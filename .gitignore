@@ -140,3 +140,28 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+# Local environment temporary files
+condaenv.*.requirements.txt
+.env
+.env.*
+*.pem
+*.key
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Training outputs
+results/
+runs/
+logs/
+wandb/
+scripts/results/
+*.pt
+*.pth
+*.ckpt
+*.acmi
+
+# Editors
+.vscode/
+.idea/
