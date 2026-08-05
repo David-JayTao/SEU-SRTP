@@ -195,12 +195,12 @@ class JSBSimRunner(Runner):
 
     @torch.no_grad()
     def render(self):
-        logging.info("\nStart render, render mode is {self.render_mode} ... ...")
+        logging.info(f"\nStart render, render mode is {self.render_mode} ... ...")
         render_episode_rewards = 0
         render_obs = self.envs.reset()
         render_masks = np.ones((1, *self.buffer.masks.shape[2:]), dtype=np.float32)
         render_rnn_states = np.zeros((1, *self.buffer.rnn_states_actor.shape[2:]), dtype=np.float32)
-        self.envs.render(mode=self.render_mode, filepath=f'{self.run_dir}/{self.experiment_name}.txt.acmi',tacview=self.tacview)
+        self.envs.render(mode=self.render_mode, filepath=f'{self.run_dir}/{self.experiment_name}.txt.acmi')
         while True:
             self.policy.prep_rollout()
             render_actions, render_rnn_states = self.policy.act(np.concatenate(render_obs),
