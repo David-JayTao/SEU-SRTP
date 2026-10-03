@@ -1,0 +1,8 @@
+# Extra queue: uses CPU headroom left by the three main queues (GPU0 has spare
+# VRAM and the SingleControl/SingleCombat jobs are CPU-cheap).
+# Focus: the armed (ShootMissile) family -- official configs that have no
+# official shell entry point, plus the shoot-variant scaling axis.
+# name|threads|num_env_steps|time_limit_s|env|scenario|algo|seed|extra
+official_2v2_noweapon_selfplay|8|1e8|5400|MultipleCombat|2v2/NoWeapon/Selfplay|mappo|0|--use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 1 --eval-episodes 1
+scaling_2v2_shoot|8|900000|5400|MultipleCombat|2v2/scaling_shoot/HierarchySelfplay|mappo|0|--use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 2 --eval-episodes 1
+scaling_3v3_shoot|8|900000|7200|MultipleCombat|3v3/scaling_shoot/HierarchySelfplay|mappo|0|--use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 2 --eval-episodes 1
