@@ -310,6 +310,33 @@ for enm in env.agents[agent_id].enemies:          # <-- 对每个敌机求和
 （官方自己也没有统一：1v1 NoWeapon 用 scale=100，1v1 Shoot/Dodge 和 2v2 用 scale=15，
 说明这个尺度是逐场景手工调的，从未有人为 N>2 调过。）
 
+#### 重要精度修正：`∝ N` 只严格成立于 **NoWeapon** 家族
+
+`reward / N` 归一化之所以成立，前提是**每步奖励是"对敌机求和"**。
+这只对 `hierarchical_multiplecombat`（NoWeapon）成立，其 `reward_functions` 为：
+
+```
+[AltitudeReward, PostureReward, EventDrivenReward]
+```
+
+- `PostureReward`：**对每个敌机求和** → ∝ N ✅
+- `AltitudeReward`：只看自身高度 → 与 N 无关
+- `EventDrivenReward`：事件式（被击落 -200 / 击落 +200）→ 与 N 无关
+
+而 Shoot 家族（`hierarchical_multiplecombat_shoot`）的 `reward_functions` 是：
+
+```
+[PostureReward, MissilePostureReward, AltitudeReward, EventDrivenReward]
+```
+
+其中 **`MissilePostureReward` 只用 `check_missile_warning()` 返回的那一枚导弹**
+（见 §5.3），因此它与 N 无关，而多出来的 `PostureReward` 仍 ∝ N。
+
+> **结论**：`reward / N` 是 **NoWeapon 家族的严格归一化**；
+> 对 Shoot 家族只是**近似**（其中不随 N 变化的分量被一并除了 N）。
+> 因此 `metrics/normalized_scaling.csv` 只对 NoWeapon 家族生成，
+> 报告中的归一化结论**不得**直接搬运到 shoot 结果上。
+
 ### 5.2 团队奖励平均化（credit assignment 随 N 变难）
 
 ```python
