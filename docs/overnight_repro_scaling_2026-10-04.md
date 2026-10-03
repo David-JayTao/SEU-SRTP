@@ -164,6 +164,60 @@ eval 曲线的大幅摆动是**策略与对手真实变化**的结果（FSP 的�
 因此**泛化性（不同初始态势下的表现）在本次实验中完全没有被测量**。
 这也是「下一步实验」里优先要补的一项。
 
+### 5.3 ⚠️ 官方脚本里的「FSP」并不是 FSP
+
+读 `algorithms/utils/selfplay.py` 发现：
+
+```python
+class FSP(SelfplayAlgorithm):
+    @staticmethod
+    def choose(agents_elo, **kwargs) -> str:
+        return np.random.choice(list(agents_elo.keys()))   # 均匀随机，不用 ELO
+    @staticmethod
+    def update(agents_elo, eval_results, **kwargs) -> None:
+        pass                                               # 空函数
+```
+
+而 `share_jsbsim_runner.py:356` 给每个新 checkpoint 写的 ELO 都是同一个初值
+`init_elo`，第 219 行还留着 `# TODO: use eval results to update elo`。
+
+**后果**：
+- `fsp` 实际是**对全部历史 checkpoint 的均匀随机采样**；
+- `pfsp` 因 ELO 从不更新，其 meta-solver 概率退化为均匀分布，**同样等价于均匀采样**；
+- 只有 `sp`（永远取最新）是真正不同的。
+
+**因此本报告对 self-play 的准确表述改为**：
+「MAPPO + **历史 checkpoint 均匀随机采样自博弈**」，
+**不能**称其为博弈论意义上的 Fictitious Self-Play，
+**也不能**拿它的结果与文献里的 FSP 结果对比。
+
+（我们跑的确实是官方代码——用的就是官方 `--selfplay-algorithm fsp`。
+这是对 baseline 的**命名纠正**，不是对代码的改动。）
+
+### 5.4 官方 2v2 基线的学习信号
+
+| 实验 | steps | 训练 reward | eval reward |
+|---|---|---|---|
+| `official_heading`（1 智能体，PPO） | 1.17e6 | **-14.0 → +7.6（明确上升）** | — |
+| `official_2v2_noweapon`（MAPPO+hier） | 4.3e5 | **-3.52（12 个 episode 基本平坦）** | -28 → -280 之间**大幅振荡** |
+| `official_2v2_noweapon_selfplay`（非层次化） | 2.9e5 | +11.2 → +12.1 | 29.7 → 15.0 之间振荡 |
+
+**必须如实报告**：在这次通宵的预算内，
+
+- 官方 `SingleControl/1/heading` **清楚地学起来了**；
+- 官方 hierarchical `2v2/NoWeapon/HierarchySelfplay`（MAPPO + 自博弈）
+  **训练 reward 在 4.3e5 步内基本没有改善**，eval reward 在
+  -28 到 -280 之间振荡，**没有观察到单调上升趋势**。
+
+结合 §5.1（MultipleCombat 评估是确定性的），这个振荡是**策略真实在变差又在变好**，
+不是采样噪声。这与「均匀采样历史策略」的自博弈特性一致，
+也与文献里 self-play 常见的循环现象一致。
+
+**但必须极其谨慎**：4.3e5 步**远未达到**官方设定的 1e8 步
+（仅约 0.4%），因此这**不能**说明「2v2 学不会」——
+只能说「在本次预算内没有观察到明显提升」。
+`heading` 用同样长的墙钟时间已经学到了明显水平，说明差距是**任务难度**，不是管线故障。
+
 **已可确认**：
 - `SingleControl/1/heading` 的 PPO **确实在学**：reward 从 -14 稳步升到 +0.8
   （510k 环境步，约 15 分钟）。这条最基础的通路是通的。

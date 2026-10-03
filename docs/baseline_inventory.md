@@ -57,6 +57,42 @@ self-play 任务额外带：
 
 种子：heading=5，1v1 全部=1，2v2=0。
 
+### 1.2b ⚠️ 「FSP」实际不是 FSP（**影响 baseline 的正确命名**）
+
+官方脚本用的是 `--selfplay-algorithm fsp`。但读 `algorithms/utils/selfplay.py` 会发现：
+
+```python
+class FSP(SelfplayAlgorithm):
+    @staticmethod
+    def choose(agents_elo, **kwargs) -> str:
+        return np.random.choice(list(agents_elo.keys()))      # 均匀随机，完全不用 ELO
+    @staticmethod
+    def update(agents_elo, eval_results, **kwargs) -> None:
+        pass                                                  # 空函数
+```
+
+而且 `share_jsbsim_runner.py:356` 每次存 checkpoint 时写的是
+`self.policy_pool[str(episode)] = self.all_args.init_elo` —— **所有历史策略的 ELO
+都是同一个初值**，第 219 行还留着 `# TODO: use eval results to update elo`。
+
+**结论**：
+
+1. `FSP` 的 `choose` 是**对全部历史 checkpoint 的均匀随机采样**，
+   与 ELO、与「最优反应」都无关。
+2. `PFSP` 虽然公式里用了 ELO，但因为 ELO 从不更新，所有值相同，
+   于是 `meta_solver_probs` 退化为均匀分布 —— **PFSP 也等价于均匀采样**。
+3. 只有 `SP`（永远取最新策略）是真正不同的。
+
+**因此本次实验对 self-play 的准确表述应当是**：
+
+> 「MAPPO + **对历史 checkpoint 的均匀随机采样自博弈**」，
+> 而不是「MAPPO + FSP」。
+
+这不改变我们跑的是官方代码这一事实（我们用的就是官方 `--selfplay-algorithm fsp`），
+但它改变了**我们如何描述这个 baseline**，也提醒我们：
+仓库里名字叫 FSP 的东西**不是**博弈论意义上的 Fictitious Self-Play，
+**不能拿它去和文献里的 FSP 结果做对比**。
+
 ### 1.2 ⚠️ 官方脚本中的两个缺陷（复现时必须记录）
 
 | 缺陷 | 位置 | 后果 | 处理 |
