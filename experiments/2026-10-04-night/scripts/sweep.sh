@@ -83,6 +83,7 @@ python experiments/2026-10-04-night/scripts/collect_metrics.py 2>&1 | head -20
 python experiments/2026-10-04-night/scripts/make_manifest.py 2>&1 | head -30
 python experiments/2026-10-04-night/scripts/normalized_scaling.py 2>&1 | tail -14
 python experiments/2026-10-04-night/scripts/make_figures.py 2>&1 | grep -E "wrote|Error"
+python experiments/2026-10-04-night/scripts/make_report_tables.py 2>&1 | tail -2
 bash experiments/2026-10-04-night/scripts/snapshot_status.sh >/dev/null
 
 echo
