@@ -1,0 +1,9 @@
+# Seed-replicate queue. Single-seed curves cannot separate signal from noise, so
+# every scaling point we intend to make a claim about gets a second seed.
+# Uses residual CPU headroom (measured utilisation was ~26 of 48 cores; each
+# rollout worker only reaches ~60% of a core because the main process's
+# per-step GPU/IPC latency is the serialisation point, not CPU).
+# name|threads|num_env_steps|time_limit_s|env|scenario|algo|seed|extra
+scaling_3v3_noweapon_s1|10|900000|5400|MultipleCombat|3v3/scaling_noweapon/HierarchySelfplay|mappo|1|--use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 2 --eval-episodes 1
+scaling_2v2_noweapon_s1|10|900000|5400|MultipleCombat|2v2/scaling_noweapon/HierarchySelfplay|mappo|1|--use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 2 --eval-episodes 1
+scaling_5v5_noweapon_s1|10|900000|7200|MultipleCombat|5v5/scaling_noweapon/HierarchySelfplay|mappo|1|--use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 2 --eval-episodes 1
