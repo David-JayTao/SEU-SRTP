@@ -167,25 +167,43 @@ Verification / Category。
 
 ---
 
-## F8 — 10v10 首个 episode 极慢（待最终归因）
+## F8 — 环境吞吐远低于孤立基准：JSBSim + vec-env 的实际成本
 
 - **Failure ID**: F8
-- **Experiment**: `scaling_10v10_noweapon`
-- **Symptoms**: 启动后 **约 12 分钟** 才可能完成 episode 0
-  （3000 向量化步 × 18 rollout 线程）；同期 3v3 用 10 线程约 3 分钟完成。
-- **Measured**: 该作业稳定占用约 **13.2 个核**，总 CPU 时间 12.5 分钟内累计
-  9704 核·秒，进程持续工作（非死锁）。GPU 利用率 0–1%。
-- **Cause（初步）**: 环境侧成本随 N 超线性（O(N²) 观测构造 + O(N²) share_obs
-  构造与拷贝），叠加主进程每步的打包/IPC/GPU 往返延迟。
-  **尚未**归因于 PPO 更新本身——需在 episode 0 完成后用
-  `metrics.jsonl` 与 FPS 日志区分「rollout 时间」与「update 时间」。
+- **Experiment**: 全部 N-v-N 训练（在 `scaling_10v10_noweapon` 上最明显）
+- **Symptoms**: 训练时的环境步进吞吐 **系统性低于** 孤立基准 2–4 倍：
+
+  | 规模 | 孤立基准（并发负载下）steps/s/进程 | 训练实测 steps/s/线程 | 达成率 |
+  |---|---|---|---|
+  | 2v2（12 线程） | 67.2 | 18.3 | **27%** |
+  | 3v3（10 线程） | 34.2 | 16.1 | **47%** |
+  | 10v10（18 线程） | 6.58 | 3.33 | **51%** |
+
+  最直观的表现：10v10 完成 episode 0（3000 个向量化步）需 **约 15 分钟**，
+  FPS 60。
+- **Precise diagnosis（逐进程采样 /proc，不是推测）**:
+  - 18 个 rollout worker 全部处于 `state=R`，各约 **0.72 核**，合计 **13.2 核**
+  - **主进程 `state=S`，仅 0.11 核** —— 它在**等待**，不是瓶颈
+  - GPU 利用率 **0–1%**，显存 464 MB
+  → 瓶颈 **完全在 CPU 侧的环境仿真**，既不是 PPO 更新，也不是 GPU。
+- **Cause（已定位，分三层）**:
+  1. **观测构造 O(N²)**：`MultipleCombatTask.get_obs()` 对每个 agent 遍历全部
+     partner+enemy；`BaseEnv.get_state()` 又对全部 2N 个 agent 各调用一次
+     `get_obs` 再 `hstack`。每步做两遍 O(N²)，且 share_obs 向量被复制 2N 份。
+  2. **跨进程传输**：10v10 每步每个 env 要 pickle 20×2460 = 49,200 个 float
+     的 share_obs，18 个 env 合计约 3.5 MB/向量化步。
+  3. **CPU 争用**：40 个 rollout 进程竞争 48 核配额，每个只能拿到约 0.72 核。
 - **Code location**: `envs/JSBSim/tasks/multiplecombat_task.py::get_obs`、
-  `envs/JSBSim/envs/env_base.py::get_state`
-- **Fix**: 尚未处理（先如实记录）。若确认瓶颈在观测构造，可考虑的**工程**优化是
-  把 `get_state()` 的重复 `get_obs` 调用缓存复用；这属于实现优化，
-  **不得**作为算法改进宣称。
-- **Verification**: 待 episode 0 完成
-- **Category**: `Computational scalability`（**不是** algorithmic）
+  `envs/JSBSim/envs/env_base.py::get_state`、`envs/env_wrappers.py`
+- **Fix**: 未修改（保持官方实现以便公平复现）。**可做的纯工程优化**（不在本次范围）：
+  在 `get_state()` 中复用同一步内已经算过的 `get_obs` 结果，把每步的 O(N²)
+  观测构造从两遍降到一遍；以及避免把同一个 share_obs 复制 2N 份。
+  这两项是**实现优化**，若将来采用，**必须**声明它改变了基线实现，
+  不得与算法改进混为一谈。
+- **Verification**: 见上表与逐进程采样；`metrics/env_bench_scaling.json` 的
+  `quiet` / `loaded` 两组数据支持该归因
+- **Category**: `Computational scalability`
+  （**明确不是** algorithmic scalability —— 主进程在等待、算法并未参与瓶颈）
 
 ---
 
