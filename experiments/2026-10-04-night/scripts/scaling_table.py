@@ -91,6 +91,14 @@ def main():
         if variant == "shoot" and obs_dim is not None:
             obs_dim = 12 * n + 9
             share_dim = 2 * n * obs_dim
+        fps = fnum(s.get("fps_last"))
+        thr = fnum(s.get("n_rollout_threads"))
+        # Wall-clock normalisations. FPS counts *individual* env-steps/s summed
+        # over the rollout threads, so:
+        #   seconds per vectorised rollout step = threads / FPS
+        #   agent-steps/s = FPS * total_agents
+        # Thread counts differ between scales (they were sized to the measured
+        # cost), so the per-thread figure is the only fair cross-scale one.
         rows.append({
             "scale": f"{n}v{n}",
             "variant": variant,
@@ -103,6 +111,10 @@ def main():
             "n_rollout_threads": s.get("n_rollout_threads"),
             "seed": s.get("seed"),
             "fps": s.get("fps_last"),
+            "sec_per_vectorised_step": (round(thr / fps, 5) if (fps and thr) else None),
+            "sec_per_rollout_episode": (round(3000 * thr / fps, 1) if (fps and thr) else None),
+            "agent_steps_per_s": (round(fps * 2 * n, 1) if fps else None),
+            "agent_steps_per_s_per_thread": (round(fps * 2 * n / thr, 1) if (fps and thr) else None),
             "env_steps": s.get("steps_done"),
             "episodes_logged": s.get("episodes_logged"),
             "train_reward_last": s.get("train_reward_last"),
@@ -132,7 +144,8 @@ def main():
         print(f"wrote {out} ({len(rows)} rows)\n")
 
     hdr = ["scale", "variant", "agents", "obs", "share_obs", "actor_p",
-           "critic_p", "thr", "seed", "FPS", "steps", "eps", "rew_first",
+           "critic_p", "thr", "seed", "FPS", "s/vec-step", "s/rollout-ep",
+           "agent-steps/s", "ag-steps/s/thr", "steps", "eps", "rew_first",
            "rew_last", "slope", "eval_rew", "value_loss", "critic_gn",
            "entropy", "NaN?", "learnable?"]
     print("| " + " | ".join(hdr) + " |")
@@ -151,7 +164,10 @@ def main():
         print("| " + " | ".join([
             r["scale"], r["variant"], str(r["total_agents"]), str(r["local_obs_dim"]),
             str(r["share_obs_dim"]), str(r["actor_params"]), str(r["critic_params"]),
-            str(r["n_rollout_threads"]), str(r["seed"]), g("fps"), str(r["env_steps"]),
+            str(r["n_rollout_threads"]), str(r["seed"]), g("fps"),
+            g("sec_per_vectorised_step", 3), g("sec_per_rollout_episode", 4),
+            g("agent_steps_per_s", 4), g("agent_steps_per_s_per_thread", 3),
+            str(r["env_steps"]),
             str(r["episodes_logged"]), g("train_reward_first"), g("train_reward_last"),
             ("-" if slope is None else f"{slope:+.3g}"), g("eval_reward_last"),
             g("critic_loss_value"), g("critic_grad_norm"), g("entropy_loss"),
