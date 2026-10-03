@@ -3,3 +3,5 @@
 official_2v2_noweapon|12|1e8|7200|MultipleCombat|2v2/NoWeapon/HierarchySelfplay|mappo|0|--use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 1 --eval-episodes 1
 official_2v2_shoot|12|1e8|7200|MultipleCombat|2v2/ShootMissile/HierarchySelfplay|mappo|0|--use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 1 --eval-episodes 1
 scaling_2v2_noweapon|12|900000|5400|MultipleCombat|2v2/scaling_noweapon/HierarchySelfplay|mappo|0|--use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 2 --eval-episodes 1
+official_2v2_noweapon_s1b|12|1e8|5400|MultipleCombat|2v2/NoWeapon/HierarchySelfplay|mappo|1|--use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 2 --eval-episodes 1
+scaling_2v2_noweapon_s2|12|900000|5400|MultipleCombat|2v2/scaling_noweapon/HierarchySelfplay|mappo|2|--use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 2 --eval-episodes 1

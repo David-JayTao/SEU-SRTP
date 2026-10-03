@@ -120,6 +120,37 @@
 | `official_1v1_dodgemissile_selfplay` | 排队中 | - | - | - | - | - |
 | `official_1v1_shoot_hier_vsbaseline` | 排队中 | - | - | - | - | - |
 
+### 5.1 一个重要的方法学发现：MultipleCombat 的评估是确定性的
+
+我最初怀疑官方 `--eval-episodes 1` 的评估太噪声（eval 序列在 -28 → -280 之间大幅摆动）。
+为此写了离线评估器 `scripts/offline_eval.py`，对**同一个 checkpoint** 重复评估 8 个 episode：
+
+```
+mean_return = -191.5615   std_return = 0.0   mean_episode_length = 724
+per_episode_returns = [-191.561, -191.561, -191.561, -191.561, ...]   # 8 个完全相同
+```
+
+**std = 0.0**，即 **MultipleCombat 的评估在固定 checkpoint 下是完全确定性的**。
+原因在代码里：
+
+- `MultipleCombatEnv.reset_simulators()` 只调用 `sim.reload()`（无新初始状态），
+  **不做任何随机化**；对比 `SingleCombatEnv.reset_simulators()` 里有
+  `self.np_random.shuffle(init_states)`
+- 评估时策略是 `deterministic=True`
+
+**因此结论要修正**：官方的 `--eval-episodes 1` 对 MultipleCombat **不是统计噪声问题**。
+eval 曲线的大幅摆动是**策略与对手真实变化**的结果（FSP 的循环/振荡特性），
+这一点本身值得在论文里讨论，而不是当作噪声忽略。
+
+（补充：同一 checkpoint 在不同时间点评估会得到不同数值——因为训练**已经更新了 checkpoint**，
+不是评估本身有随机性。已用两次运行 -191.6 / -139.9 的差异验证。）
+
+> **对后续实验的建议**：由于评估是确定性的，"评估 1 个 episode" 等于评估
+> **一个固定的确定性交战场景**。真正需要的不是更多 episode，而是
+> **多个不同的初始条件**（例如随机化初始态势），否则评估无法代表策略的一般水平。
+> 这是一个可以立即改进的点：给 `MultipleCombatEnv` 的 reset 加入初始状态随机化，
+> 与 `SingleCombatEnv` 保持一致。
+
 **已可确认**：
 - `SingleControl/1/heading` 的 PPO **确实在学**：reward 从 -14 稳步升到 +0.8
   （510k 环境步，约 15 分钟）。这条最基础的通路是通的。
