@@ -1,0 +1,202 @@
+task: hierarchical_multiplecombat
+sim_freq: 60
+agent_interaction_steps: 12
+max_steps: 1000
+altitude_limit: 2500
+acceleration_limit_x: 10.0
+acceleration_limit_y: 10.0
+acceleration_limit_z: 10.0
+aircraft_configs:
+  A0100:
+    color: Red
+    model: f16
+    init_state:
+      ic_long_gc_deg: 119.955
+      ic_lat_geod_deg: 60.0
+      ic_h_sl_ft: 20000
+      ic_psi_true_deg: 0.0
+      ic_u_fps: 800.0
+  A0200:
+    color: Red
+    model: f16
+    init_state:
+      ic_long_gc_deg: 119.965
+      ic_lat_geod_deg: 60.0
+      ic_h_sl_ft: 20000
+      ic_psi_true_deg: 0.0
+      ic_u_fps: 800.0
+  A0300:
+    color: Red
+    model: f16
+    init_state:
+      ic_long_gc_deg: 119.975
+      ic_lat_geod_deg: 60.0
+      ic_h_sl_ft: 20000
+      ic_psi_true_deg: 0.0
+      ic_u_fps: 800.0
+  A0400:
+    color: Red
+    model: f16
+    init_state:
+      ic_long_gc_deg: 119.985
+      ic_lat_geod_deg: 60.0
+      ic_h_sl_ft: 20000
+      ic_psi_true_deg: 0.0
+      ic_u_fps: 800.0
+  A0500:
+    color: Red
+    model: f16
+    init_state:
+      ic_long_gc_deg: 119.995
+      ic_lat_geod_deg: 60.0
+      ic_h_sl_ft: 20000
+      ic_psi_true_deg: 0.0
+      ic_u_fps: 800.0
+  A0600:
+    color: Red
+    model: f16
+    init_state:
+      ic_long_gc_deg: 120.005
+      ic_lat_geod_deg: 60.0
+      ic_h_sl_ft: 20000
+      ic_psi_true_deg: 0.0
+      ic_u_fps: 800.0
+  A0700:
+    color: Red
+    model: f16
+    init_state:
+      ic_long_gc_deg: 120.015
+      ic_lat_geod_deg: 60.0
+      ic_h_sl_ft: 20000
+      ic_psi_true_deg: 0.0
+      ic_u_fps: 800.0
+  A0800:
+    color: Red
+    model: f16
+    init_state:
+      ic_long_gc_deg: 120.025
+      ic_lat_geod_deg: 60.0
+      ic_h_sl_ft: 20000
+      ic_psi_true_deg: 0.0
+      ic_u_fps: 800.0
+  A0900:
+    color: Red
+    model: f16
+    init_state:
+      ic_long_gc_deg: 120.035
+      ic_lat_geod_deg: 60.0
+      ic_h_sl_ft: 20000
+      ic_psi_true_deg: 0.0
+      ic_u_fps: 800.0
+  A1000:
+    color: Red
+    model: f16
+    init_state:
+      ic_long_gc_deg: 120.045
+      ic_lat_geod_deg: 60.0
+      ic_h_sl_ft: 20000
+      ic_psi_true_deg: 0.0
+      ic_u_fps: 800.0
+  B0100:
+    color: Blue
+    model: f16
+    init_state:
+      ic_h_sl_ft: 20000
+      ic_long_gc_deg: 119.955
+      ic_lat_geod_deg: 60.1
+      ic_psi_true_deg: 180.0
+      ic_u_fps: 800.0
+  B0200:
+    color: Blue
+    model: f16
+    init_state:
+      ic_h_sl_ft: 20000
+      ic_long_gc_deg: 119.965
+      ic_lat_geod_deg: 60.1
+      ic_psi_true_deg: 180.0
+      ic_u_fps: 800.0
+  B0300:
+    color: Blue
+    model: f16
+    init_state:
+      ic_h_sl_ft: 20000
+      ic_long_gc_deg: 119.975
+      ic_lat_geod_deg: 60.1
+      ic_psi_true_deg: 180.0
+      ic_u_fps: 800.0
+  B0400:
+    color: Blue
+    model: f16
+    init_state:
+      ic_h_sl_ft: 20000
+      ic_long_gc_deg: 119.985
+      ic_lat_geod_deg: 60.1
+      ic_psi_true_deg: 180.0
+      ic_u_fps: 800.0
+  B0500:
+    color: Blue
+    model: f16
+    init_state:
+      ic_h_sl_ft: 20000
+      ic_long_gc_deg: 119.995
+      ic_lat_geod_deg: 60.1
+      ic_psi_true_deg: 180.0
+      ic_u_fps: 800.0
+  B0600:
+    color: Blue
+    model: f16
+    init_state:
+      ic_h_sl_ft: 20000
+      ic_long_gc_deg: 120.005
+      ic_lat_geod_deg: 60.1
+      ic_psi_true_deg: 180.0
+      ic_u_fps: 800.0
+  B0700:
+    color: Blue
+    model: f16
+    init_state:
+      ic_h_sl_ft: 20000
+      ic_long_gc_deg: 120.015
+      ic_lat_geod_deg: 60.1
+      ic_psi_true_deg: 180.0
+      ic_u_fps: 800.0
+  B0800:
+    color: Blue
+    model: f16
+    init_state:
+      ic_h_sl_ft: 20000
+      ic_long_gc_deg: 120.025
+      ic_lat_geod_deg: 60.1
+      ic_psi_true_deg: 180.0
+      ic_u_fps: 800.0
+  B0900:
+    color: Blue
+    model: f16
+    init_state:
+      ic_h_sl_ft: 20000
+      ic_long_gc_deg: 120.035
+      ic_lat_geod_deg: 60.1
+      ic_psi_true_deg: 180.0
+      ic_u_fps: 800.0
+  B1000:
+    color: Blue
+    model: f16
+    init_state:
+      ic_h_sl_ft: 20000
+      ic_long_gc_deg: 120.045
+      ic_lat_geod_deg: 60.1
+      ic_psi_true_deg: 180.0
+      ic_u_fps: 800.0
+battle_field_center:
+- 120.0
+- 60.0
+- 0.0
+PostureReward_scale: 15.0
+PostureReward_potential: true
+PostureReward_orientation_version: v2
+PostureReward_range_version: v3
+AltitudeReward_safe_altitude: 4.0
+AltitudeReward_danger_altitude: 3.5
+AltitudeReward_Kv: 0.2
+num_agents: 20
+team_size: 10

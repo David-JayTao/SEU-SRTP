@@ -1,0 +1,5 @@
+# GPU2: large-scale scaling (10v10 first -- it is the long pole)
+# name|threads|num_env_steps|time_limit_s|env|scenario|algo|seed|extra
+scaling_10v10_noweapon|18|900000|10800|MultipleCombat|10v10/scaling_noweapon/HierarchySelfplay|mappo|0|--use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 2 --eval-episodes 1
+scaling_5v5_noweapon|18|900000|7200|MultipleCombat|5v5/scaling_noweapon/HierarchySelfplay|mappo|0|--use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 2 --eval-episodes 1
+scaling_3v3_noweapon|18|900000|5400|MultipleCombat|3v3/scaling_noweapon/HierarchySelfplay|mappo|0|--use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 2 --eval-episodes 1

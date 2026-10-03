@@ -14,6 +14,9 @@ from ..model.baseline_actor import BaselineActor
 
 class MultipleCombatTask(SingleCombatTask):
     def __init__(self, config):
+        # Resolved before super().__init__ because BaseTask.__init__ calls
+        # load_observation_space(), which needs num_agents.
+        self._num_agents_override = getattr(config, 'num_agents', None)
         super().__init__(config)
 
         self.reward_functions = [
@@ -32,7 +35,18 @@ class MultipleCombatTask(SingleCombatTask):
 
     @property
     def num_agents(self) -> int:
-        return 4
+        """Number of RL-controlled aircraft in the scenario.
+
+        Defaults to the number of aircraft declared in the scenario's
+        ``aircraft_configs`` (so N-v-N only needs a new YAML, no code change).
+        An explicit ``num_agents`` key in the YAML still takes precedence, which
+        allows asymmetric or partially-scripted team compositions.
+
+        Original upstream implementation hard-coded ``return 4`` (2v2 only).
+        """
+        if self._num_agents_override is not None:
+            return self._num_agents_override
+        return len(self.config.aircraft_configs)
 
     def load_variables(self):
         self.state_var = [

@@ -1,5 +1,7 @@
+import json
 import os
 import sys
+import time
 import wandb
 import torch
 import numpy as np
@@ -120,7 +122,29 @@ class Runner(object):
             for k, v in infos.items():
                 wandb.log({k: v}, step=total_num_steps)
         else:
-            pass
+            self._log_info_to_jsonl(infos, total_num_steps)
+
+    def _log_info_to_jsonl(self, infos, total_num_steps):
+        """Persist training diagnostics to <save_dir>/metrics.jsonl.
+
+        Upstream drops everything but `average_episode_rewards` when wandb is
+        disabled, so the PPO/centralised-critic diagnostics that matter most for
+        a scalability study (value_loss, policy_loss, entropy, grad norms) were
+        computed but never written anywhere. This is a logging-only addition:
+        no algorithmic quantity is touched.
+        """
+        record = {"total_num_steps": int(total_num_steps), "wall_time": time.time()}
+        for k, v in infos.items():
+            try:
+                arr = np.asarray(v, dtype=np.float64)
+                record[k] = float(arr.mean()) if arr.size > 1 else float(arr.reshape(-1)[0])
+            except (TypeError, ValueError):
+                continue
+        try:
+            with open(os.path.join(self.save_dir, "metrics.jsonl"), "a") as f:
+                f.write(json.dumps(record) + "\n")
+        except OSError as e:  # never let logging break a training run
+            logging.warning("metrics.jsonl write failed: %s", e)
         
     def render_with_tacview(self, data):
         """

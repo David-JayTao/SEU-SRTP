@@ -165,3 +165,9 @@ scripts/results/
 # Editors
 .vscode/
 .idea/
+
+# --- SRTP overnight experiment infrastructure (2026-10-04) ---
+# Raw training outputs (checkpoints, per-run logs) stay out of git; the
+# experiments/ tree keeps the manifests, metrics extracts and figures.
+experiments/**/logs/
+experiments/**/status/*.status
