@@ -7,3 +7,6 @@ official_1v1_hier_selfplay|10|1e8|4200|SingleCombat|1v1/NoWeapon/HierarchySelfpl
 official_1v1_shoot_hier_selfplay|10|1e8|4200|SingleCombat|1v1/ShootMissile/HierarchySelfplay|ppo|1|--use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 1 --eval-episodes 1 --use-prior
 official_1v1_dodgemissile_selfplay|10|1e8|4200|SingleCombat|1v1/DodgeMissile/HierarchySelfplay|ppo|1|--use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 1 --eval-episodes 1
 official_1v1_shoot_hier_vsbaseline|10|1e8|4200|SingleCombat|1v1/ShootMissile/HierarchyVsBaseline|ppo|1|--use-eval --n-eval-rollout-threads 1 --eval-interval 1 --eval-episodes 1 --use-prior
+official_1v1_shoot_selfplay|10|1e8|4200|SingleCombat|1v1/ShootMissile/Selfplay|ppo|1|--use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 1 --eval-episodes 1 --use-prior
+official_1v1_dodge_vsbaseline|10|1e8|4200|SingleCombat|1v1/DodgeMissile/vsBaseline|ppo|1|--use-eval --n-eval-rollout-threads 1 --eval-interval 1 --eval-episodes 1
+official_1v1_hier_dodge_vsbaseline|10|1e8|4200|SingleCombat|1v1/DodgeMissile/HierarchyVsBaseline|ppo|1|--use-eval --n-eval-rollout-threads 1 --eval-interval 1 --eval-episodes 1
