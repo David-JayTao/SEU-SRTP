@@ -264,6 +264,25 @@ reward / termination / simulation 参数**逐字继承**官方 2v2 模板，
 
 > `[进行中]`
 
+### 7.0 有效性验证：生成的 scaling 家族确实锚定在官方 2v2 上
+
+scaling 系列是**我们生成**的配置（§6）。在做跨 N 对比之前必须验证
+「生成的 2v2」与「官方 2v2」行为一致，否则整个 scaling 家族就失去了基线锚点。
+
+**验证方法**：比较两者 **episode 0** 的 `average_episode_rewards`
+（同一算法、同一奖励配置、同一动作空间；唯一差异是生成编队整体沿经度平移 278 m）。
+
+| 配置 | episode 0 reward | reward/N |
+|---|---|---|
+| 官方 `2v2/NoWeapon/HierarchySelfplay` | **-3.525** | -1.7625 |
+| 生成 `2v2/scaling_noweapon/HierarchySelfplay` | **-3.532** | -1.7658 |
+| 差异 | **0.0065（占官方 0.19%）** | — |
+
+> **结论：生成的 scaling 家族与官方 2v2 在数值上几乎完全一致（差 0.19%），
+> 因此 2v2 → 3v3 → 5v5 → 10v10 的对比是可信的，
+> 差异来自队伍规模而不是配置改动。**（§5.2 提到的唯一系统性差异——
+> 正面宽度随 N 线性增长——仍然存在，必须一并声明。）
+
 **实测 scaling 表**（由 `scripts/scaling_table.py` 生成，
 数据源 `experiments/2026-10-04-night/metrics/scaling_table.csv`）：
 
