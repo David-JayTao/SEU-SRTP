@@ -1,0 +1,78 @@
+{
+  "quiet": [
+    {
+      "team_size": 2,
+      "env_steps_per_s": 107.83,
+      "sec_per_env_step": 0.009274,
+      "obs_dim": 27,
+      "share_obs_dim": 108,
+      "per_aircraft_ms": 2.318,
+      "note": "machine otherwise idle"
+    },
+    {
+      "team_size": 3,
+      "env_steps_per_s": 60.3,
+      "sec_per_env_step": 0.016585,
+      "obs_dim": 39,
+      "share_obs_dim": 234,
+      "per_aircraft_ms": 2.764,
+      "note": "machine otherwise idle"
+    },
+    {
+      "team_size": 5,
+      "env_steps_per_s": 25.4,
+      "sec_per_env_step": 0.039369,
+      "obs_dim": 63,
+      "share_obs_dim": 630,
+      "per_aircraft_ms": 3.937,
+      "note": "machine otherwise idle"
+    },
+    {
+      "team_size": 10,
+      "env_steps_per_s": 7.82,
+      "sec_per_env_step": 0.127852,
+      "obs_dim": 123,
+      "share_obs_dim": 2460,
+      "per_aircraft_ms": 6.393,
+      "note": "machine otherwise idle"
+    }
+  ],
+  "loaded": [
+    {
+      "team_size": 2,
+      "env_steps_per_s": 67.2,
+      "sec_per_env_step": 0.01489,
+      "obs_dim": 27,
+      "share_obs_dim": 108,
+      "per_aircraft_ms": 3.723,
+      "note": "5 concurrent training queues"
+    },
+    {
+      "team_size": 3,
+      "env_steps_per_s": 34.2,
+      "sec_per_env_step": 0.02926,
+      "obs_dim": 39,
+      "share_obs_dim": 234,
+      "per_aircraft_ms": 4.877,
+      "note": "5 concurrent training queues"
+    },
+    {
+      "team_size": 5,
+      "env_steps_per_s": 15.2,
+      "sec_per_env_step": 0.06599,
+      "obs_dim": 63,
+      "share_obs_dim": 630,
+      "per_aircraft_ms": 6.599,
+      "note": "5 concurrent training queues"
+    },
+    {
+      "team_size": 10,
+      "env_steps_per_s": 6.6,
+      "sec_per_env_step": 0.15208,
+      "obs_dim": 123,
+      "share_obs_dim": 2460,
+      "per_aircraft_ms": 7.604,
+      "note": "5 concurrent training queues"
+    }
+  ]
+}
