@@ -41,6 +41,29 @@ SEED_RE = re.compile(r"^algo\s+:\s+\S+\s+seed=(?P<n>\d+)", re.M)
 GPU_RE = re.compile(r"^gpu\s+:\s+(?P<g>\d+)", re.M)
 
 
+def queue_metadata():
+    """experiment -> {env_name, scenario, algo, seed, gpu, n_threads}.
+
+    Fallback for jobs launched before run_train.sh started writing its header
+    into the log file: the queue definitions still carry the same information.
+    """
+    meta = {}
+    for qf in glob.glob(os.path.join(EXP_DIR, "configs", "queue_*.txt")):
+        gpu_map = {"queue_gpu0.txt": 0, "queue_extra.txt": 0, "queue_gpu1.txt": 1,
+                   "queue_seeds.txt": 1, "queue_gpu2.txt": 2}
+        gpu = gpu_map.get(os.path.basename(qf), "")
+        for line in open(qf):
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            p = line.split("|")
+            if len(p) < 8:
+                continue
+            meta[p[0]] = {"env_name": p[4], "scenario": p[5], "algo": p[6],
+                          "seed": p[7], "gpu": gpu, "n_threads": p[1]}
+    return meta
+
+
 def parse_log(path):
     txt = open(path, encoding="utf-8", errors="replace").read()
     eps = []
@@ -95,12 +118,19 @@ def load_jsonl(path):
 def main():
     os.makedirs(os.path.join(OUT_DIR, "curves"), exist_ok=True)
     summary = []
+    qmeta = queue_metadata()
 
     for logpath in sorted(glob.glob(os.path.join(LOG_DIR, "*.log"))):
         meta, eps = parse_log(logpath)
         exp = os.path.basename(logpath).split("_seed")[0]
         if not eps and not meta.get("crashed"):
             continue
+
+        # fall back to the queue definition when the log has no header
+        q = qmeta.get(exp, {})
+        for k in ("env_name", "scenario", "algo", "seed", "gpu", "n_threads"):
+            if not meta.get(k) and q.get(k) is not None:
+                meta[k] = q[k]
 
         # locate the run dir (metrics.jsonl lives next to the checkpoints)
         run_dir = None
@@ -112,8 +142,13 @@ def main():
                 run_dir = os.path.dirname(cands[-1])
         jrows = load_jsonl(os.path.join(run_dir, "metrics.jsonl")) if run_dir else []
 
-        # merge metrics.jsonl in by total_num_steps
-        by_step = {r["total_num_steps"]: r for r in jrows}
+        # Merge metrics.jsonl by total_num_steps. A single step can carry more
+        # than one record (the training diagnostics and, when eval is on, the
+        # eval infos), so records for the same step must be unioned -- a plain
+        # dict assignment would let the eval record shadow value_loss/entropy.
+        by_step = {}
+        for r in jrows:
+            by_step.setdefault(r["total_num_steps"], {}).update(r)
         for e in eps:
             e.update({k: v for k, v in by_step.get(e["total_num_steps"], {}).items()
                       if k != "total_num_steps"})

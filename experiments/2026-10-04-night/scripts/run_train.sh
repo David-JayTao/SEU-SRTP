@@ -46,6 +46,11 @@ cd "${REPO}/scripts"
 STAMP=$(date +%Y%m%d_%H%M%S)
 LOGFILE="${RUN_LOG_DIR}/${EXP}_seed${SEED}_gpu${GPU_ID}_${STAMP}.log"
 
+# NOTE: the header goes into the log file as well as the terminal. Previously it
+# was only echoed to the terminal (only the python process was piped into tee),
+# so the log file carried no experiment metadata and the metrics collector could
+# not recover env/scenario/algo from it.
+{
 echo "================================================================"
 echo "EXPERIMENT : ${EXP}"
 echo "git commit : $(git -C ${REPO} rev-parse HEAD)  branch=$(git -C ${REPO} rev-parse --abbrev-ref HEAD)"
@@ -57,6 +62,7 @@ echo "extra      : ${EXTRA}"
 echo "log        : ${LOGFILE}"
 echo "start      : $(date -Is)"
 echo "================================================================"
+} | tee "${LOGFILE}"
 
 # Optional hard wall-clock cap (seconds). The queue runner uses this so that a
 # slow scale cannot block every later job; checkpoints are written every
@@ -93,8 +99,12 @@ ${TIMEOUT_PREFIX} python train/train_jsbsim.py \
     --recurrent-hidden-layers 1 \
     --data-chunk-length 8 \
     --user-name "liuyunxiao" \
-    ${EXTRA} 2>&1 | tee "${LOGFILE}"
+    ${EXTRA} 2>&1 | tee -a "${LOGFILE}"
 
+STATUS=$?
+{
 echo "================================================================"
-echo "EXPERIMENT ${EXP} exited with code ${PIPESTATUS[0]} at $(date -Is)"
+echo "EXPERIMENT ${EXP} exited with code ${STATUS} at $(date -Is)"
 echo "================================================================"
+} | tee -a "${LOGFILE}"
+exit ${STATUS}
