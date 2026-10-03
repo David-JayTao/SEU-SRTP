@@ -6,12 +6,12 @@
 
 | 实验 | 状态 | steps 完成/计划 | FPS | 训练 reward 首→末 | eval reward | checkpoint |
 |---|---|---|---|---|---|---|
-| `official_1v1_vsbaseline` | running (time-capped) | 150000/100000000 | 348 | -208.2 → -211.9 | - | yes |
-| `official_2v2_noweapon` | running (time-capped) | 972000/100000000 | 209 | -3.525 → -0.2723 | -74.851 | yes |
-| `official_2v2_noweapon_selfplay` | running (time-capped) | 672000/100000000 | 153 | 11.16 → 18.13 | -6.5831 | yes |
+| `official_1v1_vsbaseline` | running (time-capped) | 240000/100000000 | 346 | -208.2 → -210.6 | - | yes |
+| `official_2v2_noweapon` | running (time-capped) | 1008000/100000000 | 209 | -3.525 → -2.993 | -119.03 | yes |
+| `official_2v2_noweapon_selfplay` | running (time-capped) | 720000/100000000 | 153 | 11.16 → -11.9 | 25.624 | yes |
 | `official_heading` | **CRASHED** | 2460000/100000000 | 590 | -13.98 → 100.6 | - | yes |
-| `scaling_10v10_noweapon` | running (time-capped) | 216000/900000 | 55 | -17.66 → -17.65 | -129.76 | yes |
-| `scaling_3v3_noweapon_s1` | running (time-capped) | 660000/900000 | 159 | -5.435 → -1.108 | 21.429 | yes |
+| `scaling_10v10_noweapon` | running (time-capped) | 270000/900000 | 57 | -17.66 → -17.46 | -134.56 | yes |
+| `scaling_3v3_noweapon_s1` | running (time-capped) | 690000/900000 | 159 | -5.435 → -0.6657 | 13.721 | yes |
 
 ## B. Scaling 对比表（含 wall-clock 归一化）
 
@@ -19,14 +19,14 @@ wrote /root/autodl-tmp/SEU-SRTP/experiments/2026-10-04-night/metrics/scaling_tab
 
 | scale | variant | agents | obs | share_obs | actor_p | critic_p | thr | seed | FPS | s/vec-step | s/rollout-ep | agent-steps/s | ag-steps/s/thr | steps | eps | rew_first | rew_last | slope | eval_rew | value_loss | critic_gn | entropy | NaN? | learnable? |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 3v3 | noweapon | 6 | 39 | 234 | 156427 | 180097 | 10 | 1 | 159 | 0.0629 | 188.7 | 954 | 95.4 | 660000 | 22 | -5.43 | -1.11 | -0.0564 | 21.4 | 1.21 | 15.5 | -0.000606 | no | flat/declining |
-| 10v10 | noweapon | 20 | 123 | 2460 | 167179 | 465025 | 18 | 0 | 55 | 0.327 | 981.8 | 1100 | 61.1 | 216000 | 4 | -17.7 | -17.6 | - | -130 | 70.5 | 47.2 | -0.000351 | no | ? |
+| 3v3 | noweapon | 6 | 39 | 234 | 156427 | 180097 | 10 | 1 | 159 | 0.0629 | 188.7 | 954 | 95.4 | 690000 | 23 | -5.43 | -0.666 | -0.0655 | 13.7 | 1.18 | 12.6 | -0.000604 | no | flat/declining |
+| 10v10 | noweapon | 20 | 123 | 2460 | 167179 | 465025 | 18 | 0 | 57 | 0.316 | 947.4 | 1140 | 63.3 | 270000 | 5 | -17.7 | -17.5 | - | -135 | 69.1 | 47.2 | -0.000351 | no | ? |
 
-host peaks during the whole night: CPU 48.0/48 cores, RAM 60.1 GB, VRAM 1842 MB (single job uses <1.5 GB)
+host peaks during the whole night: CPU 48.0/48 cores, RAM 62.3 GB, VRAM 1842 MB (single job uses <1.5 GB)
 
 ## C. 归一化后的 critic 对比
 
-wrote /root/autodl-tmp/SEU-SRTP/experiments/2026-10-04-night/metrics/normalized_scaling.csv (53 rows)
+wrote /root/autodl-tmp/SEU-SRTP/experiments/2026-10-04-night/metrics/normalized_scaling.csv (56 rows)
 
 === matched training stage (episode index), hierarchical NoWeapon family ===
   N  ep    reward    rew/N        vl    vl/N²  critic_gn    gn/N  experiment
@@ -44,13 +44,14 @@ wrote /root/autodl-tmp/SEU-SRTP/experiments/2026-10-04-night/metrics/normalized_
  10   1    -17.57    -1.76    72.391    0.724      46.94    4.69  scaling_10v10_noweapon
  10   2    -17.56    -1.76    73.277    0.733      46.92    4.69  scaling_10v10_noweapon
  10   3    -17.65    -1.76    70.535    0.705      47.18    4.72  scaling_10v10_noweapon
+ 10   4    -17.46    -1.75    69.102    0.691      47.23    4.72  scaling_10v10_noweapon
 
 ## D. 逐实验资源占用（峰值）
 
 | 实验 | 进程数 | 峰值 CPU% | 峰值 CPU 核 | 峰值 RSS | GPU | 该 GPU 峰值显存 |
 |---|---|---|---|---|---|---|
-| `official_1v1_vsbaseline` | 12 | 472% | 4.7 | 5.13 GB | 0 | 1315 MB |
-| `official_2v2_noweapon` | 14 | 668% | 6.7 | 5.83 GB | 1 | 1405 MB |
+| `official_1v1_vsbaseline` | 12 | 472% | 4.7 | 5.16 GB | 0 | 1315 MB |
+| `official_2v2_noweapon` | 14 | 669% | 6.7 | 5.83 GB | 1 | 1405 MB |
 | `official_2v2_noweapon_selfplay` | 10 | 414% | 4.1 | 4.20 GB | 0 | 1559 MB |
 | `official_heading` | 12 | 326% | 3.3 | 4.75 GB | 0 | 1559 MB |
 | `scaling_10v10_noweapon` | 20 | 1218% | 12.2 | 13.83 GB | 2 | 994 MB |
