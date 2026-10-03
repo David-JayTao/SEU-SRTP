@@ -352,6 +352,65 @@ def fig_normalized_critic():
     print("wrote critic_normalized_scaling.png")
 
 
+def fig_resource_scaling():
+    """Per-experiment CPU cores and RSS vs team size, plus per-rollout-thread cost.
+
+    Sourced from metrics/resources.csv, which sweep.sh samples from /proc while
+    the runs are live. Values are peaks over the observed samples, so they
+    describe what the run actually demanded, not a synthetic benchmark.
+    """
+    path = os.path.join(METRICS, "resources.csv")
+    if not os.path.exists(path):
+        return
+    rows = read_csv(path)
+    peak = {}
+    for r in rows:
+        e = r["experiment"]
+        m = re.search(r"scaling_(\d+)v\d+_noweapon", e)
+        if not m:
+            continue
+        n = int(m.group(1))
+        cpu = fnum(r["cpu_pct"])
+        rss = fnum(r["rss_gb"])
+        if cpu is None:
+            continue
+        cur = peak.setdefault(n, [0.0, 0.0, 0.0])
+        cur[0] = max(cur[0], cpu / 100.0)      # cores
+        cur[1] = max(cur[1], rss or 0.0)       # GB
+    if not peak:
+        return
+    Ns = sorted(peak)
+    cores = [peak[n][0] for n in Ns]
+    rss = [peak[n][1] for n in Ns]
+
+    fig, axes = plt.subplots(1, 3, figsize=(15, 4.2))
+    _panel(axes[0], Ns, cores, "team size N", "CPU cores (of 48)",
+           "CPU demand per job (measured peaks)")
+    _panel(axes[1], Ns, rss, "team size N", "RSS (GB)",
+           "Process RSS per job (measured peaks)")
+    # VRAM is flat across N -- show it so the flatness is on the record
+    vram = {}
+    for r in rows:
+        m = re.search(r"scaling_(\d+)v\d+_noweapon", r["experiment"])
+        if not m:
+            continue
+        v = fnum(r["gpu_vram_mb"])
+        if v is not None:
+            vram[int(m.group(1))] = max(vram.get(int(m.group(1)), 0.0), v)
+    if vram:
+        vs = sorted(vram)
+        _panel(axes[2], vs, [vram[n] for n in vs], "team size N", "GPU VRAM (MB)",
+               "Peak VRAM on the run's GPU (shared)")
+    else:
+        axes[2].axis("off")
+    fig.suptitle("Per-job resource demand vs team size (peaks over live samples)",
+                 fontsize=13, fontweight="600", y=1.0)
+    fig.tight_layout(rect=[0, 0, 1, 0.92])
+    fig.savefig(os.path.join(FIG, "resource_scaling.png"), bbox_inches="tight")
+    plt.close(fig)
+    print("wrote resource_scaling.png")
+
+
 def main():
     curves = load_curves()
     # exclude smoke / metrics-test runs from the figures
@@ -364,6 +423,7 @@ def main():
                             "wall-clock (minutes)", "Learning curves: reward vs wall-clock (compute-normalised view)")
     fig_scaling_dashboards()
     fig_normalized_critic()
+    fig_resource_scaling()
     fig_resources()
     print(f"\nfigures in {FIG}")
 
