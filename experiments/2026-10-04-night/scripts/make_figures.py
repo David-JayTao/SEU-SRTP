@@ -305,6 +305,53 @@ def fig_resources():
     print("wrote throughput_vs_agents.png")
 
 
+def fig_normalized_critic():
+    """Reward-scale normalisation, and the residual critic effect it exposes.
+
+    Three panels, one axis each: reward/N (should be flat if the normalisation
+    is right), value_loss/N^2 and grad_norm/N (what is left after removing the
+    trivial reward-scale growth).
+    """
+    path = os.path.join(METRICS, "normalized_scaling.csv")
+    if not os.path.exists(path):
+        return
+    rows = read_csv(path)
+    if not rows:
+        return
+    by_n = {}
+    for r in rows:
+        by_n.setdefault(int(r["team_size"]), []).append(r)
+
+    fig, axes = plt.subplots(1, 3, figsize=(15, 4.2))
+    panels = [
+        ("reward_per_enemy", "reward / N", "Reward per enemy (flat => scale is exactly O(N))"),
+        ("value_loss_per_N2", "value loss / N$^2$", "Critic loss, reward-scale removed"),
+        ("critic_grad_norm_per_N", "critic grad norm / N", "Critic gradient, reward-scale removed"),
+    ]
+    Ns = sorted(by_n)
+    for ax, (key, ylab, title) in zip(axes, panels):
+        for i, n in enumerate(Ns):
+            rs = sorted(by_n[n], key=lambda r: int(r["episode"]))
+            xs = [int(r["episode"]) for r in rs]
+            ys = [fnum(r[key]) for r in rs]
+            if any(y is None for y in ys):
+                continue
+            ax.plot(xs, ys, color=CAT[i % 4], lw=2, ls=DASH[i % 4], marker="o", ms=6,
+                    label=f"{n}v{n}")
+        ax.set_xlabel("PPO episode (matched training stage)")
+        ax.set_ylabel(ylab)
+        ax.set_title(title)
+        ax.legend(fontsize=8)
+        ax.set_xticks(sorted({int(r["episode"]) for r in rows}))
+    fig.suptitle("Centralised critic scaling after removing the reward-magnitude confound "
+                 "(hierarchical NoWeapon family only)",
+                 fontsize=13, fontweight="600", y=1.0)
+    fig.tight_layout(rect=[0, 0, 1, 0.93])
+    fig.savefig(os.path.join(FIG, "critic_normalized_scaling.png"), bbox_inches="tight")
+    plt.close(fig)
+    print("wrote critic_normalized_scaling.png")
+
+
 def main():
     curves = load_curves()
     # exclude smoke / metrics-test runs from the figures
@@ -316,6 +363,7 @@ def main():
         fig_learning_curves(curves, "time", "learning_curves_walltime.png",
                             "wall-clock (minutes)", "Learning curves: reward vs wall-clock (compute-normalised view)")
     fig_scaling_dashboards()
+    fig_normalized_critic()
     fig_resources()
     print(f"\nfigures in {FIG}")
 
