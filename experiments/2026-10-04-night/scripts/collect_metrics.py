@@ -99,6 +99,30 @@ def parse_log(path):
     return meta, eps
 
 
+def entropy_batch_rows(n_rollout_threads, buffer_size=3000, num_mini_batch=5,
+                       data_chunk_length=8):
+    """Rows per PPO minibatch -- the divisor ACTLayer applies to the entropy.
+
+    ACTLayer.evaluate_actions computes `action_dist.entropy() / log_probs.size(0)`
+    per action dimension and then sums, so the logged `policy_entropy_loss` is
+    (sum of per-dim entropies) / batch_rows. That divisor depends on
+    n_rollout_threads and therefore varies with team size, which makes the raw
+    column non-comparable across runs. SharedReplayBuffer.recurrent_generator:
+        data_chunks     = n_rollout_threads * buffer_size // data_chunk_length
+        mini_batch_size = data_chunks // num_mini_batch
+        batch_rows      = data_chunk_length * mini_batch_size
+    Multiplying the logged value back by batch_rows recovers the true summed
+    entropy, which IS comparable across runs and across N.
+    """
+    try:
+        t = int(n_rollout_threads)
+    except (TypeError, ValueError):
+        return None
+    data_chunks = t * buffer_size // data_chunk_length
+    mini_batch_size = data_chunks // num_mini_batch
+    return data_chunk_length * mini_batch_size
+
+
 def load_jsonl(path):
     rows = []
     if not os.path.exists(path):
@@ -149,6 +173,17 @@ def main():
         by_step = {}
         for r in jrows:
             by_step.setdefault(r["total_num_steps"], {}).update(r)
+
+        # undo the batch-size normalisation that ACTLayer applies to entropy
+        ent_rows = entropy_batch_rows(meta.get("n_threads"))
+        for rec in by_step.values():
+            ev = rec.get("policy_entropy_loss")
+            if ev is not None and ent_rows:
+                rec["policy_entropy_true_sum"] = -float(ev) * ent_rows
+        if ent_rows:
+            for e in eps:
+                if "policy_entropy_loss" in e:
+                    e["policy_entropy_true_sum"] = -float(e["policy_entropy_loss"]) * ent_rows
         for e in eps:
             e.update({k: v for k, v in by_step.get(e["total_num_steps"], {}).items()
                       if k != "total_num_steps"})
@@ -205,6 +240,7 @@ def main():
         curve_path = os.path.join(OUT_DIR, "curves", f"{exp}.csv")
         keys = ["episode", "total_num_steps", "fps", "average_episode_rewards",
                 "value_loss", "policy_loss", "policy_entropy_loss",
+                "policy_entropy_true_sum",
                 "actor_grad_norm", "critic_grad_norm", "ratio", "wall_time"]
         with open(curve_path, "w", newline="") as f:
             w = csv.DictWriter(f, fieldnames=keys, extrasaction="ignore")
