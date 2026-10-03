@@ -411,6 +411,84 @@ def fig_resource_scaling():
     print("wrote resource_scaling.png")
 
 
+def fig_scaling_reward_normalized():
+    """Headline scaling figure: reward per enemy vs steps, one line per N.
+
+    Normalised by N because PostureReward sums orientation*range over every
+    enemy at a constant scale of 15, so raw reward magnitude grows linearly with
+    team size (verified: reward/N is flat at ~-1.77 for N = 2, 3, 10 at episode
+    0). Without this the lines would be separated by scale rather than by
+    learning. Exact only for the NoWeapon family.
+    """
+    path = os.path.join(METRICS, "sample_efficiency.csv")
+    runs = {}
+    for p in sorted(glob.glob(os.path.join(CURVES, "*noweapon*.csv"))):
+        e = os.path.basename(p)[:-4]
+        m = re.search(r"scaling_(\d+)v\d+_noweapon", e)
+        if not m:
+            continue
+        n = int(m.group(1))
+        xs, ys = [], []
+        for r in read_csv(p):
+            v = fnum(r.get("average_episode_rewards"))
+            s = fnum(r.get("total_num_steps"))
+            if v is not None and s is not None:
+                xs.append(s)
+                ys.append(v / n)
+        if xs:
+            runs.setdefault(n, []).append((xs, ys, e))
+    if not runs:
+        return
+
+    fig, axes = plt.subplots(1, 2, figsize=(13, 4.6))
+    ax = axes[0]
+    handles = []
+    for i, n in enumerate(sorted(runs)):
+        for (xs, ys, e) in runs[n]:
+            lab = f"{n}v{n}" + ("" if e.endswith("s1") or "_s" not in e else
+                                " (seed " + e.rsplit("_s", 1)[1] + ")")
+            ax.plot(xs, ys, color=CAT[i % 4], lw=2, ls=DASH[i % 4], marker="o",
+                    ms=3.5, markevery=max(1, len(xs) // 12))
+            handles.append(Line2D([], [], color=CAT[i % 4], lw=2,
+                                  ls=DASH[i % 4], label=lab))
+    ax.axhline(0, color=MUTED, lw=1, ls=":")
+    ax.set_xlabel("environment steps (vectorised)")
+    ax.set_ylabel("average episode reward / N")
+    ax.set_title("Reward per enemy vs steps (NoWeapon scaling family)")
+    ax.legend(handles=handles, fontsize=8)
+
+    # Right panel: the SAME data against real wall-clock, which is the
+    # compute-normalised view. A scale that needs more CPU-seconds per step
+    # falls to the right, so this is where the computational scalability cost
+    # shows up as a horizontal displacement rather than a vertical one.
+    ax = axes[1]
+    for i, n in enumerate(sorted(runs)):
+        for (xs, ys, e) in runs[n]:
+            wt = {int(fnum(r["total_num_steps"])): fnum(r.get("wall_time"))
+                  for r in read_csv(os.path.join(CURVES, e + ".csv"))
+                  if fnum(r.get("wall_time"))}
+            if not wt:
+                continue
+            t0 = min(wt.values())
+            tv = [(wt[s] - t0) / 3600.0 for s in xs if s in wt]
+            yv = [y for s, y in zip(xs, ys) if s in wt]
+            if tv:
+                ax.plot(tv, yv, color=CAT[i % 4], lw=2, ls=DASH[i % 4], marker="o",
+                        ms=3.5, markevery=max(1, len(tv) // 12),
+                        label=f"{n}v{n}")
+    ax.axhline(0, color=MUTED, lw=1, ls=":")
+    ax.set_xlabel("wall-clock since run start (hours)")
+    ax.set_ylabel("average episode reward / N")
+    ax.set_title("Same runs vs wall-clock (compute-normalised)")
+    ax.legend(fontsize=8)
+    fig.suptitle("N-v-N scaling, reward normalised by team size", fontsize=13,
+                 fontweight="600", y=1.0)
+    fig.tight_layout(rect=[0, 0, 1, 0.93])
+    fig.savefig(os.path.join(FIG, "scaling_reward_normalized.png"), bbox_inches="tight")
+    plt.close(fig)
+    print("wrote scaling_reward_normalized.png")
+
+
 def main():
     curves = load_curves()
     # exclude smoke / metrics-test runs from the figures
@@ -423,6 +501,7 @@ def main():
                             "wall-clock (minutes)", "Learning curves: reward vs wall-clock (compute-normalised view)")
     fig_scaling_dashboards()
     fig_normalized_critic()
+    fig_scaling_reward_normalized()
     fig_resource_scaling()
     fig_resources()
     print(f"\nfigures in {FIG}")
