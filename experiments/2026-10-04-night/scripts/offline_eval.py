@@ -61,6 +61,8 @@ def main():
     p.add_argument("--selfplay", action="store_true",
                    help="mirror the ego/opponent split; opponent is the checkpoint too")
     p.add_argument("--max-steps", type=int, default=None)
+    p.add_argument("--coordination", action="store_true",
+                   help="also record per-step team-coordination proxies")
     p.add_argument("--out", default=None)
     args = p.parse_args()
 
@@ -98,7 +100,41 @@ def main():
     policy.prep_rollout()
 
     n_ego = n_agents // 2 if (is_multi and args.selfplay) else n_agents
-    returns, lengths, wins = [], [], []
+    returns, lengths = [], []
+
+    def coordination_metrics(env, n_ego):
+        """Cheap, geometry-based coordination proxies for the ego team.
+
+        We do not have an explicit target assignment in the NoWeapon task, so we
+        use the nearest-enemy as the de-facto target:
+          n_distinct_targets  how many different enemies the team is oriented to
+          collision_rate      fraction of ego agents whose nearest enemy is also
+                              some teammate's nearest enemy (everyone piling on
+                              the same aircraft)
+          team_spread_m       mean pairwise distance inside the ego team
+          nearest_enemy_m     mean distance from each ego agent to its target
+        All are proxies; the formation width is deliberately scaled with N, so
+        absolute values are not comparable across N -- only the trends, and only
+        at comparable policy quality.
+        """
+        ids = list(env.agents.keys())[:n_ego]
+        enm = list(env.agents[ids[0]].enemies)
+        pos = np.array([env.agents[i].get_position() for i in ids], dtype=float)
+        epos = np.array([e.get_position() for e in enm], dtype=float)
+        d = np.linalg.norm(pos[:, None, :] - epos[None, :, :], axis=-1)  # (n_ego, n_enm)
+        tgt = d.argmin(axis=1)
+        counts = np.bincount(tgt, minlength=len(enm))
+        collision = float(np.mean([counts[t] > 1 for t in tgt]))
+        pd = np.linalg.norm(pos[:, None, :] - pos[None, :, :], axis=-1)
+        iu = np.triu_indices(len(ids), k=1)
+        return {
+            "n_distinct_targets": int((counts > 0).sum()),
+            "collision_rate": collision,
+            "team_spread_m": float(pd[iu].mean()) if len(iu[0]) else 0.0,
+            "nearest_enemy_m": float(d.min(axis=1).mean()),
+        }
+
+    coord = []
 
     for ep in range(args.episodes):
         reset = env.reset()
@@ -113,6 +149,8 @@ def main():
         step = 0
         while True:
             step += 1
+            if args.coordination and is_multi and step % 5 == 1:
+                coord.append(coordination_metrics(env, n_ego))
             with torch.no_grad():
                 actions, rnn = policy.act(obs_ego.reshape(n_ego, -1), rnn, masks, deterministic=True)
             actions = actions.cpu().numpy().astype(np.int64)
@@ -151,6 +189,15 @@ def main():
         "mean_episode_length": round(statistics.mean(lengths), 2),
         "per_episode_returns": [round(r, 3) for r in returns],
     }
+    if coord:
+        keys = list(coord[0].keys())
+        res["coordination"] = {
+            k: round(float(np.mean([c[k] for c in coord])), 4) for k in keys
+        }
+        res["coordination_samples"] = len(coord)
+        res["coordination_note"] = (
+            "proxies only; formation width is deliberately scaled with N, so "
+            "absolute values are not comparable across N")
     print(json.dumps(res, indent=2))
     if args.out:
         with open(args.out, "w") as f:
