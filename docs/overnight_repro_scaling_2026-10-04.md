@@ -705,19 +705,111 @@ MAPPO **不会显式枚举所有联合动作**。因此联合动作空间的指�
 
 ## 14. Paper A Analysis
 
-> `[进行中]` 由后台工作流产出，见 `docs/scalable_marl_papers.md`。
+**完整精读见 `docs/scalable_marl_papers.md` §1、§3、§4。**
+该文档由一个 17 agent 的工作流产出（每篇 5 个分页抽取 → 每篇合成 → 两篇对比 →
+3 个对抗验证 agent（分别核查 A 的事实地基、B 的样本复杂度精确性、
+概念正确性与完整性）→ 最终写作者），共提出 13 个问题，**3 个严重问题已修正并入正文**。
 
----
+**论文 A**：Ma, Li, Du, Dong & Yang, *Efficient and scalable reinforcement learning
+for large-scale network control*, **Nature Machine Intelligence 6** (2024),
+doi:10.1038/s42256-024-00879-7。
+
+核心（**它攻击的是"全局信息 / 中心化"，全文不用 "curse" 一词，用词是 scalability**）：
+
+- **形式化**：networked MDP；agent $i$ 的 $\kappa$-hop 邻域 $N^\kappa_i$
+  （图距离 ≤ κ 的节点，含自身）；**localized policy** $\pi_i(\cdot\mid s_{N^\kappa_i})$
+  只依赖邻域与自身状态；**extended value** $V_i(s^{N^\kappa_i})$。
+- **Theorem 3**（eq. 15, p.12）：$|V_i(s)-V_i(s^{N^\kappa_i})|\le \frac{r_{max}}{1-\gamma}\gamma^\kappa$
+  —— 近似误差随 κ **指数衰减**。
+- **Theorem 4**（eq. 17, p.12）：policy gradient 版本，
+  误差 $\le \frac{\gamma^{\kappa-1}}{1-\gamma}\left[1-(1-\gamma^2)\frac{|N^\kappa_i|}{n}\right]r_{max}g_{max}$。
+  **邻域占比是乘性因子，不是指数**（验证器据 SI §4.6 的推导确认了这一读法）。
+- **方法**：localized model + extended value + **branched rollout**（Thm 2 把模型误差系数
+  从 $\le\gamma/(1-\gamma)$ 降到 $\le\gamma(1-\gamma^T)/(1-\gamma)$）。
+- **实验规模**：真实系统数百个 agent。
+- **⚠️ 量级现实检验（对我们很重要）**：$\gamma^\kappa$ 在 $\gamma=0.99$ 时，
+  要让误差降到 $0.1\,r_{max}$ 需要 **$\kappa\approx700$**。
+  **"小的 κ 就够"绝不能当定理使用**，必须经验验证。
 
 ## 15. Paper B Analysis
 
-> `[进行中]` 同上。
+**论文 B**：Shi, Gai, Mazumdar, Chi & Wierman,
+*Breaking the Curse of Multiagency in Robust Multi-Agent Reinforcement Learning*,
+arXiv:2409.20067v3（Caltech / PKU / CMU）。
 
----
+核心（**它攻击的是"联合动作空间"的统计瓶颈**）：
+
+- **curse of multiagency 的精确含义**：sample complexity 经联合动作空间
+  $\prod_i|A_i|$ **随 agent 数指数增长**。
+  ⚠️ **术语出处**：B **不是**这个术语的首创者（应归 Wang et al. 2023 COLT）。
+- **设定**：distributionally robust Markov games；
+  提出 **fictitious uncertainty set**（每个 agent 的不确定性集同时由环境和
+  其他 agent 的**整体行为**决定），并证明 robust NE 与 robust CCE 的存在性。
+- **算法**：**Robust-Q-FTRL** + adaptive sampling；其 robust Q 只定义在 $(s,a_i)$ 上，
+  不确定性集把其他 agent 的行为**积分掉**。
+- **Theorem 2**（p.12, eq. 26/30）：总样本数
+  $\tilde O\!\left(\frac{S H^6 \sum_{i=1}^n A_i}{\epsilon^4}\cdot\min\{H,\;1/\min_i\sigma_i\}\right)$
+  —— 对动作空间是 **$\sum_i A_i$ 线性，不是 $\prod_i A_i$**。
+- **⚠️ 两点必须与结论一起引用**：
+  1. 该 $\prod\to\sum$ 结果**只在其自己新引入的 RMG 类内成立**，
+     B 在 p.4 footnote 1 **明确声明不可与先前工作直接对比**；
+     标准 MG 的 $\sum$ 界早于 B（Li et al. 2023）。
+  2. 依赖**生成模型（generative model）+ tabular + finite horizon + robust CCE**。
+- **无实验、无代码**；常数 $C_1/C_2$ 未给数值。
 
 ## 16. Connection to LAG
 
-> `[进行中]`
+**完整分析见 `docs/scalable_marl_papers.md` §5、§6。**
+
+### 16.1 一句话结论
+
+> **Paper A 管"信息"，Paper B 管"统计"——两者正交。**
+> 而 **LAG 在 N-v-N 上实测到的所有超线性增长，全部落在 Paper A 的坐标系里，
+> 没有一条落在 Paper B 的坐标系里。**
+
+逐条对应（都是本机实测）：
+
+| LAG 的增长点 | 阶数 | Paper A 的轴 | Paper B 的轴 |
+|---|---|---|---|
+| `obs_dim = 12N+3` | O(N) | ✅ | ❌ |
+| `share_obs_dim = 24N²+6N` | **O(N²)** | ✅ | ❌ |
+| critic 首层 MAC/env-step | **O(N³)** | ✅ | ❌ |
+| share_obs replay buffer 字节 | **O(N³)** | ⚠️ 间接 | ❌ |
+| JSBSim 物理仿真 | **O(N) 线性** | ❌ | ❌ |
+| 观测构造（工程实现） | **O(N²)，每步两遍** | ⚠️ | ❌ |
+| 联合动作空间 | 理论 $\prod\|A_i\|$，**MAPPO 未显式枚举** | ❌ | ⚠️ 概念相关但不可套用 |
+
+### 16.2 最有价值的一条连接：**当前 LAG 的 κ = ∞**
+
+Paper A 的局部性参数是 κ。把它套到 LAG 上：
+
+> **`MultipleCombatTask.get_obs()` 对每个 agent 遍历 `partners + enemies`——
+> 即全部其他飞机，与图距离无关。**
+
+因此 LAG 现在实现的**不是**「局部观测 + 集中式 critic」，
+而是 **「全局观测 + 全局 critic」**：每个 agent 拿到的是
+一个含全部 N 个 agent 交互信息的稠密向量（`12N+3` 维），
+而 critic 拿到的是 `24N²+6N` 维并**复制给每个 agent**。
+
+这直接给出一个**可执行、可度量、且与 Thm 3 的形式一一对应**的实验
+（见 §17 与 `docs/scalable_marl_candidates.md` 的 Candidate A），
+但**今晚不实现**（用户 §29：不急于创新）。
+**同时必须声明**：A 的定理前提（图结构已知、动力学可分解、局部模型）
+在空战里都不成立，**不能声称有任何理论保证**。
+
+### 16.3 为什么 Paper B 的方法不能拿来改 LAG
+
+- MAPPO 的 actor 是 **factorized** 的：$\pi(a\mid o)=\prod_i\pi_i(a_i\mid o_i)$，
+  **不显式枚举联合动作**，所以 $\prod|A_i|$ 不进入网络前向。
+- LAG 里确实继承指数的组件是**集中式 critic 的输入维度**，
+  但那是**状态空间**的拼接（O(N²)），属于 Paper A 的轴。
+- B 的算法需要 **tabular + generative model + robust CCE**，
+  与 LAG（连续高维状态、神经网络策略、self-play、非平稳对手）
+  之间存在**不可跨越的差距**。
+
+> **因此本报告明确声明：本晚的实验没有、也不可能验证 Paper B 的任何定理。
+> B 对我们的价值是术语与诊断工具（∏ vs Σ 的分类学），不是可实现的算法。**
+> 「我们用 LAG 验证了 Paper B」这类说法必须禁止。
 
 ---
 
