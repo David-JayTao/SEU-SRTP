@@ -87,8 +87,32 @@ def main():
         w.writerows(rows)
     print(f"wrote {OUT} ({len(rows)} rows)\n")
 
+    # Mean over the first K episodes. Episode 0 alone is a single point; this is
+    # the version that should be quoted, with its episode count attached.
+    K = 5
+    print(f"=== mean over the first {K} episodes per run (hierarchical NoWeapon family) ===")
+    print("(value_loss/N^2 and grad_norm/N remove the reward-magnitude growth; "
+          "a purely reward-scale effect would make both constant)")
+    print(f"\n{'N':>3} {'runs':>5} {'eps':>4} {'reward/N':>9} {'vl/N^2':>8} "
+          f"{'gn/N':>7}  sd(vl/N^2)  sd(gn/N)")
+    by_n = {}
+    for r in rows:
+        if r["episode"] < K:
+            by_n.setdefault(r["team_size"], []).append(r)
+    import statistics as _st
+    for n in sorted(by_n):
+        rs = by_n[n]
+        rw = [r["reward_per_enemy"] for r in rs]
+        vl = [r["value_loss_per_N2"] for r in rs]
+        gn = [r["critic_grad_norm_per_N"] for r in rs if r["critic_grad_norm_per_N"] is not None]
+        exps = {r["experiment"] for r in rs}
+        print(f"{n:>3} {len(exps):>5} {len(rs):>4} {_st.mean(rw):>9.3f} "
+              f"{_st.mean(vl):>8.3f} {_st.mean(gn) if gn else float('nan'):>7.3f}  "
+              f"{( _st.pstdev(vl) if len(vl) > 1 else 0):>10.4f}  "
+              f"{(_st.pstdev(gn) if len(gn) > 1 else 0):>8.4f}")
+
     # matched-stage comparison: episode index equal across scales
-    print("=== matched training stage (episode index), hierarchical NoWeapon family ===")
+    print("\n=== matched training stage (episode index), hierarchical NoWeapon family ===")
     print(f"{'N':>3} {'ep':>3} {'reward':>9} {'rew/N':>8} {'vl':>9} {'vl/N²':>8} "
           f"{'critic_gn':>10} {'gn/N':>7}  experiment")
     for r in rows:
