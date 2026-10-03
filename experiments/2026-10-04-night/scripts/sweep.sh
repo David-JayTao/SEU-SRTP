@@ -88,8 +88,24 @@ bash experiments/2026-10-04-night/scripts/snapshot_status.sh >/dev/null
 
 echo
 echo "--- health ---"
-CRASH=$(grep -l "Traceback" "${EXP}"/logs/*.log 2>/dev/null | wc -l)
-echo "logs_with_traceback: ${CRASH}"
+# A traceback is NOT automatically a crash: the queue caps every job with
+# `timeout -s INT`, so a completed job ends in KeyboardInterrupt by design
+# (see run_train.sh). Only count tracebacks that are not a clean interrupt.
+REAL=0
+INTERRUPT=0
+for f in "${EXP}"/logs/*.log; do
+    [ -e "$f" ] || continue
+    if grep -q "Traceback" "$f" 2>/dev/null; then
+        if tail -40 "$f" | grep -qE "^(KeyboardInterrupt|SystemExit)"; then
+            INTERRUPT=$((INTERRUPT+1))
+        else
+            REAL=$((REAL+1))
+            echo "  !! unhandled traceback in $(basename "$f")"
+        fi
+    fi
+done
+echo "logs_with_unhandled_traceback: ${REAL}"
+echo "logs_ended_by_timeout_SIGINT: ${INTERRUPT}"
 echo "tmux_sessions: $(tmux ls 2>/dev/null | wc -l)"
 echo "live_train_procs: $(pgrep -fc train_jsbsim.py || echo 0)"
 echo "load: $(cut -d' ' -f1-3 /proc/loadavg)"
