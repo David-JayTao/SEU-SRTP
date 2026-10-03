@@ -1,0 +1,5 @@
+# GPU1: official 2v2 reproduction + small-scale scaling
+# name|threads|num_env_steps|time_limit_s|env|scenario|algo|seed|extra
+official_2v2_noweapon|12|1e8|7200|MultipleCombat|2v2/NoWeapon/HierarchySelfplay|mappo|0|--use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 1 --eval-episodes 1
+official_2v2_shoot|12|1e8|7200|MultipleCombat|2v2/ShootMissile/HierarchySelfplay|mappo|0|--use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 1 --eval-episodes 1
+scaling_2v2_noweapon|12|900000|5400|MultipleCombat|2v2/scaling_noweapon/HierarchySelfplay|mappo|0|--use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 2 --eval-episodes 1
