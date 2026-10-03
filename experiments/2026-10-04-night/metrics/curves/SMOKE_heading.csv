@@ -1,4 +1,4 @@
-episode,total_num_steps,fps,average_episode_rewards,value_loss,policy_loss,policy_entropy_loss,actor_grad_norm,critic_grad_norm,ratio,wall_time
-0,12000,238.0,-14.824906782670455,,,,,,,
-1,24000,236.0,-12.279285919971954,,,,,,,
-2,36000,234.0,-13.130021528764205,,,,,,,
+episode,total_num_steps,fps,average_episode_rewards,value_loss,policy_loss,policy_entropy_loss,policy_entropy_true_sum,actor_grad_norm,critic_grad_norm,ratio,wall_time
+0,12000,238.0,-14.824906782670455,,,,,,,,
+1,24000,236.0,-12.279285919971954,,,,,,,,
+2,36000,234.0,-13.130021528764205,,,,,,,,

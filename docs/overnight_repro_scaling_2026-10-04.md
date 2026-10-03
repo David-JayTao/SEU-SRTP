@@ -454,6 +454,68 @@ for enm in env.agents[agent_id].enemies:      # 对每个敌机求和
 `1v1/Shoot`、`1v1/Dodge`、`2v2` 用 scale=15。说明这个尺度是逐场景手工调的，
 **从来没有人针对 N>2 调过**。）
 
+### 11.1b ⚠️ 一个必须先排除的混淆：策略几乎还是均匀随机
+
+**这是本晚最重要的单点发现之一，也是解释「战斗任务 reward 平坦」的关键。**
+
+#### (a) `metrics.jsonl` 里的熵列不可直接用
+
+`algorithms/utils/act.py :: ACTLayer.evaluate_actions` 对 MultiDiscrete 动作空间做的是：
+
+```python
+dist_entropy.append(action_dist.entropy() / action_log_probs[-1].size(0))   # ← 除以 batch 行数
+...
+dist_entropy = torch.cat(dist_entropy, dim=-1).sum(dim=-1, keepdim=True)
+```
+
+所以被 log 的 `policy_entropy_loss` 实际是 **(各维熵之和) / batch 行数**。
+而 batch 行数
+
+```
+data_chunks     = n_rollout_threads * buffer_size // data_chunk_length
+mini_batch_size = data_chunks // num_mini_batch
+batch_rows      = data_chunk_length * mini_batch_size
+```
+
+**随 `n_rollout_threads` 变化，因此随 N 变化** —— 直接拿这列跨 N 比较是**错的**。
+（例：2v2 的只读因子是 7200，10v10 是 10800。）
+
+已在 `collect_metrics.py` 中还原：`policy_entropy_true_sum = -policy_entropy_loss × batch_rows`。
+
+#### (b) 两种独立方法测出的真实熵（互相印证）
+
+| 运行 | 训练步数 | 还原后的熵（终端值/最大） | **直接测量**（加载 checkpoint 前向） |
+|---|---|---|---|
+| 未训练 2v2 | 0 | — | **1.000** |
+| `official_heading` | 1.17e6 | 13.91 / 14.54 = **0.957** | **0.949** |
+| `official_2v2_noweapon` | 4.3e5 | 3.724 / 3.807 = **0.978** | **0.973** |
+| `scaling_3v3_noweapon_s1` | 2.4e5 | 3.741 / 3.807 = **0.983** | — |
+| `scaling_10v10_noweapon` | 1.1e5 | 3.798 / 3.807 = **0.998** | **0.998** |
+
+两种方法（日志还原 vs 直接前向）在三个可比的运行上**吻合到 1% 以内**，
+说明这个测量是可信的。
+
+> **结论：训练了数十万步之后，策略的动作分布仍然停留在最大熵的
+> 95%–99.8%——也就是几乎还是均匀随机。**
+> 未训练策略是 100.0%，训练后只降到 94.9%（heading）到 99.8%（10v10）。
+
+#### (c) 这意味着什么（以及不能意味着什么）
+
+- **能解释**：战斗任务（2v2/3v3/10v10）的训练 reward 为何在 4e5 步内基本平坦——
+  因为策略还没有从随机行为中走出来，reward 的变化主要来自随机涨落。
+- **不能说明**：不能说「10v10 比 2v2 更难学」。上表中熵与**训练步数**高度混淆
+  （10v10 只有 1.1e5 步，是 2v2 的四分之一），**必须先控制步数才能比较熵**。
+  目前**不足以**得出「N 越大熵越高」的结论。
+- **归因**：这是**优化/超参数层面的现象**（`entropy_coef=1e-3` 很小、
+  策略梯度在这两个任务上推进很慢），**不是 MARL 算法可扩展性问题**。
+  按用户 §16 的分类，它属于 **Algorithmic/Learning**，但成因是超参数与任务难度，
+  与 agent 数量无关。
+
+**实际影响**：在策略仍接近随机的阶段比较 2v2 / 3v3 / 5v5 / 10v10 的
+`reward vs steps`，比较的其实是「随机策略在几何规模不同的场景下拿到多少 shaping reward」，
+而不是「哪个规模更容易学」。**这一点必须在结论与答辩中明确说明**，
+否则会把环境几何差异误读成算法可扩展性差异。
+
 ### 11.2 归一化后的 matched-stage 结果（同一 task 类、同一奖励配置、同一动作空间）
 
 数据源 `metrics/normalized_scaling.csv`：
