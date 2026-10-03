@@ -1,0 +1,54 @@
+[
+  {
+    "team_size": 2,
+    "num_agents": 4,
+    "obs_dim": 27,
+    "share_obs_dim": 108,
+    "get_obs_all_ms": 1.9835,
+    "get_state_ms": 2.0149,
+    "sim_run_ms": 3.6628,
+    "full_step_ms": 14.5034,
+    "obs_share_of_step_pct": 27.6,
+    "sim_share_of_step_pct": 25.3,
+    "get_state_per_agent_us": 503.72
+  },
+  {
+    "team_size": 3,
+    "num_agents": 6,
+    "obs_dim": 39,
+    "share_obs_dim": 234,
+    "get_obs_all_ms": 4.8721,
+    "get_state_ms": 4.5622,
+    "sim_run_ms": 5.5492,
+    "full_step_ms": 27.1705,
+    "obs_share_of_step_pct": 34.7,
+    "sim_share_of_step_pct": 20.4,
+    "get_state_per_agent_us": 760.37
+  },
+  {
+    "team_size": 5,
+    "num_agents": 10,
+    "obs_dim": 63,
+    "share_obs_dim": 630,
+    "get_obs_all_ms": 13.2596,
+    "get_state_ms": 13.3649,
+    "sim_run_ms": 10.6308,
+    "full_step_ms": 58.2312,
+    "obs_share_of_step_pct": 45.7,
+    "sim_share_of_step_pct": 18.3,
+    "get_state_per_agent_us": 1336.49
+  },
+  {
+    "team_size": 10,
+    "num_agents": 20,
+    "obs_dim": 123,
+    "share_obs_dim": 2460,
+    "get_obs_all_ms": 37.1827,
+    "get_state_ms": 36.9459,
+    "sim_run_ms": 15.6255,
+    "full_step_ms": 183.8758,
+    "obs_share_of_step_pct": 40.3,
+    "sim_share_of_step_pct": 8.5,
+    "get_state_per_agent_us": 1847.29
+  }
+]
