@@ -157,6 +157,8 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("--out", default=None)
     p.add_argument("--batch-threads", type=int, default=12)
+    p.add_argument("--n", type=int, nargs="+", default=[2, 3, 5, 10])
+    p.add_argument("--variant", default="noweapon", choices=["noweapon", "shoot"])
     p.add_argument("--cuda", action="store_true", default=True)
     p.add_argument("--cpu", dest="cuda", action="store_false")
     args = p.parse_args()
@@ -165,12 +167,10 @@ def main():
     print(f"device={device} batch_threads={args.batch_threads}")
 
     rows = []
-    # measured scales
-    for n in (2, 3, 5, 10):
-        for variant in ("noweapon",):
-            r = probe(n, variant, device, args.batch_threads)
-            rows.append(r)
-            print(json.dumps(r))
+    for n in args.n:
+        r = probe(n, args.variant, device, args.batch_threads)
+        rows.append(r)
+        print(json.dumps(r))
 
     # Extrapolation. The honest model is FLOP-based, not time-based:
     #   critic first-layer work per env step  = (rows) * share_dim * 128
@@ -181,14 +181,14 @@ def main():
     # (Using the production batch would be misleading: at small N it is
     # launch-latency-bound and the measured per-agent cost actually FALLS with
     # N, which says nothing about asymptotic scaling.)
-    base = next(r for r in rows if r["team_size"] == 10)
+    base = max(rows, key=lambda r: r["team_size"])
     mac_per_sample_base = base["share_obs_dim"] * 128
     sec_per_mac = (base["critic_fwd_ms_fixed256"] / 1000) / (256 * mac_per_sample_base)
     eff_gmacs = 1.0 / sec_per_mac / 1e9
+    measured_n = {r["team_size"] for r in rows}
 
-    EXTRA_N = (20, 50, 100)
     extrap = []
-    for n in (2, 3, 5, 10) + EXTRA_N:
+    for n in sorted(measured_n | {2, 3, 5, 10, 20, 50, 100}):
         obs_dim, share_dim = dims_noweapon(n)
         rows_per_step = args.batch_threads * n          # ego team only
         mac_per_step = rows_per_step * share_dim * 128
@@ -203,7 +203,7 @@ def main():
             "critic_first_layer_MAC_per_envstep": mac_per_step,
             "critic_fwd_ms_per_envstep_est": round(mac_per_step * sec_per_mac * 1000, 4),
             "share_obs_buffer_GB": round(buf_bytes / 1024 ** 3, 3),
-            "note": "measured" if n <= 10 else "extrapolated",
+            "note": "measured" if n in measured_n else "extrapolated",
         })
 
     out = {"measured": rows, "extrapolated": extrap, "device": str(device),
