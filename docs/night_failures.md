@@ -212,3 +212,46 @@ Verification / Category。
 以上 F1–F8 **没有一条**可以支撑「curse of multiagency」的结论。
 它们分别是环境、日志、脚本、工具、测量方法层面的问题。
 若最终 10v10 学不动，必须先排除 F8 类因素，再讨论算法层面的可扩展性。
+
+---
+
+## F9 — 官方配置 `1v1/ShootMissile/HierarchyVsBaseline` 根本无法运行（**upstream 真实 bug**）
+
+- **Failure ID**: F9
+- **Experiment**: `official_1v1_shoot_hier_vsbaseline`
+  （场景 `1v1/ShootMissile/HierarchyVsBaseline`；`_nolimit` 变体同样受影响）
+- **Symptoms**: 训练在第一个 env step 就抛
+  `TypeError: 'NoneType' object is not subscriptable`，
+  全部 rollout 子进程崩溃，主进程随后在 `envs.close()` 里抛 `EOFError`。该作业**零步完成**。
+- **Cause（已定位到具体行）**：
+  ```python
+  # envs/JSBSim/tasks/singlecombat_with_missle_task.py:224-227
+  class HierarchicalSingleCombatShootTask(...):
+      def normalize_action(self, env, agent_id, action):
+          self._shoot_action[agent_id] = action[-1]        # ← 这里先崩
+          return HierarchicalSingleCombatTask.normalize_action(
+              self, env, agent_id, action[:-1].astype(np.int32))
+  ```
+  而 `use_baseline=True` 时的提前返回写在**父类**
+  `HierarchicalSingleCombatTask.normalize_action`（`singlecombat_task.py:219-221`）里：
+  ```python
+  if self.use_baseline and agent_id in env.enm_ids:
+      action = self.baseline_agent.get_action(env.agents[agent_id])
+      return action
+  ```
+  但 `action[-1]` 在**到达父类之前**就已经被求值了。
+  `vsBaseline` 配置下 `num_agents == 1`，`BaseEnv._unpack()` 会给对手 agent 填 `None`，
+  于是 `None[-1]` → `TypeError`。
+- **Code location**: `envs/JSBSim/tasks/singlecombat_with_missle_task.py:226`（配合
+  `singlecombat_task.py:219`、`env_base.py:280`）
+- **Fix**: **未修复**（保持官方实现以便审计）。最小修复是在 shoot 子类里
+  先判断 baseline 分支再取 `action[-1]`，
+  例如把 `use_baseline and agent_id in env.enm_ids` 的判断提到函数最前面。
+- **Verification**: 该作业的日志
+  `logs/official_1v1_shoot_hier_vsbaseline_seed1_gpu0_20261004_091910.log`
+  从第一个 step 起即反复抛同一异常；对照 `1v1/ShootMissile/HierarchySelfplay`
+  （无 baseline，所有 agent 都有动作）可正常运行 72 万步。
+- **意义**：这是本次审计发现的**唯一一个「官方配置无法运行」**的案例。
+  它说明仓库中「有 YAML + 有 task 分支」**不等于**「该配置可用」——
+  L2 配置必须逐个实际跑过才能确认，这正是本次逐项 smoke test 的价值。
+- **Category**: `Other`（upstream 实现 bug，与可扩展性无关）

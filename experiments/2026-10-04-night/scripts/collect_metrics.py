@@ -91,8 +91,15 @@ def parse_log(path):
     meta["env_name"] = m.group("e") if m else None
     meta["scenario"] = m.group("s").strip() if m else None
 
-    crashed = bool(re.search(r"Traceback \(most recent call last\)", txt))
-    meta["crashed"] = crashed
+    # A traceback is NOT a crash here: every queued job is capped with
+    # `timeout -s INT`, so a job that ran to its wall-clock limit ends in
+    # KeyboardInterrupt by design. Only count tracebacks that are not a clean
+    # interrupt, otherwise every time-capped run is misreported as crashed.
+    has_tb = bool(re.search(r"Traceback \(most recent call last\)", txt))
+    tail = txt[-4000:]
+    clean_interrupt = bool(re.search(r"^(KeyboardInterrupt|SystemExit)\s*$", tail, re.M))
+    meta["crashed"] = has_tb and not clean_interrupt
+    meta["time_capped"] = has_tb and clean_interrupt
     meta["n_fps_lines"] = len(eps)
     meta["eval_rewards"] = evals
     meta["last_eval_reward"] = evals[-1] if evals else None

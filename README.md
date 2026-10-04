@@ -103,6 +103,24 @@ We have added support for real-time telemetry rendering using **Tacview Advanced
 
 This functionality enhances training visualization, making it easier to debug and analyze the agent's performance during the simulation.
 
+## SRTP Research Progress
+
+This repository is maintained as the code base for the SEU SRTP project on
+multi-agent RL for UAV air combat. Project-specific documentation lives under
+`docs/`; the upstream README above is unchanged.
+
+**Start here:** [Group Progress Report (2026-10-04)](docs/group_progress_report_2026-10-04.md)
+— a single entry point covering what was run, what was found, what the results
+do and do not support, and links to everything else.
+
+- [Full Technical Report](docs/overnight_repro_scaling_2026-10-04.md)
+- [Baseline Inventory](docs/baseline_inventory.md)
+- [N-v-N Scalability Audit](docs/nvn_scalability_audit.md)
+- [Scalable MARL Paper Notes](docs/scalable_marl_papers.md)
+- [Candidate Research Directions](docs/scalable_marl_candidates.md)
+- [Failures and Fixes](docs/night_failures.md)
+- [Experiment manifest](experiments/2026-10-04-night/manifest.csv)
+
 ## Citing
 If you find this repo useful, pleased use the following citation:
 ````

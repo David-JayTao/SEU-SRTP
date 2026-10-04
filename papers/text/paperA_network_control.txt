@@ -1,0 +1,4204 @@
+
+
+===== PAGE 1 =====
+Nature Machine Intelligence
+nature machine intelligence
+https://doi.org/10.1038/s42256-024-00879-7
+Article
+Efficient and scalable reinforcement learning 
+for large-scale network control
+Chengdong Ma1,2,6, Aming Li2,3,6, Yali Du4,6, Hao Dong5 & Yaodong Yang    1,2 
+The primary challenge in the development of large-scale artificial 
+intelligence (AI) systems lies in achieving scalable decision-making—
+extending the AI models while maintaining sufficient performance.  
+Existing research indicates that distributed AI can improve scalability  
+by decomposing complex tasks and distributing them across collaborative 
+nodes. However, previous technologies suffered from compromised 
+real-world applicability and scalability due to the massive requirement 
+of communication and sampled data. Here we develop a model-based 
+decentralized policy optimization framework, which can be efficiently 
+deployed in multi-agent systems. By leveraging local observation  
+through the agent-level topological decoupling of global dynamics,  
+we prove that this decentralized mechanism achieves accurate  
+estimations of global information. Importantly, we further introduce  
+model learning to reinforce the optimal policy for monotonic improvement 
+with a limited amount of sampled data. Empirical results on diverse 
+scenarios show the superior scalability of our approach, particularly in 
+real-world systems with hundreds of agents, thereby paving the way for 
+scaling up AI systems.
+Achieving scalable decision-making becomes a critical challenge when 
+deploying artificial intelligence (AI) models into large-scale systems 1. 
+First, this requires effective information exchange among system enti-
+ties to help an agent perceive the state of the environment and other 
+agents2. However, owing to constraints and high costs associated 
+with communication3, achieving comprehensive information sharing 
+across the entire system becomes unfeasible (Fig. 1a). For example, 
+in traffic networks, frequent and extensive communication between 
+traffic lights can cause a substantial power loss (Fig. 1b). In some sys-
+tems involving user information, centralized information collection 
+also increases the risk of privacy leakage 4. Second, efficient sample 
+acquisition and learning from limited data are necessary because the 
+cost of agent–environment interaction rises exponentially with the 
+scale of the system5, and in some scenarios, only limited interactions 
+are permitted. Therefore, developing an effective communication 
+mode and a sample-efficient approach is crucial for achieving  
+scalable decision-making.
+As an advanced paradigm of distributed AI, multi-agent reinforce-
+ment learning (MARL) provides a possible solution6,7 and has made 
+progress in various scenarios, including autonomous driving8–12, wire-
+less communications13,14, multi-player games15,16, power systems17,18 and 
+urban transportation19–24. The advantage of MARL lies in its ability to 
+perform nonlinear fitting solely by data and attain efficient inference. 
+In contrast, traditional methods such as model predictive control (MPC) 
+require precise system dynamics25,26, which are often difficult to obtain 
+in complex systems. Even with accurate dynamics, traditional methods 
+often rely on system linearization27, which inevitably harms performance 
+by disregarding numerous intricate nonlinear factors and system per-
+turbations inherent in complex systems. In addition, deficiencies in 
+computational efficiency, numerical stability and communication costs 
+Received: 18 April 2023
+Accepted: 10 July 2024
+Published online: xx xx xxxx
+ Check for updates
+1Institute for Artificial Intelligence, Peking University, Beijing, China. 2Center for Multi-Agent Research, Institute for Artificial Intelligence, Peking University, 
+Beijing, China. 3Center for Systems and Control, College of Engineering, Peking University, Beijing, China. 4Department of Informatics, King’s College 
+London, London, UK. 5CFCS, School of CS, Peking University, Beijing, China. 6These authors contributed equally: Chengdong Ma, Aming Li, Yali Du. 
+ e-mail: yaodong.yang@pku.edu.cn
+
+===== PAGE 2 =====
+Nature Machine Intelligence
+Article https:/ /doi.org/10.1038/s42256-024-00879-7
+By contrast, we discard this assumption to adapt to more generalized 
+systems. In addition, some insightful research adopted the trun -
+cated policy gradient method to optimize local policies and provided  
+guarantees for policy improvement where communication is lim -
+ited41,42. We further extend the concept of truncated Q -learning 41 
+(Q represents the value of state-action pairs) from the tabular case 
+to deep MARL, thereby factoring global Markov decision processes 
+(MDPs) into marginal transition to reduce system complexity 43. This 
+extension provides theoretical guarantees for policy improvement 
+at each step in general systems. Another direction involves learning 
+hidden information through computational communication pro -
+tocols21,44–47, whereas our approach requires only neighbour states. 
+This indicates that each agent needs less information for learning 
+and inference21.
+are also difficult to avoid for traditional methods28. Therefore, we focus 
+on MARL approaches to realize large-scale AI systems.
+However, despite its numerous advantages, developing an effi-
+cient and scalable MARL algorithm applicable to real-world scenarios 
+remains challenging29–36. Previous works towards alleviating informa-
+tion exchange have been shown to be insufficient because they rely 
+on impractical assumptions and redundant communication mecha -
+nisms, resulting in inferior adaptability to complex systems compared 
+with our framework. Specifically, one direction involves connecting 
+agents through a network topology and executing decentralized 
+control by neighbouring information 21,37–39. On the basis of this set -
+ting, existing methods have achieved policy learning convergence by 
+assuming linear approximation of the value functions40, or assuming 
+that the system dynamics are fully independent and decouplable 39. 
+2nd-order neighbours
+VCentral agent
+1st-order neighbours 3rd-order neighbours
+Hete ro gen eou s
+ag ents
+Disconnected
+ag ents V
+Hom oge neo us
+ag ents
+V
+Line Ring Grid
+C o mmuni ca t i on w i t h  d i ﬀe rent nei ghbours
+×
+M appi ng to
+The power of our method
+Sa f e  and e ﬀi ci ent
+i n t e ra ct i o n
++
+C o mmuni ca t i on w i t h  nei ghbours
+M odel
+C o m put a t i o n
+co m p l e x i t y ↑ Si gnal
+in t e rf e rence ↑
+Po w e r l o ss ↑
+Larg e-scale sy st e m in real wo rl d
+Communication
+range
+Prohi b i t
+e x t ensi v e
+i n t e ra ct i o n
+Systems with diﬀerent networked structures
+T ra ﬀi c
+light
+C o mmuni ca t i o n
+cent re
+(Global observation) (Local observation)
+Communication
+costs
+Sy st e m  co m p l e x i t y
+Learning stabilitySy st e m  co m p l e x i t y
+More scalable
+for large-scale systems
+Model-based decentralized policy optimizationCentralized learning (CL) Independent learning (IL)
+Clo se r to  the real  w o rl d
+C o mmuni ca t i o n
+a
+b
+Agent s
+C L O u rs ILO u rs
+O u rsC L
+O u rs IL
+s1
+s3
+s2 s4 a0s0 S0
+*
+Fig. 1 | Research motivation and relationship of networked agents. a, When 
+comparing our method with two main learning paradigms, centralized learning 
+(left) requires each agent to have global observations, significantly increasing 
+algorithm complexity and communication costs, and reducing scalability. In 
+independent learning (right), each agent learns in a single-agent fashion through 
+local observations, which reduces system and algorithm complexity. However, 
+the learning process is unstable, leading to poor decision-making performance 
+and mismatch with real-world scenarios. Our method (middle) learns based on 
+local communication between topologically connected agents, avoiding the 
+drawbacks of these two learning paradigms and achieving superior performance 
+with low observation costs. b, When controlling traffic lights on a traffic system, 
+obtaining information from many other traffic lights to make decisions for many 
+other traffic lights can lead to power loss with each communication step, thereby 
+reducing the endurance of the traffic lights. In addition, frequent and large-
+scale communication operations increase the probability of signal interference 
+and raise computational complexity, which are drawbacks of extensive 
+communication operations. Our approach relies on local communication 
+between topologically adjacent agents to reduce communication costs, power 
+consumption and computational complexity. Each agent receives the state 
+observation from its neighbours and aggregates them with its state and action 
+to obtain the final decision-dependent information. s0 and a0 represent the 
+state and action, respectively, of the agent itself; s1–s4 represent the states of 
+four adjacent agents and s0* represents the aggregated information state of the 
+agent. Furthermore, our framework maps the real system to a model, allowing 
+it to learn policies through safe and efficient interactions between agents and 
+the model. On the right, we describe the relationships between agents and 
+neighbours of different orders in our methodology, where the order corresponds 
+to κ, and a larger κ implies a broader communication range. In our method, each 
+agent accurately estimates the global value and policy gradient solely through 
+its neighbours' information, aiding policy learning. Another advantage of our 
+solution is its ability to handle heterogeneous agents and systems of multiple 
+types. In our experiments, CACC represents a linear-type system, Flow represents 
+a ring-type system, and ATSC, Power Grid, Real Power-Net and Pandemic 
+Networks represent grid-type systems. The agents in CACC, Flow and ATSC-Grid 
+are homogeneous, while agents in ATSC-Monaco, ATSC-New York, Real Power-
+Net and Pandemic Networks are heterogeneous. In addition, in the non-adjacent 
+setting, some disconnected agents existed in systems.
+
+===== PAGE 3 =====
+Nature Machine Intelligence
+Article https://doi.org/10.1038/s42256-024-00879-7
+Furthermore, high sample efficiency is also crucial yet unad -
+dressed, rendering current methods effective in only small-scale or sim-
+ulated environments16,48–50. Model-based methods are widely studied as 
+a promising approach for improving sample efficiency51–56, as they can 
+leverage estimated dynamic models to execute efficient interactions in 
+for acquisition of policy learning data52,57. This is particularly helpful for 
+the application of MARL in large-scale systems with constrained inter-
+actions (Fig. 1b). However, previous research on model-based MARL 
+is primarily restricted to specific scenarios, for example, two-player 
+zero-sum games 58,59, the pursuit-evasion game 60 or tabular tasks 61. 
+Some works formulate opponent models or dynamics in a decentral-
+ized structure62, but these approaches assume full-state observability, 
+and their scalability has not been sufficiently verified. Subsequently, 
+some researchers extended model-based prioritized sweeping to a 
+MARL scenario61 but were limited to only the tabular MARL setting, 
+and thus were unable to address more general tasks. In summary, it is 
+difficult to achieve scalable decision-making with existing model-based 
+MARL methods owing to the following limitations63. (1) Despite being 
+rooted in local models, they still rely on a global critic, undermining 
+their effectiveness in communication-constrained scenarios64–66. (2) 
+Theoretical analysis and bounded estimation for multi-agent model 
+learning are lacking, resulting in an insufficient understanding of the 
+model’s impact on MARL 65,67. (3) The integration of model learning 
+and policy learning in MARL scenarios, a potential iterative process in 
+real-world scenarios, has not been achieved65.
+Here we surpass the existing research bottleneck and take a sig-
+nificant step towards a decision paradigm that is scalable to large-scale 
+systems. First, we propose the ξ-dependent networked MDP, which has 
+the Markovian property of transition. ξ  characterizes the difference 
+between the decoupled system dynamics and the real system dynamics. 
+This is a form of decentralized partially observable MDP, and its advan-
+tage lies in its ability to deal with more general partially observable 
+cooperative multi-agent tasks. This concept bridges the gap between 
+standard network systems and general multi-agent systems, providing 
+the necessary theoretical framework and analytical tools for research 
+into multi-agent systems. Second, building on ξ-dependent network 
+systems, we propose a decentralized model-based framework for 
+networked systems, called model-based decentralized policy optimiza-
+tion. Our method is efficient and scalable, enabling overall perfor -
+mance improvement of the general system even when individual agents 
+have severely limited access to information retrieval (our method can 
+achieve the minimum local message size O (|si|)). 𝑂 is a mathematical 
+notation used to describe the asymptotic upper bound of the complex-
+ity of an algorithm; 𝑠𝑖 rerepresents the state of agent i. In our method, 
+we couple localized model learning with decentralized policy optimiza-
+tion. Specifically, we use well-learned localized models to predict future 
+states and use local communication to broadcast their predictions. T o 
+alleviate the issue of compounding model error, we adopt a branching 
+strategy 54,68 by replacing few long-horizon rollouts with many 
+short-horizon rollouts to reduce compounding errors in 
+model-generated rollouts. In the policy optimization part, we perform 
+decentralized proximal policy optimization (PPO)69 using data gener-
+ated by localized models and incorporating an extended value function. 
+Theoretically, we prove that the policy gradient computed from the 
+extended value function is a close approximation to the true gradient, 
+establishing the theoretical bridge between model learning and mono-
+tonic policy improvement. Our theoretical analysis begins with extend-
+ing the fully independent systems 41,70 to more realistic and general 
+multi-agent systems, and expanding single-agent model learning 
+theory54 to multi-agent systems.
+Empirically, we evaluate our algorithms in highly realistic simula-
+tors and real-world scenarios in a progressive manner, encompassing 
+various systems such as transportation, electric energy and social 
+healthcare. Specifically, the evaluation scenarios involved: (1) coop-
+erative adaptive cruise control (CACC)21 and connected autonomous 
+vehicle control (Flow) 71, (2) adaptive traffic signal control (ATSC), 
+including the construction of a traffic network using real maps of 
+Monaco21 and New York, (3) IEEE Power Grid72 and the real power sys-
+tems constructed using real-time electricity consumption data from 
+Portugal73, and (4) the Pandemic Networks constructed by epidemiolo-
+gists based on real epidemiological dynamics, COVID-19 prevention 
+and control policies, and infection status from real Swedish govern -
+ment data74. These tasks accurately and comprehensively simulate the 
+complexities and challenges that exist in large-scale networked sys -
+tems, with agent counts reaching 199 and 436. Importantly, although 
+some MARL methods can handle tasks involving large-scale multi-agent 
+systems (500 agents and above)75–77, these approaches often simplify 
+the complexity of large-scale problems through agent grouping76,77 or 
+mean-field approximations75. The problem setting remains approxi-
+mately centralized and cannot address decentralized multi-agent 
+learning in communication-limited scenarios. In contrast, our method 
+is decentralized. Therefore, it is necessary to qualify our statements to 
+indicate that our method significantly surpasses previous decentral-
+ized MARL methods in terms of the number of agents it can handle.
+Model-based decentralized policy optimization
+In the general framework of our algorithm (Algorithm 1), three key 
+components need to be specified: (1) how to perform decentralized 
+policy optimization, (2) how to query localized models and (3) to what 
+extent can we approximate the true policy gradients? T o train the mod-
+els and policies, we maintain two experience buffers, 𝒟𝒟E for trajectories 
+generated by true environment p and 𝒟𝒟M for data generated by the 
+model. The trajectories for agent i consist of (si,ai,s′
+i ,ri,di), i ∈𝒱𝒱 , where 
+𝒱𝒱𝒱𝒱 1,…, n} is the set of agents, si is state, ai is action, s′
+i is next state, ri 
+is reward and di is binary, indicating whether the task is completed or 
+reaches maximum episode length. The architecture of our framework 
+is presented in Fig. 2a. Below we present the details of model learning 
+and policy improvement.
+For each agent i, let π∗
+i  denote the optimal policy and Vi(s) denote 
+the critic. The parameterized policy πθi  with parameters θ and critic 
+Vϕi  with parameters 𝜙  are used to approximate these functions. Let 
+𝒱(si,τ,ai,τ,ri,τ)}i∈𝒱𝒱,τ∈ℬ represent a mini-batch of samples from 𝒟𝒟M gener-
+ated by policies πθi ,i ∈𝒱𝒱 , where τ is the collected interaction trajectory 
+and ℬ represents a mini-batch sampled from the experience buffer. As 
+it is not easy to obtain the true value Vi(s), we adopt the extended value 
+function39, which is defined as
+Vi(sNκ
+i
+)𝒱𝔼𝔼 sNκ
+−i
+[
+∞
+∑
+t=0
+rt
+i |s0
+Nκ
+i
+𝒱sNκ
+i
+] ,i ∈ 𝒱𝒱𝒱 (1)
+Let Nκ
+i  denote the κ-hop neighbour of agent i. Note that Vi(sNκ
+i
+) is a good 
+approximation of Vi(s), with the discrepancy decreasing exponentially 
+with κ (according to Theorem 3). T o generate the objective for the 
+extended value function, or return Ri, we use reward-to-go technique78. 
+The target of Vi(st
+Nκ
+i
+) is
+Rt
+i 𝒱
+T−t−1
+∑
+l=0
+γlrt+l
+i +Vϕi (sT
+Nκ
+i
+) , (2)
+where γ ∈ (0, 1) is the temporal discount factor and T is the length of each 
+episode. The loss for learning value function approximation is defined as
+ℒ(ϕi)𝒱 1
+|ℬ| ∑
+τ∈ℬ
+(Vϕi (sτ
+Nκ
+i
+) −Rτ
+i )
+2
+𝒱 (3)
+Empirically, we use communication within κ-hop neighbours to gener-
+ate an estimation of the global value function, denoted as
+̃Vi (st
+Nκ
+i
+) 𝒱 1
+n ∑
+j∈Nκ
+i
+Vj (st
+Nκ
+j
+) (4)
+
+===== PAGE 4 =====
+Nature Machine Intelligence
+Article https:/ /doi.org/10.1038/s42256-024-00879-7
+where t represents a certain time step during the networked MDP,  
+and j represents the agent index adjacent to agent i in κ-hop adjacency. 
+The advantage is thus defined as ̂At(st
+Nκ
+i
+,at
+i )𝒱𝔼𝔼 st+1
+Nκ
+i
+[rt
+i (st
+Nκ
+i
+,at
+i )+  
+γ ̃Vi(st+1
+Nκ
+i
+)− ̃Vi (st
+Nκ
+i
+))]. We adopt a PPO agent69 in implementations. The 
+loss function of an agent in our method is defined as:
+ℒ(θi)𝒱 1
+|ℬ| ∑
+τ∈ℬ
+(−
+πθi (ai,τ|sNi ,τ)
+πθold
+i (ai,τ|sNi ,τ)
+̂Ai,τ +βH(πθi )) 𝒱 (5)
+where H(πθi ) represents the policy entropy function used to compute 
+the entropy of the policy πθi, and β is the constant coefficient corre-
+sponding to the policy entropy.
+S a m p l e  an 
+a ct i on 
+Policy  learning
+Sample experience
+from environment
+Environment buﬀer
+Sample mini batchUpdate
+Policy loss
+Value loss
+U pdat e
+Mode l
+lea rning
+A d v ant age 
+Output variance 
+and mean 
+Model buﬀer
+Sample mini batch
+Sample experience
+from model
+Combine
+states
+Embed
+actions
+Next state
+Done
+Reward
+Predictive net
+Combine
+states and actions
+S e l f  a c t i o n
+Embed
+states 
+N e i ghbour
+s t a t e
+S e l f  s t a t e
+N e i ghbour
+s t a t e
+a
+The architecture of our method
+Gaussian
+distribution
+kt h i t e ra t i o n
+1st iteration
+2nd iteration
+Model-based transitionReal-world transition
+RewardState
+Mode l erro r
+D D ≈ D ≤ ξ
+D
+D
+Iterationk31 2
+Sa m ple  f ro m  m o del
+ST/uni2032
+ST
+Sa m ple  f ro m  world
+Ro llout l engt h  L  = 4
+Guarantee monotonic improvement of policies 
+Mode l buﬀ er
+Mode l size
+Mode l error
+Mode
+l error D
+0.8
+1.0
+1.2
+0.2
+2
+16
+2
+14
+2
+12
+2
+10
+2
+8
+2
+12
+2
+14
+2
+16
+2
+18
+2
+20
+0.3
+0.4
+Ini t i a l  s tate  s 0
+L = 1
+L = 2
+eThe process of model learning
+Time 
+t1
+t2
+t3
+St3
+St1
+St2
+I ndepende n ce-app r o x i m a t i on e rro r D(p(s/uni2032|s, a)||p(s/uni2032|s, a))
+− ≤ ξ
+b  
+G l obal  s t a t e  
+3
+3
+N e i ghbours ’
+s t a t e  
+The error between transitions
+p(s/uni2032|s, a) in model MDP
+Dependency bias D(p(s/uni2032|s, a)||p(s/uni2032|s, a)) Model error D(p(s/uni2032|s, a)||p(s/uni2032|s, a))
+p(s/uni2032|s, a)
+p(s/uni2032|s, a) in networked MDP p(s/uni2032|s, a) in original MDP
+p(s/uni2032|s, a)
+Sn
+S4
+S2
+S S
+S2
+S3
+a3
+a3
+a3
+a3
+a3
+a3
+Independence
+-approximation error
+D
+c 
+Dependency bias D
+d  
+Catch-up
+Real Power-NetTriangular
+inequality
+ξ
+ξ
+Policy net
+ Policy net
+ Policy net
+Value net Value net Value net
+Sn
+S4
+S2
+S2
+S3
+Fig. 2 | Architecture of our method, distinctions and connections among 
+different MDPs, and the model learning process. a, Our algorithm comprises 
+decentralized policy, value function, model, model buffer and environment buffer. 
+The red arrows highlight primary steps, involving experience sampling from both 
+the model and the real environment for policy and model learning. The model 
+framework incorporates embedding layers for state and action feature extraction, 
+followed by merging based on graph network topology. b, Distinction and 
+connection of different p in networked MDP, original MDP and model MDP as 
+depicted in inequality (12). The differences between different p constitute 
+dependency bias, model error and independence-approximation error, 
+respectively. c, These different D constitute the triangular inequality relationship in 
+inequality (12). The main objective of model learning is to minimize the 
+independence-approximation error D( ̄p ∥ ̂p) to reduce the difference between 
+model error D(p ∥ ̂p) and dependency bias D(p ∥ ̄p). d, In real-world complex 
+systems, we prove that the values of ξ are all small positive values (ξ ≥ 0.2 in Catch-up 
+and ξ ≥ 0.8 in Real Power-Net), which proves the authenticity and correctness of our 
+assumptions about ξ-dependent systems in Definition 2. The data (n = 5) are 
+presented as median values (the central line of each box) along with the 25th and 
+75th percentiles (the bottom and top edges of each box), minima and maxima (the 
+whiskers attached to each box), and outliers (outside the box and whiskers). e, The 
+process of model learning in our approach involves sampling trajectories from the 
+model buffer for multiple iterations of learning (ST represents the real state when the 
+system has reached step T, and ST′ represents the predicted state of the system when 
+it reaches step T by the model). As a result, the model’s predictions of transition 
+gradually approach the real world, with supD(p ∥ ̂p)≈ supD(p ∥ ̄p)= ξ , which 
+promotes a monotonic improvement of the policies.
+
+===== PAGE 5 =====
+Nature Machine Intelligence
+Article https://doi.org/10.1038/s42256-024-00879-7
+In general, larger κ leads to higher performance on policy training, 
+but also more communication costs. In algorithms, computation cost 
+cannot be overlooked, as larger κ results in more complex models or 
+policy architectures, thereby complicating the training process. We 
+discuss more about this problem in the experiments section.
+Update model
+T o perform decentralized model-based learning, each agent maintains 
+a localized model. This localized model observes the state of its κ-hop 
+neighbours and its own action, with the goal of predicting the next 
+time step’s information, including state and reward. Let 
+̂si,t+1 𝒱pψi (sNi ,t,ai); here we parameterized the neural network model 
+𝑝, with parameters represented by 𝜓. In practice, each agent stores the 
+data locally. The models are updated by minimizing the following objec-
+tive function:
+ℒ(ψi)𝒱 1
+|ℬ| ∑
+τ∈ℬ
+∥ ̂si,τ+1 −si,τ+1∥2𝒱 (6)
+Scaling model-based methods to real tasks can lead to decreased 
+performance, even if the model itself is relatively accurate. A primary 
+reason for this is the compounding modelling error during long model 
+rollouts, where errors accumulate along the rollout trajectory, ulti-
+mately making it inaccurate. T o mitigate the negative effects of model 
+error, we adopt a branched rollout scheme54,68. In branched rollout, 
+the model rollout does not start from an initial state, but from a state 
+randomly selected from the most recent environmental trajectory τ. 
+In addition, the model rollout length is fixed to T. The model training 
+steps are described in lines 4–7 of Algorithm 2.
+Results
+In this section, we introduce the results of our method and baselines 
+(more details in Supplementary Table 1) in the control of large-scale 
+networked systems (more description in Supplementary Section 2). 
+We have solved many control problems in simulators and real-world 
+systems (more details in Supplementary Table 2). Baselines consist 
+of two main categories: model-based algorithms such as MAG64, inde-
+pendent model-based policy optimization (IMPO) and MPO na, and 
+model-free algorithms such as CommNet47, IC3Net79, DIAL45, Neur-
+Comm21, ConseNet40, FPrint80, CPPO and DPPO, where IMPO is a fully 
+independent model-based MARL method, MPOna is an ablated discon-
+nected agents in our method (Fig. 1b) and our method with linear mod-
+els ablated linear models in our method (more details in Supplementary 
+Fig. 1). Overall, our method has decentralized models, policies and value 
+functions, with the minimum local message size. Especially compared 
+with the centralized methods, the communication costs of our method 
+in different scenarios is only about 5–35% of that in centralized methods 
+(more details in Supplementary Table 3).
+Training results and ablation study
+Learning process. We first focus on the convergence of the episode 
+reward and sample efficiency in the learning process. Figure 3e shows 
+that our method significantly improves sample efficiency and achieves 
+the highest sample efficiency, converging within 1 × 10−5 training steps, 
+exceedingly outperforms baselines (more results in Supplementary 
+Fig. 2). The reason is that the usage of the model will greatly increase 
+the amount of experience to support training and improve the explo-
+ration efficiency (corresponding to lines 9–12 in Algorithm 3). As seen 
+in Fig. 3d, our algorithm generates more extensive state-visited (the 
+state-visited point set covers more areas in two-dimensional space), 
+further confirming this point. Therefore, the experimental results 
+are consistent with the theoretical results. From the results in differ-
+ent tasks, we observe that the performance of CPPO does not exceed 
+that of the algorithms that use extended value functions. In this way, 
+we conclude that by using an extended value function, a centralized 
+algorithm can be decomposed into a decentralized algorithm, but the 
+performance would not drop significantly. According to Theorems 3 
+and 4, the extended value function is accurate enough to evaluate the 
+overall multi-agent system and support the training process. Therefore, 
+the experimental results are consistent with the theoretical results. 
+Compared with the two model-based baselines IMPO and MPO na, we 
+conclude that the existence of the extended value increased the esti-
+mation accuracy of the global value function and gradient. Although 
+theoretical analysis of our method in Theorems 3 and 4 does not pro-
+vide more restrictions on whether the neighbour selection is adjacent, 
+in the actual experiment we recommend using information of adjacent 
+neighbours in the topology of the networked systems to predict the 
+global value and gradient, which can reduce the variance of the learn-
+ing process and improve the performance. It is worth noting that MAG 
+models the learning process of model errors as MARL tasks, resulting 
+in lower model errors in certain scenarios. However, MAG still relies on 
+global modelling information during the learning phase. In the model 
+prediction phase, the traditional control algorithm MPC is utilized 
+in the model prediction phase, thus having a higher computational 
+complexity and communication cost.
+In terms of optimal performance, Fig. 3a shows that our method 
+reaches the highest performance with the minimum local message 
+size among all the baselines. Due to the fact that CPPO is a fully central-
+ized algorithm, where each agent obtains global complete informa -
+tion, it has the highest theoretical performance and performs well on 
+ATSC-Monaco. However, due to its dependence on large network size 
+and computing resources, it is difficult to truly achieve theoretical 
+optimal performance. MAG also has high performance in multiple 
+scenarios but leads to high computational burden and poor scalability.
+Rollout length. T o verify the relationship of rollout length k to Theorems 
+1 and 2, we designed relevant experiments to observe the effects of differ-
+ent choices of rollout length on the convergence of the episode reward 
+and sample efficiency. Model rollout length represents the step size of 
+using the model forward to predict the state and reward. Figure 3b shows 
+more details of the experimental results. We choose four representative 
+environments: CACC Catch-up, Ring Attenuation, ATSC-Monaco and 
+Power Grid with the set of rollout lengths 1, 25, 50, 100 and 200, to validate 
+how sensitive the accuracy of environment model is to rollout length. 
+From the final episode reward and sample efficiency in Ring Attenua-
+tion under the rollout lengths of 1, 25 and 100, it can be concluded that 
+the environment model is accurate enough to support normal training. 
+However, the accuracy of model drops significantly when the rollout 
+length is 200, which is reflected in the final episode reward and sample 
+efficiency being lower than for shorter rollout lengths. According to 
+Theorems 1 and 2, a shorter rollout length k leads to a lower model error 
+and better convergence of episode reward. Therefore, the experimental 
+results are consistent with the theoretical results.
+κ-hop neighbours. T o further verify the relationship of κ with Theo-
+rems 3 and 4, we designed relevant experiments to observe the effect of 
+different choices of κ on the convergence of the episode reward, sample 
+efficiency and the model error, which is defined as the mean squared 
+error loss under the fixed network structures in our framework. From 
+Fig. 3c, we conclude that neighbour information is accurate enough 
+for a model to predict the next state in these environments, but the 
+effect of different κ on state prediction is different. When the network 
+structure is fixed, the sampling efficiency will increase and the error 
+of our model in predicting the state will increase with increasing κ . 
+But when κ is greater than a certain value, the sampling efficiency will 
+decrease and the error of our model in predicting the state will increase 
+due to the limited fitting ability of the network. The optimal choice of 
+κ is 4 under our network structure in Ring Attenuation and 3 in CACC 
+Catch-up. There is almost no difference between different choice of κ in 
+Ring Attenuation, which indicates that the information of neighbours 
+
+===== PAGE 6 =====
+Nature Machine Intelligence
+Article https:/ /doi.org/10.1038/s42256-024-00879-7
+under κ = 1 is sufficient for policy learning. According to Theorems 3 
+and 4, a larger κ leads to a lower model error, higher sample efficiency 
+and better convergence of episode reward. Therefore, the experimental 
+results are consistent with the theoretical results.
+Execution results
+Connected vehicle control.  Figure 4a,b shows the execution per -
+formance of the trained policies in Flow and CACC. In CACC, both the 
+velocity and headway of vehicles with the same interval in the queue 
+can be stably controlled around the target value by our method. For 
+Flow, we conclude that our decentralized controller improves the 
+efficiency of the overall traffic flow while ensuring safety (more results 
+in Supplementary Fig. 3).
+Traffic signal control. Figure 5a,b shows the scenario descriptions and 
+the execution performance for ATSC-Grid, -Monaco and -New York. The 
+Hi g h e r s a m p l e  e ﬀi ci e n cy A ccu r a t e  m odel
+a
+c
+O u r s
+Higher performance
+Less communication
+b
+d
+e
+–1,200 0
+100
+–550 –9
+–7
+–5
+–3
+35,000
+25,000
+15,000
+5,000
+–450
+–350
+–250
+200
+300
+0 0 0 5 10
+Step (×10 4 )
+Slow-down
+Slow-down
+ATSC-Grid
+ATSC-GridSlow-down
+CPPO DPPO
+IC3Net Ours
+Figure Eight ATSC-Monaco ATSC-New York Real Power-Net 421-bus
+15 20 0 5 10 15 0 5 10 152020 40 6010 20
+CPPO
+DPPO
+IMPO
+MPO na
+Ours
+IC3Net
+30
+Epiosde reward Optimal epiosde reward
+Epiosde reward
+Epiosde rewardModel error
+–800
+–400
+0.60
+CPPO Ours-lin
+MAGDPPO
+IC3Net ConseNet
+CommNet
+DIAL
+FPrint
+NeurComm
+OursIMPO
+MPO na
+0.65
+0.70
+0.75
+–120
+–400
+–320
+–240
+–160
+–550
+–480
+–410
+–340
+–250
+–180
+–110
+–40
+–120
+0
+200
+–2,000 –550
+–450
+–350
+–250
+–1,500
+–1,000
+–500
+400
+600
+–90
+–60
+–30
+Ring Catch-up
+Catch-up
+Rollout length
+Neighbour order
+1
+25
+100
+200
+50
+Ring Catch-up
+ATSC-Monaco
+ATSC-Monaco
+Power Grid
+Power Grid
+Pandemic Networks
+0 5 10 15 20 0 5 10 15 20
+Step (×10 4 )
+0 5 10 15 5 10 1520
+0 5 10 15 50 10 1520
+Step (×10 4 )
+0
+0.4
+–1,800
+0
+0.05
+0
+0.2
+0.4
+0.6
+0.8
+0
+200
+400
+600
+0.10
+0.15
+0.20
+–1,200
+–800
+–300
+0.5
+0.6
+0.7
+0 0.25
+1st
+4th
+5th
+2nd
+3rd
+0.50 0.755 10 15 20
+–80
+–40
+0
+0
+Eﬀicient exploration
+Fig. 3 | Main training results and ablation studies. These results demonstrate 
+the advantages of our method, including high performance, accurate model 
+learning, low communication cost, efficient exploration ability and higher 
+sample efficiency. a, The performance upper bound of all the baselines in 
+different scenarios with different random seeds. The red colour illustrates the 
+performance of our algorithm. We compared it with model-based and model-free 
+baselines. Our approach achieves superior performance in terms of optimality, as 
+demonstrated by the upper edge of the red boxplot being at its highest position 
+in the figure. In addition, our method shows excellent performance in the upper 
+quartile, median and lower quartile, as shown in the plot. Furthermore, our 
+algorithm demonstrates enhanced training stability, indicating the absence of 
+outliers within the red boxplot. The data (n = 5) are presented as median values 
+(the central line of each box) along with the 25th and 75th percentiles (the bottom 
+and top edges of each box), minima and maxima (the whiskers attached to each 
+box), and outliers (outside the box and whiskers). Ours-lin, our method with linear 
+models. b, Training reward under different rollout lengths in Ring, Catch-up, 
+ATSC-Grid and Real Power-Net 141-bus (n = 5). c, Training rewards and model 
+error (n = 5) under different κ in Ring and Catch-up. Different κ correspond to 
+different neighbour order (Fig. 1b). d, The states visited by different algorithms in 
+Slow-down and ATSC-Grid. The distance between points represents the difference 
+between states84. Due to the existence of the model, our approach outperforms 
+other algorithms in exploration efficiency, thereby increasing sample efficiency. 
+This augmentation is visually represented by the more even and expansive spatial 
+coverage of the red data points within the depicted space. e, Training reward 
+increment during the training process under different scenarios and different 
+algorithms. Solid lines represent the mean rewards and error bars are s.d. (n = 5).
+
+===== PAGE 7 =====
+Nature Machine Intelligence
+Article https://doi.org/10.1038/s42256-024-00879-7
+average queue length and average intersection delay at intersections 
+are important indicators to measure the level of traffic congestion. 
+Compared with the baselines, our method significantly reduces the 
+average queue length and intersection delay. Our solution still effec-
+tively solves traffic congestion with low communication costs, achiev-
+ing the maximum number of arrived vehicles, average velocity and the 
+minimum number of halting vehicles. The reason why our method in 
+the New York City road network with 436 controllable intersections 
+has a lower average velocity after 1,800 s is that in the later stage, our 
+method has already cleared most vehicles to the destination, and only 
+a few vehicles are driving at this time.
+Pandemic network control. In the large-scale spread of an epidemic 
+in society, real-time local decision-making is very important. As the 
+infection situation gradually worsens, the decisions of different 
+decision-making institutions (education departments, medical sys -
+tems, social service systems and so on) usually rely on the local infor-
+mation possessed by the current institutions (Fig. 4c). We observe the 
+overall infection of different infectious disease prevention and control 
+strategies in a society with a growing population in three months. 
+Figure 4c shows the relationship between critical cases and the maxi-
+mum capacity of hospitals under different policies. If the number of 
+critical cases exceeds the maximum capacity of the hospital, it indicates 
+that the current virus transmission is very serious. Our approach can 
+effectively control severe cases below the maximum capacity of the 
+hospital and alleviate the pressure on medical staff. Figure 4c shows 
+the relationship between death cases and maximum hospital capacity 
+under different policies. Our method maintained a small number of 
+deaths in multiple scenarios, controlling the mortality rate at a lower 
+level between 0.8% and 1.5%, while also balancing regional economic 
+development as much as possible (according to the final performance 
+shown in Fig. 3a; more results in Supplementary Fig. 4).
+Power control. Figure 6a shows the architecture of secondary voltage 
+control in Power Grid. Figure 6c shows the execution performance of 
+the trained policies based on different algorithms. We conclude that 
+Velocity ↑CACC catch-up
+8 7 6 5 4 3 2 1
+a
+c
+Residential
+centre
+Oﬀice
+centre
+Trade
+sector
+Death case
+Time (day)
+1,000-people society
+IC3Net OursIC3Net Ours
+10,000-people society
+Critical case Position (m)Velocity (m s –1 )
+0 0
+70
+140
+210
+0
+150
+300
+450
+0
+Simulation time (s)
+0
+Simulation time (s)
+0 400 800 1,200 0 400 800 1,200180 360 540 0 180 360 540
+35 70 105 0 35 70 105
+10
+20
+30
+0
+15
+30
+45
+0
+6
+12
+Velocity (m s –1 )
+17
+15
+13
+19
+Headway (m)
+36
+28
+20
+12
+18
+0
+120
+240
+360
+Education
+sector
+Medical sector
+Retail sector
+Hair salon
+Catering centre
+Entertainment
+centre
+Human service centre
+Critical case Death case
+Pandemic network
+b
+2.
+Figure Eight
+CPPO
+Vehicle IDVehicle ID
+32
+3
+4
+4
+5
+6
+DPPO
+IC3Net Crowded hospital capacity
+Maximum hospital capacityOurs
+Fig. 4 | Evaluation results on vehicle control on CACC, Flow and pandemic 
+network. a, Description of velocity and headway of vehicles 1, 5 and 8 in  
+Catch-up. The headway stabilizes at 20 m, which matches the target headway. 
+The velocity stabilizes at 15 m s−1, matching the target velocity. b, Description of 
+velocity and position of vehicles 1–4 in Figure Eight. The visualization of tasks is 
+adapted from existing work71. Our approach controls the formation of queues 
+to cross the intersection with an orderly process of accelerating to the target 
+velocity and then decelerating to the safe velocity near 0 m s−1. c, Description 
+of a pandemic network, where various societal units adjust control policies to 
+manage the critical cases and death cases. The right side shows the strategies 
+provided by different algorithms for handling critical cases and death cases with 
+different population sizes. The data are presented as mean ± s.d. The centre line 
+represents the mean values and the error bar represents the s.d. (n = 5). Panel b 
+adapted from ref. 71 under a Creative Commons licence CC BY 4.0.
+
+===== PAGE 8 =====
+Nature Machine Intelligence
+Article https:/ /doi.org/10.1038/s42256-024-00879-7
+our method can maintain reliable control performance and adaptability 
+to random disturbances while reducing the cost of communication 
+(more results in Supplementary Fig. 5). Furthermore, we show the main 
+results in the large-scale Real Power-Net 141-bus, 322-bus and 421-bus 
+scenarios within 12 hours in Fig. 6b. Our method can maintain a higher 
+safety control rate in the 141-bus scenario and achieve lower power loss 
+in terms of q loss (the symbol q represents reactive power) and total 
+power loss (Fig. 6d). When we expand the system scale to 322-bus (22 
+agents) and 421-bus (199 agents), the system complexity and model-
+ling difficulty are higher. Our method still maintains effective policies, 
+which demonstrate its scalability. The strong baseline OPF81 algorithm, 
+which relies on the real dynamics of the system, and its decision-making 
+ability will decrease in large-scale systems. Besides, solving the con -
+strained optimization problem in OPF is time-consuming, so it is dif-
+ficult to react to the rapid change of load profile in a large network. This 
+further confirms the advantages of our solution in practical power grid 
+problems and modelling complex non-stationary dynamic systems.
+Discussion
+Here we provide a theoretical framework for scalable decision-making 
+and propose a MARL framework for the control of general systems. 
+Notably, our MARL framework remains effective even when the system 
+size scales up to the hundreds of agents, which significantly surpasses 
+the scale of problems addressed by previous decentralized methods. 
+Therefore, this method holds promise in establishing large-scale AI 
+decision-makers for traffic, energy systems and pandemic systems, 
+thereby elevating the intelligence level in the real world. The core idea 
+in this work shares an intriguing parallel with the theory of six degrees 
+of separation82. Through interconnected topology, agents require 
+only minimal information exchange to assess the global situation. In 
+the future, we hope to explore the optimal system topology through 
+information entropy theory and expand modules such as vision and 
+natural language, which will comprehensively improve the ability of AI 
+models and provide insights for developing scalable AI methodologies.
+Methods
+In this section, we mainly describe the details of the problem formula-
+tion and our algorithm83 (more details in Supplementary Code 1), as well 
+as some basic theoretical conclusions. First, we introduce networked 
+MDP. We define an independent system39 and ξ-dependent system, and 
+we present diverse experimental results on algorithms and models.
+Networked MDP
+We consider a system with n agents as a graph. Specifically, n agents 
+coexist in an undirected and stationary graph 𝒢𝒢 𝒱 (𝒱𝒱, 𝒢) . Each agent in 
+a system is represented as a node in an undirected and stationary graph 
+𝒢𝒢 𝒱 (𝒱𝒱, 𝒢) , therefore 𝒱𝒱𝒱𝒱 1,…, n} is the set of agents. 𝒢⊂𝒱𝒱𝒱𝒱𝒱  comprises 
+the edges that represent the connectivity of all the agents. Each agent 
+a
+b
+M onac o
+ N e w  Y orkPopul a t i o n
+38,000
+T o t a l  a re a
+2 . 02 k m 2
+T o t a l  a re a
+1,214 k m 2
+Popul a t i o n
+8,340,000
+M ap t o M ap t o
+0
+2
+4
+6
+8 CPPO
+CommNet
+FPrint
+IC3Net
+Ours
+NeurComm
+DPPO
+CPPO
+DPPO
+ATSC-Grid
+Queue length (vehicles)Queue length (vehicles)Queue length (vehicles)
+Intersection delay
+(s per vehicle)
+Intersection delay
+(s per vehicle)
+Intersection delay
+(s per vehicle)
+Arrived vehicles
+(vehicles)
+Arrived vehicles
+(vehicles)
+Arrived vehicles
+(vehicles)
+Halting vehicles
+(vehicles)
+Halting vehicles
+(vehicles)
+Halting vehicles
+(vehicles)
+Average velocity (m s –1 )Average velocity (m s –1 )Average velocity (m s –1 )
+1
+2
+3
+4
+ATSC-Monaco
+1
+0 1,000 2,000 3,000 0 1,000 2,000 600 1,800
+Simulation time (s) Simulation time (s) Simulation time (s)Simulation time (s) Simulation time (s)
+3,000 600 1,800 3,000 600 1,800 3,0003,000
+2
+3
+4
+ATSC-New York
+0
+100
+200
+300
+0
+120
+240
+360
+0
+200
+400
+600
+IC3Net
+Ours
+100
+300
+500
+700
+0
+250
+500
+750
+0
+800
+1,600
+2,400
+30
+120
+210
+300
+0
+300
+600
+900
+0
+300
+600
+900
+0
+2
+4
+6
+0
+1
+2
+3
+1
+2
+3
+0
+Fig. 5 | Evaluation results on large-scale traffic control from A TSC. a, Monaco 
+traffic network (a part of Monaco, adapted from existing research21) with 28 
+heterogeneous traffic lights and New York traffic network with 432 traffic lights 
+(a part of New York). b, Key evaluation indicators for ATSC tasks. The data are 
+presented as mean ± s.d. The centre represents the mean values and the error 
+bar represents the s.d. (n = 5). During the first 3,000 s, the system will continue 
+to load vehicles, causing the traffic pressure at the intersections to gradually 
+increase, and the average queue length will gradually increase. However, our 
+method clears the traffic congestion well, so that the maximum average queue 
+length does not exceed about 6 vehicles in Grid, 2 vehicles in Monaco and 1 
+vehicle in New York. This indicator is lower than other algorithms. After 3,000 s 
+of vehicles loading, our method can maintain an average intersection delay at 
+about 250 s per vehicle in Grid, 300 s per vehicle in Monaco and 10 s per vehicle 
+in New York. Our method prevents it from increasing. At different times, our 
+decentralized policies achieved the most arrived vehicles, the least halting 
+vehicles and stable average velocity. It should be noted that in New York scenario, 
+the actual total evaluation time is 1,000 s; to unify the time with all scenarios, we 
+have standardized it to within 3,600 s. Credit: Monaco and New York maps in a 
+created with GADM.org.
+
+===== PAGE 9 =====
+Nature Machine Intelligence
+Article https://doi.org/10.1038/s42256-024-00879-7
+can communicate along the edges with their adjacent agents. Let N i 
+denote the neighbour of the agent i including itself. Let Nκ
+i  denote the 
+κ-hop neighbour of i, that is, the nodes whose graph distance to i is less 
+than or equal to κ . For the simplicity of notation, we also define 
+Nκ
+−i 𝒱𝒱𝒱𝒱 Nκ
+i . We define an adjacency matrix A with size of n × n. If there 
+is an adjacency relationship between agent i and agent j, then Aij = Aji = 1, 
+otherwise Aij = Aji = 0. This adjacency relationship is determined by the 
+system structure and κ.
+We define its corresponding networked MDP as (𝒢𝒢, 𝒱𝒮𝒮i,𝒜𝒜i}i∈𝒱𝒱 ,p,r). 
+Each agent i has its local state si ∈𝒮𝒮i, and performs action ai ∈𝒜𝒜i. The 
+global state is the concatenation of all local states: s 𝒱(s1,…, sn)
+∈ 𝒮𝒮 𝒮𝒱 𝒮𝒮1 𝒱…𝒱𝒮𝒮 n. The global action is a 𝒱(a1,…, an)∈ 𝒜𝒜 𝒮𝒱 𝒜𝒜1 𝒱…𝒱𝒜𝒜 n. 
+For the simplicity of notation, we define sNi to be the states of i’s neigh-
+bours. The transition function is defined as: p(s′|s,a)𝒮𝒮𝒮𝒱𝒜𝒜𝒮 Δ(𝒮𝒮) ,  
+and the state transition satisfies Markov properties. Each agent main-
+tains a localized policy πθi
+i (ai|sNi ) with parameter θi ∈ Θi, which means 
+that the localized policy is dependent on only states of its neighbours 
+and itself. We use θ = (θ1, …, θn) to denote the tuple of localized policy 
+parameters, and πθ(a|s)𝒱 ∏
+n
+i=1πθi
+i (ai|sNi )  to denote the joint policy.  
+The reward function for each agent depends on only local state and 
+action: ri(si, ai), and the global reward function is defined to be the 
+average reward r(s,a)𝒱
+1
+n
+∑
+n
+i=1ri(si,ai). The goal of reinforcement learn-
+ing is to find a policy πθ that maximizes the accumulated reward:
+πθ∗
+𝒱argmax
+πθ
+𝔼𝔼πθ [
+∞
+∑
+t=0
+γtr(st,at)] , (7)
+where γ ∈ (0, 1) is the temporal discount factor. The value function is 
+defined as
+Vπθ (s)𝒱𝔼𝔼 πθ [
+∞
+∑
+t=0
+γtr(st,at)|s0 𝒱s] 𝒱 1
+n
+n
+∑
+i=1
+Vi(s)𝒱 (8)
+E l e c t r i c a l  n e t w o r k
+L o c a l
+p o w e r  n e t
+Controller
+Solar Wind Hydro
+a bA r c h i t e c t u r e  o f dec e n t r a l i z e d  pow e r  c o n t r o l Topology structure of Real Power-Net
+c d
+L o c a l
+p o w e r  n e t
+L o c a l
+p o w e r  n e t
+Controller Controller
+0.90
+0 0 10 20 30 40 0 3 6 9 0 3 6 9 0 3 6 95 10 15 20
+Agent index
+20-agent system 40-agent system Real Power-Net 141-bus Real Power-Net 322-bus Real Power-Net 421-bus
+Time (h)
+3 6 9 3 6 9
+Time (day)
+3 6 9
+Threshold
+CPPO CPPO
+CPPO
+DPPO
+DPPO DPPOOurs
+Ours
+IC3Net
+IC3Net
+IC3Net
+0.50
+1.50
+2.50
+3.50
+1.00
+1.50
+2.00
+2.50
+0
+0.3
+0.6
+0.9
+0.95
+1.00
+1.05
+0.92
+0.97
+Without disturbances
+Q loss Control rate
+Real Power-Net 141-bus Real Power-Net 322-bus Real Power-Net 421-bus
+Total line loss
+With disturbances
+Voltage (pu)
+1.02
+1.07
+0.05
+0.10
+0.15
+0.20
+0.04
+0.05
+0.06
+0.07
+110
+118
+126
+134
+0.45
+0.51
+0.57
+0.63
+Ours OPF
+Fig. 6 | Evaluation results on large-scale power control from Power Grid and 
+Real Power-Net. a, The architecture of secondary voltage control in Power Grid 
+with the objective of stabilizing the output voltages of the distributed generators 
+at a pre-defined reference value. 0.95 pu to 1.05 pu is the range of the reference 
+value; pu (per unit) is a non-unit ratio used to represent the ratio of a voltage value 
+to a reference value. This system structure is adapted from existing research72.  
+b, The structures of 141-bus, 322-bus and 421-bus in Real Power0Net. We report the 
+capabilities in terms of safety control rate. Control rate calculates the ratio of time 
+steps. The data are presented as mean ± s.d. The top of the bar chart represents the 
+mean values and the error bar represents the s.d. (n = 5) where all buses' voltages 
+are under control for 12 hours. c, The voltage control performance without 
+random disturbances and with random disturbances in Power Grid with 20 agents 
+and 40 agents. The control performance of the baselines decreases when random 
+disturbances are added and it is difficult to control the voltage of all distributed 
+generators within the range of the reference value. But our method can control the 
+voltage of most distributed generators well within the range of the reference value 
+regardless of the presence of random disturbances. d, We report the Q loss and 
+total line loss in Real Power-Net. The data are presented as mean ± s.d. The centre 
+line represents the mean values and the error bar represents the s.d. (n = 5). Q loss 
+represents the average of the mean reactive power generations by agents each 
+time step during 12 hours. T otal line loss represents the average of the total power 
+loss overall buses per time step during 12 hours.
+
+===== PAGE 10 =====
+Nature Machine Intelligence
+Article https:/ /doi.org/10.1038/s42256-024-00879-7
+In the last step, we have defined Vi(s), which is the value function for 
+individual reward ri.
+Model-based learning. Let η[π] denote the return of the policy in the 
+true environment:
+η[π]𝒱𝔼𝔼 π [
+∞
+∑
+t=0
+γtr(st,at)] (9)
+Let ̂η[π] denote the returns of the policy under the approximated model. 
+T o analyse the difference between η[π] and ̂η[π], we need to construct 
+a bound
+η[π]≥ ̂η[π]−C( p, ̂p,π,πD), (10)
+where C is a non-negative function, and πD is the data-collecting policy. 
+According to equation (10), if every policy update ensures an improve-
+ment of ̂η[π] by at least C, η[π] will improve monotonically. This inequal-
+ity was first presented in single-agent domain54.
+ξ-dependent networked system
+A networked system may have some extent of locality, meaning that in 
+some cases local states and actions do not affect the states of distant 
+agents. In such systems, environmental transitions can be factorized, 
+and agents are able to maintain local models to predict future local 
+states. We define an independent networked system (INS) and an 
+ξ-dependent networked system as follows. Figure 1b shows different 
+topological structures in networked systems. In addition, exponential 
+decay has been shown to hold in networked MARL when the network is 
+static41,70. This means that with the increase of the topological distance, 
+the influence between agents will gradually decrease in networked 
+systems. We have proved the properties of these networked systems 
+through experiments in the Ring Attenuation (more results in Sup -
+plementary Fig. 6).
+Definition 1. An environment is an INS if:
+p(s′|s,a)𝒱
+n
+∏
+i=1
+pi(s′
+i |sNκ
+i
+,ai)𝒱 (11)
+INS might be an assumption that is too strong to hold. However, 
+for the dynamics that cannot be factorized, we can still use an INS to 
+approximate it. Let DTV denote the total variation distance between 
+distributions, we have the following definition:
+Definition 2.  (ξ-dependent) Assume there exists an INS ̄p such that  
+̄p(s′|s,a)𝒱 ∏
+n
+i=1pi(s′
+i |sNκ
+i
+,ai). An environment is ξ-dependent, if:
+sup
+s,a
+DTV (p(s′|s,a)∥ ̄p(s′|s,a)) 𝒱sup
+s,a
+1
+2 ∑
+s′ ∈𝒮𝒮
+|p(s′|s,a)− ̄p(s′|s,a)| ≤ ξ𝒱
+Denote ˆp(s′|s,a)𝒱 ∏
+n
+i=1 ˆpi(s′
+i |sNκ
+i
+,ai) . By using ˆp(s′|s,a) to approxi -
+mate the true dynamics, larger κ  leads to better approximation of 
+model p, but also heavier computation overhead. The universal model 
+error D(p ∥ ̂p) can be divided into two parts: dependency bias D(p ∥ ̄p) 
+and independence-approximation error D( ̄p ∥ ̂p) with
+D(p ∥ ̂p)≤ D(p ∥ ̄p)+D( ̄p ∥ ̂p)𝒱 (12)
+More details of networked MDP and distances among ̄p, ̂p and ˆp 
+are shown in Fig. 2b–d . Then for an ξ -dependent system, when the 
+model becomes very accurate, meaning D( ̄p ∥ ̂p)≈ 0 , supD(p ∥ ̂p)  
+≈supD(p ∥ ̄p)𝒱 ξ . While D can be any appropriate distance metric, we 
+use the TV distance hereafter for the ease of presentation. Here we give 
+analysis under both independent and ξ-dependent networked systems. 
+In the following experiments, the systems used to evaluate the algo -
+rithms also have the properties of an ξ-dependent system.
+Let π indicate a collective policy π  = [π1, …, πn], and the model ̂p 
+be an INS ̂p(s′|s,a)𝒱 ∏
+n
+i=1 ̂pi(s′
+i |sNi ,ai) that approximating the true MDP. 
+Denote the data-collecting policy as πD. For decentralized learning and 
+control, each agent learns a localized model ̂pi, policy πi(⋅|sNi ). For each 
+agent i, we solve the following problem:
+πk+1
+i ,pk+1
+i 𝒱argmax
+πi ,pi
+̂η[π]−C( p, ̂p,π,πD)𝒱 (13)
+Below, we first lay out the monotonic improvement property of 
+independent and ξ-independent systems. Then we describe our frame-
+work in Algorithm 1 , and Fig. 2e shows the model learning process. 
+Experience data of state transition and rewards from the interaction 
+between the environment and the agent are used to train the environ-
+ment model. Then our method can use the large amount of data gener-
+ated by the interaction between the model and the agent to improve 
+the sampling efficiency in the training process.
+Monotonic model-based improvement
+In model-based learning, different rollout schemes can be chosen. The 
+vanilla rollout assumes that models are used in an infinite horizon. The 
+branched rollout performs a rollout from a state sampled by a state 
+distribution of previous policy πD, and runs T steps in ̂π according to π. 
+Based on different rollout schemes, we can construct two lower bounds. 
+Under vanilla rollout, real return and model return can be bounded by 
+model error and policy divergence. Formal results are presented in 
+Theorem 1. The detailed proof is deferred to Supplementary Section 4.2.
+Theorem 1. Consider an INS. Denote local model errors as:
+ϵmi 𝒱max
+sNi ,ai
+DTV[pi(s′
+i |sNi ,ai)∥ ̂pi(s′
+i |sNi ,ai)]
+and divergences between the data-collecting policy and evaluated  
+policy as:
+ϵπi 𝒱max
+sNi
+DTV[πD(ai|sNi )∥ π(ai|sNi )]
+Assume the upper bound of rewards of all agents is rmax. Let ηp[π1, …, πn] 
+denote the real returns in the environment. Also, let η ̂p[π1,…, πn] denote 
+the returns estimated in the model trajectories, and the states and actions 
+are collected with πD. Then we have:
+|ηp[π1,…, πn]−η ̂p[π1,…, πn]| ≤ 2rmax
+1 −γ
+n
+∑
+i=1
+[
+ϵπi
+n +(ϵmi +2ϵπi )
+∞
+∑
+k=0
+γk+1 |Ni
+k
+|
+n ] 𝒱
+(14)
+Intuitively, the term ∑
+∞
+k=0γk+1 |Ni
+k |
+n
+ would be in the same magnitude 
+as 
+1
+1−γ
+, which might be huge given the choice of γ , making the bound 
+too loose to be effective. T o make tighter the discrepancy bound in 
+Theorem 1, we adopt the branched rollout scheme. The branched 
+rollout enables a effective combination of model-based and model-free 
+rollouts. For each rollout, we begin from a state sample from dπD, and 
+run T steps in each localized ̂πi. When branched rollout is applied in an 
+INS, Theorem 2 gives the returns bound.
+Theorem 2. Consider an INS. Denote local model errors as:
+ϵmi 𝒱max
+sNi ,ai
+DTV[pi(s′
+i |sNi ,ai) ∥ ̂pi(s′
+i |sNi ,ai)]
+and divergences between the data-collecting policy and evaluated  
+policy as:
+ϵπi 𝒱max
+sNi
+DTV[πD(ai|sNi ) ∥π(ai|sNi )]
+
+===== PAGE 11 =====
+Nature Machine Intelligence
+Article https://doi.org/10.1038/s42256-024-00879-7
+Assume the upper bound of rewards of all agents is rmax. Let ηp[π1, …, πn] 
+denote the real returns in the environment. Also, let ηbranch[π1, …, πn] 
+denote the returns estimated via T-step branched rollout scheme. Then 
+we have:
+|ηp[π1,…, πn]−η branch[π1,…, πn]| ≤
+2rmax
+1−γ
+n
+∑
+i=1
+[ϵmi ⋅ (
+T−1
+∑
+k=0
+γk+1 |Ni
+k |
+n
+) +ϵπi ⋅ (
+∞
+∑
+k=T
+γk+1 |Ni
+k |
+n
+)]
+Comparing the results in Theorems 1  and 2 , we can see that 
+branched rollout scheme reduced the coefficient before ϵmi  from 
+∑
+∞
+k=0γk+1 |Ni
+k |
+n
+≤
+γ
+1−γ
+ to ∑
+T−1
+k=0γk+1 |Ni
+k |
+n
+≤ ∑
+T−1
+k=0γk+1 𝒱
+γ(1−γT )
+1−γ
+. This reduction 
+explains that empirically, branched rollout brings better asymptotic 
+performance. Also, if we set T  = 0, this bound turn into a model-free 
+bound. This indicates that when ϵmi  is lower than ϵπi  allowed by our 
+algorithm, a model might increase the performance.
+Algorithm 1: A general model-based learning framework. 
+1:  Initialize policy π(a|s)𝒱𝒱 πi}
+n
+i=1 , predictive model pψ (s′|s,a) 𝒱
+𝒱pψi (si|sNκ
+i
+,ai)}
+n
+i=1
+, empty dataset 𝒱𝒟𝒟i}
+n
+i=1.
+2: for N epochs do
+3:   Collect data with 𝒱πi}
+n
+i=1  in real environment: 𝒟𝒟i 𝒱𝒟𝒟i∪
+{(st
+i ,at
+i ,st+1
+i ,rt
+i )}t
+ for all agents
+4:   Train model pψi  on dataset 𝒟𝒟i  via maximum likelihood: 
+ψi ←argmaxψi
+𝔼𝔼𝒟𝒟i [logpψi (si|sNκ
+i
+,ai)]
+5:   Optimize policy under predictive model: πk+1
+i ←argmaxπ′
+i
+̂η[π′]−C( p, ̂p,π′,πD).
+6: end for
+Incorporating dependency bias
+In reality, not every system satisfies the definition of an INS. Yet we can 
+generalize Theorem 2 into an ξ-dependent system.
+Corollary 1. Consider an ξ-dependent networked system. Denote local 
+model errors as:
+ϵmi 𝒱max
+sNi ,ai
+DTV[pi(s′
+i |sNi ,ai) ∥ ̂pi(s′
+i |sNi ,ai)]
+and divergences between the data-collecting policy and evaluated  
+policy as:
+ϵπi 𝒱max
+sNi
+DTV[πD(ai|sNi ) ∥π(ai|sNi )]
+Assume the upper bound of rewards of all agents is rmax. Let ηp[π1, …, πn] 
+denote the real returns in the environment. Also, let ηbranch[π1, …, πn] 
+denote the returns estimated via T-step branched rollout scheme. Then 
+we have:
+|ηp[π1,…, πn]−η branch[π1,…, πn]| ≤
+2rmaxγ
+(1−γ)
+2 ξ
++
+2rmax
+1−γ
+n
+∑
+i=1
+[ϵmi ⋅ (
+T−1
+∑
+k=0
+γk+1 |Ni
+k |
+n
+) +ϵπi ⋅ (
+∞
+∑
+k=T
+γk+1 |Ni
+k |
+n
+)]
+The proof can also be found in Supplementary Information. 
+Compared with Theorem 2 , Corollary 1  is more general, as it  
+applies to multi-agent systems that are not fully independent.  
+Intuitively, if a networked system seems nearly independent, local 
+models will be effective enough. The bound indicates that when the 
+policy is optimized in a trust region where D(π,πD)≤ ϵπi , the bound 
+would also be restricted, making monotonic update more 
+achievable.
+Algorithm 2: Model-based decentralized policy optimization. 
+1:  Initialize the model buffer 𝒟𝒟M
+i  and the environment buffer 𝒟𝒟E
+i ,  
+where i ∈𝒱𝒱 .
+2:  Initialize the rollout length T and adjacency matrix A  
+through κ.
+3:  Initialize the decentralized model pψi, actor πθi and critic Vϕi by 
+adjacency matrix A, where i ∈𝒱𝒱 .
+4: for many epochs do
+5:   Sample action according to decentralized πθi and local observa-
+tion sNκ
+i
+ in environment to collect trajectories τE
+i .
+6:   Store trajectories to environment buffer 𝒟𝒟E
+i  for each agent i, 
+𝒟𝒟E
+i 𝒱𝒟𝒟E
+i ∪𝒱τE
+i }.
+7:   Minimize the objective in equation (6 ) to update model pψi  
+through trajectories from 𝒟𝒟E
+i .
+8:  for  many steps do
+9:   for  many rollouts do
+10:     Sample st
+i  from 𝒟𝒟E
+i  as an initial state.
+11:     Simulate T-step trajectories τM
+i  from st
+i  by decentralized 
+policy πθi and decentralized model pψi.
+12:     Store trajectories τM
+i  to model buffer 𝒟𝒟M
+i  for each agent i, 
+𝒟𝒟M
+i 𝒱𝒟𝒟M
+i ∪𝒱τM
+i }.
+13:   end for
+14:   for  many gradient steps do
+15:     Update the extended value functions Vϕi on trajectories 
+τM
+i  sampled from 𝒟𝒟M
+i  according to equation (3)
+16:     Update the decentralized policies πθi on trajectories τM
+i  
+sampled from 𝒟𝒟M
+i  according to equation (5).
+17:   end for
+18:  end for
+19: end for
+Compared with the theorems of model-based policy optimiza -
+tion in the single-agent domain54, we extend them to the multi-agent 
+domain, especially for completely independent networked systems 
+or even more general and real-world systems named ξ -dependent 
+networked systems. Further, to solve the problems of the increase of 
+computation complexity, communication cost and system instability 
+caused by the multi-agent system, we propose a novel communica -
+tion mechanism and analyse the accuracy of the estimation of value 
+functions and policy gradients through the following theoretical 
+proofs, which is completely different from the general model-based 
+algorithms.
+Therefore, the challenges for our algorithm and theorems are 
+mainly twofold in these ξ -dependent networked systems with fewer 
+communications. One is that local communication and approxima-
+tion dependency bias D(p ∥ ̄p) between independent networked sys-
+tems and ξ -dependent networked systems will increase the 
+generalization error ϵmi of the environment model and policy shift ϵπi 
+between π and π D, which will further increase the lower bounds 
+C(p, ̂p,π,πD)  in Theorems 1  and 2 . The results of experiments  
+fully prove that our method can reduce the influence of these  
+errors on the monotonic improvement of the model-based learning 
+through the following algorithm design and hyperparameter selec-
+tion. The other is that our method needs to provide accurate  
+policy gradients and value functions for the multi-agent system to 
+guide the policy optimization, which is explained in more detail in 
+Theorems 3 and 4.
+Analysis of policy gradients approximation
+In this section, we show that the policy gradient induced by  
+equation (5 ) is an asymptotic approximation of the true policy  
+gradients. We begin with discussing that the extended value function 
+Vi(sNκ
+i
+) is a good approximation of the real value function. We formally 
+state the result in Theorem 3  and defer the proof to Supplementary 
+Section 4.5.
+
+===== PAGE 12 =====
+Nature Machine Intelligence
+Article https:/ /doi.org/10.1038/s42256-024-00879-7
+Theorem 3. Define Vi(sNκ
+i
+)𝒱𝔼𝔼 sNκ
+−i
+[∑
+∞
+t=0rt
+i (st,at)|s0
+Nκ
+i
+𝒱sNκ
+i
+]  and Vi(s)𝒱𝔼𝔼
+[∑
+∞
+t=0rt
+i |s0 𝒱s ], then
+|Vi(s)−Vi(sNκ
+i
+)| ≤ rmax
+1 −γγκ𝒱 (15)
+Remark 1. Recall that V(s)𝒱
+1
+n
+∑
+n
+i=1Vi(s). From equation (15), it is easy to 
+obtain the following result
+|V(s)− 1
+n
+n
+∑
+i=1
+Vi(sNκ
+i
+)| ≤ rmax
+1 −γγκ, (16)
+which indicates that the global value function V(s) can be approximated 
+by the average of all extended value functions.
+In policy optimization, value functions are used for calculating 
+advantages ̂A
+(t)
+, and we have shown that V(s) can be estimated with the 
+average of extended value functions 
+1
+n
+∑
+n
+i=1Vi(sNκ
+i
+). In practice, an agent 
+might not get the value function of distant agents and can access only 
+the value function of its κ-hop neighbours. However, we can prove that 
+̃Vi 𝒱
+1
+n
+∑j∈Nκ
+i
+Vj(sNκ
+j
+) is already very accurate for calculating the policy gradi-
+ent for agent i. This theoretical result has been extended to general 
+multi-agent systems based on previous research39. Theorem 4 formally 
+states this result and the proof is deferred to Supplementary Section 4.6.
+Theorem 4. Let ̂At 𝒱r (t) +γV(s(t+1))− V(s(t)) be the TD (temporal differ-
+ence) residual, and gi 𝒱 𝔼𝔼[ ̂A∇θi logπi(a|s)] be the policy gradient. If ̃At and 
+̃gi are the TD residual and policy gradient when value function V(s) is 
+replaced by ̃Vi(s)𝒱
+1
+n
+∑j∈Nκ
+i
+Vj(sNκ
+i
+), we have:
+|gi − ̃gi|≤ γκ−1
+1 −γ [1 −(1 −γ2)
+Nκ
+i
+n ]rmaxgmax, (17)
+where rmaxand gmax denote the upper bound of the absolute value of 
+reward and gradient, respectively.
+Remark 2. Theorem 4 justifies that the policy gradients computed based 
+on the sum of the neighbouring extended value functions is a close 
+approximation of true policy gradients. The power of this theorem is that 
+the extended value function Vi(sκ
+Ni
+) requires only the neighbouring infor-
+mation, thus easier to approximate and scalable. Despite the reduction 
+in computation, the difference between the approximated and true 
+gradient in equation (17) is small.
+On the basis of the difficulties and challenges proposed in the 
+above theoretical analysis, we designed corresponding solutions in 
+the algorithm and the specific implementation details can be found in 
+our code. In Theorems 1 and 2, the probability to monotonic improve-
+ment of the model-based learning in the algorithm will be increase 
+when the lower bound C(p, ̂p,π,πD) that consists of two parts: generaliza-
+tion model error ϵmi  and policy shift ϵπi  is tight enough to constrain 
+equation (10). T o reduce the generalization model error ϵmi caused by 
+dependency bias D(p ∥ ̂p) in equation (12), we design a stage of warm-up 
+in our algorithm to pre-train the model until an acceptable accuracy 
+of the model is obtained and a method to select data from the true MDP 
+or model with a probability to guide the usage of the model, and we 
+further adopted a k-branched rollout method to improve the accuracy 
+of model. According to equation (12), when the model becomes very 
+accurate, meaning D( ̄p ∥ ̂p)≈ 0, supD(p ∥ ̂p)≈ supD(p ∥ ̄p)𝒱 ξ. Then we 
+design a distribution of the neighbours for each agent, including the 
+quantity and topology of neighbours, to reduce the model error ϵmi  
+caused by dependency bias D(p ∥ ̄p)  in the experiments. Lastly, to 
+constrain the policy shift ϵπi between π and πD, we use the method of 
+PPO to limit the difference in policies.
+Reporting summary
+Further information on research design is available in the Nature 
+Portfolio Reporting Summary linked to this article.
+Data availability
+The SUMO data generated during other experimental processes, as 
+well as the power-grid and pandemic data used, are all included in the 
+code repository and can be used directly https://github.com/CDM1619/
+Networked-MB-MARL (ref. 83). The specific usage methods are further 
+explained in README.md. The real data of Real Power-Net are available 
+in https://drive.google.com/file/d/1-GGPBSolVjX1HseJVblNY3KoT qf-
+blmLh/view. This is a publicly available dataset from previous research 
+work73. For more details on how to use this data to run the experiments, 
+please refer to https://github.com/CDM1619/Networked-MB-MARL. 
+Source data are provided with this paper.
+Code availability
+An implementation of our method is available at https://github.com/
+CDM1619/Networked-MB-MARL. We provide detailed installation 
+tutorials and running examples in https://github.com/CDM1619/
+Networked-MB-MARL (ref. 83).
+References
+1. Barmer, H. et al. Scalable AI. https://doi.org/10.1184/R1/16560273.
+v1 (Carnegie Mellon University, 2021).
+2. Zhang, K., Yang, Z. & Başar, T. Multi-agent reinforcement learning: 
+A selective overview of theories and algorithms. In Handbook 
+of Reinforcement Learning and Control (eds Vamvoudakis, K. G. 
+et al.) 321–384 (2021).
+3. Qin, J., Chow, Y., Yang, J. & Rajagopal, R. Distributed online 
+modified greedy algorithm for networked storage operation 
+under uncertainty. IEEE Trans. Smart Grid 7, 1106–1118  
+(2015).
+4. Huo, X. & Liu, M. Privacy-preserving distributed multi-agent 
+cooperative optimization—paradigm design and privacy analysis. 
+IEEE Control Syst. Lett. 6, 824–829 (2021).
+5. Gronauer, S. & Diepold, K. Multi-agent deep reinforcement 
+learning: a survey. Artif. Intell. Rev. 55, 895–943 (2022).
+6. Busoniu, L., Babuska, R. & De Schutter, B. A comprehensive 
+survey of multiagent reinforcement learning. IEEE Trans. Syst. Man 
+Cybern. C 38, 156–172 (2008).
+7. Ruan, J. et al. GCS: Graph-based coordination strategy for 
+multi-agent reinforcement learning. In Proc. 21st International 
+Conference on Autonomous Agents and Multiagent Systems 
+1128–1136 (International Foundation for Autonomous Agents and 
+Multiagent Systems, 2022).
+8. Zhou, M. et al. SMARTS: an open-source scalable multi-agent RL 
+training school for autonomous driving. In Conference on Robot 
+Learning 264–285 (PMLR, 2021).
+9. Li, Y. et al. V2X-Sim: multi-agent collaborative perception dataset 
+and benchmark for autonomous driving. IEEE Robot. Autom. Lett. 
+7, 10914–10921 (2022).
+10. Lim, S., Yu, H. & Lee, H. Optimal tethered-UAV deployment in A2G 
+communication networks: multi-agent Q-learning approach. 
+IEEE Internet of Things Journal 9, 18539–18549 (2022).
+11. Qiu, X., Xu, L., Wang, P., Yang, Y. & Liao, Z. A data-driven packet 
+routing algorithm for an unmanned aerial vehicle swarm:  
+a multi-agent reinforcement learning approach. IEEE Wirel. 
+Commun. Lett. 11, 2160–2164 (2022).
+12. Lian, Z. & Deshmukh, A. Performance prediction of an unmanned 
+airborne vehicle multi-agent system. Eur. J. Oper. Res. 172, 
+680–695 (2006).
+13. Feriani, A. & Hossain, E. Single and multi-agent deep 
+reinforcement learning for ai-enabled wireless networks:  
+a tutorial. IEEE Commun. Surv. Tutor. 23, 1226–1252 (2021).
+14. Naderializadeh, N., Sydir, J. J., Simsek, M. & Nikopour, H. 
+Resource management in wireless networks via multi-agent deep 
+reinforcement learning. IEEE Trans. Wirel. Commun. 20,  
+3507–3523 (2021).
+
+===== PAGE 13 =====
+Nature Machine Intelligence
+Article https://doi.org/10.1038/s42256-024-00879-7
+15. Samvelyan, M. et al. The StarCraft multi-agent challenge. In 
+Proc. 18th International Conference on Autonomous Agents and 
+MultiAgent Systems 2186–2188 (International Foundation for 
+Autonomous Agents and Multiagent Systems, 2019).
+16. Vinyals, O. et al. Grandmaster level in Starcraft II using 
+multi-agent reinforcement learning. Nature 575, 350–354 (2019).
+17. Kamboj, S., Kempton, W. & Decker, K. S. Deploying power 
+grid-integrated electric vehicles as a multi-agent system. In 
+The 10th International Conference on Autonomous Agents and 
+Multiagent Systems Vol. 1, 13–20 (International Foundation for 
+Autonomous Agents and Multiagent Systems, 2011).
+18. Li, W., Logenthiran, T., Phan, V.-T. & Woo, W. L. Intelligent 
+multi-agent system for power grid communication. In 2016 IEEE 
+Region 10 Conference (TENCON) 3386–3389 (IEEE, 2016).
+19. Ghanadbashi, S. & Golpayegani, F. Using ontology to guide 
+reinforcement learning agents in unseen situations: a traffic  
+signal control system case study. Appl. Intell. 52, 1808–1824 
+(2022).
+20. Noaeen, M. et al. Reinforcement learning in urban network traffic 
+signal control: a systematic literature review. Expert Syst. Appl. 
+199, 116830 (2022).
+21. Chu, T., Chinchali, S. & Katti, S. Multi-agent reinforcement learning 
+for networked system control. In International Conference 
+on Learning Representations (ICLR) https://openreview.net/
+pdf?id=Syx7A3NFvH (2020).
+22. Jin, I. G. & Orosz, G. Dynamics of connected vehicle systems with 
+delayed acceleration feedback. Transp. Res. C 46, 46–64 (2014).
+23. Wu, C., Kreidieh, A., Vinitsky, E. & Bayen, A. M. Emergent behaviors 
+in mixed-autonomy traffic. In Conference on Robot Learning 
+398–407 (PMLR, 2017).
+24. Bando, M., Hasebe, K., Nakayama, A., Shibata, A. & Sugiyama, Y. 
+Dynamical model of traffic congestion and numerical simulation. 
+Phys. Rev. E 51, 1035 (1995).
+25. Simpson-Porco, J. W. et al. Secondary frequency and voltage 
+control of islanded microgrids via distributed averaging. IEEE 
+Trans. Ind. Electron. 62, 7025–7038 (2015).
+26. Garcia, C. E., Prett, D. M. & Morari, M. Model predictive control: 
+theory and practice—a survey. Automatica 25, 335–348  
+(1989).
+27. Lai, J. et al. Distributed voltage control for dc mircogrids with 
+coupling delays & noisy disturbances. In IECON 2017—43rd 
+Annual Conference of the IEEE Industrial Electronics Society 
+2461–2466 (IEEE, 2017).
+28. Wang, S. et al. A data-driven multi-agent autonomous voltage 
+control framework using deep reinforcement learning. IEEE Trans. 
+Power Syst. 35, 4644–4654 (2020).
+29. Foerster, J. N., Farquhar, G., Afouras, T., Nardelli, N. & Whiteson, 
+S. Counterfactual multi-agent policy gradients. In Proc. AAAI 
+conference on artificial intelligence. 32 (AAAI Press, 2018).
+30. Lowe, R. et al. Multi-agent actor-critic for mixed 
+cooperative-competitive environments. Adv. Neural Inf. Process. 
+Syst. 30, 6379–6390 (2017).
+31. Du, Y. et al. LIIR: learning individual intrinsic reward in multi-agent 
+reinforcement learning. Adv. Neural Inf. Process. Syst. 32 (Curran 
+Associates, 2019).
+32. Yu, C. et al. The surprising effectiveness of PPO in cooperative 
+multi-agent games. Adv. Neural Inf. Process. Syst. 35, 24611–24624 
+(2022).
+33. Zhong, Y. et al. Heterogeneous-agent reinforcement learning.  
+J. Mach. Learn. Res. 25, 1–67 (2024).
+34. Sunehag, P. et al. Value-decomposition networks for cooperative 
+multi-agent learning based on team reward. In Proc. 17th 
+International Conference on Autonomous Agents and Multi-Agent 
+Systems 2085–2087 (International Foundation for Autonomous 
+Agents and Multiagent Systems, 2018).
+35. Rashid, T. et al. QMIX: monotonic value function factorisation 
+for deep multi-agent reinforcement learning. In International 
+Conference on Machine Learning (ICML) 4292–4301 (PMLR, 2018).
+36. Son, K., Kim, D., Kang, W. J., Hostallero, D. & Yi, Y. QTRAN: learning 
+to factorize with transformation for cooperative multi-agent 
+reinforcement learning. In Proc. 36th International Conference on 
+Machine Learning Vol 97 (eds Chaudhuri, K. & Salakhutdinov, R.) 
+5887–5896 (PMLR, 2019).
+37. Lin, Y., Qu, G., Huang, L. & Wierman, A. Multi-agent reinforcement 
+learning in stochastic networked systems. Adv. Neural Inf. Process. 
+Syst. 34, 7825–7837 (2021).
+38. Li, T. & Zhang, J.-F. Consensus conditions of multi-agent systems 
+with time-varying topologies and stochastic communication 
+noises. IEEE Trans. Automat. Contr. 55, 2043–2057 (2010).
+39. Du, Y. et al. Scalable model-based policy optimization for 
+decentralized networked systems. In 2022 IEEE/RSJ International 
+Conference on Intelligent Robots and Systems (IROS) 9019–9026 
+(IEEE, 2022).
+40. Zhang, K., Yang, Z., Liu, H., Zhang, T. & Başar, T. Fully decentralized 
+multi-agent reinforcement learning with networked agents. In 
+Proc. 35th International Conference on Machine Learning (ICML) 
+(eds Dy, J. & Krause, A.) 5872–5881 (PMLR, 2018).
+41. Qu, G., Lin, Y., Wierman, A. & Li, N. Scalable multi-agent 
+reinforcement learning for networked systems with average 
+reward. Adv. Neural Inf. Process. Syst. 33, 2074–2086 (2020).
+42. Simao, T. D. & Spaan, M. T. J. Safe policy improvement with 
+baseline bootstrapping in factored environments. In Proc. AAAI 
+Conference on Artificial Intelligence (AAAI) Vol. 33, 4967–4974 
+(AAAI Press, 2019).
+43. Guestrin, C., Koller, D. & Parr, R. Multiagent planning with factored 
+mdps. In Adv. Neural Inf. Process. Syst. 1, 1523–1530 (2001).
+44. Du, Y. et al. Learning correlated communication topology in 
+multi-agent reinforcement learning. In Proc. 20th International 
+Conference on Autonomous Agents and MultiAgent Systems 
+456–464 (International Foundation for Autonomous Agents and 
+Multiagent Systems, 2021).
+45. Foerster, J., Assael, I. A., de Freitas, N. & Whiteson, S. Learning to 
+communicate with deep multi-agent reinforcement learning. Adv. 
+Neural Inf. Processing Syst. 29, 2137–2145 (2016).
+46. Zhang, C. & Lesser, V. Coordinating multi-agent reinforcement 
+learning with limited communication. In Proc. 20th International 
+Conference on Autonomous Agents and MultiAgent Systems 
+1101–1108 (International Foundation for Autonomous Agents and 
+Multiagent Systems, 2013).
+47. Sukhbaatar, S., Szlam, A. & Fergus, R. Learning multiagent 
+communication with backpropagation. Adv. Neural Inf. Process 
+Syst. 29, 2252–2260 (2016).
+48. Mnih, V. et al. Human-level control through deep reinforcement 
+learning. Nature 518, 529–533 (2015).
+49. Silver, D. et al. A general reinforcement learning algorithm that 
+masters chess, shogi, and Go through self-play. Science 362, 
+1140–1144 (2018).
+50. Han, L. et al. Grid-wise control for multi-agent reinforcement 
+learning in video game AI. In Proc. 36th International Conference 
+on Machine Learning Vol. 97, 2576–2585 (PMLR, 2019).
+51. Kaelbling, L. P., Littman, M. L. & Moore, A. W. Reinforcement 
+learning: a survey. J. Artif. Intell. Res. 4, 237–285 (1996).
+52. Deisenroth, M. & Rasmussen, C. E. PILCO: a model-based 
+and data-efficient approach to policy search. In Proc. 28th 
+International Conference on machine learning (ICML-11) 465–472 
+(Citeseer, 2011).
+53. Luo, Y. et al. Algorithmic framework for model-based deep 
+reinforcement learning with theoretical guarantees. In 
+International Conference on Learning Representations (ICLR) 
+https://openreview.net/pdf?id=BJe1E2R5KX (2019).
+
+===== PAGE 14 =====
+Nature Machine Intelligence
+Article https:/ /doi.org/10.1038/s42256-024-00879-7
+54. Janner, M., Fu, J., Zhang, M. & Levine, S. When to trust your model: 
+model-based policy optimization. Adv. Neural Inf. Process. Syst. 
+32 (2019).
+55. Schrittwieser, J. et al. Mastering Atari, Go, chess and shogi by 
+planning with a learned model. Nature 588, 604–609 (2020).
+56. Morgan, A. S. et al. Model predictive actor-critic: accelerating 
+robot skill acquisition with deep reinforcement learning. In 
+2021 IEEE International Conference on Robotics and Automation 
+6672–6678 (IEEE, 2021).
+57. Deisenroth, M. P. et al. A survey on policy search for robotics. 
+Found. Trends Robot. 2, 388–403 (2013).
+58. Zhang, K., Kakade, S., Basar, T. & Yang, L. Model-based multi-agent 
+RL in zero-sum markov games with near-optimal sample 
+complexity. Adv. Neural Inf. Process. Syst. 33, 1166–1178 (2020).
+59. Brafman, R. I. & Tennenholtz, M. A near-optimal polynomial time 
+algorithm for learning in certain classes of stochastic games. Artif. 
+Intell. 121, 31–47 (2000).
+60. Bouzy, B. & Métivier, M. Multi-agent model-based reinforcement 
+learning experiments in the pursuit evasion game. (2007).
+61. Bargiacchi, E., Verstraeten, T. & Roijers, D.M. Cooperative 
+prioritized sweeping. In International Conference on Autonomous 
+Agents and Multiagent Systems (AAMAS 2021) 160–168 (IFAAMAS, 
+2021).
+62. Zhang, W., Wang, X., Shen, J. & Zhou, M. Model-based multi-agent 
+policy optimization with adaptive opponent-wise rollouts. In IJCAI 
+(ed. Zhou, Z.-H.) 3384–3391 (ijcai.org, 2021).
+63. Zhang, K., Yang, Z. & Başar, T. in Handbook of Reinforcement Learning 
+and Control 321–384 (Springer International Publishing, 2021).
+64. Wu, Z., Yu, C., Chen, C., Hao, J. & Zhuo, H. H. Models as agents: 
+optimizing multi-step predictions of interactive local models in 
+model-based multi-agent reinforcement learning. In Proc. AAAI 
+Conference on Artificial Intelligence Vol. 37, 10435–10443 (AAAI 
+Press, 2023).
+65. Wang, R. et al. Model-based reinforcement learning for 
+decentralized multiagent rendezvous. In Conference on Robot 
+Learning 711–725 (PMLR, 2021).
+66. Kim, W., Park, J. & Sung, Y. Communication in multi-agent 
+reinforcement learning: intention sharing. In International 
+Conference on Learning Representations. https://openreview.net/
+pdf?id=qpsl2dR9twy (2020).
+67. Pretorius, A. et al. Learning to communicate through imagination 
+with model-based deep multi-agent reinforcement learning. 
+https://openreview.net/pdf?id=boZj4g3Jocj (2020).
+68. Sutton, R. S. Integrated architectures for learning, planning, and 
+reacting based on approximating dynamic programming. In 
+Machine Learning Proc. 1990 216–224 (Elsevier, 1990).
+69. Schulman, J., Wolski, F., Dhariwal, P., Radford, A. & Klimov, O. 
+Proximal policy optimization algorithms. Preprint at https://arxiv.
+org/abs/1707.06347 (2017).
+70. Qu, G., Wierman, A. & Li, N. Scalable reinforcement learning of 
+localized policies for multi-agent networked systems. In Learning 
+for Dynamics and Control (L4DC) 256–266 (PMLR, 2020).
+71. Vinitsky, E. et al. Benchmarks for reinforcement learning in 
+mixed-autonomy traffic. In Conference on Robot Learning 
+399–409 (PMLR, 2018).
+72. Chen, D. et al. PowerNet: multi-agent deep reinforcement 
+learning for scalable powergrid control. IEEE Trans. Power Syst. 
+37, 1007–1017 (2021).
+73. Wang, J., Xu, W., Gu, Y., Song, W. & Green, T. C. Multi-agent 
+reinforcement learning for active voltage control on power 
+distribution networks. Adv. Neural Inf. Process. Syst. 34,  
+3271–3284 (2021).
+74. Kompella, V. et al. Reinforcement learning for optimization of 
+COVID-19 mitigation policies. In 2020 AAAI Fall Symposium on AI 
+for Social Good, AI4SG (AAAI Press, 2020).
+75. Hao, Q., Huang, W., Feng, T., Yuan, J. & Li, Y. GAT-MF: graph 
+attention mean field for very large scale multi-agent 
+reinforcement learning. In Proc. 29th ACM SIGKDD Conference on 
+Knowledge Discovery and Data Mining 685–697 (Association for 
+Computing Machinery, 2023).
+76. Zhou, M. et al. Factorized Q-learning for large-scale multi-agent 
+systems. In Proc. First International Conference On Distributed 
+Artificial Intelligence 1–7 (Association for Computing Machinery, 
+2019).
+77. Liu, Y. et al. GPLight: grouped multi-agent reinforcement learning 
+for large-scale traffic signal control. In Proc. Thirty-Second 
+International Joint Conference on Artificial Intelligence 199–207 
+(Association for Computing Machinery, 2023).
+78. Sutton, R. S. & Barto, A. G. Reinforcement learning: an 
+introduction. Robotica 17, 229–235 (1999).
+79. Singh, A., Jain, T. & Sukhbaatar, S. Learning when to communicate 
+at scale in multiagent cooperative and competitive tasks. In 
+International Conference on Learning Representations https://
+openreview.net/forum?id=rye7knCqK7 (2018).
+80. Foerster, J. et al. Stabilising experience replay for deep 
+multi-agent reinforcement learning. In International Conference 
+On Machine Learning 1146–1155 (PMLR (2017).
+81. Gan, L., Li, N., Topcu, U. & Low, S. H. Optimal power flow in tree 
+networks. In 52nd IEEE Conference on Decision and Control 
+2313–2318 (IEEE, 2013).
+82. Guare, J. Six degrees of separation. In The Contemporary 
+Monologue: Men. Dramatists Play Service. 89–93 (Routledge, 
+2016).
+83. Ma, C., Du, Y., Li, A. & Yang, Y. Official implementation of model 
+based decentralized policy optimization. Zenodo https://doi.
+org/10.5281/zenodo.11549522 (2024).
+84. Van der Maaten, L. & Hinton, G. Visualizing data using t-SNE. J. 
+Mach. Learn. Res. 9, 11 (2008).
+Acknowledgements
+We appreciate K. Du’s suggestions for revising the paper and 
+response letter. We thank Y. Zhong for assistance in language 
+polishing and J. Wang for providing suggestions in experiments 
+with real-world power nets. This project is sponsored by National 
+Science and Technology Major Project of China (2022ZD0114900), 
+National Natural Science Foundation of China (62376013), Young 
+Elite Scientists Sponsorship Program by CAST (2022QNRC002) 
+and Beijing Municipal Science & Technology Commission 
+(Z231100007423015). A.L. is supported by National Key Research and 
+Development Program of China (2022YFA1008400), National Natural 
+Science Foundation of China (62173004), Beijing Nova Program 
+(Z211100002121105) and SMP-IDATA Chenxing Youth Fund.
+Author contributions
+C.M., A.L., Y.D., H.D. and Y.Y. designed the project. C.M., A.L., Y.D. and 
+Y.Y. conducted the experiments and analysed the results. C.M., A.L., 
+Y.D., H.D. and Y.Y. wrote the paper and response letter. C.M., A.L., Y.D. 
+and Y.Y. analysed the theoretical results. C.M., A.L., Y.D., H.D. and Y.Y. 
+participated in the discussion of the revised content.
+Competing interests
+The authors declare no competing interests.
+Additional information
+Supplementary information The online version  
+contains supplementary material available at  
+https://doi.org/10.1038/s42256-024-00879-7.
+Correspondence and requests for materials should be addressed to 
+Yaodong Yang.
+
+===== PAGE 15 =====
+Nature Machine Intelligence
+Article https://doi.org/10.1038/s42256-024-00879-7
+Peer review information Nature Machine Intelligence thanks the anonymous  
+reviewer(s) for their contribution to the peer review of this work.
+Reprints and permissions information is available at  
+www.nature.com/reprints.
+Publisher’s note Springier Nature remains neutral with regard to 
+jurisdictional claims in published maps and institutional affiliations.
+Open Access This article is licensed under a Creative Commons 
+Attribution-NonCommercial-NoDerivatives 4.0 International License, 
+which permits any non-commercial use, sharing, distribution and 
+reproduction in any medium or format, as long as you give appropriate 
+credit to the original author(s) and the source, provide a link to the 
+Creative Commons licence, and indicate if you modified the licensed 
+material. You do not have permission under this licence to share 
+adapted material derived from this article or parts of it. The images 
+or other third party material in this article are included in the article’s 
+Creative Commons licence, unless indicated otherwise in a credit 
+line to the material. If material is not included in the article’s Creative 
+Commons licence and your intended use is not permitted by statutory 
+regulation or exceeds the permitted use, you will need to obtain 
+permission directly from the copyright holder. To view a copy of this 
+licence, visit http://creativecommons.org/licenses/by-nc-nd/4.0/.
+© The Author(s) 2024
+
+===== PAGE 16 =====
+
+
+===== PAGE 17 =====
+
+
+===== PAGE 18 =====
+
+
+===== PAGE 19 =====
+nature machine intelligence
+https://doi.org/10.1038/s42256-024-00879-7
+Article
+Efficient and scalable reinforcement 
+learning for large-scale network control
+In the format provided by the 
+authors and unedited
+Supplementary information
+
+===== PAGE 20 =====
+Contents
+1. Comparison with Existing Work . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2
+1.1. Model-based learning in multi-agent systems . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2
+1.2. Model-free learning and communication mechanism . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2
+1.3. Other ablation baselines . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 3
+1.4. Theoretical connections with previous work. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 3
+2. Description of Systems . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+3. Supplemental Result . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 9
+3.1. Hyperparameters and model training details . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 9
+3.2. Selection of linear and nonlinear model approximators . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 9
+3.3. Estimation the range of ξ in complex systems . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 10
+3.4. More training results on different tasks. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 11
+3.5. More execution results in Connected vehicle control . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 12
+3.6. More execution results in Power-Grid . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 12
+3.7. More execution results in Pandemic networks . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 12
+4. Details of Proofs . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 15
+4.1. Remarks on Proofs of Lemmas and Theorems . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 15
+4.2. Proof of Theorem 1 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 15
+4.3. Proof of Theorem 2 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 16
+4.4. Proof of Corollary 1 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 16
+4.5. Proof of Theorem 3 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 17
+4.6. Proof of Theorem 4 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 17
+4.7. Proof of Lemmas . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 19
+5. Description of Supplementary Videos. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 23
+5.1. Execution results in ATSC . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 23
+5.2. Execution results in Flow. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 23
+5.3. Execution results in Real Power-Net . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 23
+References . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 24
+
+===== PAGE 21 =====
+1 Comparison with Existing Work
+We have comprehensively analyzed the relevant work in the field and added more baselines. Our baselines consist of two main
+categories: model-based algorithms such as MAG1 and model-free algorithms. In addition, we add some algorithms which are
+the ablation of our method on different components such as extended value functions, adjacent information, and local models.
+Next, we will describe the existing work and ablation separately.
+1.1 Model-based learning in multi-agent systems
+In the work about model-based multi-agent reinforcement learning, we focused on analyzing the following works and compared
+MAG as one of the baselines through experiments.
+• MAG1 , a multi-agent model optimization framework, adopts a novel approach whereby local models are conceptualized
+as multi-step decision-making agents, and the current policies are viewed as the dynamics shaping the model rollout
+process. This unique perspective enables the local models to incorporate the intricate interplay and mutual influence
+across multiple time steps, offering a more holistic consideration before generating predictions. But MAG uses global
+information that has been processed by the Attention block as the input of the critic. This is still essentially a centralized
+training method, only using local models, while in our method, the models, polices, and critics are all decentralized.
+• Furthermore, some exist model-based multi-agent reinforcement learning endeavors that concentrate on goal alignment
+within the context of navigation ensemble tasks2. These works presuppose the availability of pre-trained peer-to-peer
+navigation policies and models. They construct a modular system composed of learning components. However, they do
+not delve into the specifics of model learning theory or policy improvement theory.
+• In certain model-based multi-agent reinforcement learning endeavors, communication and interaction mechanisms are
+also employed3. Agents engage in iterative exchanges of their individual forecasts to collaboratively plan ahead. Each
+agent has access to a learned world model capable of generating future state and reward predictions conditioned on
+actions sampled from the agent’s policy. Subsequently, these insights are encoded into messages and employed in training
+through differentiable message passing to learn communication protocols. However, this approach does not take into
+account scenarios with constrained communication, rendering it unsuitable for large-scale real-world systems subject to
+objective communication restrictions. And there is no theoretical joint analysis of model learning and strategy learning
+errors.
+• Some researchers have also proposed an Intention Sharing (IS) mechanism 4 to enhance the coordination among agents.
+In this scheme, each agent employs an attention mechanism based on messages received from other agents to learn the
+relative significance of components within imagined trajectories. This compression allows for capturing the agent’s
+future action plans in the form of an intent message for communication. Nevertheless, this method still disregards
+communication limitations prevalent in the real world. Additionally, it necessitates extra information learning, thereby
+introducing additional computational costs.
+In a comprehensive assessment, the existing model-based approaches for multi-agent reinforcement learning suffer from
+the following issues: (1) Despite being rooted in local models, they still rely on a global critic, rendering them ineffective
+in communication-constrained scenarios. (2) Theoretical analysis and bounded estimation for multi-agent model learning
+are lacking, resulting in an insufficient grasp of the model’s impact on reinforcement learning. (3) The integration of model
+learning and policy learning, a potential iterative process in real-world scenarios, has not been achieved.
+Supplementary Table 1. Comparison of Local Message Sizes (LMS) of different decentralized algorithms.
+DIAL5, NeurComm6 CommNet7 FPrint8 ConseNet9 Ours
+local message sizes O (|si| +|πi| +|hi|) O (|si| +|hi|) O (|si| +|πi|) O (|si|) O (|si|)
+1.2 Model-free learning and communication mechanism
+This categories are further subdivided into hidden information-based algorithms DIAL5, CommNet7, NeurComm6, IC3Net10
+and non-hidden information-based algorithms ConseNet9, FPrint8. Note that hidden information-based algorithms necessitate a
+larger number of messages to be transmitted, consequently demanding increased communication bandwidth and imposing a
+heavier computational burden. We define the hi,t 6
+hi,t = gνi
+
+hi,t−1,eλ s
+i
+ 
+sVi,t
+
+,eλ π
+i (πNi,t−1) ,eλ h
+i
+(hNi,t−1)
+
+(1)
+2/24
+
+===== PAGE 22 =====
+where hi,t is the hidden state (or the belief) of each agent i in time t and eλi and gνi are differentiable message encoding and
+extracting functions. In Table 1, we present the local message sizes 6 for different algorithms, it represents the amount of
+information required for each local agent when learning and reasoning, and it is evident that our approach utilizes the minimal
+amount of information.
+• Hidden information-based algorithms The DIAL approach distinguishes itself by encoding received messages in-
+dividually instead of resorting to averaging, although the summation of all encoded inputs remains unchanged. In
+contrast, CommNet adopts a more lossy aggregation mechanism which involves averaging the received messages prior to
+encoding, followed by the summation of all encoded inputs. Moreover, both DIAL and CommNet eschew the inclusion
+of policy fingerprints within their respective messages. Within NeurComm, each agent effectively leverages delayed
+global information to refine its belief system, while also acquiring the capacity to learn the messages to optimize the
+control performance of all other agents. Learning hidden information requires additional computational burden and
+may even increase decision errors. Certain studies have directed their attention towards communication strategies that
+involve the selective transmission of messages. For instance, ATOC11 employs a soft attention mechanism to apportion a
+communication probability to individual agents, whereas IC3Net10 adopts a hard binary attention approach to determine
+whether communication should occur. In IC3Net, the agents maintain their local hidden states with a LSTM kernel.
+Such endeavors prove particularly beneficial when each agent is compelled to establish communication priorities. It is
+important to note that these approaches find heightened relevance in scenarios where the necessity for communication
+target prioritization is prominent. However, in the context of Scenarios with limited communication, this need is less
+pronounced, as the communication scope is typically confined to localized neighborhoods. This method still uses global
+information.
+• Non-hidden information-based algorithms ConseNet and FPrint exclusively rely on neighborhood information. In the
+case of ConseNet, an additional consensus update mechanism is employed, facilitating the overwrite of critic parameters
+with the mean values obtained from all critics within the enclosed neighborhood. On the other hand, FPrint incorporates
+the inclusion of neighbor policies as an integral component of its framework. It is worth noting that in real scenarios,
+the difficulty for intelligent agents to obtain their neighbor policies is often larger than that of obtaining neighbor states
+through simple sensors. Our algorithm also does not require neighbor policy information.
+1.3 Other ablation baselines
+The following algorithm is the ablation of our method on different components such as extended value functions, adjacent
+information, and local models.
+• CPPO 12, 13: Centralized PPO learns a centralized critic Vi(s). This baseline aims to analyze the performance when κ
+is set to be arbitrarily huge, and is used in13 as a benchmark algorithm for networked system control. The comparison
+between the performance of CPPO and our method can be viewed as an ablation study of extended value function and
+model usage.
+• DPPO 12: Decentralized PPO learns an independent actor and critic for each agent. We implement it by using the
+neighbor’s state for extended value estimation. The comparison between the performance of DPPO and our method can
+be viewed as an ablation study of model usage.
+• IMPO: A decentralized and model-based algorithm based on our method, but without information of neighbors and
+does not use the extended value function to predict global value function and gradient. The comparison between the
+performance of IMPO and our method can be viewed as an ablation study of the extended value function.
+• MPOna: A decentralized and model-based algorithm based on our method, but without information of non-adjacent
+neighbors. The comparison between the performance of MPOna and our method can be viewed as an ablation study of
+adjacent neighbors. The more detailed description is shown in Fig. 1 in the main text.
+1.4 Theoretical connections with previous work
+In addition to the aforementioned aspects, prior work has introduced the foundational assumption of completely independent
+systems14. However, we believe that this assumption is considerably strong and not well-suited for the intricacies of real-world
+complex systems. Algorithms designed under such an assumption lack scalability, rendering them less viable for large-scale and
+intricate systems. As the number of agents grows, the approximation errors introduced by this assumption become challenging
+to control. Furthermore, due to the absence of model learning, these algorithms exhibit low exploration efficiency and sample
+efficiency in complex tasks. Rapidly attaining optimal policies becomes arduous. To address these limitations, we have
+3/24
+
+===== PAGE 23 =====
+introduced the concept of ξ -dependent systems, which mitigates the issues associated with the independent systems assumption.
+Specifically, our basic theoretical starting point is from Definition 1 to Definition 2 in our manuscript.
+Furthermore, we have incorporated model learning theory to tackle the challenges of sample inefficiency. Furthermore, we
+have incorporated model learning theory to tackle the challenges of sample inefficiency. The theoretical development of this
+part is based on the MBPO15 of model-based single agent reinforcement learning. We extend model learning theory to the field
+of multi-agent systems with complex coupling relationships between agents and provide a theoretical guarantee for monotonic
+improvement of policies in multi-agent learning. Specifically, our basic theoretical starting point is from
+η p[π]≥ η ˆp[π]−C15 (2)
+to
+η p[π1, ...,πn]≥ η ˆp[π1, ...,πn]−C (3)
+In summary, our approach has extended the realm of networked multi-agent reinforcement learning to encompass larger
+scales and a wider array of intricate tasks. Although our theoretical findings are based on the work of Scalable SAC 14, we
+have made significant theoretical contributions to the practical application of the algorithm. To the best of our knowledge,
+our theoretical findings may represent the first provable assurance of policy monotonic improvement based on decentralized
+model learning, policy learning, and value function learning within scalable multi-agent networked systems. Additionally, our
+work stands as the first endeavor to extend rigorously independent multi-agent network systems to the realm of generalized
+multi-agent systems. Moreover, we introduce the first practically effective multi-agent reinforcement learning algorithm tailored
+for large-scale systems.
+In conclusion, we have conducted a comprehensive analysis of the disparities between our work and existing research,
+delineating the advantages inherent to our approach. Notably, we have incorporated select aspects of these prior works as
+baselines in our experiments, including both model-based methods like MAG, and model-free algorithms such as NeurComm,
+CommNet, DIAL, IC3Net, FPrint, and ConseNet. The empirical results undeniably demonstrate the superiority of our algorithm
+over the existing methodologies, achieving optimal performance with minimal communication costs. Moreover, our contribution
+extends beyond empirical results; we provide foundational model learning theory and policy learning theory for model-based
+multi-agent reinforcement learning, enriching the theoretical underpinnings of the field.
+4/24
+
+===== PAGE 24 =====
+2 Description of Systems
+We described the real-world systems in our experimental scenario in Table 2, including their scale and real-world impact of the
+problem.
+Supplementary Table 2. Summary of the scale of the problems we addressed and the sources of authenticity for the systems.
+System scale Real-world impact
+ATSC-New
+York
+New York is a large city, with a total land area of
+approximately 1214 square kilometers. As of
+December 2023, the city’s population is
+estimated at around 8340,000 individuals. We
+examined the performance at 436 different
+traffic intersections.
+The ATSC New York system is developed based
+on the SUMO platform and real road network
+map of New York City. 1) SUMO was used to
+provide traffic forecasts for authorities of the
+City of Cologne during the Pope’s visit in 2005
+and during the Soccer World Cup 2006: . 2)
+SUMO is widely used by the V2X community
+for both, providing realistic vehicle traces, and
+for evaluating applications in an online loop
+with a network simulator.
+Real
+Power-Net
+This large-scale power system comprises over
+400 photovoltaic (PV) nodes, which have been
+subdivided into 199 control zones. The grid’s
+coverage spans approximately 300 square
+kilometers, equivalent to supporting the energy
+supply needs of a city like Philadelphia in the
+United States.
+The load profiles16 for each network are
+adjusted using real-time Portuguese electricity
+consumption data, which encompasses 232
+consumers over a period of 3 years: . To account
+for varying solar radiation levels across different
+zones, we consider ten cities, regions, and
+provinces within Belgium, Netherlands, and
+Luxembourg. These include Antwerp, Brussels,
+Flemish-Brabant, Hainaut, Liege, Limburg,
+Luxembourg, Namur, Walloon-Brabant, and
+West-Flanders. The PV data is sourced from
+Elia Group: , the power network operator in
+Belgium.
+Pandemic
+network
+We optimized the virus containment strategies
+within distinct social settings with populations
+ranging from 500 to 10,000 people. These social
+settings encompassed a diverse array of
+establishments, including Homes, Grocery
+Stores, Offices, Schools, Retail Stores,
+Hospitals, Hair Salons, Restaurants, and Bars,
+each of which plays a crucial role in the
+transmission dynamics of the virus17.
+The population’s age distribution is based on
+actual US population age distribution statistics.
+Hospital capacities in various societal segments
+are determined following Red Cross guidelines
+for hospital infrastructure and aligned with 2020
+data from the American Hospital Association.
+Average virus infection and transmission rates,
+along with their standard deviations, are
+calibrated using COVID-19 hospitalization and
+mortality data from Sweden . Population
+mask-wearing data is sourced from the Health
+and Safety Fund of North America.
+Flow This task consists of Figure Eight and Ring Attenuation. The objective is to achieve a target speed and avoid collision,
+which is similar to CACC. The road network has a shape of ring or figure “eight". The figure eight network, previously
+presented in18, acts as a closed representation of an intersection. In a figure eight network containing a total of 14 vehicles,
+we witness the formation of queues resulting from vehicles arriving simultaneously at the intersection and slowing down to
+obey right-of-way rules. The state consists of velocity and position for the vehicle. The action is the acceleration of the vehicle
+a∈ R[amin,amax]. The objective of the learning agent is to achieve high speeds while penalizing collisions. Accordingly, the local
+reward function is defined as ri = vdes−| vdes− vi|, where vdes is an arbitrary target velocity. In Ring Attenuation, the state and
+action of each vehicle is the same as Figure Eight. In the perspective of a networked system, we assume that the vehicles are
+connected with the preceding and succeeding vehicle, thus resulting in a loop-structured graph.
+Cooperative Adaptive Cruise Control CACC consists of two scenarios: Catch-up and Slow-down. The objective of
+CACC is to adaptively coordinate a platoon of 8 vehicles to minimize the car-following headway and speed perturbations based
+on real-time vehicle-to-vehicle communication. The state of each agent consists of headway h, velocity v, acceleration a , and
+5/24
+
+===== PAGE 25 =====
+is shared to neighbors within two steps. The action of each agent is to choose appropriate hyper-parameters (α◦, β◦) for each
+OVM controller19, selected from four levels {(0,0),(0.5,0),(0,0.5),(0.5,0.5)}, where α◦, β◦ denotes headway gain and relative
+gain. The reward is defined as (hi,t− h∗)2 + (vi,t− v∗
+t )2 + 0.1a2
+i,t, where the target headway and velocity profile are h∗ = 20m
+and v∗
+t . Whenever a collision happens (hi,t < 1m), a large penalty of -1000 is assigned to each agent and the state becomes
+absorbing. In catch-up scenario, initial headway of the first vehicle is larger than the target headway, thus the following agents
+learn how to catch up with the first vehicle, where target speedv∗
+t = 15m/s and initial headway h1,0 > hi,0,∀i̸= 1. In slow-down
+scenario, target speed v∗
+t linearly decreases to 15m/s during the first 30s and then stays at constant, thus agents learn how to
+slow down speed cooperatively,where initial headwayhi,0 = h∗.
+Adaptive Traffic Signal Control The objective of ATSC is to adaptively adjust signal phases to minimize traffic congestion
+based on real-time road-traffic measurements. Here we use two scenarios: ATSC Grid and ATSC Monaco. Both scenarios
+simulate peak-hour traffic. The MDP horizon is 720 steps, and one MDP step corresponds to a 5s simulation to prevent the
+traffic lights from switching too frequently. For safety, a 2 second yellow time is inserted before switching to red. Figure 2 (d)
+in manuscript illustrates a 5×5 synthetic traffic grid: ATSC Grid traffic network, which is formed by a two-lane main road with
+a speed limit of 20m/s and a single-lane avenue with a speed limit of 11m/s. In the 5×5 synthetic traffic grid, the peak hour
+traffic dynamics are simulated by a collection of four time-variant traffic flows, including loading and recovery phases. The
+grid is homogeneous. The state of each agent is all the twelve flows, and all agents have the same action space, which is a
+set of five pre-defined signal phases: E-W straight phase, E-W left-turn phase, and three straight and left-turn phases for E,
+W, and N-S.. Figure 2 (e) in manuscript illustrates a more challenging scenario with a heterogeneous network structure with
+diverse action and observation spaces: ATSC Monaco traffic network with 28 intersections. Four collections of traffic flows that
+are multiples of 325 veh/hr will be continuously generated to simulate peak-hour traffic. The blue intersections are different
+controlled objects with size of the action space changing from 2 to 6 and the dimension of observation space changing from 2
+to 22. The map of the ATSC Monaco system is derived from the actual traffic grid of the city of Monaco, enabling a reasonable
+simulation of traffic conditions within a heterogeneous and asymmetric urban network. The ATSC Monaco system is developed
+based on the SUMO platform. SUMO has been used within several projects for answering a large variety of research questions
+and real applications:
+• Evaluate the performance of traffic lights, including the evaluation of modern algorithms up to the evaluation of weekly
+timing plans.
+• Vehicle route choice has been investigated, including the development of new methods, the evaluation of eco-aware
+routing based on pollutant emission, and investigations on network-wide influences of autonomous route choice.
+• SUMO was used to provide traffic forecasts for authorities of the City of Cologne during the Pope’s visit in 2005 and
+during the Soccer World Cup 2006 1.
+• SUMO is widely used by the V2X community for both, providing realistic vehicle traces, and for evaluating applications
+in an on-line loop with a network simulator.
+More details can be checked in code and videos.
+Decentralized Inverter-based Secondary Voltage Control To further demonstrate the capabilities of our algorithm, we
+apply the developed our method to more complex multi-agent Power-Grid systems, IEEE 34-bus test feeder with 20 and 40
+heterogeneous distributed generators. Specifically, this is a decentralized inverter-based secondary voltage control problem in
+distributed generators, which can be formulated as a cooperative MARL problem. The objective of Power-Grid is to maintain
+the voltage and frequency of all distributed generators to the reference value when the disruptions in the systems and tracking
+imperfections in primary control. Figure 2 (f) in manuscript illustrates Power-Grid systems. This simulator is based on the line
+and load specifications detailed in20 and21. The action for each agent is the secondary voltage control set point. Specifically,
+we discretize the action space uniformly to a value between 1.00 pu and 1.14 pu in this system. The state of each agent i
+consists of 9 variables si,t = (δi,Pi,Qi,iodi,ioqi,ibdi,ibqi,vbdi,vbqi), where δi denote the measured reference angle frame; Pi and
+Qi is the active and reactive power, respectively. iodi, ioqi, ibdi and ibqi denote the output d-q currents of the agent i and the
+directly connected buses, respectively; vbdi and vbqi represent the output d-q voltages of the connected bus, respectively; These
+definitions and descriptions refer to previous research22. In order to stabilize the voltage of the Power-Grid systems, we design
+a positive reward to encourage agents when the distributed generators with voltage close to 1.00 pu and design a negative
+reward to punish agents when the distributed generators with diverged voltages or have no power flow solution. Furthermore, to
+make the simulator closer to the real-world power systems, some random disturbances in the range of±5% of the nominal
+values for each load are added in each simulation time step.
+1https://eclipse.dev/sumo/about/
+6/24
+
+===== PAGE 26 =====
+The Real-world Active Voltage ControlTo further validate the efficacy of our method in real-world scenarios, we tackle
+the challenge of active control in a large-scale power system 16 constructed with real-world data. The emerging trend of
+decarbonization is placing excessive stress on power distribution networks. Active voltage control is seen as a promising
+solution to relieve power congestion and improve voltage quality without extra hardware investment, taking advantage of the
+controllable apparatuses in the network, such as roof-top photovoltaics (PVs) and static var compensators (SVCs). These
+controllable apparatuses appear in a vast number and are distributed in a wide geographic area, making MARL a natural
+candidate. These power systems consist of 141 and 322 buses, respectively. To facilitate operational efficiency, a large-scale
+power network is partitioned into multiple regions, with each region being equipped with several photovoltaic (PV) installations
+overseen by the respective distribution network owner. Within this setup, each PV is equipped with an inverter that generates
+reactive power to regulate the voltage around a fixed reference value denoted asvref. In our task, we assume the independence
+and segregation of PV ownership (e.g., individual homeowners or enterprises) from distribution network ownership. Notably,
+the operation of PV infrastructure falls under the responsibility of the PV owner. This implies that each PV can be controlled
+in a distributed manner, naturally lending itself to the characterization of an agent. The objective is to ensure that the power
+systems is within safe control range and has minimal power losses. The load profiles of each electrical network are derived
+from real-time Portuguese electricity consumption data spanning a period of three years, encompassing 232 consumers. In
+order to highlight the distinctions between residential and industrial users, the default power factors specified in the case files
+are randomly perturbed by±5%, thereby generating corresponding real-time reactive power consumption. Solar data, sourced
+from Elia group, the power network operator in Belgium, is obtained and incorporated. Both the load and photovoltaic (PV)
+data are interpolated using a resolution of 3 minutes to align with the real-time control period within the power grid. To
+differentiate between varying solar radiation levels across different regions, the PV generation profiles from 10 cities/regions
+over a three-year period are collected, with PV systems within the same control region sharing identical generation profiles16.
+The specific real system situation is as follows:
+• Load Profiles The load profiles for each network undergo modification based on real-time Portuguese electricity
+consumption data encompassing 232 consumers over a span of 3 years 2. The initial dataset comprises electricity usage
+records of 370 residential and industrial clients between 2011 and 2014, captured at 15-minute intervals. Due to some
+data not commencing from the beginning, records are collected from January 1st, 2012, starting at 00:15:00. Locations
+featuring over 20 missing data entries are omitted, while the remaining gaps, primarily arising from the transition between
+winter time and daylight saving time, are linearly interpolated. Subsequently, the load data is interpolated at a 3-minute
+resolution to align with the real-time control intervals in the grid. The ultimate dataset size stands at 526080× 23216,
+encompassing load profiles for 232 consumers spanning 1096 days (equivalent to three years).
+• PV Profiles To account for varying solar radiation levels across distinct zones, we consider ten cities, regions, and
+provinces within Belgium, Netherlands, and Luxembourg. These encompass Antwerp, Brussels, Flemish-Brabant (a
+province of Belgium), Hainaut (a province of Belgium), Liege, Limburg (a province of Netherlands), Luxembourg,
+Namur, Walloon-Brabant (a province of Belgium), and West-Flanders (a province of Belgium). The PV data is sourced
+from Elia Group 3, the power network operator in Belgium. This PV data is also subjected to interpolation at a 3-minute
+resolution, culminating in a total dataset size of 526080× 1016.
+The active voltage control problem exhibits several intriguing characteristics. Firstly, it manifests as a convergence of
+both local and global factors. This denotes that while the voltage of each node is influenced by the real and reactive powers
+of all other nodes, the influence diminishes as the distance between nodes increases. Secondly, it constitutes a constrained
+optimization quandary, with the voltage threshold serving as the constraint and the minimization of total power loss standing
+as the objective. However, the relationship between the constraint and the control action lacks explicit definition. Thirdly,
+the structure of a distribution network adheres to a radial topology, offering substantial underlying information for control
+strategies. Nevertheless, the node-branch parameters of this topology can introduce significant uncertainties. Lastly, voltage
+control possesses a relatively considerable margin of tolerance, resulting in less severe consequences in cases where the control
+fails to meet standard requirements. This particular characteristic renders it highly suitable as a practical application scenario
+for multi-agent reinforcement learning that relies on a certain degree of exploration and trial-and-error. It serves as an ideal
+context for the implementation of grounded multi-agent reinforcement learning applications.
+The load profiles of each electrical network are derived from real-time Portuguese electricity consumption data spanning a
+period of three years, encompassing 232 consumers. In order to highlight the distinctions between residential and industrial
+users, the default power factors specified in the case files are randomly perturbed by±5%, thereby generating corresponding
+real-time reactive power consumption. Solar data, sourced from Elia group, the power network operator in Belgium, is obtained
+2https://archive.ics.uci.edu/dataset/321/electricityloaddiagrams20112014
+3https://www.elia.be/en/grid-data/power-generation/solar-pv-power-generation-data
+7/24
+
+===== PAGE 27 =====
+and incorporated. Both the load and photovoltaic (PV) data are interpolated using a resolution of 3 minutes to align with the
+real-time control period within the power grid. To differentiate between varying solar radiation levels across different regions,
+the PV generation profiles from 10 cities/regions over a three-year period are collected, with PV systems within the same
+control region sharing identical generation profiles16.
+Pandemic Networked Control for COVID-19 Mitigation17 To further promote the applicability of our algorithm, we
+simulated prevention and control strategies that are close to real infectious diseases in large societies. The construction of this
+pandemic network relies on COVID-19 prevention and control policies and infection data by the real Swedish government. The
+year 2020 bore witness to the emergence of the COVID-19 virus, precipitating one of the most severe global pandemics in
+recorded history. Consequently, governments worldwide have been confronted with the arduous task of safeguarding public
+health while simultaneously striving to ensure the uninterrupted functioning of their respective economies. Epidemiological
+models serve as invaluable tools for comprehending the transmission dynamics of such diseases and forecasting the potential
+impact of intervention measures. Nevertheless, prevailing intervention policies, despite being rooted in data-driven approaches,
+still heavily rely on heuristic strategies. In this realistic scenario, we evaluate the utilization of our method in the optimization
+of mitigation policies aimed at minimizing the economic repercussions of a pandemic while ensuring the resilience of hospital
+capacity and reducing death cases. The difference between this pandemic simulator and traditional models is that it can capture
+complex interactions between individuals in specific locations within the community. We optimized the virus containment
+strategies within distinct social settings with populations ranging from 500 to 10,000 individuals. These social settings
+encompassed a diverse array of establishments, including Home, Grocery Store, Office, School, Retail Store, Hospital, Hair
+Salon, Restaurant, and Bar, each of which plays a crucial role in the transmission dynamics of the virus. By tailoring the
+strategies to the specific characteristics and interactions within these settings, we aimed to enhance the effectiveness of the virus
+control measures employed. The description sources for real data are as follows:
+• The age distribution of the population is based on real US population age distribution statistics 4
+• Hospital capacities in various societal segments are determined based on the guidelines provided by the Red Cross for
+hospital infrastructure, aligned with the data from the American Hospital Association for the year 2020. The total bed
+count, distributed across 6,146 hospitals in the United States, amounts to 924,107 beds, with an average of approximately
+150 beds per hospital.
+• The average values and standard deviation of virus infection and transmission rates are calibrated based on the hospital-
+ization and mortality data of COVID-19 cases in Sweden.
+• The relevant data on the wearing of masks by the population comes from Health and Safety Fund of North America 5.
+• In order to enhance the authenticity of our model, we conducted a calibration by comparing the average time to peak
+for deaths and tested critical cases within the simulator with actual data from Sweden, sourced from the World Health
+Organization 6. We chose Sweden as our data reference due to its comparatively minimal restrictions during the initial
+pandemic wave. As a result, the virus dynamics observed in Sweden are regarded as more representative of natural trends.
+The main prevention and control policies also come from the Swedish government.
+In summary, our approach demonstrates exceptional performance both in virtual simulation environments and real-world
+settings, further substantiating the rationality of our assumption regarding theξ -dependent system in our theorem. In subsection
+3.3, we estimated the value of ξ within two scenarios, namely CACC and Real Power-Net 141-bus.
+4https://www.populationpyramid.net/united-states-of-america/2018/
+5https://www.lhsfna.org/how-effective-are-masks-and-other-facial-coverings-at-stopping-coronavirus/
+6https://covid19.who.int/region/euro/country/se
+8/24
+
+===== PAGE 28 =====
+3 Supplemental Result
+In this section, we will supplement some ablation experiments, as well as additional findings and results.
+3.1 Hyperparameters and model training details
+The key hyperparameters and reduction in communication costs for our method are summarized in Table 3. Especially compared
+to the centralized methods, the communication costs of our method in different scenarios is only about 5 %-35% of that in
+centralized methods.
+Supplementary Table 3. Hyperparameters for our algorithm.
+Catch up Slow down Eight Ring ATSC Grid Monaco Power-Grid Real Power Pandemic
+lr of Vi 3e-4 3e-4 5e-5 5e-4 5e-4 1e-4 5e-4 5e-4 5e-4
+lr of π 3e-4 3e-4 5e-5 5e-4 5e-4 1e-4 5e-4 5e-4 2e-4
+lr of pi 3e-4 3e-4 5e-4 5e-4 2e-4 1e-4 5e-4 5e-5 5e-4
+πi Net. [64,64] [64,64] [64,64] [64,64] [128,128] [256,256] [256,256] [512,512] [64,64]
+Vi Net. [64,64] [64,64] [64,64] [64,64] [128,128] [256,256] [256,256] [512,512] [64,64]
+pi Net. [16,16] [16,16] [16,16] [16,16] [64,64] [32,32] [64,64] [128,128] [64,64]
+κ 1 1 2 2 1 1 1 1 1
+Rollout 25 25 25 25 25 25 25 15 25
+Cost (≈) -87% -87% -65% -78% -83% -85% -85% -95% -90%
+Next, we provide some details of the model learning methods in our method. The universal model error corresponds to the
+term D(p∥ ˆp) in the inequality (6) in our manuscript. The model error D(p∥ ˆp) can be divided into two parts: dependency bias
+D(p∥ ¯p) and independence-approximation error D( ¯p∥ ˆp). When our model accurately fits the true MDP, we have D( ¯p∥ ˆp)≈ 0,
+and supD(p∥ ˆp)≈ supD(p∥ ¯p)≤ ξ . Therefore, εmi≤ D(p∥ ˆp)≤ ξ . We have controlled the model error εmi (TV distance
+between the distributions) under ξ bound through model learning to adapt to our analysis of the monotonic improvement
+theorem of policy. To obtain a more accurate fitting model, we optimized it from three perspectives: model architecture design,
+training methods, and training data.
+• Structure of the model We have undertaken numerous design considerations based on practical engineering experience.
+Firstly, we meticulously designed the model architecture. Figure 9 in the main text illustrates the overall structure of our
+method, wherein the red-bordered box represents the model employed for fitting real-world environments. Concerning
+the design of the model framework, we distinctively handle state and action information. They are individually subjected
+to feature extraction using embedding layers, followed by amalgamation based on the topological relationships of the
+graph network. On one hand, this graph network architecture inherently approximates networked Markov Decision
+Processes (MDPs). On the other hand, the separate extraction and aggregation of features facilitate rapid learning of
+environmental dynamical traits by the model. This enables us to maintain a relatively compact network size with reduced
+model error during training, thereby expediting monotonic policy improvement and minimizing extraneous computational
+overhead beyond policy learning.
+• Training method and data We employ a supervised learning approach involving multi-step model extrapolation,
+iteratively executed in multiple batches. Throughout the model learning process, virtual data generated by the model and
+authentic environmental data are continually blended in accordance with a predetermined ratio. During the initial stages
+of training, when the model’s accuracy is still developing, the model predominantly relies on authentic environmental
+data for supervised learning, effectively performing a warm start. As the model attains a certain level of accuracy, we
+progressively elevate the proportion of model-generated data within the overall training dataset. This ensures that the
+model effectively fits both mixed real and virtual data. Additionally, guided by disparities between real and virtual
+data within the amalgamated dataset, a self-supervised mechanism is employed to further adjust model parameters
+during training iterations. This iterative process facilitates the enhancement of model accuracy and maintains a degree
+of generalization. During the continuous training of the model, our strategy has also been continuously trained and
+improved, and our model fitting and strategy improvement are alternating.
+3.2 Selection of linear and nonlinear model approximators
+We comprehensively compare the performance of linear models and nonlinear neural network models in fitting simple to
+complex systems, and conclude that linear models are suitable for fitting and analyzing simple linear systems due to their
+9/24
+
+===== PAGE 29 =====
+Supplementary Figure 1. The comparative analysis involves linear models and nonlinear neural networks with
+varying parameter sizes across distinct environments. a, The model errors in the learning process of models in different
+scenarios indicate that the fitting ability of linear models is weaker than that of nonlinear neural network models. The data are
+presented as mean values +/− SD. The center line represents the mean values and the error bar represents the standard
+deviation (n = 5). b, When the model parameters are reduced, linear models exhibit a greater reduction in fitting ability
+compared to nonlinear neural networks. The data are presented as mean values +/− SD. The center line represents the mean
+values and the error bar represents the standard deviation (n = 5).
+simplicity and good theoretical characteristics, while nonlinear neural network models are more suitable for model learning in
+complex large-scale systems, Both in terms of fitting efficiency and fitting accuracy, it has better performance.
+To further validate the complexity of the environment, we compared the effectiveness of using linear model xk+1 =
+Axk + Buk +C to fit the model. For fairness, we used a learnable matrix A, B and C of the same size as the nonlinear neural
+network model for fitting. From Figure 1(a)-(c), We found that in simple environments and tasks, the final performance of
+linear model fitting can also meet the control performance requirements, but the fitting efficiency is low and the variance is
+high, especially when the scene becomes complex. The fitting defects caused by linearity make it difficult to quickly reduce the
+model fitting error to the ideal state. Compared to linear models in Figure 1(d), the fitting ability of nonlinear neural networks is
+relatively less sensitive to model size. For better visualization, the model size in Figure 1(d) is defined as ln(1/m), m represents
+the number of parameters. Model based reinforcement learning is a dynamic interaction process between policy learning and
+model learning, and the lower fitting efficiency further affects the learning of strategies, Reduced final control performance.
+More importantly, When the size of the linear matrix and neural network models decreases simultaneously, the ability of the
+linear model to fit the model is significantly reduced compared to nonlinear neural networks.
+Therefore, from the perspective of reducing model errors as soon as possible, in order to improve the monotonic improvement
+ability of the policy and reduce the lower bound, we recommend using nonlinear neural networks for fitting in complex task
+scenarios to better reduce model errors for policy training and model prediction.
+3.3 Estimation the range of ξ in complex systems
+We further validate the rationality of our definitions through experimentation. Specifically, we conducted exhaustive model
+fitting in both the context of CACC and Real Power-Net, which exhibits a more intricate dynamical dependency. We
+progressively augmented the parameter count of the fitting models and pursued more comprehensive training to enhance fidelity.
+Following an extensive series of experiments, we observed that in numerous parameter experiments involving CACC, upon
+continuous augmentation of model expressiveness and training iterations, further reduction of model error became unattainable.
+We denotebp(s′|s,a) = ∏n
+i=1bpi(s′
+i|sNκ
+i ,ai). By using bp(s′|s,a) to approximate the true dynamics. At this juncture, we inferred
+that an optimal local decomposition ˆp∗(s′|s,a) for the overall decomposable dynamic transition ¯p of the CACC system had
+been attained:
+ˆp∗(s′|s,a) =
+n
+∏
+i=1
+ˆp∗
+i (s′
+i|sNκ
+i ,ai). (4)
+Corresponding to the condition where D( ¯p∥ ˆp∗)≈ 0 and D(p∥ ˆp∗) > 0 in the following inequality:
+D(p∥ ˆp∗)≤ D(p∥ ¯p) +D( ¯p∥ ˆp∗). (5)
+In this inequality, the universal model errorD(p∥ ˆp∗) can be divided into two parts: dependency bias D(p∥ ¯p) and independence-
+approximation error D( ¯p∥ ˆp∗). According to our Definition 2 of the ξ -dependent system in the manuscript, when model
+becomes very accurate, meaning D( ¯p∥ ˆp∗)≈ 0, supD(p∥ ˆp∗)≈ supD(p∥ ¯p) = ξ . Figure 6 reports that in the CACC and Real
+10/24
+
+===== PAGE 30 =====
+Supplementary Figure 2. The training process in other tasks and the differences in policy learning under nonlinear
+and linear fitters. a, Training reward increment during the training process under different scenarios and different algorithms.
+Solid lines represent the mean rewards, and error bars correspond to the standard deviation. The data are presented as mean
+values +/− SD. The center line represents the mean values and the error bar represents the standard deviation (n = 5). b,
+Training reward increment during the training process under linear models and nonlinear models. The data are presented as
+mean values +/− SD. The center line represents the mean values and the error bar represents the standard deviation (n = 5).
+Power-Net systems, with the improvement of parameter quantity and fitting ability, so the model errorD(p∥ ˆp∗) stabilized at
+around 0.2 and 0.8, respectively. Then we have
+supD(p∥ ˆp∗)≈ supD(p∥ ¯p) = ξ≥ 0.2 or 0.8 > 0 (6)
+Consequently, we substantiated that ξ > 0 in some complex systems, although ξ may be a very small value (this attribute
+underscores the reliability of our preliminary assumption regarding the independent decomposition of system dynamics
+in practical systems) in the CACC systems. Analogously, within the more intricate Real Power-Net context, we similarly
+encountered this phenomenon, manifesting ξ > 0. Furthermore, in comparison to the CACC system, the Real Power-Net
+system exhibits heightened complexity, with inter-agent coupling relationships being more prevalent. As a result, the value
+of ξ tends to be larger than its value in CACC. Subsequently, in our ensuing theoretical analyses and algorithmic design, we
+extensively address scenarios where ξ > 0, thus providing examples to demonstrate the consistency of our algorithm framework
+with the ξ -dependent attribute of real multi-agent systems.
+3.4 More training results on different tasks
+Here we show the training process for all tasks not included in the main text, and from the training process, we can conclude
+from Fig. 2a that our method has the highest sample efficiency. Especially in large-scale real-world systems, our framework
+demonstrates superior performance, enabling high decision-making capabilities at low communication costs. In these tasks,
+the communication cost of our approach is only 10 % of that of the centralized algorithm, which makes each decentralized
+strategy a very small decision network and its training and inference speed far exceeds that of the centralized method. To
+11/24
+
+===== PAGE 31 =====
+Supplementary Figure 3. The evaluation results on vehicle control on CACC and Flow. a,Description of velocity and
+headway of vehicles 1,3,5 in Catch-up. The visualization of this task is adapted from existing work6. The headway stabilizes at
+20 m which matches the target headway. The velocity stabilizes at 15 m/s, matching the target velocity. b, Description of
+velocity and position of vehicles 1, 8, 15, 22 in Ring Attention. The visualization of this task is adapted from existing work13.
+Our method controls the formation of queues with a process of accelerating to the safe and efficient velocity near 5 m/s.
+achieve performance similar to our method, the centralized method requires that the parameter size of each decision network be
+at least 10 times that of our method, and the computational efficiency is worrying. In addition, for complex system dynamics in
+the real world, nonlinear models are not sufficient, which can lead to the failure of policy learning (Fig. 2b).
+3.5 More execution results in Connected vehicle control
+Figure 3a-b depicts the execution performance of the trained policies based on our method in Flow and CACC. Our analysis
+suggests that, in comparison to IC3Net, our method effectively governs vehicles to adhere to traffic regulations and uphold
+safety standards, concurrently enhancing the overall traffic flow efficiency. Specifically in CACC, our method ensures stable
+control of both velocity and headway of vehicles within the same queue interval, consistently maintaining them around the
+target value. This leads us to conclude that our algorithm not only improves the efficiency of the overall traffic flow but also
+ensures safety standards are met.
+3.6 More execution results in Power-Grid
+We further provided the performance of algorithms Only Primary Control, FPrint, CommNet, DIAL and ConseNet in Power-
+Grid with 20 agents. We also compared the traditional control algorithm MPC. We referred to the evaluation of these methods
+in previous studies22. MPC performance well but it relies heavily on accurate models, which is difficult to achieve in a large
+number of complex real-world scenarios, and the computational cost of MPC is very high (inference time is about 19 times that
+of deep reinforcement methods22) because it solves online non-linear optimization problems at each time step, requiring a large
+amount of computation.
+When only Primary Control exists, there is evidence that it is difficult to control the voltage values of all DGs in the system
+within the reference range, so secondary control is required. We test the performance of different baselines in terms of execution
+performance is given. As shown in Figure 5, other baselines are difficult to control all DGs within the voltage reference range.
+3.7 More execution results in Pandemic networks
+In the large-scale spread of the epidemic in society, real-time local decision-making is very important. As the infection situation
+gradually worsens, the decisions of different decision-making institutions (education departments, medical systems, social
+service systems, etc.) usually rely on the local information possessed by the current institutions. We observe the overall
+12/24
+
+===== PAGE 32 =====
+Supplementary Figure 4. Execution performance of the final decision models in pandemic network a, The number of
+critical cases and death cases when using strategies provided by different algorithms in societies with different population sizes.
+The data are presented as mean values +/− SD. The center line represents the mean values and the error bar represents the
+standard deviation (n = 5).
+Supplementary Figure 5. Description of the secondary control system of the power-grid and more execution results.
+a, Schematic diagram of the decentralized control of power-grid. This system architecture is adapted from existing work22. b,
+Decision performance of only primary control, traditional control algorithm MPC and other reinforcement learning algorithms.
+infection of different infectious disease prevention and control strategies in a society with a growing population in three months.
+Figure 4a reports the relationship between severe cases and the maximum capacity of hospitals under different policies, If
+the number of severe cases exceeds the maximum capacity of the hospital, it indicates that the current virus transmission is
+very serious. Our algorithm can effectively control severe cases below the maximum capacity of the hospital and alleviate
+the pressure on medical staff. Our method has also maintained regional economic development as much as possible. These
+indicators verify that our method can not only alleviate the harm caused by virus transmission to human health in real pandemic
+systems but also balance the economic development of large societies.
+13/24
+
+===== PAGE 33 =====
+Supplementary Figure 6. Analysis of system attenuation characteristics and verification of ξ -dependent system
+assumption a, We show the influence of the following vehicles when the leading vehicle suddenly accelerates or decelerates.
+We can conclude that the influence will gradually weaken as the network topology distance increases. we also show the
+relationship between the distance and influence between agents under different κ in more general networked systems. The
+overall trend is that the influence between agents gradually attenuates from the central agent to the surroundings. b, The
+relationship between the limit error of model fitting and the model’s fitting capacity (such as the number of parameters). The
+abscissa represents the number of hidden layers and neurons in the principal structural components of the neural network
+employed for model fitting, ranging from 16×16 to 1024×1024 The data (n = 5) are presented as median values (the central
+line of each box) along with the 25th and 75th percentiles (the bottom and top edges of each box), minima and maxima (the
+whiskers attached to each box), as well as outliers (outside the box and whiskers). The ordinate denotes the ultimate
+discrepancy between the fitted model and the actual environment under the present parameter configuration.
+14/24
+
+===== PAGE 34 =====
+4 Details of Proofs
+4.1 Remarks on Proofs of Lemmas and Theorems
+To bound the returns, we use TV distance to assess the distance between si,ai at every timestep, based on the fact that
+|Esi,ai∼p1r(si,ai)− Esi,ai∼p2r(si,ai)|≤ rmax· DTV (p1∥p2). To achieve this, we argue that in an INS, sT
+i only depends on sT−1
+N1
+i
+,
+which is the 1-hop neighbors’ states at previous timestep. Then, inductively, sT
+i is only dependent on sT−1
+N1
+i
+,sT−2
+N2
+i
+, ...,sT−k
+Nk
+i
+, and
+ultimately, s0
+NT
+i
+. Then we consider a chain of states xt = sNN−t
+i
+,t = 0,1, ...,N in Lemma 4 to analyze how st
+i depends on model
+errors and policy divergences in a step-by-step manner. Insipred by15, by summing the divergence at each timestep t = 0,1, ...,
+we can generate a overall discounted returns bound of branched rollout in Lemma 5. Lemma 6 is a simple corollary of Lemma
+5, which handles normal rollout scenario.
+If the returns are bounded, we can show that if every optimization step increase the return by C, the real return would
+also almost monotonically increase. Specifically, if ˆη[πk+1]≥ ˆη[πk] +C, combined with η[πk+1]≥ ˆη[πk]−C, we have
+η[πk+1]≥ ˆη[πk]. But note that ˆη[πk] increases monotonically, and it’s a lower bound of η[πk+1]. This means that ˆη[πk+1]
+would almost monotonically increase.
+4.2 Proof of Theorem 1
+η p[π1, ...,πn] and η ˆp[π1, ...,πn] differs in two ways. First, they are estimated with different transition dynamics. Second, the
+latter sample their states and actions with another policy, namely πD. To deal with these divergences separately, we use an
+intermediate return η[πD], which is the return of πD in the environment. Then the difference can be bounded by:
+|η p
+i [π1, ...,πn]− η ˆp
+i [π1, ...,πn]|≤| η p
+i [π1, ...,πn]− η p
+i [πD]|| {z }
+L1
++|η p
+i [πD]− η ˆp
+i [π1, ...,πn]|| {z }
+L2
+. (7)
+To bound L1, we apply Lemma 6 with εmi = 0. Then:
+L1≤ 2rmax
+1− γ
+
+επi +
+∞
+∑
+k=0
+γk+1
+∑
+j∈Nk
+i
+επ j
+
+. (8)
+In L2, both the dynamics and policies and different, therefore:
+L2≤ 2rmax
+1− γ
+
+επi +
+∞
+∑
+k=0
+γk+1
+∑
+j∈Nk
+i
+(εm j + επ j )
+
+. (9)
+Putting Equation 8 and 9 yields:
+|η p
+i [π1, ...,πn]− η ˆp
+i [π1, ...,πn]|≤ 2rmax
+1− γ
+
+2επi +
+∞
+∑
+k=0
+γk+1
+∑
+j∈Nk
+i
+(εm j + 2επ j )
+
+. (10)
+And because the binary relation of k-hop neighbor is symmetric, we have:
+1
+n
+n
+∑
+i=1
+∑
+j∈Nk
+i
+ε j =
+n
+∑
+j=1
+|V k
+j|
+n ε j. (11)
+Then, by averaging Equation 10, we have:
+|η p[π1, ...,πn]− η ˆp[π1, ...,πn]|≤ 1
+n
+n
+∑
+i=1
+|η p
+i [π1, ...,πn]− η ˆp
+i [π1, ...,πn]|
+≤ 2rmax
+1− γ
+1
+n
+n
+∑
+i=1
+επi +
+∞
+∑
+k=0
+γk+1 1
+n
+n
+∑
+i=1
+∑
+j∈Nk
+i
+(εm j + 2επ j )
+
+= 2rmax
+1− γ
+1
+n
+n
+∑
+i=1
+επi +
+∞
+∑
+k=0
+γk+1
+n
+∑
+i=1
+|Nk
+i|
+n (εmi + 2επi)
+
+= 2rmax
+1− γ
+n
+∑
+i=1
+ επi
+n + (εmi + 2επi)·
+∞
+∑
+k=0
+γk+1|Nk
+i|
+n
+
+(12)
+15/24
+
+===== PAGE 35 =====
+4.3 Proof of Theorem 2
+To bound|η p[π1, ...,πn]− ηbranch[π1, ...,πn]|, we need to analyze how do they differ from each other.η p denote the real returns
+of these policies in the environment. ηbranch is the returns estimated in the branched rollout scheme. To explicitly illustrate this
+point, we describe their difference in Table 4:
+branch point before after
+dynamics policies dynamics policies
+η p p π p π
+ηbranch p πD ˆp π
+Supplementary Table 4. The difference between η p and ηbranch
+By Lemma 5, we have:
+|η p
+i [π1, ...,πn]− ηbranch
+i [π1, ...,πn]|≤ 2rmax
+1− γ
+ T−1
+∑
+k=0
+γk+1
+∑
+j∈Nk
+i
+εm j +
+∞
+∑
+k=T
+γk+1
+∑
+j∈Nk
+i
+επ j
+
+(13)
+And because the binary relation of k-hop neighbor is symmetric, we have:
+1
+n
+n
+∑
+i=1
+∑
+j∈Nk
+i
+ε j =
+n
+∑
+j=1
+|V k
+j|
+n ε j. (14)
+Then, by averaging Equation 13, we have:
+|η p[π1, ...,πn]− ηbranch[π1, ...,πn]|≤ 1
+n
+n
+∑
+i=1
+|η p
+i [π1, ...,πn]− ηbranch
+i [π1, ...,πn]|
+≤ 2rmax
+1− γ
+ T−1
+∑
+k=0
+γk+1· 1
+n
+n
+∑
+i=1
+∑
+j∈Nk
+i
+εm j +
+∞
+∑
+k=T
+γk+1· 1
+n
+n
+∑
+i=1
+∑
+j∈Nk
+i
+επ j
+
+= 2rmax
+1− γ
+ T−1
+∑
+k=0
+γk+1·
+n
+∑
+i=1
+|Nk
+i|
+n εmi +
+∞
+∑
+k=T
+γk+1·
+n
+∑
+i=1
+|Nk
+i|
+n επi
+
+= 2rmax
+1− γ
+n
+∑
+i=1
+
+εmi·
+  T−1
+∑
+k=0
+γk+1|Nk
+i|
+n
+
++ επi·
+  ∞
+∑
+k=T
+γk+1|Nk
+i|
+n
+
+(15)
+4.4 Proof of Corollary 1
+Although p(s′|s,a) might not satisfy the criteria of an INS, we can construct another transition dynamic ˆp = ∏n
+i=1 pi(si|sNi,ai),
+which is the product of marginal transitions, thus being an INS. Recall that by definition, if p is a transition dynamic of a
+ξ -dependent system, sups,a DTV (p(s′|s,a)∥ ˆp(s′|s,a))≤ ξ . Then we divide the difference into two parts:
+η p[π1, ...,πn]− ηbranch[π1, ...,πn] = η p[π1, ...,πn]− η ˆp[π1, ...,πn]| {z }
+L1
++ η ˆp[π1, ...,πn]− ηbranch[π1, ...,πn]| {z }
+L2
+(16)
+The first part is the difference of policy returns, estimated in two environments. Lemma 2 gives that:
+DTV
+ 
+pt (s,a)∥ ˆpt (s,a)
+
+≤ DTV
+ 
+p0(s,a)∥ ˆp0(s,a)
+
++
+t
+∑
+i=1
+DTV
+ 
+pi(si,ai|si−1,ai−1)∥ ˆpi(si,ai|si−1,ai−1)
+
+. (17)
+Note that the first part has no policy divergences, which follows from Lemma 1, thus
+DTV
+ 
+pi(si,ai|si−1,ai−1)∥ ˆpi(si,ai|si−1,ai−1)
+
+≤ DTV
+ 
+pi(si|si−1,ai−1)∥ ˆpi(si|si−1,ai−1)
+
++ DTV
+ 
+π(ai|si)∥π(ai|si)
+
+≤ ξ + 0 = ξ . (18)
+Plug (18) into (17) yields
+DTV
+ 
+pt (s,a)∥ ˆpt (s,a)
+
+≤ DTV
+ 
+p0(s,a)∥ ˆp0(s,a)
+
++
+t
+∑
+i=1
+ξ = tξ . (19)
+16/24
+
+===== PAGE 36 =====
+Then, we have:
+L1 = η p[π1, ...,πn]− η ˆp[π1, ...,πn]≤ 2rmax
+∞
+∑
+t=0
+γtDTV
+ 
+pt (s,a)∥ ˆpt (s,a)
+
+≤ 2rmax
+∞
+∑
+t=0
+γttξ
+= 2rmax
+1− γ· γ
+1− γ ξ .
+(20)
+As for L2, because ˆp is an INS, we can directly apply Theorem 2:
+L2≤ 2rmax
+1− γ
+n
+∑
+i=1
+
+εmi·
+  T−1
+∑
+k=0
+γk+1|Nk
+i|
+n
+
++ επi·
+  ∞
+∑
+k=T
+γk+1|Nk
+i|
+n
+
+(21)
+Summation of Equation 20 and Equation 21 completes the proof.
+4.5 Proof of Theorem 3
+In14 (Lemma 3), it was proven that if sNκ
+i and aNκ
+i are fixed, then no matter how distant states and actions changes, Q-function
+will not change significantly:
+|Qi(sNκ
+i ,aNκ
+i ,sNκ
+−i,aNκ
+−i)− Qi(sNκ
+i ,aNκ
+i ,s′
+Nκ
+−i
+,a′
+Nκ
+−i
+)|≤ rmax
+1− γ γ κ .
+As the value function is the expectation of the Q-function
+Vi(s) = Ea∼πQi(s,a)
+Vi(sNκ
+i ) = Ea∼πQi(sNκ
+i ,aNκ
+i ),
+we have,
+|Vi(s)−Vi(sNκ
+i )| =|Ea∼πQi(s,a)− Ea∼πQi(sNκ
+i ,aNκ
+i )|
+≤ Ea∼π|Qi(s,a)− Qi(sNκ
+i ,aNκ
+i )|
+≤ rmax
+1− γ γ κ ,
+which concludes the proof. This theoretical result is based on previous research23.
+4.6 Proof of Theorem 4
+The difference of the gradients is written as
+gi− ˜gi =E( ˆA− ˜A)∇θi log πi(ai|sNi)
+=1
+n E[ ∑
+j /∈Nκ
+i
+ˆA j]∇θi log πi(ai|sNi) + 1
+n E[ ∑
+j∈Nκ
+i
+( ˆA j− ˜A j)]∇θi log πi(ai|sNi)
+=1
+n E[ ∑
+j /∈Nκ
+i
+(r j + γVj(s′)−Vj(s))]∇θi log πi(ai|sNi) + 1
+n E ∑
+j∈Nκ
+i
+
+(r j + γVj(s′)−Vj(s))
+− (r j + γVj(s′
+Nκ
+i
+)−Vj(sNκ
+i ))
+
+∇θi log πi(ai|sNi)
+=L1 + L2.
+(22)
+Note that for any function b(s), E[b(s)∇θi log π θi(ai|sNi)] = 0. Therefore, L2 in Equation (22) becomes:
+|L2|≤ 1
+n E ∑
+j∈Nκ
+i
+γ|Vj(s′)−Vj(s′
+Nκ
+i
+)]||∇θi log πi(ai|sNi)||
+≤|Nκ
+i|
+n
+γ κ+1
+1− γ rmaxgmax.
+(23)
+17/24
+
+===== PAGE 37 =====
+For L1, note that r j + γVj(s′)−Vj(s) =−Vj(s) +r j + ∑κ−2
+t=1 Eγtrt
+j + γ κ−1Vj(sκ−1). And in an independent network system
+(where Eq.(4) holds), st
+j,at
+j,t = 0,1, ...,κ− 2 is not affected by policy πi if j /∈ Nκ
+i , we have that
+|L1|≤ 1
+n E ∑
+j /∈Nκ
+i
+|γ κ−1Vj(sκ−1)||∇θi log πi(ai|sNi)||
+≤(1−|Nκ
+i|
+n ) γ κ−1
+1− γ rmaxgmax.
+(24)
+Put Equation (23) and (24) together, we have
+|gi− ˜gi|≤| L1| +|L2|
+≤|Nκ
+i|
+n
+γ κ+1
+1− γ rmaxgmax + (1−|Nκ
+i|
+n ) γ κ−1
+1− γ rmaxgmax
+= γ κ−1
+1− γ [1− (1− γ2)|Nκ
+i|
+n ]rmaxgmax.
+18/24
+
+===== PAGE 38 =====
+4.7 Proof of Lemmas
+Below we give Lemmas that are used in the theorems and the their proofs. Note that Lemma 1 was firstly proposed and proved
+in15. We list it here to make the presentation self-contained.
+Lemma 1. (TVD of Joint Distribution15) Consider two distributions p1(x,y) = p1(x)p1(y|x) and p2(x,y) = p2(x)p2(y|x). The
+total variation distance between them can be bounded as:
+DTV
+ 
+p1(x,y)∥p2(x,y)
+
+≤ DTV
+ 
+p1(x)∥p2(x)
+
++ Ex∼p2
+
+DTV
+ 
+p1(y|x)∥p2(y|x)
+
+≤ DTV
+ 
+p1(x)∥p2(x)
+
++ max
+x
+DTV
+ 
+p1(y|x)∥p2(y|x)
+
+Lemma 2. Suppose there are two chains of distributions{xt
+1,t≥ 0},{xt
+2,t≥ 0}. At time t, the states of both chains share
+an identical state space xt
+1,xt
+2∈ X t. Suppose these two chains satisfy a Markov-like property: pt+1(xt+1|xt , ...,x1,x0) =
+pt+1(xt+1|xt ). Then, the TVD of distributions of two chains at time t can be decomposed as:
+DTV
+ 
+pT
+1 (xT )∥pT
+2 (xT )
+
+≤ DTV
+ 
+p0
+1(x0)∥p0
+2(x0)
+
++
+T
+∑
+t=1
+Est−1∼pt−1
+2
+DTV
+ 
+pt
+1(xt|xt−1)∥pt
+2(xt|xt−1)
+
+.
+We prove this lemma by induction. When T = 0, it’s easy to see that this lemma is true.
+Assume it is true for T = k. We have:
+|pk+1
+1 (xk+1)− pk+1
+2 (xk+1)| =|∑
+xk
+[pk+1
+1 (xk+1|xk)pk
+1(xk)− pk+1
+2 (xk+1|xk)pk
+2(xk)]|
+≤∑
+xk
+|pk+1
+1 (xk+1|xk)pk
+1(xk)− pk+1
+2 (xk+1|xk)pk
+2(xk)|
+=∑
+xk
+|pk+1
+1 (xk+1|xk)pk
+1(xk)− pk+1
+1 (xk+1|xk)pk
+2(xk) + pk+1
+1 (xk+1|xk)pk
+2(xk)− pk+1
+2 (xk+1|xk)pk
+2(xk)|
+≤∑
+xk
+
+pk
+2(xk)|pk+1
+1 (xk+1|xk)− pk+1
+2 (xk+1|xk)| + pk+1
+1 (xk+1|xk)|pk
+1(xk)− pk
+2(xk)|
+
+=Exk∼pk
+2
+[|pk+1
+1 (xk+1|xk)− pk+1
+2 (xk+1|xk)|] +∑
+xk
+pk+1
+1 (xk+1|xk)|pk
+1(xk)− pk
+2(xk)|
+Then,
+DTV
+ 
+pk+1
+1 (xk+1)∥pk+1
+2 (xk+1)
+
+=1
+2 ∑
+xk+1
+|pk+1
+1 (xk+1)− pk+1
+2 (xk+1)|
+≤1
+2 ∑
+xk+1
+
+Exk∼pk
+2
+[|pk+1
+1 (xk+1|xk)− pk+1
+2 (xk+1|xk)|] +∑
+xk
+pk+1
+1 (xk+1|xk)|pk
+1(xk)− pk
+2(xk)|
+
+=Esk∼pk
+2
+DTV
+ 
+pk+1
+1 (xk+1|xk)∥pk+1
+2 (xk+1|xk)
+
++ DTV
+ 
+pk
+1(xk)∥pk
+2(xk)
+
+≤DTV
+ 
+p0
+1(x0)∥p0
+2(x0)
+
++
+k+1
+∑
+t=1
+Est−1∼pt−1
+2
+DTV
+ 
+pt
+1(xt|xt−1)∥pt
+2(xt|xt−1)
+
+Then this theorem holds for all n∈ N.
+Lemma 3. Consider two distributions with pdf p(x) and q(x), where x = (x1, ...,xn)∈ Rn. Suppose p and q can be factorized
+as: p (x) = ∏n
+i=1 pi(xi),q(x) = ∏n
+i=1 qi(xi). Then we have:
+DTV [p(x)∥q(x)]≤
+n
+∑
+i=1
+DTV [pi(xi)∥qi(xi)].
+Also, if the distance is measured by KL-divergence, we have:
+DKL[p(x)∥q(x)] =
+n
+∑
+i=1
+DKL[pi(xi)∥qi(xi)].
+19/24
+
+===== PAGE 39 =====
+We prove this result for discrete distributions, yet by replacing sum with integration, this result stays true in continuous case.
+DTV [p(x)∥q(x)] = 1
+2 ∑
+x
+|p(x)− q(x)| = 1
+2 ∑
+x1,...,xn
+|
+n
+∏
+k=1
+pk(xk)−
+n
+∏
+k=1
+qk(xk)|
+= 1
+2 ∑
+x1,...,xn
+
+n
+∑
+i=1
+h i−1
+∏
+k=1
+pk(xk)
+n
+∏
+k=i+1
+qk(xk)(pi(xi)− qi(xi))
+i
+≤ 1
+2 ∑
+x1,...,xn
+n
+∑
+i=1
+h i−1
+∏
+k=1
+pk(xk)
+n
+∏
+k=i+1
+qk(xk)|pi(xi)− qi(xi)|
+i
+= 1
+2
+n
+∑
+i=1
+∑
+xi
+|pi(xi)− qi(xi)|
+=
+n
+∑
+i=1
+DTV [pi(xi)∥qi(xi)].
+In KL-divergence case, we have:
+DKL[p(x)∥q(x)] = ∑
+x
+p(x)log p(x)
+q(x)
+= ∑
+x1,...,xn
+h
+p(x1, ...,xn)
+n
+∑
+i=1
+log pi(xi)
+qi(xi)
+i
+=
+n
+∑
+i=1
+∑
+x1,...,xn
+h n
+∏
+k=1
+pk(xk)log pi(xi)
+qi(xi)
+i
+=
+n
+∑
+i=1
+∑
+xi
+pi(xi)log pi(xi)
+qi(xi)
+=
+n
+∑
+i=1
+DKL(pi(xi)∥qi(xi)).
+Lemma 4. (N-step distribution distance) Suppose the expected TVD between two dynamics transitions is bounded as
+εmi = maxsNi ,ai DTV
+
+p(s′
+i|sNi,ai)∥ ˆp(s′
+i|sNi,ai)
+
+and επi = maxs DTV
+
+πi(ai|sNi)∥ ˆπi(ai|sNi)
+
+. Then the N-step distribution distance
+is bounded as:
+DTV
+
+pN
+i (si)∥ ˆpN
+i (si)
+
+≤
+N−1
+∑
+t=0
+∑
+j∈Nt
+i
+(επ j + εm j ).
+Thus,
+DTV
+
+pN
+i (si,ai)∥ ˆpN
+i (si,ai)
+
+≤ επi +
+N−1
+∑
+t=0
+∑
+j∈Nt
+i
+(επ j + εm j ).
+Consider a chain of regional state xt = sNN−t
+i
+. Two chains of distributions pt (xt ), ˆp(xt ) denote the distributions of xt under
+the environment and our model, respectively. First, because of the property of an INS, these two chains’ transition dynamics
+can be decomposed as:
+p(xt|xt−1) = p(s′
+NN−t
+i
+|sNN−t+1
+i
+)
+= ∏
+j∈NN−t
+i
+p j(s′
+j|sVj ).
+And because p j(s′
+j|sVj ) = ∑a j p j(s′
+j|sVj ,a j)π j(a j|sVj ), by the property of TVD, we know that:
+DTV
+
+p j(s′
+j|sVj )∥ ˆp j(s′
+j|sVj )
+
+≤ επ j + εm j .
+With Lemma 3, we have:
+20/24
+
+===== PAGE 40 =====
+DTV
+
+p(xt|xt−1)∥ ˆp(xt|xt−1)
+
+≤ ∑
+j∈NN−t
+i
+(επ j + εm j ). (25)
+Then we are ready to decompose DTV
+
+pN
+i (si)∥ ˆpN
+i (si)
+
+.
+By definition, xN = sNN−N
+i
+= si, then
+DTV
+
+pN
+i (si)∥ ˆpN
+i (si)
+
+= DTV
+
+pN
+i (xN)∥ ˆpN
+i (xN)
+
+.
+Then the two chains of distributions p(x0), ...,p(xN) and ˆp(x0), ..., ˆp(xN) are Markov chains, because by definition,
+p(xt+1|s) = p(sNN−t−1
+i
+|s)
+= p(sNN−t−1
+i
+|sNN−t
+i
+)
+= p(xt+1|xt ),
+which means xt+1 is solely dependent on xt.
+Applying Lemma 2 on these chains, we have
+DTV
+
+pN
+i (si)∥ ˆpN
+i (si)
+
+= DTV
+
+pN
+i (xN)∥ ˆpN
+i (xN)
+
+≤ DTV (p0
+1(x0)∥p0
+2(x0)) +
+N
+∑
+t=1
+Ext−1∼pt−1
+2
+DTV
+ 
+pt
+1(xt|xt−1)∥pt
+2(xt|xt−1)
+
+.
+By (25), we have
+DTV
+
+pN
+i (si)∥ ˆpN
+i (si)
+
+≤ DTV (p0
+1(x0)∥p0
+2(x0)) +
+N
+∑
+t=1
+Ext−1∼pt−1
+2
+DTV
+ 
+pt
+1(xt|xt−1)∥pt
+2(xt|xt−1)
+
+≤ 0 +
+N
+∑
+t=1
+∑
+j∈NN−t
+i
+(επ j + εm j )
+=
+N−1
+∑
+t=0
+∑
+j∈Nt
+i
+(επ j + εm j ).
+which completes the proof of the first part. And by Lemma 1, the second part holds true.
+Lemma 5. (Returns bound measured in branched rollout) Consider two MDPs p(s) and ˆp(s). Suppose they both adopt
+T -branched rollout scheme. Before the branch, suppose the dynamics distributions are bounded as:
+max
+sNi ,ai
+DTV
+ 
+ppre
+i (s′
+i|sNi,ai)∥ ˆppre
+i (s′
+i|sNi,ai)
+
+= ε pre
+mi
+and policy divergences are bounded as:
+max
+sNi
+DTV
+ 
+π pre
+i (ai|sNi)∥ ˆπ pre
+i (ai|sNi)
+
+= ε pre
+πi
+After the branch, ε post
+mi and ε post
+πi are defined similarly. Then the (local) T -step returns are bounded as:
+|ηi− ˆηi|≤ 2rmax
+1− γ
+
+ε post
+πi +
+T−1
+∑
+k=0
+γk+1
+∑
+j∈Nk
+i
+(ε post
+m j + ε post
+π j ) +
+∞
+∑
+k=T
+γk+1
+∑
+j∈Nk
+i
+(ε pre
+m j + ε pre
+π j )
+
+We prove this by estimating the state-action distribution divergence at each timestep. For notation simplicity, we denote
+ε pre
+Nk
+i
+= ε pre
+Nk
+i
+= ∑ j∈Nk
+i
+(ε pre
+m j + ε pre
+π j ), and ε post
+Nk
+i
+analogously. If we divide the chains into two parts: pre-branch and post-branch,
+and apply Lemma 4 on both parts, we have:
+21/24
+
+===== PAGE 41 =====
+For t≤ T :
+DTV
+
+pt
+i(si,ai)∥ ˆpt
+i(si,ai)
+
+≤ ε post
+πi +
+t−1
+∑
+k=0
+ε post
+Nk
+i
+,
+and for t > T :
+DTV
+
+pt
+i(si,ai)∥ ˆpt
+i(si,ai)
+
+≤ ε post
+πi +
+T−1
+∑
+k=0
+ε post
+Nk
+i
++
+t−1
+∑
+k=T
+ε pre
+Nk
+i
+.
+Then, the difference of discounted distribution can be bounded as:
+DTV
+
+pi(si,ai)∥ ˆpi(si,ai)
+
+≤ (1− γ)
+∞
+∑
+t=0
+DTV
+
+pt
+i(si,ai)∥ ˆpt
+i(si,ai)
+
+≤ (1− γ)
+T
+∑
+t=0
+γt 
+ε post
+πi +
+t−1
+∑
+k=0
+ε post
+Nk
+i
+
++ ( 1− γ)
+∞
+∑
+t=T +1
+γt 
+ε post
+πi +
+T−1
+∑
+k=0
+ε post
+Nk
+i
++
+t−1
+∑
+k=T
+ε pre
+Nk
+i
+
+= ε post
+πi + (1− γ)
+T−1
+∑
+k=0
+ε post
+Nk
+i
+(γk+1 + γk+2 + ...) + ( 1− γ)
+∞
+∑
+k=T
+ε pre
+Nk
+i
+(γk+1 + γk+2 + ...)
+= ε post
+πi +
+T−1
+∑
+k=0
+ε post
+Nk
+i
+γk+1 +
+∞
+∑
+k=T
+ε pre
+Nk
+i
+γk+1.
+We can convert this bound into the returns bound:
+|ηi− ˆηi|≤
+∞
+∑
+t=0
+γt|ri(st
+i,ai)− ri( ˆst
+i, ˆat
+i)|
+≤ 2rmax
+1− γ (1− γ)
+∞
+∑
+t=0
+DTV
+
+pt
+i(si,ai)∥ ˆpt
+i(si,ai)
+
+= 2rmax
+1− γ DTV
+
+pi(si,ai)∥ ˆpi(si,ai)
+
+= 2rmax
+1− γ
+
+ε post
+πi +
+T−1
+∑
+k=0
+ε post
+Nk
+i
+γk+1 +
+∞
+∑
+k=T
+ε pre
+Nk
+i
+γk+1
+Lemma 6. (Returns bound measured in full length rollout) Consider two MDPs p(s) and ˆp(s). Suppose they both run their
+rollouts until the end of every trajectory, and the dynamic distributions are bounded as:
+max
+sNi ,ai
+DTV
+ 
+pi(s′
+i|sNi,ai)∥ ˆpi(s′
+i|sNi,ai)
+
+= εmi
+while policy divergences are bounded as:
+max
+sNi
+DTV
+ 
+πi(ai|sNi)∥ ˆπi(ai|sNi)
+
+= επi
+Then the (local) returns are bounded as:
+|ηi− ˆηi|≤ 2rmax
+1− γ
+
+επi +
+∞
+∑
+k=0
+γk+1
+∑
+j∈Nk
+i
+(εm j + επ j )
+
+We can think it as a special case of branched rollout, where ε post = ε pre = ε for every subscript, and T = 0. From this
+perspective, applying the result of Lemma 5 completes the proof.
+22/24
+
+===== PAGE 42 =====
+5 Description of Supplementary Videos
+5.1 Execution results in ATSC
+We show the execution results of ATSC-Grid in our method (Supplementary Video 1) and DPPO (Supplementary Video 2).
+Through the key indicator "Insertion-backlogged vehicles" in the numerical panel on the left, we can observe that "Insertion-
+backlogged vehicles" will gradually increase with the load of the traffic flow, and then gradually decrease with the effective
+decision of the traffic light. The maximum value of this indicator is 1486 vehicles in DPPO and 1033 vehicles in our algorithm,
+which indicates that our approach can reduce the backlog of vehicles at intersections. Therefore, compared with DPPO, our
+framework is more effective in solving traffic jams. Through the three intersections we focused on in the video, we can also
+observe that our method can make traffic jams last for less time.
+We further show a more challenging scenario with a heterogeneous network structure with diverse action and observation
+spaces: ATSC-Monaco traffic network with 28 intersections of real traffic network in Monaco city. We compare our method
+(Supplementary Video 3) with DPPO (Supplementary Video 4). Through the key indicator "arrived vehicles" in the numerical
+panel on the left, we can observe that " arrived vehicles " will gradually increase with the load of the traffic flow. The maximum
+value of this indicator is 563 vehicles in DPPO and 752 vehicles in our framework, which indicates that our method can reduce
+the backlog of vehicles at intersections and allow more vehicles to arrive at their destinations. Therefore, compared with DPPO,
+our algorithm is more effective in solving traffic jams. Through the three intersections, we focused on in the video, we can also
+observe that our method can make traffic jams last for less time.
+5.2 Execution results in Flow
+Supplementary Video 5 shows the execution result in Figure Eight. We can observe that our method controls the formation of
+queues to cross intersections with an orderly process of accelerating to the target velocity and then decelerating to the safe
+velocity near 0 m/s. We conclude that our models control vehicles to obey traffic rules while improving the efficiency of the
+overall traffic flow.
+Supplementary Video 6 shows the execution result in Ring Attenuation. We can observe that our method can maintain the
+stability of the ring traffic flow and improve the efficiency of the overall traffic flow.
+5.3 Execution results in Real Power-Net
+Supplementary Video 7 shows the performance of the four algorithms on Real Power-Net with 141-bus, with particular
+emphasis on the total power loss. The observation period spans 12 hours, and for the sake of presentation, temporal augmentation
+has been applied to the video footage. The upper left, upper right, lower left, and lower right corners sequentially showcase
+the four algorithms: our method, CPPO, DPPO, and IC3Net. Through the video visualization, it becomes evident that our
+algorithm maintains the lowest aggregate power loss. The dynamic variation in colors of the power grid’s structure signifies the
+dynamic changes in load, while the bar chart on the right provides a color scale corresponding to different loads; darker colors
+indicate higher load levels.
+Supplementary Video 8 shows the performance of the four algorithms on Real Power-Net with 322-bus and more complex
+topology, with particular emphasis on the total power loss. The observation period spans 12 hours, and for the sake of
+presentation, temporal augmentation has been applied to the video footage. The upper left, upper right, lower left, and
+lower right corners sequentially showcase the four algorithms: our approach, CPPO, DPPO, and IC3Net. Through the video
+visualization, it becomes evident that our method maintains the lowest aggregate power loss. The dynamic variation in colors
+of the power grid’s structure signifies the dynamic changes in load, while the bar chart on the right provides a color scale
+corresponding to different loads; darker colors indicate higher load levels.
+23/24
+
+===== PAGE 43 =====
+References
+1. Wu, Z., Yu, C., Chen, C., Hao, J. & Zhuo, H. H. Models as agents: optimizing multi-step predictions of interactive
+local models in model-based multi-agent reinforcement learning. In Proceedings of the AAAI Conference on Artificial
+Intelligence, vol. 37, 10435–10443 (2023).
+2. Wang, R. et al. Model-based reinforcement learning for decentralized multiagent rendezvous. In Conference on Robot
+Learning, 711–725 (PMLR, 2021).
+3. Pretorius, A. et al. Learning to communicate through imagination with model-based deep multi-agent reinforcement
+learning. In 2020 openreview.net (2020).
+4. Kim, W., Park, J. & Sung, Y . Communication in multi-agent reinforcement learning: Intention sharing. InInternational
+Conference on Learning Representations (2020).
+5. Foerster, J., Assael, I. A., de Freitas, N. & Whiteson, S. Learning to communicate with deep multi-agent reinforcement
+learning. In NeurIPS, 2137–2145 (2016).
+6. Chu, T., Chinchali, S. & Katti, S. Multi-agent reinforcement learning for networked system control. In International
+Conference on Learning Representations (ICLR) (2020).
+7. Sukhbaatar, S., Szlam, A. & Fergus, R. Learning multiagent communication with backpropagation. In Advances in Neural
+Information Processing Systems (NeurIPS), 2252–2260 (2016).
+8. Foerster, J. et al. Stabilising experience replay for deep multi-agent reinforcement learning. In International conference on
+machine learning, 1146–1155 (PMLR, 2017).
+9. Zhang, K., Yang, Z., Liu, H., Zhang, T. & Ba¸ sar, T. Fully decentralized multi-agent reinforcement learning with networked
+agents. In International Conference on Machine Learning (ICML), 5872–5881 (2018).
+10. Singh, A., Jain, T. & Sukhbaatar, S. Learning when to communicate at scale in multiagent cooperative and competitive
+tasks. In International Conference on Learning Representations (2018).
+11. Jiang, J. & Lu, Z. Learning attentional communication for multi-agent cooperation. Adv. neural information processing
+systems 31 (2018).
+12. Schulman, J., Wolski, F., Dhariwal, P., Radford, A. & Klimov, O. Proximal policy optimization algorithms. arXiv preprint
+arXiv:1707.06347 (2017).
+13. Vinitsky, E.et al. Benchmarks for reinforcement learning in mixed-autonomy traffic. In Conference on robot learning,
+399–409 (PMLR, 2018).
+14. Qu, G., Wierman, A. & Li, N. Scalable reinforcement learning of localized policies for multi-agent networked systems. In
+Learning for Dynamics and Control (L4DC), 256–266 (PMLR, 2020).
+15. Janner, M., Fu, J., Zhang, M. & Levine, S. When to trust your model: Model-based policy optimization. In Advances in
+Neural Information Processing Systems (NeurIPS) (2019).
+16. Wang, J., Xu, W., Gu, Y ., Song, W. & Green, T. C. Multi-agent reinforcement learning for active voltage control on power
+distribution networks. Adv. Neural Inf. Process. Syst. 34, 3271–3284 (2021).
+17. Kompella, V .et al. Reinforcement learning for optimization of covid-19 mitigation policies. In 2020 AAAI Fall Symposium
+on AI for Social Good, AI4SG 2020 (2020).
+18. Wu, C., Kreidieh, A., Vinitsky, E. & Bayen, A. M. Emergent behaviors in mixed-autonomy traffic. In Conference on Robot
+Learning, 398–407 (PMLR, 2017).
+19. Bando, M., Hasebe, K., Nakayama, A., Shibata, A. & Sugiyama, Y . Dynamical model of traffic congestion and numerical
+simulation. Phys. review E 51, 1035 (1995).
+20. Mustafa, A., Poudel, B., Bidram, A. & Modares, H. Detection and mitigation of data manipulation attacks in ac microgrids.
+IEEE Transactions on Smart Grid 11, 2588–2603 (2019).
+21. Li, T. & Zhang, J.-F. Consensus conditions of multi-agent systems with time-varying topologies and stochastic communi-
+cation noises. IEEE Transactions on Autom. Control.55, 2043–2057 (2010).
+22. Chen, D. et al. Powernet: Multi-agent deep reinforcement learning for scalable powergrid control. IEEE Transactions on
+Power Syst. 37, 1007–1017 (2021).
+23. Du, Y . et al. Scalable model-based policy optimization for decentralized networked systems. In 2022 IEEE/RSJ
+International Conference on Intelligent Robots and Systems (IROS), 9019–9026 (IEEE, 2022).
+24/24
