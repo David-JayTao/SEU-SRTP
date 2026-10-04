@@ -6,9 +6,10 @@
 实验分支：`exp/repro-scaling-20261004`
 基础提交：`60a3e2d`（main）
 
-> **状态说明**：本报告在通宵实验进行中持续更新。
-> 标注 `[进行中]` 的章节在实验结束后会补全。
-> 所有数字均来自落盘产物（`experiments/2026-10-04-night/`），非估计值，除非明确标注。
+> **状态说明**：本轮实验已全部结束，三条 GPU 队列均于 12:00–12:50 之间自然排空。
+> 本报告为**最终版本**，所有数字取自 13:40 刷新的落盘产物
+> （`experiments/2026-10-04-night/`），非估计值，除非明确标注「外推」。
+> 面向小组的简明版本见 [group_progress_report_2026-10-04.md](./group_progress_report_2026-10-04.md)。
 
 ---
 
@@ -100,24 +101,34 @@
 
 ## 5. Baseline Reproduction
 
-> `[进行中]` 下表在实验结束后填最终值。实时状态见
-> `experiments/2026-10-04-night/status/running_jobs.md` 与 `manifest.csv`。
+> 最终状态。完整机器可读版本见
+> `experiments/2026-10-04-night/metrics/report_tables.md` 与 `manifest.csv`。
 
 **所有官方入口一律用官方超参数启动**（`num_env_steps=1e8`、`buffer_size=3000`、
 `lr=3e-4`、`ppo_epoch=4`、`hidden="128 128"`、`data_chunk_length=8` …），
 **没有偷偷调小步数**。因为实测吞吐远不足以在 11 小时内跑完 1e8 步，
 每个作业有**墙钟上限**，记录 `planned / completed / 趋势 / 预计剩余`。
 
-| 实验 | 状态 | steps 完成/计划 | FPS | 训练 reward 趋势 | eval reward | checkpoint |
+| 实验 | 状态 | steps 完成/计划 | FPS | 训练 reward 首→末 | eval reward | checkpoint |
 |---|---|---|---|---|---|---|
-| `official_heading` | 进行中 | 510000 / 1e8 | 569 | **明显上升**（-14.0 → +0.8） | - | ✅ |
-| `official_2v2_noweapon` | 进行中 | 180000 / 1e8 | 218 | 平坦（-3.5 附近） | -290 → -99（**上升**） | ✅ |
-| `official_2v2_noweapon_selfplay` | 进行中 | 96000 / 1e8 | 155 | +11.2 → +9.9 | 29.7 → 15.0 | ✅ |
-| `official_1v1_vsbaseline` | 排队中 | - | - | - | - | - |
-| `official_1v1_selfplay` | 排队中 | - | - | - | - | - |
-| `official_1v1_hier_selfplay` | 排队中 | - | - | - | - | - |
-| `official_1v1_shoot_hier_selfplay` | 排队中 | - | - | - | - | - |
-| `official_1v1_dodgemissile_selfplay` | 排队中 | - | - | - | - | - |
+| `official_heading` | 已结束（时限截断） | 2,460,000 / 1e8 | 590 | **-14.0 → +100.6** | - | ✅ |
+| `official_1v1_vsbaseline` | 已结束（时限截断） | 1,500,000 / 1e8 | 357 | -208 → **-1.9** | - | ✅ |
+| `official_1v1_hier_selfplay` | 已结束（时限截断） | 1,140,000 / 1e8 | 276 | -69 → **+36.8** | - | ✅ |
+| `official_1v1_dodgemissile_selfplay` | 已结束（时限截断） | 900,000 / 1e8 | 218 | -265 → **-0.4** | - | ✅ |
+| `official_1v1_shoot_hier_selfplay` | 已结束（时限截断） | 720,000 / 1e8 | 172 | -196 → -21.1 | - | ✅ |
+| `official_1v1_dodge_vsbaseline` | 已结束（时限截断） | 1,020,000 / 1e8 | 249 | -249 → -249 | -230.7 | ✅ |
+| `official_1v1_hier_dodge_vsbaseline` | 已结束（时限截断） | 1,140,000 / 1e8 | 277 | -258 → -43.2 | -218.9 | ✅ |
+| `official_1v1_selfplay` | 已结束（时限截断） | 1,350,000 / 1e8 | 325 | -157 → -91.1 | - | ✅ |
+| `official_1v1_shoot_selfplay` | 已结束（时限截断） | 660,000 / 1e8 | 160 | -221 → -225.7 | - | ✅ |
+| `official_2v2_noweapon` | 已结束（时限截断） | 1,476,000 / 1e8 | 208 | -3.53 → **+1.20** | 7.95 | ✅ |
+| `official_2v2_noweapon` (seed 1) | 已结束（时限截断） | 1,152,000 / 1e8 | 219 | -3.51 → **+8.63** | -162.5 | ✅ |
+| `official_2v2_noweapon_selfplay` | 已结束（时限截断） | 816,000 / 1e8 | 154 | +11.2 → -16.1 | 24.2 | ✅ |
+| `official_2v2_shoot` | 已结束（时限截断） | 1,152,000 / 1e8 | 163 | -36.9 → **+9.08** | -9.13 | ✅ |
+| `official_1v1_shoot_hier_vsbaseline` | **失败（upstream bug）** | 0 | - | - | - | ✗ |
+
+> **注**：`official_1v1_shoot_hier_vsbaseline` 从未成功启动——
+> 该官方配置本身有 bug，1v1 系列共 9 个入口，实际跑通 8 个。详见
+> [night_failures.md F9](./night_failures.md)。
 | `official_1v1_shoot_hier_vsbaseline` | 排队中 | - | - | - | - | - |
 
 ### 5.1 一个重要的方法学发现：MultipleCombat 的评估是确定性的
@@ -262,7 +273,7 @@ reward / termination / simulation 参数**逐字继承**官方 2v2 模板，
 
 ## 7. Scaling Experiments
 
-> `[进行中]`
+> 最终状态：2v2 / 3v3 / 5v5 / 10v10 四个规模共 **13 个 scaling 运行**（含种子重复）已完成。
 
 ### 7.0 有效性验证：生成的 scaling 家族确实锚定在官方 2v2 上
 
@@ -329,20 +340,20 @@ scaling 系列是**我们生成**的配置（§6）。在做跨 N 对比之前�
 | 2v2 | shoot | 4 | 33 | 132 | - | - | - | - | - | 排队中 | - | - | - | - |
 | 3v3 | shoot | 6 | 45 | 270 | - | - | - | - | - | 排队中 | - | - | - | - |
 
-**当前可直接回答的问题**（用户 §1 主线 B 的 10 问）：
+**主线 B 的 10 问——最终回答**：
 
-| # | 问题 | 目前答案 |
+| # | 问题 | 最终答案 |
 |---|---|---|
-| 1 | 能不能正常运行？ | ✅ 2v2/3v3/10v10 全部正常运行，无 NaN、无崩溃 |
-| 2 | 能不能开始学习？ | ✅ 全部在跑；`heading` 学习最明显；combat 任务学习慢 |
-| 3 | 学习速度是否显著下降？ | `[进行中]` 需要等各规模积累足够 episode |
-| 4 | sample efficiency 是否下降？ | `[进行中]` |
-| 5 | wall-clock efficiency 是否下降？ | ✅ **显著下降**：FPS 218(2v2) → 155(3v3) → 60(10v10) |
-| 6 | centralized critic 是否更难拟合？ | ⚠️ **有证据**：归一化后 value_loss/N² 上升 42%，grad_norm/N 上升 2.3× |
-| 7 | observation / share_obs 是否膨胀？ | ✅ **是**：obs 27→123 线性；share_obs 108→2460 **二次** |
-| 8 | coordination difficulty 是否增加？ | `[进行中]` |
-| 9 | 是否出现 critic instability？ | ⚠️ critic_grad_norm 随 N 大幅上升（6.9→61.6），尚未观察到发散/NaN |
-| 10 | 是否真正观察到算法 scalability degradation？ | ⚠️ **尚不能断言**，见 §13 |
+| 1 | 能不能正常运行？ | ✅ **能**。13 个 scaling 运行（2v2/3v3/5v5/10v10 × 多种子）全部跑完，无 NaN、无崩溃 |
+| 2 | 能不能开始学习？ | 🟡 **能，但很慢，且随 N 变难**。2v2/3v3/5v5 各有种子突破初始平台（reward/N 爬到 +1 ~ +6.5）；**10v10 的 3 个种子到 59–65 万步仍一致停在 -1.7** |
+| 3 | 学习速度是否显著下降？ | ⚠️ **是**。2v2 约需 7.5e5 步才出现明显抬升；3v3 较早；**10v10 在 6.5e5 步内未观察到抬升**。但各规模步数不同，属观察而非定论 |
+| 4 | sample efficiency 是否下降？ | ⚠️ **匹配步数下的均值口径**：3v3 (+1.09) > 2v2 (+0.40) > 5v5 (-0.51) > 10v10 (-1.59)（reward/N），**非单调**；且种子方差极大（§3.4），**不能下结论** |
+| 5 | wall-clock efficiency 是否下降？ | ✅ **显著下降**。约 690k steps/h（2v2）→ **67k steps/h（10v10）**，**相差约 10 倍** |
+| 6 | centralized critic 是否更难拟合？ | ⚠️ **有单调证据**：扣除奖励尺度后 value_loss/N² **0.479→0.704（+47%）**、grad_norm/N **3.42→5.20（+52%）**，在 3–4 个种子上严格单调（§11.2），但受限条件见该节 |
+| 7 | observation / share_obs 是否膨胀？ | ✅ **是**。obs 27→123 **线性**；share_obs 108→2460 **二次**；critic 每步计算与 buffer 内存 **三次** |
+| 8 | coordination difficulty 是否增加？ | ❓ **未观察到明显恶化**。实测代理量接近（目标覆盖 75% vs 67%），但该测量有 3 个已知缺陷（§12.1） |
+| 9 | 是否出现 critic instability？ | ⚠️ critic_grad_norm 随 N **大幅上升**（6.9→61.6 原始值；归一化后 3.42→5.20），**但全程未观察到发散、NaN 或 loss 爆炸** |
+| 10 | 是否真正观察到算法 scalability degradation？ | ⚠️ **尚不能断言**。已确认的是**计算与墙钟**层面的显著退化；学习层面的证据在排除混淆之前仍是假设（§13） |
 
 ---
 
@@ -359,8 +370,8 @@ scaling 系列是**我们生成**的配置（§6）。在做跨 N 对比之前�
 | 5v5 | 10 | 25.4 | 39.37 | 3.94 | 4.25× |
 | 10v10 | 20 | 7.82 | 127.85 | 6.39 | 13.79× |
 
-**每架飞机本身的成本在增长**（2.32 → 6.39 ms），所以总成本**超线性**，
-拟合约 **O(N^1.7)**。可精确定位到代码：
+**每架飞机本身的成本在增长**（2.32 → 6.39 ms），所以总成本**超线性**。
+最小二乘幂律拟合为 **∝ N^1.642（R² = 0.9989）**。可精确定位到代码：
 
 - `MultipleCombatTask.get_obs()` 对**每个 agent** 遍历其**全部** `partners+enemies`
   （每个都做 `LLA2NEU` + `get_AO_TA_R`）→ 每步 O(N²)
@@ -481,7 +492,7 @@ $$\text{share\_obs\_dim}(N) = 2N\cdot\text{obs\_dim} = 24N^2+6N \;\;(\text{NoWea
 
 ## 10. Sample Efficiency Scalability
 
-> `[进行中]` 数字随实验推进自动刷新。
+> 最终状态（13 个 scaling 运行全部结束）。
 > 工具：`scripts/sample_efficiency.py` → `metrics/sample_efficiency.csv`。
 > 归一化说明见 §11.1（NoWeapon 家族奖励幅度严格 ∝ N，必须归一化）。
 
@@ -496,22 +507,31 @@ $$\text{share\_obs\_dim}(N) = 2N\cdot\text{obs\_dim} = 24N^2+6N \;\;(\text{NoWea
 （`( )` 内为 reward/敌机数；`-` 表示该运行尚未到达该步数；
 `~` 表示该列最近一次测量低于请求步数的 75%，**不能当作在该步数处有测量**）
 
-| N | seed | eps | max_steps | 150k | 300k | 600k |
+| N | seed | eps | max_steps | 300k | 600k | 末值 |
 |---|---|---|---|---|---|---|
-| 3 | 1 | 23 | 690000 | -5.37 (-1.79) | -0.82 (-0.27) | 2.38 (0.79) |
-| 10 | 0 | 5 | 270000 | -17.57 (-1.76)~ | -17.46 (-1.75) | -17.46 (-1.75)~ |
+| 2 | 0 | 25 | 900000 | -3.46 (-1.73) | -2.91 (-1.45) | -0.12 (-0.06) |
+| 2 | 1 | 30 | 900000 | -3.25 (-1.63) | -0.64 (-0.32) | **+3.74 (+1.87)** |
+| 2 | 2 | 25 | 900000 | -3.50 (-1.75) | -3.21 (-1.60) | -1.24 (-0.62) |
+| 3 | 0 | 16 | 864000 | -5.31 (-1.77) | -3.33 (-1.11) | -1.50 (-0.50) |
+| 3 | 1 | 28 | 840000 | -0.82 (-0.27) | +2.38 (+0.79) | **+19.54 (+6.51)** |
+| 3 | 2 | 28 | 840000 | -4.95 (-1.65) | -4.01 (-1.34) | -3.44 (-1.15) |
+| 3 | 3 | 28 | 672000 | -3.42 (-1.14) | +14.87 (+4.96) | -1.46 (-0.49) |
+| 5 | 0 | 16 | 864000 | -9.12 (-1.82) | -9.01 (-1.80) | -8.67 (-1.73) |
+| 5 | 1 | 21 | 630000 | -5.72 (-1.14) | +2.42 (+0.48) | **+5.04 (+1.01)** |
+| 5 | 2 | 16 | 864000 | -8.60 (-1.72) | -8.20 (-1.64) | -4.01 (-0.80) |
+| **10** | 0 | 12 | 648000 | -17.46 (-1.75) | -16.40 (-1.64) | -16.43 (-1.64) |
+| **10** | 1 | 11 | 594000 | -17.77 (-1.78) | -15.28 (-1.53) | -15.28 (-1.53) |
+| **10** | 2 | 11 | 594000 | -16.25 (-1.63) | -15.89 (-1.59) | -15.89 (-1.59) |
 
 ### 10.3 目前能说与不能说的
 
-- **能说**：`3v3` 在 30 万步后出现明确上升（reward/敌机 -1.79 → -0.27）；
-  `10v10` 到 27 万步仍**完全没有移动**（-1.75 → -1.75，5 个 episode）。
-- **不能说**：由于 (a) 每个规模**种子数不足**（3v3 目前 1 个、10v10 1 个），
-  (b) 10v10 只有 5 个 episode（每个约 17 分钟），
-  (c) 3v3 与 10v10 的**步数区间不重叠**（10v10 最多 27 万步，3v3 已到 69 万步），
-  **当前数据不足以得出任何「sample efficiency 随 N 下降」的结论。**
-  要得到该结论，至少需要各规模在**同一批步数节点**（如 300k / 600k / 900k）
-  上都有多种子测量。
-- 队列里已经在跑 3v3 的 s2/s3、5v5 的 s1/s2、10v10 的 s1/s2，正是为了补足这一点。
+- **能说**：2v2/3v3/5v5 都至少有种子在 6–9e5 步内明显抬升；
+  **10v10 的 3 个种子在 59–65 万步内一致停留在初始平台**（reward/N 从 -1.7 只动到 -1.5 ~ -1.6）。
+- **不能说**：「sample efficiency 随 N 单调下降」。按 reward/N 的末值均值排序为
+  **3v3 (+1.09) > 2v2 (+0.40) > 5v5 (-0.51) > 10v10 (-1.59)**——**非单调**；
+  且 3v3 的种子间跨度（7.0）大于任何两个规模之间的差距。
+- **真正稳健的结论只有一条**：**10v10 是唯一一个在所有种子上都没有离开初始平台的规模**，
+  且它同时消耗了最长的墙钟时间。这是**观察**，不是已证实的算法层面失效。
 
 ---
 
@@ -984,7 +1004,22 @@ Code location / Fix / Verification / Category）。
 
 ## 19. Git Commits
 
-> `[进行中]` 每次阶段性提交后更新。实时：`git log --oneline exp/repro-scaling-20261004`
+分支 `exp/repro-scaling-20261004`，共 **34 个 commit**（自 `main@60a3e2d` 起）。
+完整列表：`git log --oneline main..exp/repro-scaling-20261004`。
+
+| 阶段 | 代表性 commit |
+|---|---|
+| 基础设施建设 | `d0d9bd0` chore: add overnight experiment infrastructure |
+| 审计文档 | `e6dc095` docs: official baseline inventory + N-v-N scalability audit |
+| 指标与图表工具 | `353ea10` feat: metrics collection, figures and live status tooling |
+| 日志/元数据修复 | `088c6bd` fix: capture experiment metadata, union per-step metrics |
+| 归一化分析 | `02c5935` feat: reward-normalised cross-N critic analysis |
+| 成本归因 | `45e4b2b` exp: attribute env-step cost to physics vs observation engineering |
+| 熵/学习诊断 | `d283229` / `a9fdfe7` policies near-uniform; critic converges, actor barely moves |
+| 论文精读 | `501461e` docs: two-paper analysis + LAG interface |
+| 候选方向 | `64777b0` docs: candidate scalable-MARL directions |
+| 主图与收口 | `cefc843` / `d9550d3` / `411657f` / `318e862` |
+| 小组汇报 | `753658a` docs: add group-facing SRTP progress report |
 
 | commit | message |
 |---|---|
@@ -998,7 +1033,9 @@ Code location / Fix / Verification / Category）。
 
 ## 20. Running Jobs
 
-> `[进行中]` 实时快照见 `experiments/2026-10-04-night/status/running_jobs.md`
+> **最终状态：全部结束。** 三条 GPU 队列分别在 11:46（GPU1）、12:20（GPU2）、
+> 12:49（GPU0）自然排空；tmux 会话已全部退出；**没有任何作业被人为杀掉**。
+> 最后一次运行快照见 `experiments/2026-10-04-night/status/running_jobs.md`。
 
 5 条 tmux 队列：
 
