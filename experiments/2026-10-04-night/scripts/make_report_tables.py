@@ -44,11 +44,14 @@ def baseline_table():
         r = seen[e]
         try:
             done, tgt = int(r["steps_done"]), int(r["steps_target"])
-            status = "completed" if done >= tgt else "running (time-capped)"
+            # A run that fell short of its target did so because its wall-clock
+            # cap expired, not because it is still going -- all queues have
+            # drained. Say that rather than "running".
+            status = "已完成 (达到步数预算)" if done >= tgt else "已结束 (墙钟上限截断)"
         except (TypeError, ValueError):
-            status = "running"
+            status = "未启动"
         if r.get("crashed") == "True":
-            status = "**CRASHED**"
+            status = "**失败 (见 F9)**"
         ck = "yes" if r.get("checkpoint_path") else "no"
         out.append(f"| `{e}` | {status} | {r.get('steps_done','-')}/{r.get('steps_target','-')} "
                    f"| {g(r.get('fps_last'),5)} | {g(r.get('train_reward_first'),4)} → {g(r.get('train_reward_last'),4)} "

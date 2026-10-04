@@ -1,0 +1,9918 @@
+
+
+===== PAGE 1 =====
+arXiv:2409.20067v3  [cs.LG]  31 Jan 2025
+Breaking the Curse of Multiagency in
+Robust Multi-Agent Reinforcement Learning
+Laixi Shi ∗†
+Caltech
+Jingchu Gai ∗‡
+PKU
+Eric Mazumdar †
+Caltech
+Yuejie Chi§
+CMU
+Adam Wierman †
+Caltech
+September 2024; Revised January 2025
+Abstract
+Standard multi-agent reinforcement learning (MARL) algor ithms are vulnerable to sim-to-real gaps.
+To address this, distributionally robust Markov games (RMG s) have been proposed to enhance robustness
+in MARL by optimizing the worst-case performance when game d ynamics shift within a prescribed
+uncertainty set. RMGs remains under-explored, from reason able problem formulation to the development
+of sample-eﬃcient algorithms. Two notorious and open chall enges are the formulation of the uncertainty
+set and whether the corresponding RMGs can overcome the curs e of multiagency, where the sample
+complexity scales exponentially with the number of agents. In this work, we propose a natural class
+of RMGs inspired by behavioral economics, where each agent’ s uncertainty set is shaped by both the
+environment and the integrated behavior of other agents. We ﬁrst establish the well-posedness of this
+class of RMGs by proving the existence of game-theoretic sol utions such as robust Nash equilibria and
+coarse correlated equilibria (CCE). Assuming access to a ge nerative model, we then introduce a sample-
+eﬃcient algorithm for learning the CCE whose sample complex ity scales polynomially with all relevant
+parameters. To the best of our knowledge, this is the ﬁrst alg orithm to break the curse of multiagency
+for RMGs, regardless of the uncertainty set formulation.
+Keywords: multi-agent reinforcement learning, robust Markov games, game theory, distribution shift
+Contents
+1 Introduction 2
+1.1 Open questions of robust MARL . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2
+1.2 Contributions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 3
+1.3 Related works . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+2 Preliminaries 6
+2.1 Standard Markov games . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 6
+2.2 Distributionally robust Markov games . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 6
+3 Robust Markov Games with Fictitious Uncertainty Sets 8
+3.1 A novel uncertainty set deﬁnition in RMGs . . . . . . . . . . . . . . . . . . . . . . . . . . . . 8
+3.2 Properties of RMGs with ﬁctitious uncertainty set . . . . . . . . . . . . . . . . . . . . . . . . 9
+4 Sample-Eﬃcient Learning: Algorithm and Theory 9
+4.1 Problem setting and goal . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 10
+4.2 Algorithm design . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 10
+4.3 Theoretical guarantees . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 12
+∗The ﬁrst two authors contributed equally.
+†Department of Computing Mathematical Sciences, Californi a Institute of Technology, CA 91125, USA.
+‡School of Mathematical Sciences, Peking University, Beiji ng, 100871, China.
+§Department of Electrical and Computer Engineering, Carneg ie Mellon University, Pittsburgh, PA 15213, USA.
+1
+
+===== PAGE 2 =====
+5 Conclusion 14
+A Preliminaries 19
+A.1 Additional notations and facts . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 19
+A.2 Robust Bellman equations of ﬁctitious RMGs . . . . . . . . . . . . . . . . . . . . . . . . . . . 21
+A.3 Preliminary facts of online adversarial learning . . . . . . . . . . . . . . . . . . . . . . . . . . 21
+B Proof for Section 3 23
+B.1 Proof of Theorem 1 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 23
+B.2 Proof of auxiliary facts . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 26
+C Proof of Theorem 2 29
+C.1 Proof pipeline . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 30
+C.2 Controlling B: using adversarial online learning . . . . . . . . . . . . . . . . . . . . . . . . . . 31
+C.3 Controlling terms A and C . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 36
+C.4 Proof of auxiliary lemmas . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 46
+1 Introduction
+A ﬂurry of problems naturally involve decision-making amon g multiple players, whether human, artiﬁcial in-
+telligence, or both, with strategic objectives. Multi-age nt reinforcement learning (MARL) serves as a powerful
+framework to address these challenges, demonstrating pote ntial in various applications such as social dilem-
+mas (Baker, 2020; Leibo et al. , 2017; Zhang et al. , 2024), autonomous driving ( Lillicrap et al. , 2015), robotics
+(Kober et al. , 2013; Rusu et al. , 2017), and games (Mnih et al. , 2015; Vinyals et al. , 2019). Despite the recent
+success of standard MARL, its transition from prototypes to reliable production is hindered by robustness
+concerns due to the complexity and variability of both the re al-world environment and human behaviors.
+Speciﬁcally, environmental uncertainty can arise from sim -to-real gaps ( Tobin et al. , 2017), unexpected dis-
+turbance ( Pinto et al. , 2017), system noise, and adversarial attacks ( Mahmood et al. , 2018); agents’ behav-
+iors are subject to unknown bounded rationality and variabi lity (Tversky and Kahneman , 1974). The solu-
+tion learned at training can fail catastrophically when fac ed with a slightly shifted MARL problem during de-
+ployment, resulting in a signiﬁcant drop in overall outcome s and each agent’s individual payoﬀ ( Balaji et al. ,
+2019; Shi et al. , 2024; Slumbers et al. , 2023; Yeh et al. , 2021; Zeng et al. , 2022; Zhang et al. , 2020a).
+To address robustness challenges, a promising and ﬂexible f ramework is (distributionally) robust Markov
+games (RMGs) ( Littman, 1994; Shapley, 1953). It is a robust counterpart to the common playground of
+standard MARL problems — Markov games (MGs) ( Kardeş et al. , 2011; Zhang et al. , 2020c). In standard
+MGs, agents consider (competitive) personal objectives an d simultaneously interact with each other within
+a shared unknown environment. The goal is to learn some ratio nally optimal solution concepts called
+equilibria, which are joint strategies/policies of agents that all of them stick with rationally with other
+agents ﬁxed; for instance, Nash equilibria (NE) ( Nash, 1951; Shapley, 1953), correlated equilibria (CE), and
+coarse correlated equilibria (CCE) ( Aumann, 1987; Moulin and Vial , 1978). To promote robustness, RMGs
+diﬀer from standard MGs by deﬁning each agent’s payoﬀ (objec tive) as its worst-case performance when the
+dynamics of the game shift within a prescribed uncertainty s et centered around a nominal environment.
+1.1 Open questions of robust MARL
+Construction of realistic uncertainty sets. The family of RMGs is a rich class of problems because of
+the ﬂexibility in constructing the uncertainty sets to capt ure diﬀerent uncertainty considerations. The uncer-
+tainty sets prevalent in current approaches are constructe d under the (s, a)-rectangularity condition, yielding
+each agent’s objective as the expectation over the independ ent risk-aware outcome on each joint action of
+other agents’ strategies. While observations from behavio ral economics ( Friedman and Mauersberger , 2022;
+Goeree et al. , 2005; Sandomirskiy et al. , 2024) reveal that, to handle other players’ uncertainty, people often
+use a risk-aware metric outside of the expected outcome of ot her players’ joint policy, rather than ﬂipping
+the expectation and the risk metric as that of (s, a)-rectangularity condition. To account for realistic human
+2
+
+===== PAGE 3 =====
+decision-making, we are motivated to develop new classes of RMGs that foster robust solutions for practical
+MARL problems.
+The curse of multiagency . Sample eﬃciency is a crucial challenge for solving MARL due t o the lim-
+ited availability of data relative to the high dimensionali ty of the problem. In MARL, agents strive to
+learn through interactions (data) with an unknown environm ent ( Achiam et al. , 2023; Silver et al. , 2016;
+Vinyals et al. , 2019) that is often extremely large-scale, while data acquisiti on can be prohibitively limited
+by high costs and stakes. As such, a notable scalability chal lenge of sample eﬃciency is the the curse of
+multiagency — the sample complexity requirement scales exponentially w ith the number of agents (induced
+by the exponentially growing size of the joint action space) . This issue has been recognized and studied in
+extensive MARL problems ( Rubinstein, 2017; Song et al. , 2021), but remains unresolved for robust MARL.
+We concentrate on ﬁnite-horizon multi-player general-sum Markov games, with a widely-used data collection
+mechanism — generative model ( Kearns and Singh , 1999), where the number of agents is n, the episode
+length is H, the size of the state space is S, and the size of the i-th agent’s action space is Ai, for 1≤ i≤ n.
+• Breaking the curse of multiagency in standard MARL. A line of pioneering work ( Bai and Jin , 2020;
+Jin et al. , 2021; Li et al. , 2023; Song et al. , 2021) has recently introduced a new suite of algorithms
+using adaptive sampling that provably break the curse of mul tiagency in standard MGs. In particular,
+to ﬁnd an ε-approximate CCE, Li et al. (2023) requires a minimax-optimal sample complexity no more
+than
+~O
+(H 4S∑ n
+i=1 Ai
+ε2
+)
+(1)
+up to logarithmic factors, which depends only on the sum of in dividual actions, rather than the number
+of joint actions.
+• The persistent curse of multiagency in robust MARL. The development of provable sample-eﬃcient
+algorithms for RMGs is largely underexplored, with only a fe w recent studies ( Blanchet et al. , 2023;
+Kardeş et al. , 2011; Ma et al. , 2023; Shi et al. , 2024; Zhang et al. , 2020c). Focusing on a class of RMGs
+with uncertainty sets satisfying the (s, a)-rectangularity condition, existing works all suﬀer from the
+curse of multiagency, signiﬁcantly limiting their scalabi lity. For example, using the total variation
+(TV) distance as the divergence function, Shi et al. (2024) relying on non-adaptive sampling, ﬁnds an
+ε-approximate robust CCE with a sample complexity no more tha n
+~O
+(H 3S∏ n
+i=1 Ai
+ε2 min
+{
+H, 1
+min1≤i≤n σi
+})
+(2)
+up to logarithmic factors, where σi∈ [0, 1) is the uncertainty level for the i-th agent. As a result, the
+sample size requirement becomes prohibitive when the numbe r of agents is large. Consequently, there
+is a signiﬁcant desire to explore paths that could break thro ugh the curse of multiagency in RMGs,
+which is much more involved than its standard counterpart du e to complicated non-linearity introduced
+by planning for worst-case performances.
+Given these two challenges of uncertainty set construction and the curse of multiagency, it raises an open
+question:
+Can we design RMGs with realistic uncertainty sets that come w ith sample complexity guarantees breaking
+the curse of multiagency?
+1.2 Contributions
+Inspired by behavioral economics, we propose a new class of R MGs with a ﬁctitious uncertainty set that
+explicitly models environmental uncertainties from the pe rspective of realistic human players, making it
+suitable for complex real-world scenarios. We begin by veri fying the game-theoretic properties of the proposed
+class of RMGs to ensure the existence of robust variants of we ll-known standard equilibria notions, robust NE
+3
+
+===== PAGE 4 =====
+Algorithm Uncertainty set Equilibria Sample complexity
+P2MPO (s, a)-rectangularity robust NE S4 (∏ n
+i=1 Ai)3 H 4/ε2
+(Blanchet et al. , 2024)
+DR-NVI (s, a)-rectangularity robust NE/CE/CCE SH 3 ∏n
+i=1 Ai
+ε2 min
+{
+H, 1
+min1≤i≤n σi
+}
+(Shi et al. , 2024)
+Robust-Q-FTRL ﬁctitious
+(this work) (s, ai)-rectangularity robust CCE
+SH 6 ∑
+1≤i≤n Ai
+ε4 min
+{
+H, 1
+min1≤i≤n σi
+}
+Table 1: We show all the existing sample complexity results w ithin the general context of robust Markov
+games (RMGs) to put our work into perspective, on ﬁnding an ε-approximate equilibrium in ﬁnite-horizon
+multi-agent general-sum robust MG, omitting logarithmic f actors. Our result is the only algorithm that
+breaks the curse of multiagency regardless of the RMG formul ations.
+and robust CCE. Next, due to the general intractability of le arning NE, we focus on designing algorithms that
+can provably overcome the curse of multiagency in learning a n approximate robust CCE, referring to a joint
+policy where no agent can improve their beneﬁt by more than ε through rational deviations.. Speciﬁcally, for
+sampling mechanisms to explore the unknown environment, we assume access to a generative model that can
+only draw samples from the nominal environment ( Shi et al. , 2024). The main contributions are summarized
+as follows.
+• We introduce a new class of robust Markov games using ﬁctiti ous uncertainty sets with others-integrated
+(s, ai)-rectangularity condition (see Section 2.2 for details), which is not only realistic viewpoint ob-
+served from behavioral economics, but also a natural adapta tion from robust single-agent RL to robust
+MARL. The uncertainty set for each agent i can be decomposed into independent subsets over each
+state and its own action tuple (s, ai), where each subset is a “ball” around the expected nominal tr an-
+sition determined by other agents’ policies and the nominal transition kernel, a distance function ρ,
+and the radius/uncertainty level σi. We verify several essential facts of this class of RMGs: the ex-
+istence of the desired equilibrium — robust NE and robust CCE for this new class of RMGs using
+game-theoretical tools such as ﬁxed-point theorem; the exi stence of best-response policies and robust
+Bellman equations.
+• We consider the total variation (TV) distance as the distan ce metric ρ for uncertainty sets due to its
+popularity in both theory ( Blanchet et al. , 2023; Panaganti and Kalathil , 2022; Shi et al. , 2023, 2024)
+and practice ( Lee et al. , 2021; Pan et al. , 2023; Szita et al. , 2003). Focusing on the proposed RMGs
+with ﬁctitious uncertainty sets, we design Robust-Q-FTRL that can provably ﬁnd ε-approximate robust
+CCE with high probability, as long as the sample size exceeds
+~O
+(SH 6∑ n
+i=1 Ai
+ε4 min
+{
+H, 1
+min1≤i≤n σi
+})
+(3)
+up to logarithmic factors, where σi∈ (0, 1] is the uncertainty level for the i-th agent. To the best of our
+knowledge, this is the ﬁrst algorithm to break the curse of mu ltiagency in sample complexity of RMGs
+regardless of the uncertainty set deﬁnition, which can prov ably ﬁnd an ε-approximate robust CCE
+using a sample size that is polynomial to all salient paramet ers. Table 1 provides a detailed summary
+of all existing sample complexity results in robust MARL 1, where our results show signiﬁcantly data
+eﬃciency with linear dependency on the size of each agent’s a ction space, which is absent from prior
+works (Blanchet et al. , 2024; Shi et al. , 2024). To achieve this, we utilize adaptive sampling and online
+adversarial learning tools, coupled by a tailored design an d analysis for robust MARL due to the
+nonlinearity of the robust value function, which contrasts with the linear payoﬀ functions in standard
+MARL with respect to the transition kernel.
+1Note that, since we focus on a new class of RMGs, the sample com plexity results in this work cannot be directly compared
+to those in prior studies. However, we provide a summary in Ta ble 1 of existing sample complexity results for general RMGs,
+regardless of the uncertainty set formulation, for referen ce.
+4
+
+===== PAGE 5 =====
+Notation. In this paper, we denote [T ] :={1, 2, . . . , T} for any positive integer T > 0. We deﬁne ∆(S)
+as the simplex over a set S. For any policy π and function Q(·) deﬁned over a domain B, the variance of Q
+under π is given by Varπ(Q) :=∑
+a∈B π(a)[Q(a)− Eπ[Q]]2. We deﬁne x = [ x(s, a)](s,a)∈S×A∈ RSA as any
+vector that represents values for each state-action pair, a nd x = [ x(s, ai)](s,ai)∈S×A i∈ RSAi as any vector
+representing agent-wise state-action values. Similarly, we denote x = [ x(s)]s∈S as any vector representing
+values for each state. For X := (S,{Ai}i∈[n], H,{σi}i∈[n], 1
+ε , 1
+δ ), let f (X ) = O(g(X )) denote that there exists
+a universal constant C1 > 0 such that f≤ C1g. Furthermore, the notation ~O(·) is deﬁned similarly to O(·)
+but hides logarithmic factors.
+1.3 Related works
+Breaking curse of multiagency for standard Markov games. Breaking the curse of multia-
+gency is a major and prevalent challenge in sequential games . In standard multi-agent general-sum
+MGs, it has been shown that learning a Nash equilibrium requi res an exponential sample complex-
+ity ( Bai and Jin , 2020; Rubinstein, 2017; Song et al. , 2021). However, for other types of equilibria,
+such as CE and CCE, many works have successfully broken the cu rse of multiagency. Speciﬁcally,
+for ﬁnite-horizon general-sum MGs in the tabular setting wi th ﬁnite state and action spaces, Jin et al.
+(2021) developed the V-learning algorithm for learning CE and CCE with the sample complexity of
+~O(H 6S(maxi∈[n] Ai)2/ǫ2) and ~O(H 6S maxi∈[n] Ai/ǫ2), respectively; Daskalakis et al. (2023) achieved a sam-
+ple complexity of ~O(H 11S3 maxi∈[n] Ai/ǫ3) for learning a CCE. Beyond tabular settings, Wang et al. (2023)
+and Cui et al. (2023) extended these results to linear function approximation, achieving sample complexities
+of ~O(d4H 6(
+maxi∈[n] A5
+i
+)
+/ǫ2) and ~O(H 10d4 log
+(
+maxi∈[n] Ai
+)
+/ǫ4), respectively, where d is the dimension of
+the linear features. For Markov potential games, a subclass of MGs, Song et al. (2021) provided a centralized
+algorithm that learns a NE with a sample complexity of ~O(H 4S2 maxi∈[n] Ai/ǫ3).
+Finite-sample analysis for distributionally robust Marko v games. Robust Markov games under
+environmental uncertainty are largely underexplored, wit h only a few provable algorithms ( Blanchet et al. ,
+2023; Kardeş et al. , 2011; Ma et al. , 2023; Shi et al. , 2024; Zhang et al. , 2020a). Existing sample complexity
+analyses all suﬀer from the daunting curse of multiagency is sues, or impose an extremely restricted uncer-
+tainty level that can fail to deliver the desired robustness (Blanchet et al. , 2024; Ma et al. , 2023; Shi et al. ,
+2024). Speciﬁcally, they all consider a class of RMGs with the (s, a)-rectangularity condition, where the
+uncertainty sets for each agent can be decomposed into indep endent sets over each (s, a) pair. Shi et al.
+(2024) considered the generative model with an uncertainty set me asured by the TV distance, Blanchet et al.
+(2023) treated a diﬀerent sampling mechanism with oﬄine data for b oth the TV distance and KL divergence.
+In addition, Ma et al. (2023) required the uncertainty level be much smaller than the acc uracy-level and an
+instance-dependent parameter (i.e., σi≤ max{ ε
+SH 2 , pmin
+H } for all i∈ [n]). This can thus fail to maintain the
+desired robustness, especially when the accuracy requirem ent is high (i.e., ε→ 0) or the RMG has small
+minimal positive transition probabilities (i.e., pmin→ 0).
+Robust MARL. Standard MARL algorithms may overﬁt the training environme nt and could fail dra-
+matically due to the perturbations and variability of both a gents’ behaviors and the shared environment,
+leading to performance drop and large deviation from the equ ilibrium. To address this, this work consid-
+ers a robust variant of MARL adopting the distributionally r obust optimization (DRO) framework that
+has primarily been investigated in supervised learning ( Bertsimas et al. , 2018; Blanchet and Murthy , 2019;
+Duchi and Namkoong , 2018; Gao, 2020; Rahimian and Mehrotra , 2019) and has attracted a lot of attention in
+promoting robustness in single-agent RL ( Badrinath and Kalathil , 2021; Iyengar, 2005; Nilim and El Ghaoui ,
+2005; Shi and Chi , 2024; Shi et al. , 2023; Wang et al. , 2024; Zhou et al. , 2021). Beyond the RMG framework
+considered in this work, recent research has advanced the ro bustness of MARL algorithms from various per-
+spectives, including resilience to uncertainties or attac ks on states ( Han et al. , 2022; Zhou and Liu , 2023),
+the type of agents ( Zhang et al. , 2021), other agents’ policies ( Kannan et al. , 2023; Li et al. , 2019), oﬄine
+data poisoning ( McMahan et al. , 2024; Wu et al. , 2024), and nonstationary environment ( Szita et al. , 2003).
+A recent review can be found in Vial et al. (2022).
+5
+
+===== PAGE 6 =====
+2 Preliminaries
+In this section, we begin with some background on multi-agen t general-sum standard Markov games (MGs)
+in ﬁnite-horizon settings, followed by a general framework of a robust variant of standard MGs —- distribu-
+tionally robust Markov games.
+2.1 Standard Markov games
+A ﬁnite-horizon multi-agent general-sum Markov game (MG) can be characterized by the tuple
+MG =
+{
+S,{Ai}1≤i≤n, P, r, H
+}
+.
+This setup features n agents each striving to maximize their individual long-ter m cumulative rewards within a
+shared environment. At each time step, all agents observe th e same state over the state space S ={1,··· , S}
+within the shared environment. For each agent i (i ∈ [n]), Ai = {1,··· , Ai} denotes its action space
+containing Ai possible actions. The joint action space for all agents (res p. the subset excluding the i-th
+agent) is deﬁned as A :=A1×···×A n (resp. A−i := ∏
+j⁄=iAj for any i∈ [n]). We use the notation
+a∈A (resp. a−i∈A −i) to denote a joint action proﬁle involving all agents (resp. all except the i-th
+agent). In addition, the probability transition kernel P ={Ph}1≤h≤H, with each Ph :S×A↦→ ∆(S),
+describes the dynamics of the game: Ph(s′| s, a) is the probability of transitioning from state s∈S to
+state s′∈S at time step h when agents choose the joint action proﬁle a∈A . The reward function of the
+game is r ={ri,h}1≤i≤n,1≤h≤H, with each ri,h :S×A↦→ [0, 1] normalized to the unit interval. For any
+(i, h, s, a)∈ [n]× [H]×S×A , ri,h(s, a) represents the immediate reward received by the i-th agent in state
+s when the joint action proﬁle a is taken. Lastly, H > 0 represents the horizon length.
+Markov policies and value functions. In this work, we concentrate on Markov policies that the acti on
+selection rule depends only on the current state s, independent from previous trajectory. Namely, the i-th
+(i∈ [n]) agent chooses actions according to πi ={πi,h :S↦→ ∆(Ai)}1≤h≤H. Here, πi,h(a| s) represents the
+probability of selecting action a∈A i in state s at time step h. As such, the joint Markov policy of all agents
+can be denoted as π = ( π1, . . . , πn) :S× [H]↦→∆(A), i.e., given any s∈S and h∈ [H], the joint action
+proﬁle a∈A of all agents is chosen following the distribution πh(·| s) = ( π1,h, π2,h . . . , πn,h)(·| s)∈ ∆(A).
+To continue, for any given joint policy π and transition kernel P of a MG, the i-th agent’s long-term
+cumulative reward can be characterized by the value functio n V π,P
+i,h :S↦→ R (resp. Q-function Qπ,P
+i,h :S×A↦→
+R) as below: for all (h, s, a)∈ [H]×S×A ,
+V π,P
+i,h (s) := Eπ,P
+[ H∑
+t=h
+ri,t
+(
+st, at
+)
+| sh = s
+]
+, Q π,P
+i,h (s, a) := Eπ,P
+[ H∑
+t=h
+ri,t
+(
+st, at
+)
+| sh = s, ah = a
+]
+. (4)
+In this context, the expectation is calculated over the traj ectory{(st, at)}h≤t≤H produced by following the
+joint policy π under the transition kernel P .
+2.2 Distributionally robust Markov games
+A general distributionally robust Markov game (RMG) is repr esented by the tuple
+RMG =
+{
+S,{Ai}1≤i≤n,{U σi
+ρ (P 0,·)}1≤i≤n, r, H
+}
+.
+Here,S,{Ai}1≤i≤n, r, H are deﬁned in the same manner as those in standard MGs (see Sec tion 2.1). RMGs
+diﬀer from standard MGs: for each agent i (1≤ i≤ n), the transition kernel is not ﬁxed but can vary within
+its own prescribed uncertainty set U σi
+ρ (P 0,·) determined by (possibly the current policy and) a nominal
+kernel P 0 : H×S×A↦→ ∆(S) that represents a reference (such as the training environme nt). The shape
+and the size of the uncertainty set
+{
+U σi
+ρ (P 0,·)
+}
+i∈[n] are further speciﬁed by a divergence function ρ and the
+uncertainty levels{σi}i∈[n], serving as the “distance” metric and the radius respective ly.
+Various choices of the divergence function have been consid ered in the literature of robust RL, including
+but not limited to f -divergence (such as total variation, χ2 divergence, and Kullback-Leibler (KL) divergence)
+6
+
+===== PAGE 7 =====
+(Lu et al. , 2024; Shi and Chi , 2024; Wang et al. , 2024; Yang et al. , 2022; Zhou et al. , 2021) and Wasserstein
+distance ( Xu et al. , 2023). Adopting uncertainty sets with diﬀerent structures lead s to distinct RMGs, as
+they address distinct types of uncertainty and game-theore tical solutions. This paper focuses on variability
+in environmental dynamics (transition kernels), though un certainty in agents’ reward functions could also
+be considered similarly but is omitted for brevity.
+Robust value functions and best-response policies. For any RMG, each agent seeks to maximize its
+worst-case performance in the presence of other agents’ beh aviors despite perturbations in the environment
+dynamics, as long as the kernel transitions remain within it s prescribed uncertainty set. Mathematically,
+given any joint policy π :S× [H]↦→∆(A), the worst-case performance of any agent i is characterized by
+the robust value function V π,σi
+i,h and the robust Q-function Qπ,σi
+i,h : for all (i, h, s, ai)∈ [n]× [H]×S×A i,
+V π,σi
+i,h (s) := inf
+P ∈U σiρ (P 0,π)
+V π,P
+i,h (s) and Qπ,σi
+i,h (s, ai) := inf
+P ∈U σiρ (P 0,π)
+Qπ,P
+i,h (s, ai). (5)
+Note that diﬀerent from ( 4), here the Q-function for any i-th agent is deﬁned only over its own action ai∈A i
+rather than the joint action a∈A .
+To continue, we denote π−i as the policy for all agents except for the i-th agent. By optimizing the i-th
+agent’s policy π′
+i :S× [H]→ ∆(Ai) (independent from π−i), we deﬁne the maximum of the robust value
+function as
+V ⋆,π−i,σi
+i,h (s) := max
+π′
+i:S×[H]↦→∆(Ai)
+V π′
+i×π−i,σi
+i,h (s) = max
+π′
+i:S×[H]↦→∆(Ai)
+inf
+P ∈U
+σiρ (P 0,π)
+V π′
+i×π−i,P
+i,h (s) (6)
+for all (i, h, s)∈ [n]× [H]×S . The policy that achieves the maximum of the robust value fun ction for all
+(i, h, s)∈ [n]× [H]×S is called a robust best-response policy.
+Solution concepts for robust Markov games. In view of the conﬂicting objectives between agents,
+establishing equilibrium becomes the goal of solving RMGs. As such, we introduce two kinds of solution
+concepts — robust NE and robust CCE — robust variants of stand ard NE and CCE (usually considered in
+standard MGs) speciﬁed to the form of RMGs.
+• Robust NE. A product policy π = π1× π2×···× πn :S× [H]↦→∏ n
+i=1 ∆(Ai) is said to be a robust NE
+if
+V π,σi
+i,1 (s) = V ⋆,π−i,σi
+i,1 (s), ∀(s, i)∈S× [n]. (7)
+Given the strategies of the other agents π−i, when each agent wants to optimize its worst-case perfor-
+mance when the environment and other agents’ policy stay wit hin its own uncertainty set U σi
+ρ (P 0, π),
+robust NE means that no player can beneﬁt by unilaterally div erging from its present strategy.
+• Robust CCE. A distribution over the joint product policy ξ :={ξh}h∈[H] : S× [H]↦→∆(∏
+i∈[n] ∆(Ai))
+is said to be a robust CCE if it holds that
+Eπ∼ξ
+[
+V π,σi
+i,1 (s)
+]
+≥ Eπ∼ξ
+[
+V ⋆,π−i,σi
+i,1 (s)
+]
+, ∀(i, s)∈ [n]×S . (8)
+Considering all agents follow the policy drawn from the dist ribution ξ, i.e., πh(s) ∼ ξh(s) for all
+(s, h)∈S× [H], when the distribution of all agents but the i-th agent’s policy is ﬁxed as the marginal
+distribution of ξ, robust CCE indicates that no agent can beneﬁt from deviatin g from its current policy.
+Note that, for standard MGs, CCE is deﬁned as a possibly corre lated joint policy πCCE :S× [H]↦→∆(A)
+(Aumann, 1987; Moulin and Vial , 1978) if it holds that
+V πCCE,P
+i,1 (s)≥ max
+π′
+i:S×[H]→∆(Ai)
+V
+π′
+i×πCCE
+−i ,P
+i,1 (s), ∀(s, i)∈S× [n]. (9)
+This correlated policy πCCE can also be viewed as a distribution ξ over the product policy space since each
+joint action a can be seen as a deterministic product policy. Careful reade rs may note that the deﬁnition
+7
+
+===== PAGE 8 =====
+(9) of CCE in standard MGs is in a diﬀerent form from the one ( 8) in RMGs, as the latter does not include
+the expectation operator Eπ∼ξ[·] with respect to the policy distribution ( ξ) over the value function. We
+emphasize that the deﬁnition with the expectation operator outside of the value (or cost) function with
+respect to a distribution of product pure strategies in ( 8) is a natural formulation originating from game
+theory (Moulin et al. , 2014; Moulin and Vial , 1978). In standard MARL and previous robust MARL studies,
+the deﬁnition in ( 9) is typically used because ( 9) and ( 8) are identical in those situations, as the expectation
+operator and the corresponding value functions are linear w ith respect to the joint policy, allowing them to
+be interchanged ( Li et al. , 2023; Shi et al. , 2024).
+3 Robust Markov Games with Fictitious Uncertainty Sets
+Given the deﬁnition of general RMGs, a natural question aris es: what kinds of uncertainty sets should we
+consider to achieve the desired robustness in our solutions ? To address this, we focus on a class of RMGs
+characterized by a type of natural yet realistic uncertaint y sets inspired from behavioral economics. More
+discussions of this class of games are provided momentarily .
+3.1 A novel uncertainty set deﬁnition in RMGs
+We propose a new class of uncertainty sets, named ﬁctitious uncertainty sets, which count in the uncertainty
+induced by both the environment and other agents’ behaviors in an integrated manner. Before introducing
+the uncertainty sets, we provide some auxiliary notations a s below. We denote a vector of any transition
+kernel P :S×A↦→ ∆(S) or P 0 :S×A↦→ ∆(S) respectively as
+∀(s, a)∈S×A : Ph,s,a := Ph(·| s, a)∈ R1×S, P 0
+h,s,a := P 0
+h (·| s, a)∈ R1×S. (10)
+For any (possibly correlated) joint Markov policy (deﬁned i n section 2.1) π :S× [H]↦→∆(A), we deﬁne
+the expected nominal transition kernel conditioned on the s ituation that the i-th agent chooses some action
+ai∈A i and other agents play according to the conditional policy (i .e., a−i∼ πh(·| s, ai)) given s∈S and
+ai as below:
+∀(h, s, ai)∈ [H]×S×A i : P π−i
+h,s,ai = Ea∼πh(· | s,ai)
+[
+P 0
+h,s,a
+]
+=
+∑
+a−i∈A−i
+πh(ai, a−i| s)
+πi,h(ai| s)
+[
+P 0
+h,s,a
+]
+. (11)
+Armed with the above deﬁnitions, now we are in a position to de ﬁne the ﬁctitious uncertainty sets, which
+satisfy a others-integrated (s, ai)-rectangularity condition.
+Deﬁnition 1. For any joint policy π :S× [H]↦→∆(A), divergence function ρ : ∆(S)× ∆(S)↦→R+ and
+accessible uncertainty levels σi≥ 0 for all i∈ [n], the ﬁctitious uncertainty sets
+{
+U σi
+ρ (P 0, π)
+}
+i∈[n] satisfy the
+others-integrated (s, ai)-rectangularity condition:
+∀i∈ [n] : U σi
+ρ (P 0, π) :=⊗U σi
+ρ
+(
+P π−i
+h,s,ai
+)
+,
+s.t.∀(h, s, ai)∈ [H]×S×A i : U σi
+ρ
+(
+P π−i
+h,s,ai
+)
+:=
+{
+P∈ ∆(S) : ρ
+(
+P, P π−i
+h,s,ai
+)
+≤ σi
+}
+, (12)
+where⊗ represents the Cartesian product.
+In words, conditioned on a ﬁxed joint policy π, the uncertainty set U σi
+ρ (P 0, π) for each i-th agent can
+be decomposed into a Cartesian product of subsets over each s tate and agent-action pair (s, ai). Each
+uncertainty subsetU σi
+ρ (P π−i
+h,s,ai ) over (s, ai) is deﬁned as a “ball” around a reference — the expected nomina l
+transition kernel P π−i
+h,s,ai conditioned on both transition kernel and agents’ joint pol icy π.
+F urther discussions of ﬁctitious uncertainty set. Here, we discuss the proposed ﬁctitious uncertainty
+sets in detail, focusing on their practical implications, p roperties, and relation to prior work and the broader
+robust RL literature. Before proceeding, we have to mention that prior works on RMGs focused on a type
+of uncertainty sets with (s, a)-rectangularity condition (Blanchet et al. , 2023; Ma et al. , 2023; Shi et al. ,
+8
+
+===== PAGE 9 =====
+2024). This class of uncertainty sets decouples the uncertainty into independent subsets for each state-joint
+action pair (s, a), accounting for the uncertainty induced by other agents sep arately and independently,
+mathematically deﬁned as
+U σi
+ρ (P 0) :=⊗U σi (P 0
+h,s,a), where U σi
+ρ (P 0
+h,s,a) =
+{
+Ph,s,a∈ ∆(S) : ρ(Ph,s,a, P 0
+h,s,a)≤ σi
+}
+.
+• Realistic and predictive of human decisions in comparisons t o prior works. Observed from
+experimental data of behavioral economics, in many games co nsidering agents’ randomness
+(Friedman and Mauersberger , 2022; Goeree et al. , 2005; Sandomirskiy et al. , 2024), people address
+other players’ uncertainty in an integrated manner as a risk metric outside of their expected out-
+comes (e.g., Risk(Ea−i∈π−i[V π,P
+i,h (ai, a−i)])), but not in a separate manner as a expectation of the risk
+metric over outcome of each joint action (namely, Ea−i∈π−i[Risk(V π.P
+i,h (ai, a−i)] ). Here, the former
+one that is realistic corresponds to our ﬁctitious uncertai nty set, while the latter one corresponds to the
+uncertainty sets with (s, a)-rectangularity condition (Blanchet et al. , 2023; Ma et al. , 2023; Shi et al. ,
+2024) studied in prior works. The proposed uncertainty set model s are realistic and predictive of human
+decision-making behaviors from behavioral economics.
+• A natural adaptation from single-agent robust RL. When agents follow some joint policy π :S× [H]↦→
+∆(A), ﬁxing other agents’ policy π−i, from the perspective of each individual agent i, RMGs with our
+others-integrated (s, ai)-rectangularity condition will degrade to a single-agent r obust RL problem with
+the widely used (s, ai)-rectangularity condition in the single-agent literature (Iyengar, 2005; Zhou et al. ,
+2021). Namely, from any agent i’s viewpoint, in a RMG, it deals with an "overall environment " player
+that can not only manipulate the environmental dynamics but also other players’ policy π−i.
+3.2 Properties of RMGs with ﬁctitious uncertainty set
+Throughout the paper, we focus on the class of RMGs with the ab ove proposed ﬁctitious uncertainty sets,
+denoted as RMGin and abbreviated as ﬁctitious RMGs in the remaining of the pap er. In this section, we
+present key facts about ﬁctitious RMGs related to best-resp onse policies, equilibria, and the corresponding
+one-step lookahead robust Bellman equations. The proofs ar e postponed to Appendix B.
+First, we introduce the following lemma, which veriﬁes the e xistence of a robust best-response policy that
+achieves the maximum robust value function (cf. ( 6)) in any RMGin.
+Lemma 1. For any i∈ [n], given π−i :S× [H]↦→∆(Ai), there exists at least one policy ~πi :S× [H]→ ∆(Ai)
+for the i-th agent that can simultaneously attain V ~πi×π−i,σi
+i,h (s) = V ⋆,π−i,σi
+i,h (s) for all s∈S and h∈ [H]. We
+refer this policy as the robust best-response policy .
+Existence of robust NE and robust CCE. Fictitious RMGs can be viewed as hierarchical games with
+n + nS∑ n
+i=1 Ai agents. This includes the original n agents and n additional sets of S∑ n
+i=1 Ai independent
+adversaries, each determining the worst-case transitions for one agent over a state plus agent-wise-action
+pair. Considering the solution concepts — robust NE and robu st CCE — introduced in Section 2.2, the
+following theorem veriﬁes the existence of them for any ﬁcti tious RMGs using Kakutani’s ﬁxed-point theorem
+(Kakutani, 1941), focusing on robust NE ﬁrstly.
+Theorem 1 (Existence of robust NE) . For anyRMGin =
+{
+S,{Ai}1≤i≤n,{U σi
+ρ (P 0,·)}1≤i≤n, r, H
+}
+with an
+uncertainty set deﬁned in Deﬁnition 1, there exists at least one robust NE.
+Analogous to standard Markov games, since {robust NE}⊆{ robust CCE}, Theorem 1 indicates the
+existence of robust CCEs directly. The class of ﬁctitious RM Gs feature a robust counterpart of the Bellman
+equation — robust Bellman equation , which is detailed in Appendix A.2.
+4 Sample-Eﬃcient Learning: Algorithm and Theory
+In this section, we focus on designing sample-eﬃcient algor ithms for solving ﬁctitious RMGs when agents
+need to collect data by interacting with the unknown shared e nvironment in order to learn the equilibria. To
+9
+
+===== PAGE 10 =====
+proceed, we shall ﬁrst specify the data collection mechanis m and the divergence function for the uncertainty
+set. Then we propose a sample-eﬃcient algorithm Robust-Q-FTRL that leverages tailored adaptive sampling
+strategy to break the curse of multiagency for solving ﬁctit ious RMGs.
+4.1 Problem setting and goal
+Recall that the uncertainty sets are constructed by specify ing a divergence function ρ and the uncertainty
+level to control its shape and size. In this work, we focus on u sing the TV distance as the divergence function
+ρ for the uncertainty set, following Lee et al. (2021); Pan et al. (2023); Shi et al. (2023, 2024); Szita et al.
+(2003), deﬁned by
+∀P, P ′∈ ∆(S) : ρTV (P, P ′) := 1
+2‖P− P ′‖1 . (13)
+For convenience, throughout the paper, we abbreviate U σi (·) :=U σi
+ρTV (·) when there is no ambiguity.
+Data collection mechanism: a generative model. We assume the agents interact with the environ-
+ment through a generative model (simulator) ( Kearns and Singh , 1999), which is a widely used sampling
+mechanism in both single-agent RL and MARL ( Li et al. , 2022; Zhang et al. , 2020b). Speciﬁcally, at any
+time step h, we can collect an arbitrary number of independent samples f rom any state and joint action tuple
+(s, a)∈S×A , generated based on the true nominal transition kernel P 0:
+si
+h,s,a
+i.i.d
+∼ P 0
+h (·| s, a), i = 1, 2, . . . (14)
+Goal. Consider any ﬁctitious RMGs RMGin =
+{
+S,{Ai}1≤i≤n,{U σi (P 0,·)}1≤i≤n, r, H
+}
+. In practice,
+learning exact robust equilibria is computationally chall enging and may not be necessary, instead in
+this work, we focus on ﬁnding an approximate robust CCE (deﬁn ed in ( 8)). Namely, a distribution
+ξ :={ξh}h∈[H] : [H]×S↦→ ∆(∏
+i∈[n] ∆(Ai)) is said to be an ε-robust CCE if
+gapCCE(ξ) := max
+s∈S,1≤i≤n
+{
+Eπ∼ξ
+[
+V ⋆,π−i,σi
+i,1 (s)
+]
+− Eπ∼ξ
+[
+V π,σi
+i,1 (s)
+]}
+≤ ε. (15)
+Armed with a generative model of the nominal environment, th e goal becomes learning a robust CCE using
+as few samples from the simulator as possible.
+4.2 Algorithm design
+With the sampling mechanism over a generative model in hand, we propose an algorithm called Robust-Q-
+FTRL to learn an ε-robust CCE in a sample-eﬃcient manner. Robust-Q-FTRL draws inspiration from Q-
+FTRL developed in the standard MG literature ( Li et al. , 2022), but empowers tailored designs for learning
+in ﬁctitious RMGs to achieve a robust equilibrium and to tack le statistical challenges arising from agents’
+nonlinear worst-case objectives. Overall, Robust-Q-FTRL takes a single pass to learn recursively from the
+ﬁnal time step h = H to h = 1 . At each time step h∈ [H], an online learning process with K iterations
+will be executed. Before introducing the algorithm, we ﬁrst concentrate on two essential steps customized
+for learning in ﬁctitious RMGs.
+Constructing the empirical model via N -sample estimation. For each time step h, we denote πk
+i,h
+as the current learning policy of the i-th agent before the beginning of the k-th iteration for any k∈ [K].
+And we denote the joint product policy as πk
+h = ( πk
+1,h,··· , πk
+n,h). During each iteration k, for each agent
+i∈ [n], we require to generate N independent samples from the generative model over each (s, ai)∈S×A i
+to obtain an empirical model, detailed in Algorithm 1. It includes an empirical reward function represented
+by rk
+i,h∈ RSAi and transition kernels denoted by P k
+i,h∈ RSAi×S. Note that diﬀerent from standard MGs, we
+need to generate N samples instead of 1 sample per iteration to handle the additional statistical c hallenges
+induced by the non-linear objective of agents ( N will be speciﬁed momentarily).
+10
+
+===== PAGE 11 =====
+Algorithm 1: N -sample estimation
+(
+πh ={πj,h}j∈[n], i, h
+)
+.
+1 Initialization: the reward ˆr = 0∈ RSAi and the transition model ˆP = 0∈ RSAi×S.
+2 for (s, ai)∈S×A i do
+3 for t = 1 to N do
+4 Sample at(s, ai) = [ aj(s, ai)]1≤j≤n constructed by independent actions drawn from policy:
+aj(s, ai)
+ind.
+∼ πj,h(·| s) ( j⁄= i) and ai(s, ai) = ai. (16)
+5 Sample from the generative model:
+rt
+i,h(s, ai) = ri,h(s, at(s, ai)), s t
+s,ai∼ Ph
+(
+·| s, at(s, ai)
+)
+. (17)
+6 Setˆr(s, ai) = 1
+N
+∑
+t∈[N ] rt
+i,h(s, ai) and ˆP
+(
+s′| s, ai
+)
+= 1
+N
+∑
+t∈[N ] 1
+{
+st
+s,ai = s′}
+.
+7 Return: empirical model
+(
+ˆr,ˆP
+)
+.
+Estimating robust Q-function of the current policy πk
+h. We denote ˆVi,h∈ RS as the estimation of
+the i-th agent’s robust value function at time step h. For any agent i, with the empirical reward function rk
+i,h,
+empirical kernel P k
+i,h, and the estimated robust value function ˆVi,h+1 at the next step in hand, the robust
+Q-function{qk
+i,h} of current policy πk
+h can be estimated as:
+∀(i, h, s, ai)∈ [n]× [H]×S× Ai : qk
+i,h(s, ai) = rk
+i,h(s, ai) + inf
+P∈U σi (P k
+i,h,s,ai )
+PˆVi,h+1. (18)
+Unlike the linear function w.r.t. P k
+i,h in standard MGs, ( 18) lacks a closed form and introduces an additional
+inner optimization problem. Solving ( 18) directly is computationally challenging due to the need to optimize
+over an S-dimensional probability simplex, with complexity growin g exponentially with the state space size
+S. Fortunately, by applying strong duality, we can solve ( 18) equivalently via its dual problem with tractable
+computation ( Iyengar, 2005):
+qk
+i,h(s, ai) = rk
+i,h(s, ai) + max
+α∈[mins ˆVi,h+1(s),maxs ˆVi,h+1(s)]
+{
+P k
+i,h
+[
+ˆVi,h+1
+]
+α
+− σi
+(
+α− min
+s′
+[
+ˆVi,h+1
+]
+α
+(s′)
+)}
+, (19)
+where [V ]α denotes the clipped version of any vector V ∈ RS determined by some level α≥ 0, namely,
+[V ]α(s) :=
+{
+α, if V (s) > α,
+V (s), otherwise. (20)
+The above two modules are key components of Robust-Q-FTRL, serving for constructing nonlinear robust
+objectives in the online learning process and ensuring the d esired statistical accuracy.
+Overall pipeline of Robust-Q-FTRL. With these modules in place, we introduce Robust-Q-FTRL, which
+follows a similar online learning procedure as Q-FTRL for st andard MGs ( Li et al. , 2022). The complete
+procedure is summarized in Algorithm 2. We denote Qk
+i,h∈ RSAi as the estimated robust Q-function of the
+equilibrium for the i-th agent at the k-th iteration of time step h. To begin with, Robust-Q-FTRL initialize
+the robust value function, robust Q-function ˆVi,H+1(s) = Q0
+i,h(s, ai) = 0 , and the policy π1
+i,h(ai| s) = 1 /Ai
+for all (i, s)∈ [n]×S . Then subsequently from the ﬁnal time step h = H to h = 1 , for each step h,
+a K iterations online learning process will be executed. At eac h k-th iteration, given current policy πk
+h,
+as described above, an empirical model ( {rk
+i,h}i∈[n] and{P k
+i,h}i∈[n]) is constructed by N -sample estimation
+(cf. algorithm 1). Then the robust Q-function {qk
+i,h}i∈[n] of the current policy πk
+h is estimated by ( 19).
+Now we are ready to specify the loss objective and proceed the online learning procedure. With the
+current one-step update {qk
+i,h}, we update the Q-estimate as Qk
+i,h = (1− αk)Qk−1
+i,h + αkqk
+i,h. Here, {αk}k∈[K]
+11
+
+===== PAGE 12 =====
+is a series of rescaled linear learning rates with some cα≥ 24,
+∀k∈ [K] : αk = cα log K
+k− 1 + cα log K and αn
+k =
+{
+αk
+∏ n
+i=k+1(1− αi), if 0 < k < n ≤ K
+αn if k = n . (21)
+Let the Q-estimate be the online learning loss objective at t his moment, we apply the Follow-the-Regularized-
+Leader strategy ( Li et al. , 2022; Shalev-Shwartz, 2012) to update the corresponding policy as below:
+πk+1
+i,h (ai| s) =
+exp
+(
+ηk+1Qk
+i,h(s, ai)
+)
+∑
+a′ exp
+(
+ηk+1Qk
+i,h(s, a′)
+) with ηk+1 =
+√
+log K
+αkH , k = 1, 2, . . . (22)
+This is a widely used adaptive sampling and learning procedu re for MARL problems.
+After completing K iterations for time step h, we ﬁnalize the robust value function estimation by setting
+it to its conﬁdence upper bound, incorporating carefully de signed optimistic bonus terms {βi,h} as: for all
+(i, h, s)∈ [n]× [H]×S ,
+βi,h(s) = cb
+√
+log3( KS ∑n
+i=1 Ai
+δ )
+KH
+K∑
+k=1
+αK
+k
+{
+Varπk
+i,h(·|s)
+(
+qk
+i,h(s,·)
+)
++ H
+}
+, (23)
+where cb denotes some absolute constant, and δ∈ (0, 1) is the high probability threshold. Finally, after the
+recursive learning process ends for all time steps h = H, H− 1,··· , 1, we output a distribution of product
+policy ˆξ ={ˆξh}h∈[H] over all the policies {πk
+h = (πk
+1,h×···× πk
+n,h)}h∈[H],k∈[K] occurs during the process that
+deﬁned as
+∀(h, k)∈ [H]× [K] : ξh(πk
+h) := αk. (24)
+4.3 Theoretical guarantees
+In this section, we provide the theoretical guarantees for t he sample complexity of our proposed algorithm
+Robust-Q-FTRL, shown as below:
+Theorem 2 (Upper bound) . Using the TV uncertainty set deﬁned in (13). Consider any δ∈ (0, 1) and any
+ﬁctitious RMGs RMGin =
+{
+S,{Ai}1≤i≤n,{U σi (P 0,·)}1≤i≤n, r, H
+}
+with σi∈ (0, 1] for all i∈ [n]. For any
+ε≤
+√
+min
+{
+H, 1
+min1≤i≤n σi
+}
+, Algorithm 2 can output an ε-robust CCE ˆξ, i.e.,
+gapCCE(ˆξ) := max
+s∈S,1≤i≤n
+{
+Eπ∼ˆξ
+[
+V ⋆,π−i,σi
+i,1 (s)
+]
+− Eπ∼ˆξ
+[
+V π,σi
+i,1 (s)
+] }
+≤ ε
+with probability at least 1− δ, as long as
+N≥ C1H 2
+ǫ2 min
+{ 1
+min1≤i≤n σi
+, H
+}
+, K ≥ C1H 3
+ǫ2 . (26)
+Here C1 is some universal large enough constant. Namely, it is suﬃcie nt if the total number of samples
+acquired in the learning process obeys
+Nall := HKN S
+∑
+1≤i≤n
+Ai≥
+(C1)2H 6S∑
+1≤i≤n Ai
+ε4 min
+{
+H, 1
+min1≤i≤n σi
+}
+.
+Before we jump into more discussions of the above theorem, in addition, we introduce the information-
+theoretic minimax lower bound for this problem as well.
+12
+
+===== PAGE 13 =====
+Algorithm 2: Robust-Q-FTRL
+1 Input: learning rates{αk} and{ηk+1}, number of iterations K per time step, and number of
+samples N per iteration.
+2 Initialization: ˆVi,H+1(s) = Q0
+i,h(s, ai) = 0 and π1
+i,h(ai| s) = 1 /Ai for all i∈ [n] and then all
+(h, s, ai)∈ [H]×S×A i.
+// start recursive learning process.
+3 for h = H, H− 1,··· , 1 do
+4 for k = 1, 2,··· , K do
+5 for i = 1, 2,··· , n do
+// construct empirical models and estimate current robust Q -function
+6
+(
+rk
+i,h, P k
+i,h
+)
+← N -sample estimation
+(
+πk
+h ={πk
+j,h}j∈[n], i, h
+)
+. (Algorithm 1)
+7 Estimate the robust Q-function qk
+i,h of current πk
+h according to ( 19).
+// Online learning procedure
+8 Update the Q-estimate Qk
+i,h = (1− αk)Qk−1
+i,h + αkqk
+i,h and apply FTRL:
+∀(s, ai)∈S×A i : πk+1
+i,h (ai| s) =
+exp
+(
+ηk+1Qk
+i,h(s,ai)
+)
+∑
+a′ exp
+(
+ηk+1Qk
+i,h(s,a′)
+).
+// set the final robust value estimate at time step h.
+9 for i = 1, 2,··· , n do
+10 For all s∈S : set βi,h(s) to be the optimistic bonus term in ( 23) and
+ˆVi,h(s) = min
+{ K∑
+k=1
+αK
+k
+⟨
+πk
+i,h(·| s), q k
+i,h(s,·)
+⟩
++ βi,h(s), H − h + 1
+}
+. (25)
+11 Output: a set of policies {πk
+h = (πk
+1,h×···× πk
+n,h)}k∈[K],h∈[H] and a distribution ˆξ ={ˆξh}h∈[H] over
+them. For any time step h, ˆξh is the distribution over {πk
+h}k∈[K] so that ˆξh(πk
+h) = αK
+k .
+Lower bound for learning in ﬁctitious RMGs. Considering the instances of ﬁctitious RMGs that
+the action space for all the agents except the i-th agent contains only a single action, i.e., Aj = 1 for all
+j⁄= i. As such, all the agents j⁄= i will take a ﬁxed action and the game reduces to a single-agent robust
+MDP with (s, a)-rectangularity condition (Zhou et al. , 2021). So the goal of ﬁnding the robust equilibrium
+— robust NE/CCE also degrades to ﬁnding the optimal policy of the i-th agent. Invoking the results from
+Shi et al. (2024, Theorem 2), the lower bound for the class of ﬁctitious RMGs i s achieved directly: consider
+any tuple
+{
+S,{Ai}1≤i≤n,{σi}1≤i≤n, H
+}
+obeying σi∈ (0, 1− c1] with 0 < c 1≤ 1
+4 being any small enough
+positive constant, and H > 16 log 2. Let
+ε≤
+{
+c1
+H , if σi≤ c1
+2H ,
+1 otherwise (27)
+We can construct a set of ﬁctitious RMGs M ={RMGi
+in}i∈[I], such that for any dataset generated from
+the nominal environment with in total Nall independent samples over all state-action pairs, we have
+inf
+ˆξ∈[H]×S↦→∆(∏n
+i=1 Ai)
+max
+RMGi
+in∈M
+{
+PRMGi
+in
+(
+gapCCE(ˆξ) > ε
+)}
+≥ 1
+8 , (28)
+provided that
+Nall≤ C2SH 3 max1≤i≤n Ai
+ε2 min
+{
+H, 1
+min1≤i≤n σi
+}
+. (29)
+Here, the inﬁmum is taken over all estimators ˆξ, PRMGi
+in
+denotes the probability when the game is RMGi
+in
+for allRMGi
+in∈M , and C2 is some small enough constant.
+13
+
+===== PAGE 14 =====
+Armed with both the upper bound (Theorem 2) and lower bound in ( 29), we are now ready to discuss
+the implications of our sample complexity results.
+Breaking the curse of multiagency in the sample complexity f or RMGs. Theorem 2 demonstrates
+that for any ﬁctitious RMGs, Robust-Q-FTRL algorithm ﬁnds an ǫ-robust CCE when the total number of
+samples exceeds
+~O
+(
+SH 6∑
+1≤i≤n Ai
+ǫ4 min
+{
+H, 1
+min1≤i≤n σi
+})
+. (30)
+To the best of our knowledge, Robust-Q-FTRL with the above sample complexity in ( 30) is the ﬁrst algo-
+rithm for RMGs breaking the curse of multiagency, regardles s of the types of uncertainty sets. Our sample
+complexity depends linearly on the sum of each agent’s actio ns∑ n
+i=1 Ai rather than their product ∏ n
+i=1 Ai—
+making the algorithm highly scalable as the number of agents increases. Nonetheless, there still exist gaps
+between our upper bound and the lower bound—especially in ter ms o the dependency on the horizon length
+H and the accuracy level ε—an interesting direction to investigate in the future.
+Comparisons with prior works. All prior works focus on learning equilibria for a diﬀerent k ind of
+robust MGs with (s, a)-rectangular uncertainty sets ( Blanchet et al. , 2023; Ma et al. , 2023; Shi et al. , 2024).
+However, the state-of-the-art sample complexity ~O
+(
+SH 3 ∏n
+i=1 Ai
+ε2 min
+{
+H, 1
+min1≤i≤n σi
+})
+(Shi et al. , 2024)
+still suﬀers from the curse of multiagency with an exponenti al dependency on the number of agents when
+all agents have equal action spaces, which uses nonadaptive sampling. Our work circumvents the curse
+of multiagency by the introduction of a new class of ﬁctitiou s RMGs inspired from behavioral economics,
+together with resorting to a tailored adaptive sampling and online learning procedure, providing a fresh
+perspective to learning practical-meaningful RMGs.
+T echnical insights. For sample complexity analysis, while previous works have a ddressed the curse of
+multiagency in sequential games like standard Markov games (MGs) and Markov potential games, these
+methods are not directly applicable to RMGs. Prior approach es assume a linear relationship between the
+value function and the transition kernel, allowing statist ical errors across K iterations to cancel out. However,
+in RMGs, the robust value function, due to its distributiona lly robust requirement, is highly nonlinear and
+often lacks a closed form, making it impossible to linearly a ggregate statistical errors. To tackle the nonlinear
+challenges in RMGs, we design a variance-style bonus term th rough non-trivial decomposition and control
+of auxiliary statistical errors caused by nonlinearity, re sulting in a tight upper bound on regret during the
+online learning process.
+5 Conclusion
+Robustness in MARL presents greater challenges than in sing le-agent RL due to the strategic interactions
+between agents in a game-theoretic setting. This work propo ses a new class of RMGs with ﬁctitious
+uncertainty sets that naturally extends from robust single -agent RL and addresses more realistic problems
+considering human features where each agent considers the u ncertainty of others in an integrated manner.
+We then propose Robust-Q-FTRL, the ﬁrst algorithm to break the curse of multiagency in robu st Markov
+games regardless of the uncertainty set deﬁnitions, with sa mple complexity scaling polynomially with all
+key parameters. This opens up new research directions in MAR L, such as uncertainty set selection and
+construction, equilibrium reﬁnement, and sample-eﬃcient algorithm design.
+Acknowledgements
+The work of Y. Chi is supported in part by the grants NSF CCF-21 06778 and CNS-2148212, and by funds
+from federal agency and industry partners as speciﬁed in the Resilient & Intelligent NextG Systems (RINGS)
+program. The work of L. Shi is supported in part by the Resnick Institute and Computing, Data, and Society
+14
+
+===== PAGE 15 =====
+Postdoctoral Fellowship at California Institute of Techno logy. The work of E. Mazumdar is supported in
+part from NSF-2240110. The work of A. Wierman is supported in part from the NSF through CNS-2146814,
+CPS-2136197, CNS-2106403, NGSDI-2105648.
+References
+Achiam, J., Adler, S., Agarwal, S., Ahmad, L., Akkaya, I., Al eman, F. L., Almeida, D., Altenschmidt, J.,
+Altman, S., Anadkat, S., et al. (2023). Gpt-4 technical repo rt. arXiv preprint arXiv:2303.08774 .
+Aumann, R. J. (1987). Correlated equilibrium as an expressi on of Bayesian rationality. Econometrica:
+Journal of the Econometric Society , pages 1–18.
+Badrinath, K. P. and Kalathil, D. (2021). Robust reinforcem ent learning using least squares policy iteration
+with provable performance guarantees. In International Conference on Machine Learning , pages 511–520.
+PMLR.
+Bai, Y. and Jin, C. (2020). Provable self-play algorithms fo r competitive reinforcement learning. In Inter-
+national Conference on Machine Learning , pages 551–560. PMLR.
+Baker, B. (2020). Emergent reciprocity and team formation f rom randomized uncertain social preferences.
+Advances in neural information processing systems , 33:15786–15799.
+Balaji, B., Mallya, S., Genc, S., Gupta, S., Dirac, L., Khare , V., Roy, G., Sun, T., Tao, Y., Townsend,
+B., et al. (2019). Deepracer: Educational autonomous racin g platform for experimentation with sim2real
+reinforcement learning. arXiv preprint arXiv:1911.01562 .
+Bertsimas, D., Gupta, V., and Kallus, N. (2018). Data-drive n robust optimization. Mathematical Program-
+ming, 167(2):235–292.
+Blanchet, J., Lu, M., Zhang, T., and Zhong, H. (2023). Double pessimism is provably eﬃcient for distri-
+butionally robust oﬄine reinforcement learning: Generic a lgorithm and robust partial coverage. arXiv
+preprint arXiv:2305.09659.
+Blanchet, J., Lu, M., Zhang, T., and Zhong, H. (2024). Double pessimism is provably eﬃcient for distribu-
+tionally robust oﬄine reinforcement learning: Generic alg orithm and robust partial coverage. Advances in
+Neural Information Processing Systems , 36.
+Blanchet, J. and Murthy, K. (2019). Quantifying distributi onal model risk via optimal transport. Mathe-
+matics of Operations Research , 44(2):565–600.
+Cui, Q., Zhang, K., and Du, S. (2023). Breaking the curse of mu ltiagents in a large state space: Rl in
+markov games with independent linear function approximati on. In The Thirty Sixth Annual Conference
+on Learning Theory , pages 2651–2652. PMLR.
+Daskalakis, C., Golowich, N., and Zhang, K. (2023). The comp lexity of markov equilibrium in stochastic
+games. In The Thirty Sixth Annual Conference on Learning Theory , pages 4180–4234. PMLR.
+Duchi, J. and Namkoong, H. (2018). Learning models with unif orm performance via distributionally robust
+optimization. arXiv preprint arXiv:1810.08750 .
+Freedman, D. A. (1975). On tail probabilities for martingal es. the Annals of Probability , pages 100–118.
+Friedman, E. and Mauersberger, F. (2022). Quantal response equilibrium with symmetry: Representation
+and applications. In Proceedings of the 23rd ACM Conference on Economics and Comp utation, pages
+240–241.
+Gao, R. (2020). Finite-sample guarantees for wasserstein d istributionally robust optimization: Breaking the
+curse of dimensionality. arXiv preprint arXiv:2009.04382 .
+15
+
+===== PAGE 16 =====
+Goeree, J. K., Holt, C. A., and Palfrey, T. R. (2005). Regular quantal response equilibrium. Experimental
+economics, 8:347–367.
+Han, S., Su, S., He, S., Han, S., Yang, H., and Miao, F. (2022). What is the solution for state adversarial
+multi-agent reinforcement learning? arXiv preprint arXiv:2212.02705 .
+Iyengar, G. N. (2005). Robust dynamic programming. Mathematics of Operations Research , 30(2):257–280.
+Jin, C., Liu, Q., Wang, Y., and Yu, T. (2021). V-learning–a si mple, eﬃcient, decentralized algorithm for
+multiagent RL. arXiv preprint arXiv:2110.14555 .
+Kakutani, S. (1941). A generalization of brouwer’s ﬁxed poi nt theorem.
+Kannan, S. S., Venkatesh, V. L., and Min, B.-C. (2023). Smart -LLM: Smart multi-agent robot task planning
+using large language models. arXiv preprint arXiv:2309.10062 .
+Kardeş, E., Ordóñez, F., and Hall, R. W. (2011). Discounted r obust stochastic games and an application to
+queueing control. Operations research, 59(2):365–382.
+Kearns, M. J. and Singh, S. P. (1999). Finite-sample converg ence rates for Q-learning and indirect algorithms.
+In Advances in neural information processing systems , pages 996–1002.
+Kober, J., Bagnell, J. A., and Peters, J. (2013). Reinforcem ent learning in robotics: A survey. The Interna-
+tional Journal of Robotics Research , 32(11):1238–1274.
+Lattimore, T. and Szepesvári, C. (2020). Bandit algorithms . Cambridge University Press.
+Lee, J., Jeon, W., Lee, B., Pineau, J., and Kim, K.-E. (2021). Optidice: Oﬄine policy optimization via
+stationary distribution correction estimation. In International Conference on Machine Learning , pages
+6120–6130. PMLR.
+Leibo, J. Z., Zambaldi, V., Lanctot, M., Marecki, J., and Gra epel, T. (2017). Multi-agent reinforcement
+learning in sequential social dilemmas. arXiv preprint arXiv:1702.03037 .
+Li, G., Cai, C., Chen, Y., Wei, Y., and Chi, Y. (2024). Is Q-lea rning minimax optimal? a tight sample
+complexity analysis. Operations Research, 72(1):222–236.
+Li, G., Chi, Y., Wei, Y., and Chen, Y. (2022). Minimax-optima l multi-agent RL in Markov games with a
+generative model. Advances in Neural Information Processing Systems , 35:15353–15367.
+Li, G., Yan, Y., Chen, Y., and Fan, J. (2023). Minimax-optima l reward-agnostic exploration in reinforcement
+learning. arXiv preprint arXiv:2304.07278 .
+Li, S., Wu, Y., Cui, X., Dong, H., Fang, F., and Russell, S. (20 19). Robust multi-agent reinforcement learning
+via minimax deep deterministic policy gradient. In Proceedings of the AAAI conference on artiﬁcial
+intelligence, volume 33, pages 4213–4220.
+Lillicrap, T. P., Hunt, J. J., Pritzel, A., Heess, N., Erez, T ., Tassa, Y., Silver, D., and Wierstra, D. (2015).
+Continuous control with deep reinforcement learning. arXiv preprint arXiv:1509.02971 .
+Littman, M. L. (1994). Markov games as a framework for multi- agent reinforcement learning. In Machine
+learning proceedings 1994, pages 157–163. Elsevier.
+Lu, M., Zhong, H., Zhang, T., and Blanchet, J. (2024). Distri butionally robust reinforcement learning
+with interactive data collection: Fundamental hardness an d near-optimal algorithm. arXiv preprint
+arXiv:2404.03578.
+Ma, S., Chen, Z., Zou, S., and Zhou, Y. (2023). Decentralized robust v-learning for solving markov games
+with model uncertainty. Journal of Machine Learning Research , 24(371):1–40.
+Mahmood, A. R., Korenkevych, D., Vasan, G., Ma, W., and Bergs tra, J. (2018). Benchmarking reinforcement
+learning algorithms on real-world robots. In Conference on robot learning , pages 561–591. PMLR.
+16
+
+===== PAGE 17 =====
+McMahan, J., Artiglio, G., and Xie, Q. (2024). Roping in unce rtainty: Robustness and regularization in
+markov games. arXiv preprint arXiv:2406.08847 .
+Mnih, V., Kavukcuoglu, K., Silver, D., Rusu, A. A., Veness, J ., Bellemare, M. G., Graves, A., Riedmiller,
+M., Fidjeland, A. K., and Ostrovski, G. (2015). Human-level control through deep reinforcement learning.
+Nature, 518(7540):529–533.
+Moulin, H., Ray, I., and Gupta, S. S. (2014). Coarse correlat ed equilibria in an abatement game. Technical
+report, Cardiﬀ Economics Working Papers.
+Moulin, H. and Vial, J.-P. (1978). Strategically zero-sum g ames: the class of games whose completely mixed
+equilibria cannot be improved upon. International Journal of Game Theory , 7(3):201–221.
+Nash, J. (1951). Non-cooperative games. Annals of mathematics , pages 286–295.
+Nilim, A. and El Ghaoui, L. (2005). Robust control of Markov d ecision processes with uncertain transition
+matrices. Operations Research, 53(5):780–798.
+Pan, Y., Chen, Y., and Lin, F. (2023). Adjustable robust rein forcement learning for online 3d bin packing.
+arXiv preprint arXiv:2310.04323 .
+Panaganti, K. and Kalathil, D. (2022). Sample complexity of robust reinforcement learning with a generative
+model. In International Conference on Artiﬁcial Intelligence and Statis tics, pages 9582–9602. PMLR.
+Pinto, L., Davidson, J., Sukthankar, R., and Gupta, A. (2017 ). Robust adversarial reinforcement learning.
+In International Conference on Machine Learning , pages 2817–2826. PMLR.
+Rahimian, H. and Mehrotra, S. (2019). Distributionally rob ust optimization: A review. arXiv preprint
+arXiv:1908.05659.
+Rubinstein, A. (2017). Settling the complexity of computin g approximate two-player nash equilibria. ACM
+SIGecom Exchanges, 15(2):45–49.
+Rusu, A. A., Večerík, M., Rothörl, T., Heess, N., Pascanu, R. , and Hadsell, R. (2017). Sim-to-real robot
+learning from pixels with progressive nets. In Conference on robot learning , pages 262–270. PMLR.
+Sandomirskiy, F., Sung, P. H., Tamuz, O., and Wincelberg, B. (2024). Narrow framing and risk in games.
+Shalev-Shwartz, S. (2007). Online learning: Theory, algor ithms, and applications.
+Shalev-Shwartz, S. (2012). Online learning and online conv ex optimization. Foundations and Trends® in
+Machine Learning, 4(2):107–194.
+Shalev-Shwartz, S. and Singer, Y. (2007). A primal-dual per spective of online learning algorithms. Machine
+Learning, 69(2):115–142.
+Shapley, L. S. (1953). Stochastic games. Proceedings of the national academy of sciences , 39(10):1095–1100.
+Shi, L. and Chi, Y. (2024). Distributionally robust model-b ased oﬄine reinforcement learning with near-
+optimal sample complexity. Journal of Machine Learning Research , 25(200):1–91.
+Shi, L., Li, G., Wei, Y., Chen, Y., Geist, M., and Chi, Y. (2023 ). The curious price of distributional
+robustness in reinforcement learning with a generative mod el. In Proceedings of the 37th International
+Conference on Neural Information Processing Systems , pages 79903–79917.
+Shi, L., Mazumdar, E., Chi, Y., and Wierman, A. (2024). Sampl e-eﬃcient robust multi-agent reinforcement
+learning in the face of environmental uncertainty. In Forty-ﬁrst International Conference on Machine
+Learning.
+Silver, D., Huang, A., Maddison, C. J., Guez, A., Sifre, L., V an Den Driessche, G., Schrittwieser, J.,
+Antonoglou, I., Panneershelvam, V., Lanctot, M., et al. (20 16). Mastering the game of go with deep
+neural networks and tree search. nature, 529(7587):484–489.
+17
+
+===== PAGE 18 =====
+Slumbers, O., Mguni, D. H., Blumberg, S. B., Mcaleer, S. M., Y ang, Y., and Wang, J. (2023). A game-
+theoretic framework for managing risk in multi-agent syste ms. In International Conference on Machine
+Learning, pages 32059–32087. PMLR.
+Song, Z., Mei, S., and Bai, Y. (2021). When can we learn genera l-sum Markov games with a large number
+of players sample-eﬃciently? arXiv preprint arXiv:2110.04184 .
+Szita, I., Takács, B., and Lorincz, A. (2003). ε–mdps: Learning in varying environments. Journal of Machine
+Learning Research, 3(1).
+Tobin, J., Fong, R., Ray, A., Schneider, J., Zaremba, W., and Abbeel, P. (2017). Domain randomization
+for transferring deep neural networks from simulation to th e real world. In 2017 IEEE/RSJ international
+conference on intelligent robots and systems (IROS) , pages 23–30. IEEE.
+Tversky, A. and Kahneman, D. (1974). Judgment under uncerta inty: Heuristics and biases: Biases in
+judgments reveal some heuristics of thinking under uncerta inty. science, 185(4157):1124–1131.
+Vershynin, R. (2018). High-dimensional probability: An introduction with appli cations in data science , vol-
+ume 47. Cambridge university press.
+Vial, D., Shakkottai, S., and Srikant, R. (2022). Robust mul ti-agent bandits over undirected graphs. Pro-
+ceedings of the ACM on Measurement and Analysis of Computing Systems, 6(3):1–57.
+Vinyals, O., Babuschkin, I., Czarnecki, W. M., Mathieu, M., Dudzik, A., Chung, J., Choi, D. H., Powell, R.,
+Ewalds, T., Georgiev, P., et al. (2019). Grandmaster level i n starcraft ii using multi-agent reinforcement
+learning. Nature, 575(7782):350–354.
+Wang, H., Shi, L., and Chi, Y. (2024). Sample complexity of oﬄ ine distributionally robust linear Markov
+decision processes. arXiv preprint arXiv:2403.12946 .
+Wang, Y., Liu, Q., Bai, Y., and Jin, C. (2023). Breaking the cu rse of multiagency: Provably eﬃcient
+decentralized multi-agent RL with function approximation . In The Thirty Sixth Annual Conference on
+Learning Theory, pages 2793–2848. PMLR.
+Wu, Y., McMahan, J., Zhu, X., and Xie, Q. (2024). Data poisoni ng to fake a nash equilibria for markov
+games. In Proceedings of the AAAI Conference on Artiﬁcial Intelligence , volume 38, pages 15979–15987.
+Xu, Z., Panaganti, K., and Kalathil, D. (2023). Improved sam ple complexity bounds for distributionally
+robust reinforcement learning. arXiv preprint arXiv:2303.02783 .
+Yang, W., Zhang, L., and Zhang, Z. (2022). Toward theoretica l understandings of robust Markov decision
+processes: Sample complexity and asymptotics. The Annals of Statistics , 50(6):3223–3248.
+Yeh, C., Meng, C., Wang, S., Driscoll, A., Rozi, E., Liu, P., L ee, J., Burke, M., Lobell, D. B., and Ermon,
+S. (2021). Sustainbench: Benchmarks for monitoring the sus tainable development goals with machine
+learning. arXiv preprint arXiv:2111.04724 .
+Zeng, L., Qiu, D., and Sun, M. (2022). Resilience enhancemen t of multi-agent reinforcement learning-based
+demand response against adversarial attacks. Applied Energy, 324:119688.
+Zhang, H., Chen, H., Boning, D., and Hsieh, C.-J. (2021). Rob ust reinforcement learning on state observa-
+tions with learned optimal adversary. arXiv preprint arXiv:2101.08452 .
+Zhang, H., Chen, H., Xiao, C., Li, B., Liu, M., Boning, D., and Hsieh, C.-J. (2020a). Robust deep reinforce-
+ment learning against adversarial perturbations on state o bservations. Advances in Neural Information
+Processing Systems, 33:21024–21037.
+Zhang, K., Kakade, S., Basar, T., and Yang, L. (2020b). Model -based multi-agent RL in zero-sum Markov
+games with near-optimal sample complexity. Advances in Neural Information Processing Systems, 33:1166–
+1178.
+18
+
+===== PAGE 19 =====
+Zhang, K., Sun, T., Tao, Y., Genc, S., Mallya, S., and Basar, T . (2020c). Robust multi-agent reinforcement
+learning with model uncertainty. Advances in neural information processing systems , 33:10571–10583.
+Zhang, R., Shamma, J., and Li, N. (2024). Equilibrium select ion for multi-agent reinforcement learning: A
+uniﬁed framework. arXiv preprint arXiv:2406.08844 .
+Zhou, Z., Bai, Q., Zhou, Z., Qiu, L., Blanchet, J., and Glynn, P. (2021). Finite-sample regret bound for
+distributionally robust oﬄine tabular reinforcement lear ning. In International Conference on Artiﬁcial
+Intelligence and Statistics , pages 3331–3339. PMLR.
+Zhou, Z. and Liu, G. (2023). Robustness testing for multi-ag ent reinforcement learning: State perturbations
+on critical agents. arXiv preprint arXiv:2306.06136 .
+A Preliminaries
+Denoting the vectors x = [xi]1≤i≤n and y = [yi]1≤i≤n, we use the notation x≤ y (or x≥ y) to represent that
+xi≤ yi (or xi≥ yi) for every 1≤ i≤ n. The Hadamard product of two vectors x and y in RS is denoted as
+x◦ y =
+[
+x(s)· y(s)
+]
+s∈S . In addition, for any series of vectors {xi}i∈[S, diag(x1, x2,··· , xS) denote a block
+diagonal matrix by placing each given vector xi along the diagonal, with zeros ﬁlling the oﬀ-diagonal block s.
+0 (or 1) represents the all-zero (or all-one) vector, while ei∈ RS denotes a basis vector of dimension S with
+1 in the i-th position and 0 elsewhere.
+A.1 Additional notations and facts
+A.1.1 Matrix and vector notations
+Before continuing, we introduce or recall some matrix and ve ctor notations that will be used throughout the
+paper. In particular, for any joint policy π :S× [H]↦→∆(A) and any (i, h)∈ [n]× [H]:
+Matrices about policies. We introduce three matrices associated with any joint polic y π, which are
+deﬁned as block diagonal matrices that adhere to the followi ng properties:
+• The matrix Ππ
+h ∈ RS×S ∏n
+i=1 Ai is given by diag
+(
+πh(1)⊤, πh(2)⊤, . . . , π⊤
+h (S)
+)
+, where πh(s) =
+[πh(a| s)]a∈A∈ ∆(A) for each s∈S represents the joint policy vectors across all agents.
+• The matrix Ππ−i
+h ∈ RS×S ∏
+j⁄=i Aj can be expressed as diag
+(
+π−i,h(1)⊤, π−i,h(2)⊤, . . . , π⊤
+−i,h(S)
+)
+, where
+π−i,h(s) = [ πh(a−i| s)]a−i∈A−i∈ ∆(A−i) for all s∈S denotes the joint policy vectors from all agents
+except agent i.
+• The matrix Ππi
+h ∈ RS×SAi is deﬁned as diag
+(
+πi,h(1)⊤, πi,h(2)⊤, . . . , π⊤
+i,h(S)
+)
+, where πi,h(s) =
+[πi,h(ai| s)]ai∈Ai
+∈ ∆(Ai) for each s∈S represents the policy of the i-th agent.
+V ectors about reward. We recall the deﬁnition of ri,h and introduce the reward vectors rπ
+i,h and rπ−i
+i,h as
+follows:
+• Let ri,h = [ri,h(s, a)](s,a)∈S×A∈ RS ∏n
+i=1 Ai represent the reward function for the i-th player at time step
+h, whereS is the state space and A is the action space.
+• rπ
+i,h ∈ RS: the expected reward of the i-th player, associated with any policy π, where rπ
+i,h(s) =
+Ea∼πh(s)[ri,h(s, a)] for any s∈S .
+• rπ−i
+i,h ∈ RSAi: the reward of the i-th player associated with π−i ={π−i,h}h∈[H]. Speciﬁcally, rπ−i
+i,h (s, ai) =
+Ea−i∼π−i,h(s)[ri,h(s, a)] for any s∈S and ai∈ Ai.
+19
+
+===== PAGE 20 =====
+Matrices of transition kernel variants. The following notations are associated with some transitio n
+kernel and possibly some joint policy π:
+• P 0
+h∈ RS ∏n
+i=1 Ai×S: the matrix representing the nominal transition kernel at t ime step h. Speciﬁcally,
+P 0
+h,s,a∈ R1×S represents the row corresponding to any state-action pair (s, a)∈S×A .
+• P π−i
+h ∈ RSAi×S: the matrix representing the nominal transition kernel at t ime step h, associated with
+the joint policy π−i. Each row of P π−i
+h corresponds to one state-action pair (s, ai)∈S×A i, denoted as
+P π−i
+h,s,ai∈ R1×S. Speciﬁcally, P π−i
+h,s,ai(s′) = Ea−i∼π−i,h(s)[P 0
+h,s,a(s′)] for all s, s′∈S and ai∈A i.
+• P k
+i,h ∈ RSAi×S: the empirical transition kernel matrix output at the k-th iteration of time step h
+associated with agent i (cf. line 6 of Algorithm 2). P k
+i,h,s,ai∈ R1×S represents the row corresponding
+to any state-action pair (s, ai)∈S×A i.
+• P π
+h∈ RS×S and P k
+i,h∈ RS×S: deﬁned as P π
+h := Ππ
+hP 0
+h and P k
+i,h := Π πi
+h P k
+i,h.
+Next, we introduce some matrix notations for transitions th at are associated with not only the nominal
+transition and policy π, but also with some value functions:
+• For any joint policy π and any value vector V ∈ RS, we deﬁne P π−i,V
+i,h ∈ RSAi×S as the matrix represent-
+ing the worst-case transition probability kernel centered around the nominal kernel P π−i
+i,h associated with
+V , for any (i, h)∈ [n]× [H]. The row corresponding to the state-action pair (s, ai) in P π−i,V
+i,h , denoted
+as P π−i,V
+i,h,s,ai∈ RS, is given by:
+P π−i,V
+i,h,s,ai = argmin P∈U σi (P
+π−i
+h,s,ai )PV. (31a)
+Similarly, we also deﬁne the transition matrices P π,V
+i,h ∈ RSAi×S for speciﬁc value vectors as:
+P π,V
+i,h := P
+π−i,V π,σi
+i,h+1
+i,h , where P π,V
+i,h,s,ai := P
+π−i,V π,σi
+i,h+1
+i,h,s,ai = argmin P∈U σi (P
+π−i
+h,s,ai )PV π,σi
+i,h+1. (31b)
+Finally, we deﬁne square matrices P π,V
+i,h ∈ RS×S as: P π,V
+i,h := Π πi
+h P π−i,V
+i,h .
+• By replacing the nominal transition kernel with the empiri cal transition kernel at some k-th iteration, we
+similarly deﬁne P k,V
+i,h as the worst-case probability transition kernel within the uncertainty set for agent
+i, centered around the empirical kernel P k,V
+i,h . The row corresponding to the state-action pair (s, ai) in
+P k,V
+i,h is denoted as P k,V
+i,h,s,ai∈ RS and is deﬁned as:
+P k,V
+i,h,s,ai = argmin P∈U σi (P k
+i,h,s,ai )PV. (31c)
+V ariance. We now introduce some notations for the variance associated with some speciﬁc probability
+distributions. For any probability vector P∈ R1×S and a vector V ∈ RS, we denote the variance of V with
+respect to P as VarP (V ), deﬁned as:
+VarP (V ) := P (V◦ V )− (P V )◦ (P V ). (32)
+Additionally, for any transition kernel matrix P∈ RSAi×S with each row as a probability distribution vector,
+and a vector V ∈ RS, we deﬁne VarP (V )∈ RSAi as a vector of variances. The (s, ai)-th entry of VarP (V ) is
+given by:
+∀(s, ai)∈S×A i : VarP (s, ai) := VarPs,ai (V ), (33)
+where Ps,ai denotes the (s, ai)-th row of the transition matrix corresponding to state acti on pair (s, ai).
+A.1.2 Additional facts
+Lemma 2. For any transition kernels P1, . . . , Pm ∈ RS, and any weight a1, . . . , am ∈ [0, 1] satisfying∑ m
+i=1 ai = 1, one has
+m∑
+i=1
+ai
+√
+VarPi (V )≤
+/radicaltp/radicalvertex/radicalvertex√
+m∑
+i=1
+aiVarPi (V ) and
+m∑
+i=1
+aiVarPi (V )≤ Var∑m
+i=1 aiPi(V ),
+20
+
+===== PAGE 21 =====
+where V denote any ﬁxed value vector V ∈ RS obeying 0≤ V ≤ H for all s∈S .
+Proof. Initially, since f (x) =√x is a concave function, we have
+m∑
+i=1
+ai
+√
+VarPi (V )≤
+/radicaltp/radicalvertex/radicalvertex√
+m∑
+i=1
+aiVarPi (V )
+by Jensen’s inequality. Recalling the deﬁnition in ( 32) yields that
+m∑
+i=1
+aiVarPi (V ) =
+m∑
+i=1
+ai
+(
+EPi (V◦ V )− (EPi [V ])2
+)
+≤
+m∑
+i=1
+aiEPi (V◦ V )−
+( m∑
+i=1
+aiEPi [V ]
+)2
+= Var∑m
+i=1 aiPi(V ).
+which holds by the elementary fact that f (x) = x2 is a convex function.
+A.2 Robust Bellman equations of ﬁctitious RMGs
+Fortunately, the class of ﬁctitious RMGs feature a robust co unterpart of the Bellman equation — robust
+Bellman equation . Speciﬁcally, for any joint policy π :S× [H]↦→∆(A), the robust value function can be
+expressed as
+V π,σi
+i,h (s) = inf
+U
+σiρ (P 0,π)
+E
+[ H∑
+t=h
+ri(st, at)| sh = s
+]
+= Ea∼πh(s)[ri,h(s, a)] + Eai∼πi,h(s)
+[
+inf
+U σiρ
+(
+P
+π−i
+h,s,ai
+) P V π,σi
+i,h+1
+]
+.
+(34)
+It can be veriﬁed directly by deﬁnition. The robust Bellman e quation described above is intrinsically linked
+to the others-integrated (s, ai)-rectangularity condition (cf. ( 12)) of the uncertainty set. This condition leads
+to a well-posed and computationally-tractable class of RMG s by allowing the decomposition from an overall
+uncertainty set to independent subsets across diﬀerent age nts, time steps, and each state and agent-wise
+action pair (s, ai).
+Note that the speciﬁed robust Bellman equation is diﬀerent f or a joint correlated policy and a joint
+product policy, induced by diﬀerent expected nominal trans ition kernels. In particular, for any joint product
+policy π :S× [H]↦→∏
+i∈[n] ∆(Ai), the expected nominal transition kernel conditioned on the i-th agent’s
+action ai∈A i, current state s∈S , and the policy π can be expressed by
+P π−i
+h,s,ai = Ea∼πh(· | s,ai)
+[
+P 0
+h,s,a
+]
+= Ea−i∼π−i,h(· | s)
+[
+P 0
+h,s,(ai,a−i)
+]
+(35)
+for any (i, h, s, ai)∈ [n]× [H]×S×A i, where the last equality holds since the policy π is a product policy,
+and the distribution of a−i is independent of ai. It is observed that the expected nominal transition kernel
+P π−i
+h,s,ai for a product policy π is independent of the i-th agent’s policy given (s, ai). This diﬀers from ( 11)
+for a possibly correlated policy, where ( 11) can generally depend on the i-th agent’s policy.
+A.3 Preliminary facts of online adversarial learning
+Our proposed Algorithm 2 is inspired by online adversarial learning, which plays a cr ucial role in addressing
+the challenge of multiagency in multi-agent sequential gam es ( Bai and Jin , 2020; Jin et al. , 2021; Li et al. ,
+2023; Song et al. , 2021). In this section, we introduce the fundamentals of online a dversarial learning and
+review key aspects of a widely-used algorithm, the Follow-t he-Regularized-Leader (FTRL).
+21
+
+===== PAGE 22 =====
+Online learning for weighted average loss. We consider an online learning problem over K steps for
+some positive integer K, commonly studied in adversarial learning ( Lattimore and Szepesvári , 2020). The
+learner is presented with an action set A and (possibly diﬀerent) loss functions f1, . . . , fK :A→ R≥0 for
+each step k∈ [K]. At each time step k, the learner selects a distribution over the action set, πk∈ ∆(A),
+and observes the loss function fk(πk). The goal of the learner is to minimize the weighted average l oss over
+the K steps, which is deﬁned as
+LK =
+K∑
+k=1
+αK
+k fk(πk). (36)
+To evaluate the learner’s performance, the regret for the on line learning process is deﬁned as:
+RK =
+K∑
+k=1
+αK
+k fk(πk)− min
+π∈∆(A)
+K∑
+k=1
+αK
+k fk(π). (37)
+FTRL and its regret bound. To solve adversarial learning, a widely-used method for sol ving the online
+learning problem described above is the Follow-the-Regula rized-Leader (FTRL) algorithm, introduced by
+Shalev-Shwartz (2007); Shalev-Shwartz and Singer (2007). At time step k+1, the learner selects a regularized
+greedy policy by solving:
+πk+1 = argmin π∈∆(A)
+[ k∑
+i=1
+αk
+i fi(π) + Fk(π)
+]
+, k = 1, 2, . . . , (38)
+where Fk(π) represents a convex regularization function. The followin g theorem provides a reﬁned regret
+bound for the FTRL algorithm when the loss functions {fk}k∈[K] are linear with respect to the policy, and
+the
+Theorem 3 (Theorem 3, Li et al. (2022)). For any time step k∈ [K] and the current policy πk, the loss
+function is deﬁned as fk(π) =⟨πk, lk⟩, where lk∈ R|A| represents some loss vector at time step k.
+Let the regularization function to be Fk(π) := ∑
+a∈A
+1
+ηk+1
+π(a) log(π(a)), where ηk+1 > 0 denotes the
+learning rate. And the policy πk+1 in episode k + 1 updated according to the following FTRL algorithm:
+πk+1 = argmin π∈∆(A){⟨π, Lk⟩ + Fk(π)} , (39)
+which indicates
+∀a∈A : πk+1 = exp
+(
+− ηk+1Lk(a)
+)
+∑
+a′∈A exp
+(
+− ηk+1Lk(a′)
+). (40)
+Suppose 0 < α 1≤ 1 and η1 = η2(1− α1), and assume 0 < α k < 1 and 0 < η k+1(1− αk)≤ ηk for all k≥ 2.
+Then, the regret of the FTRL algorithm is bounded by:
+RK =
+K∑
+k=1
+αK
+k ⟨πk, lk⟩− min
+a∈A
+[ K∑
+k=1
+αK
+k lk(a)
+]
+≤ 5
+3
+K∑
+k=1
+αK
+kˆηkαkVarπk (lk) + log A
+ηK+1
++ 3
+K∑
+k=1
+αK
+kˆη2
+kα2
+k‖lk‖3
+∞I
+(
+ˆηkαk‖lk‖∞ > 1
+3
+)
+. (41)
+where
+ˆηk :=
+{
+η2, if k = 1,
+ηk
+1−αk
+, if k > 1. (42)
+22
+
+===== PAGE 23 =====
+Properties of the learning rates. In addition, we introduce the following lemma regarding the properties
+of the learning rate {αk}k∈[K] and{ηk}k∈[K], deﬁned in ( 21) and ( 22).
+Lemma 3 (Li et al. (2023, Lemma 1)) . For any k≥ 1, the learning rate {αk}k∈[K] satisfy
+α1 = 1,
+k∑
+i=1
+αk
+i = 1, max
+1≤i≤k
+αk
+i ≤ 2cα log K
+k , (43a)
+1− αk = 1− cα log K
+k− 1 + cα log K≥
+{
+1− cα log K
+1+cα log K = 1
+1+cα log K≥ 1
+2cα log K , if k≥ 2,
+1− cα log K
+K/2+cα log K = K
+K+2cα log K≥ 1
+2 , if k≥ K/2 + 1. (43b)
+In addition, if k≥ cα log K + 1 and cα≥ 24, then one has
+max
+1≤i≤k/2
+αk
+i ≤ 1
+K 6 . (43c)
+Lemma 4. The learning rates of the online learning {ηk}k∈[K] obey
+( ηk
+ηk+1
+)2
+> (1− αk)2 and ηkαk =
+√
+2cα log2 K
+kH . (44)
+Proof. By basic calculus, we have
+( ηk
+ηk+1
+)2
+= αk
+αk−1
+= k− 2 + cα log K
+k− 1 + cα log K≥ k− 1
+k− 1 + cα log K = 1− αk > (1− αk)2,
+ηkαk =
+√
+log K
+αk−1H· αk≤
+√
+log K
+αkH · αk =
+√
+αk log K
+H ≤
+√
+2cα log2 K
+kH . (45)
+B Proof for Section 3
+Before proceeding, we introduce some useful deﬁnition and e xisting facts that are standard in real analysis
+and game theory literature.
+Deﬁnition 2 (Upper semi-continuous). A point-to-set mapping x∈X↦→ φ(x)∈Y is upper semi-continuous
+if limn→∞ xn = x0, yn∈ φ(xn), limn→∞ yn = y0 imply that y0∈ φ(x0).
+Theorem 4 (Kakutani’s ﬁxed point Theorem ( Kakutani, 1941)). If X is a closed, bounded, and convex set
+in a Euclidean space, and φ is a upper semi-continuous correspondence mapping X into the family of all
+closed convex subsets of X, then there exists x∈ X so that x∈ φ(x).
+B.1 Proof of Theorem 1
+Step 1: constructing an auxiliary single-step game. Focusing on ﬁnite-horizon ﬁctitious RMGs
+RMGin =
+{
+S,{Ai}1≤i≤n,{U σi
+ρ (P 0,·)}1≤i≤n, r, H
+}
+, we shall verify the theorem by ﬁrstly consider a one-step
+game and then apply the results recursively to the sequentia l Markov games.
+Without loss of generality, we focus on any of the steps h∈ [H] and construct an auxiliary one-step
+game. Towards this, we ﬁrst introduce a ﬁxed value function Vi,h+1∈ RS with 0≤ Vi,h+1≤ H for the i-th
+agent, representing the possible value function obtained a t the next time step h + 1. Focusing on time step
+h, and any joint product policy π :S↦→∏
+i∈[n] ∆(Ai) at this time step, we abuse the notation deﬁned in
+(35) to denote the expected nominal transition kernel over each (s, ai) as:
+P π−i
+h,s,ai = Eπ(a−i | s,ai)
+[
+P 0
+h,s,(ai,a−i)
+]
+= Eπ−i(a−i | s)
+[
+P 0
+h,s,(ai,a−i)
+]
+. (46)
+23
+
+===== PAGE 24 =====
+Armed with this, for any joint product policy π :S↦→∏
+i∈[n] ∆(Ai), we can deﬁne the payoﬀs to maximize
+for the players as below:
+∀s∈S : fi,s(πi(s), π−i(s); Vi,h+1) = Ea∼π(s)[ri,h(s, a)] + Eai∼πi(s)
+
+ inf
+U σi
+(
+P
+π−i
+h,s,ai
+) P Vi,h+1
+
+ , (47)
+which is deﬁned analogous to the robust Bellman equation (cf . (34)) by replacing a real robust value function
+vector (associated with some policy) to some ﬁxed vector Vi,h+1.
+Now we are ready to introduce the following useful mapping: f or any π :S↦→∏
+i∈[n] ∆(Ai),
+φ(π) :=
+
+
+u :S↦→
+∏
+i∈[n]
+∆(Ai)| ui(s)∈ argmaxπ′
+i(s)∈∆(Ai) fi,s(π′
+i(s), π−i(s); Vi,h+1),∀(i, s)∈ [n]×S
+
+
+ . (48)
+Step 2: the existence of NE in the auxiliary game. To apply Theorem 4, there are three required
+conditions. First, let X ={π :S↦→∏
+i∈[n] ∆(Ai)}, the space of product policies, which is known as a closed,
+bounded and convex set in Euclidean space.
+• V erifying thatφ(π) is an upper semi-continuous correspondence. Before starting, we introduce
+the following two useful lemmas with the proof postponed to A ppendix B.2.2 and B.2.3.
+Lemma 5. The set of function {fi,s(π′
+i(s), π−i(s); Vi,h+1), 0≤ Vi,h+1≤ H} is equicontinuous with re-
+spect to π′
+i(s), π−i(s) for all (i, s)∈ [n]×S .
+Lemma 6. For any i∈ [n] and then x−i :S↦→∏
+j⁄=i,j∈[n] ∆(Aj), the functions
+∀s∈S : gi,s(x−i(s), Vi,h+1) := max π′
+i(s)∈∆(Ai) fi,s(π′
+i(s), x−i(s); Vi,h+1) (49)
+are continuous with respect to x−i(s) and the set {gi,s(·, V )|V ∈ RS, 0≤ V ≤ H} is equicontinuous.
+Armed with above lemmas, we are in the position to prove this c ondition. We suppose there are
+two sequence limn→∞ xn = x0, yn∈ φ(xn), limn→∞ yn = y0. Recall the deﬁnition of a upper semi-
+continuous correspondence (cf. Deﬁnition 2), we are supposed to show that y0∈ φ(x0), i.e.,
+∀(i, s)∈ [n]×S : fi,s(y0
+i (s), x0
+−i(s); Vi,h+1) = max π′
+i(s)∈∆(Ai) fi,s(π′
+i(s), x0
+−i(s); Vi,h+1). (50)
+Towards this, we have
+|fi,s(y0
+i (s), x0
+−i(s); Vi,h+1)− gi,s(x0
+−i(s), Vi,h+1)|
+≤| fi,s(y0
+i (s), x0
+−i(s); Vi,h+1)− fi,s(yn
+i (s), xn
+−i(s); Vi,h+1)|
++|fi,s(yn
+i (s), xn
+−i(s); Vi,h+1)− gi,s(x0
+−i(s), Vi,h+1)|
+(i)
+=|fi,s(y0
+i (s), x0
+−i(s); Vi,h+1)− fi,s(yn
+i (s), xn
+−i(s); Vi,h+1)| +|gi,s(xn
+−i(s), Vi,h+1)− gi,s(x0
+−i(s), Vi,h+1)|
+→ 0 as n→∞ , (51)
+where the ﬁrst inequality follows from the triangle inequal ity, (i) holds by the assumption yn∈ φ(xn) so
+that fi,s(yn
+i (s), xn
+−i(s); Vi,h+1) = max π′
+i∈∆(S) fi,s(π′
+i(s), xn
+−i(s); Vi,h+1), and the last line can be veriﬁed
+by the continuity veriﬁed by Lemma 5 and Lemma 6.
+• V erifyingφ(π) is convex for any π∈ X. Finally, we gonna work on the convexity of φ(π) for any
+π∈ X. To begin with, by the deﬁnition of φ(π) in ( 48), we know that φ(π)⊆ X and the maximum
+of the continuous function fi,s(πi(s), π−i(s); Vi,h+1) (cf. Lemma 5) on a compact set ∆(Ai) exists, i.e.,
+φ(x)⁄=∅.
+24
+
+===== PAGE 25 =====
+Suppose there exists two Nash equilibrium z :S↦→∏
+i∈[n] ∆(Ai), v :S↦→∏
+i∈[n] ∆(Ai) and z, v∈ φ(π).
+Then we have that for any (i, s)∈ [n]×S ,
+fi,s(zi(s), π−i(s); Vi,h+1) = fi,s(vi(s), π−i(s); Vi,h+1) = max
+ui(s)∈∆(Ai)
+fi,s(ui(s), π−i(s); Vi,h+1). (52)
+To continue, for any 0≤ λ≤ 1, one has
+max
+ui(s)∈∆(Ai)
+fi,s(ui(s), π−i(s); Vi,h+1) = λfi,s(zi(s), π−i(s); Vi,h+1) + (1− λ)fi,s(vi(s), π−i(s); Vi,h+1)
+= λ
+(
+Eai∼zi(s)
+[
+rπ−i
+i,h (s, ai)
+]
++ Eai∼zi(s)
+[
+inf
+U σi
+(
+P
+π−i
+h,s,ai
+) P Vi,h+1
+])
++ (1− λ)
+(
+Eai∼vi(s)
+[
+rπ−i
+i,h (s, ai)
+]
++ Eai∼vi(s)
+[
+inf
+U σi
+(
+P
+π−i
+h,s,ai
+) P Vi,h+1
+])
+(53)
+= Eai∼[λzi(s)+(1−λ)vi(s)]
+[
+rπ−i
+i,h (s, ai)
+]
++ Eai∼[λzi(s)+(1−λ)vi(s)]
+[
+inf
+U σi
+(
+P
+π−i
+h,s,ai
+) P Vi,h+1
+]
+= fi,s(λzi(s) + (1− λ)vi(s), π−i(s); Vi,h+1). (54)
+where we denote rπ−i
+i,h (s, ai) := Ea−i∼π−i(s) [ri,h(s, (ai, a−i))]. Hence, we show that λzi(s) + (1 −
+λ)vi(s)∈ φ(π) for all (i, s)∈ [n]×S and 0≤ λ≤ 1, thus verify that φ(π) is convex for any π∈ X.
+Step 3: the existence of robust NE in ﬁctitious RMGs. Armed with above results, now we consider
+a general form to show that there exists a policy π :S× [H]↦→∏
+i∈[n] ∆(Ai) that satisﬁes
+∀(i, h, s)∈ [n]× [H]×S : V π,σi
+i,h (s) = V ⋆,π−i,σi
+i,h (s). (55)
+We shall prove this by induction.
+• The base case. Starting with the ﬁnal step h = H, we recall that by deﬁnition, for any joint policy
+π :S× [H]↦→∏
+i∈[n] ∆(Ai):
+∀(i, s)∈ [n]×S : V π,σi
+i,H+1(s) = 0 . (56)
+To apply the results in the one-step game constructed in Step 2, we consider the one-step game at
+h = H and using the payoﬀ function (cf. ( 47))
+∀s∈S : fi,s(πi(s), π−i(s); V π,σi
+i,H+1) = Ea∼π(s)[ri,h(s, a)]. (57)
+We know that there exists a policy π so that
+∀(i, s)∈ [n]×S : V π,σi
+i,H (s) = V ⋆,π−i,σi
+i,H (s) (58)
+by setting πH as the NE of the one-step auxiliary game.
+• Induction. Assuming that there exists a policy π so that for subsequent steps h + 1,··· , H,
+∀(i, h, s)∈ [n]×{ h + 1,··· , H}×S : V π,σi
+i,h (s) = V ⋆,π−i,σi
+i,h (s), (59)
+which are achieved by determining certain policies for {πh+1, πh+2,··· , πH}. We are supposed to prove
+that at time step h, we can ensure our policy π satisfying
+∀(i, s)∈ [n]×S : V π,σi
+i,h (s) = V ⋆,π−i,σi
+i,h (s) (60)
+by choosing a proper policy πh at the time step h.
+25
+
+===== PAGE 26 =====
+Towards this, it is observed that
+V ⋆,π−i,σi
+i,h (s) = max
+π′
+i:S×[H]↦→∆(Ai)
+V π′
+i×π−i,σi
+i,h (s)
+= max
+π′
+i:S×[H]↦→∆(Ai)
+Ea∼π′
+i,h(s)×π−i,h(s)[ri,h(s, a)] + Eai∼π′
+i,h(s)
+[
+inf
+P ∈U σi
+(
+P
+π−i
+h,s,ai
+) P V π′
+i×π−i,σi
+i,h+1
+]
+= max
+π′
+i,h(s)∈∆(Ai)
+Ea∼π′
+i,h(s)×π−i,h(s)[ri,h(s, a)]
++ max
+π′
+i,h(s)∈∆(Ai)
+Eai∼π′
+i,h(s) max
+π′
+i,h+ :S×h+↦→∆(Ai)
+[
+inf
+P ∈U σi
+(
+P
+π−i
+h,s,ai
+) P V π′
+i×π−i,σi
+i,h+1
+]
+= max
+π′
+i,h(s)∈∆(Ai)
+
+Ea∼π′
+i,h(s)×π−i,h(s)[ri,h(s, a)] + Eai∼π′
+i,h(s)
+
+ inf
+P ∈U σi
+(
+P
+π−i
+h,s,ai
+) P V ⋆,π−i,σi
+i,h+1
+
+
+
+ .
+(61)
+where we denote h+ ={h + 1, h + 2,··· , H} as the set that includes all the time steps after h until
+the end of the episode, and the last equality follows from the fact
+max
+π′
+i,h+ :S×h+↦→∆(Ai)
+[
+inf
+U σi
+(
+P
+π−i
+h,s,ai
+) P V π′
+i×π−i,σi
+i,h+1
+]
+= inf
+U σi
+(
+P
+π−i
+h,s,ai
+) P max
+π′
+i,h+ :S×h+↦→∆(Ai)
+V π′
+i×π−i,σi
+i,h+1
+]
+= inf
+U σi
+(
+P
+π−i
+h,s,ai
+) P V ⋆,π−i,σi
+i,h+1 , (62)
+which holds by the deﬁnition of V ⋆,π−i,σi
+i,h+1 . Combining ( 61) and the results in the auxiliary one-step
+game with Vi,h+1 = V ⋆,π−i,σi
+i,h+1 , one has that there exists a policy with πh that satisﬁes
+∀(i, s)∈ [n]×S : V π,σi
+i,h (s) = V ⋆,π−i,σi
+i,h (s). (63)
+Combining the results in the base case and induction, we comp lete the proof by recursively choosing
+πh :S↦→∏
+i∈[n] ∆(Ai) for h = H, H− 1,··· , 1 as the NE of the corresponding one-step auxiliary game at
+time step h and arrive at
+∀(i, s)∈ [n]×S : V π,σi
+i,1 (s) = V ⋆,π−i,σi
+i,1 (s). (64)
+B.2 Proof of auxiliary facts
+B.2.1 Proof of Lemma 1
+Without loss of generality, we consider any i∈ [n] with other agents’ policy as π−i :S× [H]↦→∆(A−i)
+ﬁxed. We shall prove this lemma by induction, by recursively showing that for each (h, s), there exist a
+policy~πi,h(s) that satisﬁes V ~πi×π−i,σi
+i,h (s) = V ⋆,π−i,σi
+i,h (s).
+• The base case. Consider the base case h = H. Conditioned on other agents’ policy π−i :S× [H]↦→
+∆(A−i), the maximum of the robust value function of the i-th agent can be expressed by
+∀s∈S : V ⋆,π−i,σi
+i,H (s) = max
+π′
+i:S×[H]↦→∆(Ai)
+V π′
+i×π−i,σi
+i,H (s)
+= max
+π′
+i:S×[H]↦→∆(Ai)
+Eai∼π′
+i,H (s)
+[
+Ea−i∼π−i,H (s)[ri,H (s, a)]
+]
+= max
+π′
+i,H (s)∼∆(Ai)
+Eai∼π′
+i,H (s)
+[
+Ea−i∼π−i,H (s)[ri,H (s, a)]
+]
+. (65)
+Since the maximum of the continuous function Eai∼π′
+i,H (s)
+[
+Ea−i∼π−i,H (s)[ri,H (s, a)]
+]
+on a compact set
+∆(Ai) exists, by setting
+∀s∈S : ~πi,H (s) = argmax π′
+i,H (s)∼∆(Ai)Eai∼π′
+i,H (s)
+[
+Ea−i∼π−i,H (s)[ri,H (s, a)]
+]
+, (66)
+26
+
+===== PAGE 27 =====
+we arrive at
+∀s∈S : V ~πi×π−i,σi
+i,H (s) = V ⋆,π−i,σi
+i,H (s). (67)
+This complete the proof for the base case.
+• Induction. Assuming that for t = h + 1, h + 2,··· , H, we have
+∀s∈S : V ~πi×π−i,σi
+i,t (s) = V ⋆,π−i,σi
+i,t (s). (68)
+Then, we want to prove for the step h, where the maximum of the robust value function of the i-th
+agent can be expressed as: for all s∈S ,
+V ⋆,π−i,σi
+i,h (s)
+= max
+π′
+i:S×[H]↦→∆(Ai)
+V π′
+i×π−i,σi
+i,h (s)
+= max
+π′
+i:S×[H]↦→∆(Ai)
+Eai∼π′
+i,h(s)
+[
+Ea−i∼π−i,h(s)[ri,h(s, a)]
+]
++ Eai∼π′
+i,h(s)
+
+ inf
+U σiρ
+(
+P
+π−i
+h,s,ai
+) P V ⋆,π−i,σi
+i,h+1
+
+
+(i)
+= max
+π′
+i:S×[H]↦→∆(Ai)
+Eai∼π′
+i,h(s)
+[
+Ea−i∼π−i,h(s)[ri,h(s, a)]
+]
++ Eai∼π′
+i,h(s)
+
+ inf
+U σiρ
+(
+P
+π−i
+h,s,ai
+) P V ~πi×π−i,σi
+i,h+1
+
+
+= max
+π′
+i,h(s)∼∆(Ai)
+Eai∼π′
+i,h(s)
+[
+Ea−i∼π−i,h(s)[ri,h(s, a)]
+]
++ Eai∼π′
+i,h(s)
+
+ inf
+U σiρ
+(
+P
+π−i
+h,s,ai
+) P V ~πi×π−i,σi
+i,h+1
+
+ . (69)
+where (i) holds by the induction assumption in ( 68). Similarly to the base case, the maximum of the
+continuous function Eai∼π′
+i,h(s)
+[
+Ea−i∼π−i,h(s)[ri,h(s, a)]
+]
++ Eai∼π′
+i,h(s)
+[
+inf U
+σiρ
+(
+P
+π−i
+h,s,ai
+) P V ~πi×π−i,σi
+i,h+1
+]
+on
+a compact set ∆(Ai) exists. So without conﬂict, for all s∈S , we can set
+~πi,h(s)
+= argmax π′
+i,h(s)∼∆(Ai)Eai∼π′
+i,h(s)
+[
+Ea−i∼π−i,h(s)[ri,h(s, a)]
+]
++ Eai∼π′
+i,h(s)
+
+ inf
+U
+σiρ
+(
+P
+π−i
+h,s,ai
+) P V ~πi×π−i,σi
+i,h+1
+
+ ,
+(70)
+since the function inf U
+σiρ
+(
+P
+π−i
+h,s,ai
+) P V ~πi×π−i,σi
+i,h+1 and especially V ~πi×π−i,σi
+i,h+1 are independent from the policy
+in the ﬁrst h steps ({~πi,t(s)}s∈S,t∈[h]).
+Consequently, (70) directly implies that
+∀s∈S : V ~πi×π−i,σi
+i,h (s) = V ⋆,π−i,σi
+i,h (s). (71)
+Combining the results in the base case and the induction, we c omplete the proof by concluding that there
+exists a policy ~π satisfying
+∀(h, s)∈ [H]×S : V ~πi×π−i,σi
+i,h (s) = V ⋆,π−i,σi
+i,h (s). (72)
+B.2.2 Proof of Lemma 5
+First, we deﬁne the distance metric between any two policy π, π′∈ X ={π :S↦→∏
+i∈[n] ∆(Ai)} as below:
+d(π, π′) := max
+i∈[n]
+max
+(s,ai)∈S×A i
+|πi(ai| s)− π′
+i(ai| s)|. (73)
+27
+
+===== PAGE 28 =====
+To prove the continuity, given any ǫ > 0, we want to show that there exists δ(ǫ) > 0 such that if
+d(π, π′) < δ (ǫ), (74)
+then
+⏐⏐fi,s(πi(s), π−i(s); Vi,h+1)− fi,s(π′
+i(s), π′
+−i(s); Vi,h+1)
+⏐⏐ < ǫ (75)
+for any ﬁxed {Vi,h+1}i∈[n] with 0≤ Vi,h+1≤ H for all i∈ [n]. Towards this, we observe that
+⏐⏐fi,s(πi(s), π−i(s); Vi,h+1)− fi,s(π′
+i(s), π′
+−i(s); Vi,h+1)
+⏐⏐
+=
+⏐⏐⏐⏐Ea∼π(s)[ri,h(s, a)] + Eai∼πi(s)
+[
+inf
+U σi
+(
+P
+π−i
+h,s,ai
+) P Vi,h+1
+]
+− Ea∼π′(s)[ri,h(s, a)] + Eai∼π′
+i(s)
+[
+inf
+U σi
+(
+P
+π′
+−i
+h,s,ai
+)P Vi,h+1
+] ⏐⏐⏐⏐
+≤
+⏐⏐Ea∼π(s)[ri,h(s, a)]− Ea∼π′(s)[ri,h(s, a)]
+⏐⏐
++
+⏐⏐⏐⏐Eai∼πi(s)
+[
+inf
+U σi
+(
+P
+π−i
+h,s,ai
+) P Vi,h+1
+]
+− Eai∼π′
+i(s)
+[
+inf
+U σi
+(
+P
+π′
+−i
+h,s,ai
+)P Vi,h+1
+] ⏐⏐⏐⏐. (76)
+The ﬁrst term can be bounded by
+⏐⏐Ea∼π(s)[ri,h(s, a)]− Ea∼π′(s)[ri,h(s, a)]
+⏐⏐
+≤
+∑
+a∈A
+⏐⏐⏐⏐
+∏
+i∈[n]
+πi(ai| s)−
+∏
+i∈[n]
+π′
+i(ai| s)
+⏐⏐⏐⏐ max
+(s,a)∈S×A
+ri,h(s, a)
+≤
+∑
+a∈A
+⏐⏐⏐⏐
+∏
+i∈[n]
+πi(ai| s)−
+∏
+i∈[n]
+π′
+i(ai| s)
+⏐⏐⏐⏐, (77)
+where the last inequality holds by the deﬁnition of reward fu nction max(s,a)∈S×A ri,h(s, a) ≤ 1 for all
+(i, h)∈ [n]× [H]. To continue, we denote the diﬀerence δi(s, ai) := π′
+i(ai| s)− πi(ai| s). Therefore, we have
+⏐⏐⏐⏐
+∏
+i∈[n]
+πi(ai| s)−
+∏
+i∈[n]
+π′
+i(ai| s)
+⏐⏐⏐⏐ =
+⏐⏐⏐⏐
+∏
+i∈[n]
+πi(ai| s)−
+∏
+i∈[n]
+(πi(ai| s) + δi(s, ai))
+⏐⏐⏐⏐
+=
+⏐⏐⏐⏐
+∑
+|Y|≥1,Y⊆[n]
+(∏
+i∈Y
+δi(s, ai)
+)
+·
+(∏
+i∈Y c
+πi(ai| s)
+)⏐⏐⏐⏐
+≤
+∑
+|Y|≥1,Y⊆[n]
+⏐⏐⏐⏐
+(∏
+i∈Y
+δi(s, ai)
+)
+·
+(∏
+i∈Y c
+πi(ai| s)
+)⏐⏐⏐⏐≤ (2n− 1)δ(ǫ), (78)
+where the last inequality holds by ( 74). Plugging ( 78) back to ( 77) indicates that
+⏐⏐Ea∼π(s)[ri,h(s, a)]− Ea∼π′(s)[ri,h(s, a)]
+⏐⏐≤
+∏
+i∈[n]
+Ai(2n− 1)δ(ǫ). (79)
+For the second term in ( 76), we observe that
+⏐⏐⏐⏐Eai∼πi(s)
+[
+inf
+P ∈U σi
+(
+P
+π−i
+h,s,ai
+) P Vi,h+1
+]
+− Eai∼π′
+i(s)
+[
+inf
+P ∈U σi
+(
+P
+π′
+−i
+h,s,ai
+)P Vi,h+1
+] ⏐⏐⏐⏐
+≤
+⏐⏐⏐⏐Eai∼πi(s)
+[
+inf
+P ∈U σi
+(
+P
+π−i
+h,s,ai
+) P Vi,h+1
+]
+− Eai∼πi(s)
+[
+inf
+P ∈U σi
+(
+P
+π′
+−i
+h,s,ai
+) P Vi,h+1
+] ⏐⏐⏐⏐
+28
+
+===== PAGE 29 =====
++
+⏐⏐⏐⏐Eai∼πi(s)
+[
+inf
+P ∈U σi
+(
+P
+π′
+−i
+h,s,ai
+) P Vi,h+1
+]
+− Eai∼π′
+i(s)
+[
+inf
+P ∈U σi
+(
+P
+π′
+−i
+h,s,ai
+)P Vi,h+1
+] ⏐⏐⏐⏐
+(i)
+≤ Eai∼πi(s)
+[
+max
+α∈[mins Vi,h+1(s),maxs Vi,h+1(s)]
+⏐⏐⏐⏐Eπ−i(a−i | s)
+[
+P 0
+h,s,(ai,a−i)
+]
+[Vi,h+1]α
+− Eπ′
+−i(a−i | s)
+[
+P 0
+h,s,(ai,a−i)
+]
+[Vi,h+1]α
+⏐⏐⏐⏐
+]
++
+∑
+ai∈Ai
+⏐⏐π′
+i(ai| s)− πi(ai| s)
+⏐⏐ inf
+P ∈U σi
+(
+P
+π′
+−i
+h,s,ai
+)P Vi,h+1
+(ii)
+≤
+∑
+a−i∈Ai
+⏐⏐⏐⏐
+∏
+j⁄=i
+πj(aj| s)−
+∏
+j⁄=i
+π′
+j(aj| s)
+⏐⏐⏐⏐H + HA iδ(ǫ)
+(iii)
+≤ H
+∏
+j⁄=i,j∈[n]
+Aj (2n−1− 1)δ(ǫ) + HA iδ(ǫ)≤ 2H
+∏
+i∈[n]
+Ai(2n− 1)· δ(ǫ), (80)
+where the ﬁrst inequality holds by the triangle inequality, and (i) follows from applying the dual form of the
+optimization problem associated with TV distance ( Shi et al. , 2023, Lemma 4) and the maximum operator
+is 1-Lipschitz, (ii) arises from the fact that ‖Vi,h+1‖∞≤ H, and (iii) can be veriﬁed by following the same
+pipeline of ( 78). Combining ( 79) and ( 80), one has
+⏐⏐fi,s(πi(s), π−i(s); Vi,h+1)− fi,s(π′
+i(s), π′
+−i(s); Vi,h+1)
+⏐⏐≤ 3H
+∏
+i∈[n]
+Ai(2n− 1)· δ(ε). (81)
+Consequently, letting δ1(ǫ) = min{ǫ,1}
+3H ∏
+i∈[n] Ai(2n−1) , we complete the proof by showing that when d(π, π′) < δ 1(ǫ),
+⏐⏐fi,s(πi(s), π−i(s); Vi,h+1)− fi,s(π′
+i(s), π′
+−i(s); Vi,h+1)
+⏐⏐ < ǫ.
+B.2.3 Proof of Lemma 6
+Without loss of generality, we consider any i∈ [n], and two policy x−i :S↦→∏
+j⁄=i,j∈[n] ∆(Aj ) and y−i :
+S↦→∏
+j⁄=i,j∈[n] ∆(Aj ). Before continuing, for all s∈S , we denote
+u⋆
+i,s := argmax πi(s)′∈∆(Ai) fi,s(π′
+i(s), x−i(s); Vi,h+1),
+v⋆
+i,s := argmax πi(s)′∈∆(Ai) fi,s(π′
+i(s), y−i(s); Vi,h+1). (82)
+Then we have for any s∈S , recalling the introduced function g(·) in ( 49),
+gi,s(x−i(s), Vi,h+1)− gi,s(y−i(s), Vi,h+1)
+= max π′
+i(s)∈∆(Ai) fi,s(π′
+i(s), x−i(s); Vi,h+1)− maxπ′
+i(s)∈∆(Ai) fi,s(π′
+i(s), y−i(s); Vi,h+1)
+= fi,s(u⋆
+i,s, x−i(s); Vi,h+1)− fi,s(v⋆
+i,s, y−i(s); Vi,h+1)
+≤ fi,s(u⋆
+i,s, x−i(s); Vi,h+1)− fi,s(u⋆
+i,s, y−i(s); Vi,h+1) → 0 as y−i(s)→ x−i(s), (83)
+where the last line holds by Lemma 5 which shows that the function fi,s is continuous. Similarly, one has
+gi,s(x−i(s), Vi,h+1)− gi,s(y−i(s), Vi,h+1)
+≥ fi,s(v⋆
+i,s, x−i(s); Vi,h+1)− fi,s(v⋆
+i,s, y−i(s); Vi,h+1) → 0 as y−i(s)→ x−i(s). (84)
+We complete the proof by showing that
+|gi,s(x−i(s), Vi,h+1)− gi,s(y−i(s), Vi,h+1)|→ 0 as y−i(s)→ x−i(s), (85)
+which indicates that gi,s(x−i(s), Vi,h+1) is continuous w.r.t. x−i(s) for all 0≤ Vi,h+1≤ H.
+C Proof of Theorem 2
+We will present the proof of Theorem 2 by ﬁrst outlining the key proof structure in a step-by-step m anner.
+More detailed proof are provided at the end of this section.
+29
+
+===== PAGE 30 =====
+C.1 Proof pipeline
+To proof Theorem 2, recall the goal is to show that
+∀(i, s)∈ [n]×S : Eπ∼ˆξ
+[
+V ⋆,π−i,σi
+i,1 (s)
+]
+− Eπ∼ˆξ
+[
+V π,σi
+i,1 (s)
+]
+≤ ε, (86)
+where ˆξ ={ˆξh}h∈[H] is the output distribution over the set of policies {πk
+h = ( πk
+1,h×···× πk
+n,h)}k∈[K],h∈[H]
+from Algorithm 2. Namely, π∼ˆξ means
+∀h∈ [H] : πh∼ˆξh, where ˆξh(πk
+h) = αK
+k . (87)
+Before proceeding, we ﬁrst introduce the notation of the bes t-response policy for player i:
+˜π⋆
+i = [˜π⋆
+i,h]h∈[H] := argmax π′
+i:S×[H]→∆(Ai)Eπ∼ˆξ
+[
+V π′
+i,π−i,σi
+i,1
+]
+.
+According to the deﬁnition and robust Bellman equation in ( 34), it is easily veriﬁed that Eπ∼ˆξ
+[
+V π,σi
+i,h
+]
+satisﬁes: for all (i, s, h)∈ [n]×S× [H],
+Eπ∼ˆξ
+[
+V π,σi
+i,H+1(s)
+]
+= 0
+and
+Eπ∼ˆξ
+[
+V π,σi
+i,h (s)
+]
+= Eπ∼ˆξ
+{ ∑
+a∈A
+πh(a| s)ri,h(s, a) + Eai∼πi,h(s)
+[
+inf
+P∈U
+σi
+i
+(
+P
+π−i
+h,s,ai
+)PEπ∼ˆξ
+[
+V π,σi
+i,h+1
+] ]}
+=
+K∑
+k=1
+∑
+a∈A
+αK
+k πk
+h(a| s)ri,h(s, a) +
+K∑
+k=1
+αK
+k Eai∼πk
+i,h(s)
+[
+inf
+P∈U σi
+i
+(
+P
+πk
+−i
+h,s,ai
+)PEπ∼ˆξ
+[
+V π,σi
+i,h+1
+] ]
+,
+where P
+πk
+−i
+h,s,ai is deﬁned as:
+P
+πk
+−i
+h,s,ai = Ea−i∼πk
+−i,h(s)
+[
+P 0
+h,s,(ai,a−i)
+]
+=
+∑
+a−i∈A−i
+πk
+−i,h(a−i| s)
+[
+P 0
+h,s,(ai,a−i)
+]
+.
+Before continuing, we introduce some auxiliary notations f or value functions that will be useful throughout
+the proof. For any (h, s)∈ [H]×S :
+Eπ∼ˆξ
+[
+V
+π,σi
+i,h (s)
+]
+=
+K∑
+k=1
+αK
+k Eai∼πk
+i,h(s)
+[
+rk
+i,h(s, ai)
+]
++
+K∑
+k=1
+αK
+k Eai∼πk
+i,h(s)
+
+ inf
+P∈U σi
+(
+P k
+i,h,s,ai
+)PEπ∼ˆξ
+[
+V
+π,σi
+i,h+1
+]
+
+ ,
+(88a)
+Eπ∼ˆξ
+[
+V
+˜π⋆
+i ,π−i,σi
+i,h (s)
+]
+=
+K∑
+k=1
+αK
+k Eai∼˜π⋆
+i,h(s)
+[
+rk
+i,h(s, ai)
+]
++
+K∑
+k=1
+αK
+k Eai∼˜π⋆
+i,h(s)
+
+ inf
+P∈U σi
+(
+P k
+i,h,s,ai
+)PEπ∼ˆξ
+[
+V
+˜π⋆
+i ,π−i,σi
+i,h+1
+]
+
+ ,
+(88b)
+Eπ∼ˆξ
+[
+V
+⋆,π−i,σi
+i,h (s)
+]
+= max
+ai∈Ai
+K∑
+k=1
+αK
+k
+
+rk
+i,h(s, ai) +
+
+ inf
+P∈U σi
+(
+P k
+i,h,s,ai
+)PEπ∼ˆξ
+[
+V
+⋆,π−i,σi
+i,h+1
+]
+
+
+
+ , (88c)
+where recalling P k
+i,h,s,ai is the (s, ai)-th row of the estimated transition kernel P k
+i,h at the k-th iteration of
+Algorithm 2 at time step h. In addition, for any policy π :S× [H]↦→∆(A), we deﬁne
+∀s∈S : Eπ∼ˆξ
+[
+V
+π,σi
+i,H+1(s)
+]
+= 0. (89)
+30
+
+===== PAGE 31 =====
+Armed with above deﬁnitions, we now decompose the error to be controlled as follows:
+Eπ∼ˆξ
+[
+V ⋆,π−i,σi
+i,h
+]
+− Eπ∼ˆξ
+[
+V π,σi
+i,h
+]
+≤ Eπ∼ˆξ
+[
+V ⋆,π−i,σi
+i,h
+]
+− Eπ∼ˆξ
+[
+V
+˜π⋆
+i ,π−i,σi
+i,h
+]
+/bracehtipupleft/bracehtipdownright/bracehtipdownleft/bracehtipupright
+A
++ Eπ∼ˆξ
+[
+V
+⋆,π−i,σi
+i,h
+]
+− Eπ∼ˆξ
+[
+V
+π,σi
+i,h
+]
+/bracehtipupleft/bracehtipdownright/bracehtipdownleft/bracehtipupright
+B
++ Eπ∼ˆξ
+[
+V
+π,σi
+i,h
+]
+− Eπ∼ˆξ
+[
+V π,σi
+i,h
+]
+/bracehtipupleft/bracehtipdownright/bracehtipdownleft/bracehtipupright
+C
+.
+(90)
+where we use the fact that Eπ∼ˆξ
+[
+V
+⋆,π−i,σi
+i,h
+]
+≥ Eπ∼ˆξ
+[
+V
+˜π⋆
+i ,π−i,σi
+i,h (s)
+]
+, which can be directly veriﬁed by recur-
+sively applying the deﬁnitions in ( 88). In the next step, we shall control the above three terms, A, B, and
+C separately in the following sections.
+C.2 Controlling B: using adversarial online learning
+Step 1: ˆVi,h serves as an optimistic estimate. Armed with the output from Algorithm 2, we ﬁrst
+introduce the following lemma demonstrating that the outpu t ˆVi,h serves as an optimistic estimate of the
+auxiliary value Eπ∼ˆξ
+[
+V
+⋆,π−i,σi
+i,h
+]
+(see ( 88)).
+Lemma 7. It holds that when K≥ c9H 2 log4 K, one has
+∀(i, h)∈ [n]× [H] : ˆVi,h≥ Eπ∼ˆξ
+[
+V
+⋆,π−i,σi
+i,h
+]
+.
+Proof. See Appendix C.4.1
+In addition, the following lemma demonstrates that the esti mate ˆVi,h is also an optimistic estimate on
+Eπ∼ˆξ
+[
+V
+π,σi
+i,h
+]
+(cf. ( 88)).
+Lemma 8. It holds that
+∀(i, h)∈ [n]× [H] : ˆVi,h≥ Eπ∼ˆξ
+[
+V
+π,σi
+i,h
+]
+.
+Proof. See Appendix C.4.2
+Armed with Lemma 7, we notice that
+B = Eπ∼ˆξ
+[
+V
+⋆,π−i,σi
+i,h
+]
+− Eπ∼ˆξ
+[
+V
+π,σi
+i,h
+]
+ˆVi,h(s)− Eπ∼ˆξ
+[
+V
+π,σi
+i,h (s)
+]
+. (91)
+Step 2: constructing the recursion. To further bound ( 91), according to the deﬁnition of ˆVi,h(s) in
+Algorithm 2 and Eπ∼ˆξ
+[
+V
+π,σi
+i,h (s)
+]
+, we have
+ˆVi,h(s)− Eπ∼ˆξ
+[
+V
+π,σi
+i,h (s)
+]
+= min
+
+
+
+K∑
+k=1
+αK
+k Eai∼πk
+i,h(s)
+
+rk
+i,h(s, ai) + inf
+P∈U σi
+(
+P k
+i,h,s,ai
+)PˆVi,h+1
+
+ + βi,h(s), H− h + 1
+
+
+
+−
+K∑
+k=1
+αK
+k Eai∼πk
+i,h(s)
+
+rk
+i,h(s, ai) + inf
+P∈U σi
+(
+P k
+i,h,s,ai
+)PEπ∼ˆξ
+[
+V
+π,σi
+i,h+1
+]
+
+
+≤
+K∑
+k=1
+αK
+k Eai∼πk
+i,h(s)
+
+rk
+i,h(s, ai) + inf
+P∈U σi
+(
+P k
+i,h,s,ai
+)PˆVi,h+1
+
+ + βi,h(s)
+−
+K∑
+k=1
+αK
+k Eai∼πk
+i,h(s)
+
+rk
+i,h(s, ai) + inf
+P∈U σi
+(
+P k
+i,h,s,ai
+)PEπ∼ˆξ
+[
+V
+π,σi
+i,h+1
+]
+
+
+31
+
+===== PAGE 32 =====
+=
+K∑
+k=1
+αK
+k Eai∼πk
+i,h(s)
+
+ inf
+P∈U σi
+(
+P k
+i,h,s,ai
+)PˆVi,h+1
+
+ + βi,h(s)−
+K∑
+k=1
+αK
+k Eai∼πk
+i,h
+
+ inf
+P∈U σi
+(
+P k
+i,h,s,ai
+)PEπ∼ˆξ
+[
+V
+π,σi
+i,h+1
+]
+
+
+(92)
+To simplify the notation, we deﬁne the transition kernel ass ociated with value function estimates in a manner
+similar to ( 31c). For any time step h and iteration k∈ [K], we deﬁne matrix notations ˆP πk, ˆV
+i,h ∈ RSAi×S and
+ˆP ˆπk,V
+i,h ∈ RSAi×S as:
+P k, ˆV
+i,h := P k, ˆVi,h+1
+i,h , where P k, ˆV
+i,h,s,ai := P k, ˆVi,h+1
+i,h,s,ai = argmin P∈U σi
+(
+P k
+i,h,s,ai
+)PˆVi,h+1,
+P k,ˆξ,V
+i,h := P
+k,Eπ∼ ˆξ[V π,σi
+i,h+1]
+i,h , where P k,ˆξ,V
+i,h,s,ai := P
+k,Eπ∼ ˆξ[V π,σi
+i,h+1]
+i,h,s,ai = argmin P∈U σi
+(
+P k
+i,h,s,ai
+)PEπ∼ˆξ
+[
+V
+π,σi
+i,h+1
+]
+.
+(93)
+Additionally, we deﬁne square matrices P k, ˆV
+i,h ∈ RS×S and P k,ˆξ,V
+i,h ∈ RS×S as
+P k, ˆV
+i,h := Π πk
+i
+h P k, ˆV
+i,h and P k,ˆξ,V
+i,h := Π πk
+i
+h P k,ˆξ,V
+i,h (94)
+Then we rewrite ( 92) in a vector form as below:
+ˆVi,h− Eπ∼ˆξ
+[
+V
+π,σi
+i,h
+]
+(95)
+≤
+K∑
+k=1
+αK
+k Ππi
+h
+
+ inf
+P∈U σi
+(
+P k
+i,h,s,ai
+)PˆVi,h+1
+
+ + βi,h−
+K∑
+k=1
+αK
+k Ππi
+h
+
+ inf
+P∈U σi
+(
+P k
+i,h,s,ai
+)PV
+π,σi
+i,h+1
+
+
+(i)
+=
+K∑
+k=1
+αK
+k P k, ˆV
+i,h ˆVi,h+1 + βi,h−
+K∑
+k=1
+αK
+k P k,ˆξ,V
+i,h Eπ∼ˆξ
+[
+V
+π,σi
+i,h+1
+]
+(ii)
+≤
+K∑
+k=1
+αK
+k P k,ˆξ,V
+i,h
+(
+ˆVi,h+1− Eπ∼ˆξ
+[
+V
+π,σi
+i,h+1
+])
++ βi,h
+≤
+( K∑
+k=1
+αK
+k P k,ˆξ,V
+i,h
+)( K∑
+k=1
+αK
+k P k,ˆξ,V
+i,h+1
+)(
+ˆVi,h+2− Eπ∼ˆξ
+[
+V
+π,σi
+i,h+2
+])
++ βi,h +
+( K∑
+k=1
+αK
+k P k,ˆξ,V
+i,h
+)
+βi,h+1
+≤ ...≤ βi,h +
+H∑
+j=h+1
+[ j−1∏
+r=h
+( K∑
+k=1
+αK
+k P k,ˆξ,V
+i,r
+)]
+βi,j, (96)
+where (i) holds by the deﬁnitions in ( 93), and the last inequality holds by recursively applying (ii ).
+To continue, we ﬁrst introduce an useful upper bound of the bo nus term βi,h.
+Lemma 9. The bonus vector βi,h is bounded by the following inequality:
+βi,h≤ 3cb
+√
+log3( KS ∑n
+i=1 Ai
+δ )
+KH
+(
+H· 1 +
+K∑
+k=1
+αK
+k VarP k, ˆV
+i,h
+ˆVi,h+1
+)
+Proof. See Appendix C.4.3
+Then we introduce the following notations for convenience. Let es denote the S-dimensional standard
+basis vector, with support on the s-th element. Additionally, we denote
+bh
+h = es and
+(
+bj
+h
+)⊤
+= e⊤
+s
+[ j−1∏
+r=h
+( K∑
+k=1
+αK
+k P k,ˆξ,V
+i,r
+)]
+, ∀j = h + 1, . . . , H, (97)
+32
+
+===== PAGE 33 =====
+which obey
+bh
+j· 1 = 1 , ∀j = h, h + 1,··· , H. (98)
+Combining the above notations and ( 96), we have for any s∈S ,
+ˆVi,h(s)− Eπ∼ˆξ
+[
+V
+π,σi
+i,h (s)
+]
+=
+⟨
+es,ˆVi,h− Eπ∼ˆξ
+[
+V
+π,σi
+i,h
+]⟩
+≤
+H∑
+j=h
+⟨
+bj
+h, βi,j
+⟩
+≤
+H∑
+j=h
+⟨
+bj
+h, 3cbH
+√
+log3( KS ∑n
+i=1 Ai
+δ )
+KH 1
+⟩
++
+H∑
+j=h
+K∑
+k=1
+αK
+k
+⟨
+bj
+h, 3cb
+√
+log3( KS ∑n
+i=1 Ai
+δ )
+KH VarP k, ˆV
+i,j
+ˆVi,j+1
+⟩
+= 3cb
+√
+H 3 log3( KS ∑n
+i=1 Ai
+δ )
+K + 3cb
+√
+log3( KS ∑n
+i=1 Ai
+δ )
+KH
+H∑
+j=h
+K∑
+k=1
+αK
+k
+⟨
+bj
+h, VarP k, ˆV
+i,j
+ˆVi,j+1
+⟩
+. (99)
+where the ﬁrst inequality holds by Lemma 9. We further decompose ( 99) as below:
+ˆVi,h(s)− Eπ∼ˆξ
+[
+V
+π,σi
+i,h (s)
+]
+≤ 3cb
+√
+H 3 log3( KS ∑n
+i=1 Ai
+δ )
+K + 3cb
+√
+log3( KS ∑n
+i=1 Ai
+δ )
+KH
+H∑
+j=h
+K∑
+k=1
+αK
+k
+⟨
+bj
+h, VarP k, ˆV
+i,j
+ˆVi,j+1
+⟩
+≤ 3cb
+√
+H 3 log3( KS ∑n
+i=1 Ai
+δ )
+K + 6cb
+√
+log3( KS ∑n
+i=1 Ai
+δ )
+KH
+K∑
+k=1
+αK
+k
+H∑
+j=h
+⟨
+bj
+h, VarP k, ˆV
+i,j
+(
+ˆVi,j+1− Eπ∼ˆξ
+[
+V
+π,σi
+i,j+1
+])⟩
++ 6cb
+√
+log3( KS ∑n
+i=1 Ai
+δ )
+KH
+K∑
+k=1
+αK
+k
+H∑
+j=h
+⟨
+bj
+h, VarP k, ˆV
+i,j
+(
+Eπ∼ˆξ
+[
+V
+π,σi
+i,j+1
+])⟩
+(100)
+= 3cb
+√
+H 3 log3( KS ∑n
+i=1 Ai
+δ )
+K + 6cb
+√
+log3( KS ∑n
+i=1 Ai
+δ )
+KH
+H∑
+j=h
+K∑
+k=1
+αK
+k
+⟨
+bj
+h, VarP k, ˆV
+i,j
+(
+ˆVi,j+1− Eπ∼ˆξ
+[
+V
+π,σi
+i,j+1
+])⟩
+/bracehtipupleft /bracehtipdownright/bracehtipdownleft/bracehtipupright
+D1
++ 6cb
+√
+log3( KS ∑n
+i=1 Ai
+δ )
+KH
+H∑
+j=h
+K∑
+k=1
+αK
+k
+⟨
+bj
+h, VarP k, ˆV
+i,j
+(
+Eπ∼ˆξ
+[
+V
+π,σi
+i,j+1
+])
+− VarP k, ˆξ,V
+i,j
+(
+Eπ∼ˆξ
+[
+V
+π,σi
+i,j+1
+])⟩
+/bracehtipupleft /bracehtipdownright/bracehtipdownleft /bracehtipupright
+D2
++ 6cb
+√
+log3( KS ∑n
+i=1 Ai
+δ )
+KH
+H∑
+j=h
+K∑
+k=1
+αK
+k
+⟨
+bj
+h, VarP k, ˆξ,V
+i,j
+(
+Eπ∼ˆξ
+[
+V
+π,σi
+i,j+1
+])⟩
+/bracehtipupleft /bracehtipdownright/bracehtipdownleft/bracehtipupright
+D3
+, (101)
+where the second inequality is due to the elementary inequal ity VarP (V + V ′)≤ 2 (VarP (V ) + VarP (V ′)) for
+any transition kernel P∈ RS and vector V, V ′∈ RS.
+Step 3: controlling D1,D2,D3 separately . First, we focus onD1 and directly obtain the following upper
+bound:
+D1 = 6cb
+√
+log3( KS ∑n
+i=1 Ai
+δ )
+KH
+H∑
+j=h
+K∑
+k=1
+αK
+k
+⟨
+bj
+h, VarP k, ˆV
+i,h
+(
+ˆVi,j+1− Eπ∼ˆξ
+[
+V
+π,σi
+i,j+1
+])⟩
+≤ 6cb
+√
+log3( KS ∑n
+i=1 Ai
+δ )
+KH
+H∑
+j=h
+K∑
+k=1
+αK
+k
+⟨
+bj
+h,
+‖‖‖VarP k, ˆV
+i,h
+(
+ˆVi,j+1− Eπ∼ˆξ
+[
+V
+π,σi
+i,j+1
+]) ‖‖‖
+∞
+· 1
+⟩
+33
+
+===== PAGE 34 =====
+≤ 6cb
+√
+log3( KS ∑n
+i=1 Ai
+δ )
+KH
+H∑
+j=h
+K∑
+k=1
+αK
+k
+⟨
+bj
+h,
+‖‖‖ˆVi,j+1− Eπ∼ˆξ
+[
+V
+π,σi
+i,j+1
+] ‖‖‖
+2
+∞
+· 1
+⟩
+(i)
+≤ 6cb
+√
+H log3( KS ∑n
+i=1 Ai
+δ )
+K
+H∑
+j=h
+K∑
+k=1
+αK
+k
+⟨
+bj
+h,
+‖‖‖ˆVi,j+1− Eπ∼ˆξ
+[
+V
+π,σi
+i,j+1
+] ‖‖‖
+∞
+· 1
+⟩
+≤ 6cb
+√
+H 3 log3( KS ∑n
+i=1 Ai
+δ )
+K max
+h≤j≤H
+‖‖‖ˆVi,j+1− Eπ∼ˆξ
+[
+V
+π,σi
+i,j+1
+] ‖‖‖
+∞
+(102)
+where (i) follows from the elementary upper bound
+‖‖ˆVi,j+1
+‖‖
+∞≤ H,
+‖‖Eπ∼ˆξ
+[
+V
+π,σi
+i,j+1
+] ‖‖
+∞≤ H for all h≤ j≤ H,
+and the last line holds by ( 98).
+Before deriving the upper bounds for the terms D2 andD3, we introduce the following useful lemmas.
+Lemma 10 (Lemma 3, ( Shi et al. , 2024)). For all (i, h)∈ [n]× [H], the auxiliary estimate Eπ∼ˆξ
+[
+V
+π,σi
+i,h
+]
+satisﬁes
+max
+s∈S
+Eπ∼ˆξ
+[
+V
+π,σi
+i,h (s)
+]
+− min
+s∈S
+Eπ∼ˆξ
+[
+V
+π,σi
+i,h (s)
+]
+≤ min
+{ 1
+σi
+, H− h + 1
+}
+.
+Proof. Lemma 10 can be directly veriﬁed by following the same proof pipeline of ( Shi et al. , 2024, Lemma
+3).
+With Lemma 10 in hand, we introduce the following lemma on the variance wit h the proof postponed to
+Appendix C.4.4.
+Lemma 11. Consider any ﬁxed vector V ∈ RS with maxs∈S V (s)− mins∈S V (s)≤ min
+{
+1
+σi
+, H− h + 1
+}
+.
+For a transition kernel P ′∈ RS and any ~P∈ RS such that ~P∈U σi (P ′), the following bound holds for all
+(i, h, )∈ [n]× [H]:
+⏐⏐VarP ′ (V )− Var ~P (V )
+⏐⏐≤ min
+{ 1
+σi
+, H− h + 1
+}
+. (103a)
+Now we are ready to control D2 andD3. The key part in D2 obeys
+⏐⏐⏐⏐VarP k, ˆV
+i,h
+(
+Eπ∼ˆξ
+[
+V
+π,σi
+i,h+1
+])
+− VarP k, ˆξ,V
+i,h
+(
+Eπ∼ˆξ
+[
+V
+π,σi
+i,h+1
+])⏐⏐⏐⏐
+≤
+⏐⏐⏐⏐VarP k, ˆV
+i,h
+(
+Eπ∼ˆξ
+[
+V
+π,σi
+i,h+1
+])
+− VarP k
+i,h
+(
+Eπ∼ˆξ
+[
+V
+π,σi
+i,h+1
+])⏐⏐⏐⏐
++
+⏐⏐⏐⏐VarP k
+i,h
+(
+Eπ∼ˆξ
+[
+V
+π,σi
+i,h+1
+])
+− VarP k, ˆξ,V
+i,h
+(
+Eπ∼ˆξ
+[
+V
+π,σi
+i,h+1
+])⏐⏐⏐⏐
+≤ 2 min
+{ 1
+σi
+, H
+}
+1, (104)
+which holds by applying Lemma 11 with V = Eπ∼ˆξ
+[
+V
+π,σi
+i,h+1
+]
+.
+Inserting ( 104) back to D2 gives
+D2 = 6cb
+√
+log3( KS ∑n
+i=1 Ai
+δ )
+KH
+H∑
+j=h
+K∑
+k=1
+αK
+k
+⟨
+bj
+h, VarP k, ˆV
+i,j
+(
+Eπ∼ˆξ
+[
+V
+π,σi
+i,j+1
+])
+− VarP k, ˆξ,V
+i,j
+(
+Eπ∼ˆξ
+[
+V
+π,σi
+i,j+1
+])⟩
+≤ 6cb
+√
+log3( KS ∑n
+i=1 Ai
+δ )
+KH
+H∑
+j=h
+⟨
+bj
+h, 2 min
+{ 1
+σi
+, H
+}
+1
+⟩
+34
+
+===== PAGE 35 =====
+= 12cb
+√
+H log3( KS ∑n
+i=1 Ai
+δ )
+K min
+{ 1
+σi
+, H
+}
+, (105)
+where the last line is achieved by applying ( 98).
+To controlD3, we apply Lemma 2 gives, which gives:
+D3 = 6cb
+√
+log3( KS ∑n
+i=1 Ai
+δ )
+KH
+H∑
+j=h
+K∑
+k=1
+αK
+k
+⟨
+bj
+h, VarP k, ˆξ,V
+i,j
+(
+Eπ∼ˆξ
+[
+V
+π,σi
+i,j+1
+])⟩
+≤ 6cb
+√
+log3( KS ∑n
+i=1 Ai
+δ )
+KH
+H∑
+j=h
+⟨
+bj
+h, Var∑K
+k=1 αK
+k P k, ˆξ,V
+i,j
+(
+Eπ∼ˆξ
+[
+V
+π,σi
+i,j+1
+])⟩
+(i)
+≤ 18cb
+√
+H log3( KS ∑n
+i=1 Ai
+δ )
+K
+(
+max
+s∈S
+Eπ∼ˆξ
+[
+V
+π,σi
+i,h (s)
+]
+− min
+s∈S
+Eπ∼ˆξ
+[
+V
+π,σi
+i,h (s)
+] )
+(ii)
+≤ 18cb
+√
+H log3( KS ∑n
+i=1 Ai
+δ )
+K min
+{ 1
+σi
+, H
+}
+(106)
+where (i) can be veriﬁed by the following lemma, and (ii) hold s by Lemma 10.
+Lemma 12. Consider any δ∈ (0, 1). With probability at least 1− δ, it holds for all (h, i)∈ [H]× [n] that
+H∑
+j=h
+⟨
+bj
+h, Var∑K
+k=1 αK
+k P k,V
+i,j
+(
+Eπ∼ˆξ
+[
+V
+π,σi
+i,j+1
+])⟩
+≤ 3H
+(
+max
+s∈S
+Eπ∼ˆξ
+[
+V
+π,σi
+i,h (s)
+]
+− min
+s∈S
+Eπ∼ˆξ
+[
+V
+π,σi
+i,h (s)
+] )
+. (107)
+Proof. See Appendix C.4.5.
+Step 4: summing up the results. Plugging in the results in ( 102), ( 105), and ( 106) in ( 101) gives
+ˆVi,h− Eπ∼ˆξ
+[
+V
+π,σi
+i,h
+]
+≤ 3cb
+√
+H 3 log3( KS ∑n
+i=1 Ai
+δ )
+K 1 +D1 +D2 +D3
+≤ cb
+√
+H log3( KS ∑n
+i=1 Ai
+δ )
+K
+(
+3H + 30 min
+{ 1
+σi
+, H
+})
+1
++ 6cb
+√
+H 3 log3( KS ∑n
+i=1 Ai
+δ )
+K max
+h≤j≤H
+‖‖‖ˆVi,j+1− Eπ∼ˆξ
+[
+V
+π,σi
+i,j+1
+] ‖‖‖
+∞
+1.
+In addition, Lemma 8 shows that ˆVi,h− Eπ∼ˆξ
+[
+V
+π,σi
+i,h
+]
+=
+⏐⏐⏐ˆVi,h− Eπ∼ˆξ
+[
+V
+π,σi
+i,h
+] ⏐⏐⏐, which indicates that
+max
+h∈[H]
+‖‖‖ˆVi,h− Eπ∼ˆξ
+[
+V
+π,σi
+i,h
+] ‖‖‖
+∞
+≤ cb
+√
+H log3( KS ∑n
+i=1 Ai
+δ )
+K
+(
+3H + 30 min
+{ 1
+σi
+, H
+})
++ 6cb
+√
+H 3 log3( KS ∑n
+i=1 Ai
+δ )
+K max
+h≤j≤H
+‖‖‖ˆVi,j+1− Eπ∼ˆξ
+[
+V
+π,σi
+i,j+1
+] ‖‖‖
+∞
+(i)
+≤ 33cb
+√
+H 3 log3( KS ∑n
+i=1 Ai
+δ )
+K + 1
+2 max
+h∈[H]
+‖‖‖ˆVi,h− Eπ∼ˆξ
+[
+V
+π,σi
+i,h
+] ‖‖‖
+∞
+≤ 66cb
+√
+H 3 log3( KS ∑n
+i=1 Ai
+δ )
+K
+35
+
+===== PAGE 36 =====
+where (i) holds as long as K≥ 12c2
+bH 3 log3( KS ∑n
+i=1 Ai
+δ ). Finally, plugging the above fact back to ( 91), we
+can control B as below:
+B = Eπ∼ˆξ
+[
+V
+⋆,π−i,σi
+i,h
+]
+− Eπ∼ˆξ
+[
+V
+π,σi
+i,h
+]
+≤ 66cb
+√
+H 3 log3( KS ∑n
+i=1 Ai
+δ )
+K 1. (108)
+C.3 Controlling terms A and C
+Step 1: considering a general term. Recall term A and C in ( 90)
+A = Eπ∼ˆξ
+[
+V ⋆,π−i,σi
+i,h
+]
+− Eπ∼ˆξ
+[
+V
+˜π⋆
+i ,π−i,σi
+i,h
+]
+, C = Eπ∼ˆξ
+[
+V
+π,σi
+i,h
+]
+− Eπ∼ˆξ
+[
+V π,σi
+i,h
+]
+. (109)
+We will control these two terms in a similar manner by conside ring a general set of policies{
+ˆπk
+h :S↦→∏
+i∈[n] ∆(Ai)
+}
+(h,k)∈[H]×[K]
+. Additionally, we introduce a distribution over this set of policies
+as ζ :={ζh}h∈[H], with ζh :S↦→ ∆(∏
+i∈[n] ∆(Ai)), where ζh
+(
+ˆπk
+h
+)
+= αK
+k for all (h, k)∈ [H]× [K]. Moreover,
+similar to ( 88), we introduce a set of auxiliary value vectors, deﬁned as
+Eπ∼ζ
+[
+V
+π,σi
+i,H+1(s)
+]
+= 0,
+Eπ∼ζ
+[
+V
+π,σi
+i,h (s)
+]
+=
+K∑
+k=1
+αK
+k Eai∼ˆπk
+i,h(s)[rk
+i,h(s, ai)] +
+K∑
+k=1
+αK
+k Eai∼ˆπk
+i,h(s)
+
+ inf
+P∈U σi
+(
+P k
+i,h,s,ai
+)PEπ∼ζ
+[
+V
+π,σi
+i,h+1
+]
+
+ ,
+(110)
+for all h∈ [H] and s∈S .
+With this general set of policies and its corresponding dist ribution ζ, it can be observed that
+Eπ∼ζ
+[
+V π,σi
+i,h
+]
+− Eπ∼ζ
+[
+V
+π,σi
+i,h
+]
+is equal to A or negative C by setting either ˆπk
+h = ˜π⋆
+i × πk
+−i,h or ˆπk
+h = πk
+h
+for all (h, k)∈ [H]× [K]. Therefore, the rest of the proof will focus on controlling
+⏐⏐⏐Eπ∼ζ
+[
+V π,σi
+i,h
+]
+− Eπ∼ζ
+[
+V
+π,σi
+i,h
+] ⏐⏐⏐. (111)
+Towards this, we ﬁrst introduce some useful notations for co nvenience. We denote rˆπk
+i,h ∈ RS with
+rˆπk
+i,h(s) := Eai∼ˆπk
+i,h(s)[rk
+i,h(s, ai)] for all s∈S . We also deﬁne the following extra notations of worst-case
+transition kernels similar to ( 31): for all (i, h, k)∈ [n]× [H]× [K],
+P ˆπk,V
+i,h := P
+ˆπk
+−i,Eπ∼ζ[V π,σi
+i,h+1]
+i,h , where P ˆπk,V
+i,h,s,ai := P
+ˆπk
+−i,Eπ∼ζ[V π,σi
+i,h+1]
+i,h,s,ai = argmin
+P∈U σi
+(
+P
+ˆπk
+−i
+h,s,ai
+)PEπ∼ζ
+[
+V π,σi
+i,h+1
+]
+,
+P ˆπk,V
+i,h := P
+ˆπk
+−i,Eπ∼ζ[V π,σi
+i,h+1]
+i,h , where P ˆπk,V
+i,h,s,ai := P
+ˆπk
+−i,Eπ∼ζ[V π,σi
+i,h+1]
+i,h,s,ai = argmin
+P∈U σi
+(
+P
+ˆπk
+−i
+h,s,ai
+)PEπ∼ζ
+[
+V
+π,σi
+i,h+1
+]
+,
+P k,ζ,V
+i,h := P
+k,Eπ∼ζ[V π,σi
+i,h+1]
+i,h and P k,ζ,V
+i,h,s,ai := P
+k,Eπ∼ζ[V π,σi
+i,h+1]
+i,h,s,ai = argmin P∈U σi
+(
+P k
+i,h,s,ai
+)PEπ∼ζ
+[
+V
+π,σi
+i,h+1
+]
+.
+(112)
+Additionally, we also introduce the square matrices P ˆπk,V
+i,h ∈ RS×S, P ˆπk,V
+i,h ∈ RS×S and P k,ζ,V
+i,h ∈ RS×S as:
+P ˆπk,V
+i,h := Π ˆπk
+i
+h P ˆπk,V
+i,h , P ˆπk,V
+i,h := Π ˆπk
+i
+h P
+ˆπk
+−i,V
+i,h , P k,ζ,V
+i,h := Π ˆπk
+i
+h P k,ζ,V
+i,h . (113)
+With those in mind, we are ready to control ( 111): at any time step h∈ [H],
+Eπ∼ζ
+[
+V π,σi
+i,h
+]
+− Eπ∼ζ
+[
+V
+π,σi
+i,h
+]
+36
+
+===== PAGE 37 =====
+(i)
+=
+K∑
+k=1
+αK
+k rˆπk
+i,h +
+K∑
+k=1
+αK
+k Π
+ˆπk
+i,h
+h
+
+ inf
+P∈U σi
+(
+P
+ˆπk
+−i
+h,s,ai
+)PEπ∼ζ
+[
+V π,σi
+i,h+1
+]
+
+
+−
+K∑
+k=1
+αK
+k rˆπk
+i,h−
+K∑
+k=1
+αK
+k Π
+ˆπk
+i,h
+h
+
+ inf
+P∈U σi
+(
+P k
+h,s,ai
+)PEπ∼ζ
+[
+V
+π,σi
+i,h+1
+]
+
+
+(ii)
+=
+K∑
+k=1
+αK
+k rˆπk
+i,h +
+K∑
+k=1
+αK
+k P ˆπk,V
+i,h Eπ∼ζ
+[
+V π,σi
+i,h+1
+]
+−
+K∑
+k=1
+αK
+k rˆπk
+i,h−
+K∑
+k=1
+αK
+k P k,ζ,V
+i,h Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+]
+(114)
+=
+K∑
+k=1
+αK
+k
+[ (
+rˆπk
+i,h− rˆπk
+i,h
+)
++
+(
+P ˆπk,V
+i,h Eπ∼ζ [V π,σi
+i,h+1]− P ˆπk,V
+i,h Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+])
++
+(
+P ˆπk,V
+i,h Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+]
+− P k,ζ,V
+i,h Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+]) ]
+≤
+K∑
+k=1
+αK
+k
+(
+P ˆπk,V
+i,h Eπ∼ζ
+[
+V π,σi
+i,h+1
+]
+− P ˆπk,V
+i,h Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+])
++
+K∑
+k=1
+αK
+k
+[ ⏐⏐⏐rˆπk
+i,h− rˆπk
+i,h
+⏐⏐⏐+
+⏐⏐⏐P ˆπk,V
+i,h Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+]
+− P k,ζ,V
+i,h Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+] ⏐⏐⏐
+]
+/bracehtipupleft /bracehtipdownright/bracehtipdownleft/bracehtipupright
+:=uζ
+i,h
+. (115)
+To proceed, applying ( 115) recursively leads to
+Eπ∼ζ
+[
+V π,σi
+i,h
+]
+− Eπ∼ζ
+[
+V
+π,σi
+i,h
+]
+≤
+H∑
+j=h
+[ j−1∏
+r=h
+( K∑
+k=1
+αK
+k P ˆπk,V
+i,r
+)]
+uζ
+i,j, (116)
+where the inequality follows from the abuse of notation desc ribed below:
+[ h−1∏
+r=h
+( K∑
+k=1
+αK
+k P ˆπk,V
+i,r
+)]
+= I,
+[ j−1∏
+r=h
+( K∑
+k=1
+αK
+k P ˆπk,V
+i,r
+)]
+=
+( K∑
+k=1
+αK
+k P ˆπk,V
+i,h
+)
+·
+( K∑
+k=1
+αK
+k P ˆπk,V
+i,h+1
+)
+···
+( K∑
+k=1
+αK
+k P ˆπk,V
+i,j−1
+)
+, f orj = h + 1,··· , H.
+Conversely, we can achieve the following in a manner analogo us to ( 115),
+Eπ∼ζ
+[
+V
+π,σi
+i,h
+]
+− Eπ∼ζ
+[
+V π,σi
+i,h
+]
+=
+K∑
+k=1
+αK
+k rˆπk
+i,h +
+K∑
+k=1
+αK
+k P k,ζ,V
+i,h Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+]
+−
+K∑
+k=1
+αK
+k rˆπk
+i,h−
+K∑
+k=1
+αK
+k P ˆπk,V
+i,h Eπ∼ζ
+[
+V π,σi
+i,h+1
+]
+=
+K∑
+k=1
+αK
+k
+[ (
+rˆπk
+i,h− rˆπk
+i,h
+)
++
+(
+P k,ζ,V
+i,h Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+]
+− P ˆπk,V
+i,h Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+])
+(117)
++
+(
+P ˆπk,V
+i,h Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+]
+− P ˆπk,V
+i,h Eπ∼ζ
+[
+V π,σi
+i,h+1
+]) ]
+(i)
+≤
+K∑
+k=1
+αK
+k
+(
+P ˆπk,V
+i,h Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+]
+− P ˆπk,V
+i,h Eπ∼ζ
+[
+V π,σi
+i,h+1
+])
++
+K∑
+k=1
+αK
+k
+[ ⏐⏐⏐rˆπk
+i,h− rˆπk
+i,h
+⏐⏐⏐+
+⏐⏐⏐P ˆπk,V
+i,h Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+]
+− P k,ζ,V
+i,h Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+] ⏐⏐⏐
+]
+37
+
+===== PAGE 38 =====
+≤
+H∑
+j=h
+[ j−1∏
+r=h
+( K∑
+k=1
+αK
+k P ˆπk,V
+i,r
+)]
+uζ
+i,j, (118)
+where (i) holds by the fact P ˆπk,V
+i,h Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+]
+≤ P ˆπk,V
+i,h Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+]
+. Summing up the results in ( 118)
+and ( 116), one has
+⏐⏐⏐Eπ∼ζ
+[
+V
+π,σi
+i,h
+]
+− Eπ∼ζ
+[
+V π,σi
+i,h
+] ⏐⏐⏐≤ max
+{
+Eπ∼ζ
+[
+V π,σi
+i,h
+]
+− Eπ∼ζ
+[
+V
+π,σi
+i,h
+]
+, Eπ∼ζ
+[
+V
+π,σi
+i,h
+]
+− Eπ∼ζ
+[
+V π,σi
+i,h
+]}
+≤ max
+
+
+
+H∑
+j=h
+[ j−1∏
+r=h
+( K∑
+k=1
+αK
+k P ˆπk,V
+i,r
+)]
+uζ
+i,j,
+H∑
+j=h
+[ j−1∏
+r=h
+( K∑
+k=1
+αK
+k P ˆπk,V
+i,r
+)]
+uζ
+i,j
+
+
+ ,
+(119)
+where the max operator is taken entry-wise for vectors.
+Step 2: controlling uζ
+i,j. Towards this, we introduce the following two lemmas in terms of estimation
+error on transition kernels and rewards, respectively.
+Lemma 13. Let δ∈ (0, 1) and consider any (h, i, k)∈ [H]× [n]× [K]. When N≥ log
+(
+2S ∑n
+i=1 AiN Kn
+δ
+)
+,
+with a probability of at least 1− δ, for any ﬁxed value vector V ∈ RS with 0≤ V (s)≤ H for all s∈S , we
+have
+⏐⏐⏐P ˆπk,V
+i,h Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+]
+− P k,ζ,V
+i,h Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+] ⏐⏐⏐
+≤ 2
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AiN HK
+δ
+)
+N
+√
+VarP ˆπk
+h
+(
+Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+])
++
+log
+(
+18S ∑n
+i=1 AiN HK
+δ
+)
+N 1
+≤ 3
+/radicaltp/radicalvertex/radicalvertex√ H 2 log
+(
+18S ∑n
+i=1 AiN KH
+δ
+)
+N 1,
+where VarP ˆπk
+h
+(·) was deﬁned in (33).
+Proof. See Appendix C.4.6.
+Lemma 14. There exists some constant cr such that for any (h, i)∈ [H]× [n], with probability at least 1− δ,
+one has
+⏐⏐⏐⏐⏐
+K∑
+k=1
+αK
+k rˆπk
+i,h−
+K∑
+k=1
+αK
+k rˆπk
+i,h
+⏐⏐⏐⏐⏐≤ cr
+√
+log
+(KS
+δ
+)
+K 1.
+Proof. See Appendix C.4.7.
+Armed with Lemma 13 and Lemma 14, to control uζ
+i,h in ( 115), one has for all (i, j)∈ [n]× [H],
+uζ
+i,h =
+K∑
+k=1
+αK
+k
+[ ⏐⏐⏐rˆπk
+i,h− rˆπk
+i,h
+⏐⏐⏐+
+⏐⏐⏐P ˆπk,V
+i,h Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+]
+− P k,ζ,V
+i,h Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+] ⏐⏐⏐
+]
+≤ 2
+K∑
+k=1
+αK
+k
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N
+√
+VarP ˆπk
+h
+(
+Eπ∼ζ
+[
+V
+π
+i,h+1
+])
++
+log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N 1 + cr
+√
+log( KSnH
+δ )
+K 1 (120)
+holds with probability at least 1− δ when N≥ log
+(
+2S ∑n
+i=1 AiN Kn
+δ
+)
+38
+
+===== PAGE 39 =====
+Step 3: Controlling the ﬁrst term in (119). To continue, we ﬁrst focus on controlling the ﬁrst term in
+(119). To proceed, recalling that es represents the standard basis vector in S-dimensional space associated
+with the s-th component, and deﬁning
+dh
+h := es and
+(
+dj
+h
+)⊤
+:= e⊤
+s
+[ j−1∏
+r=h
+( K∑
+k=1
+αK
+k P ˆπk,V
+i,r
+)]
+, for j = h + 1, . . . , H, (121)
+which obey
+dh
+j· 1 = 1 , ∀j = h, h + 1,··· , H. (122)
+With these notations in place, we have for any s∈S ,
+Eπ∼ζ
+[
+V π,σi
+i,h (s)
+]
+− Eπ∼ζ
+[
+V
+π,σi
+i,h (s)
+]
+=
+⟨
+es, Eπ∼ζ
+[
+V π,σi
+i,h
+]
+− Eπ∼ζ
+[
+V
+π,σi
+i,h
+]⟩
+(i)
+≤
+H∑
+j=h
+⟨
+dj
+h, uζ
+i,j
+⟩
+(ii)
+≤
+H∑
+j=h
+⟨
+dj
+h, 2
+K∑
+k=1
+αK
+k
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AiKN H
+δ
+)
+N
+√
+VarP ˆπk
+j
+(
+Eπ∼ζ
+[
+V
+π,σi
+i,j+1
+])⟩
++
+log
+(
+18S ∑n
+i=1 AiKN H
+δ
+)
+N + cr
+√
+log
+(KSnH
+δ
+)
+K
+≤
+H log
+(
+18S ∑n
+i=1 AiKN H
+δ
+)
+N + cr
+√
+H 2 log
+(KSnH
+δ
+)
+K
++
+H∑
+j=h
+⟨
+dj
+h, 2
+K∑
+k=1
+αK
+k
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AiKN H
+δ
+)
+N
+√
+VarP ˆπk
+j
+(
+Eπ∼ζ
+[
+V
+π,σi
+i,j+1
+])⟩
+. (123)
+where (i) holds by ( 116), and (ii) is achieved by ( 120)
+We further decompose the term of interest as follows, along w ith the triangle inequality:
+Eπ∼ζ
+[
+V π,σi
+i,h (s)
+]
+− Eπ∼ζ
+[
+V
+π,σi
+i,h (s)
+]
+≤
+H log
+(
+18S ∑n
+i=1 AiKN H
+δ
+)
+N + cr
+√
+H 2 log
+(KSnH
+δ
+)
+K
++
+H∑
+j=h
+⟨
+dj
+h, 2
+K∑
+k=1
+αK
+k
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AiKN H
+δ
+)
+N
+√
+VarP ˆπk ,V
+i,j
+(
+Eπ∼ζ
+[
+V
+π,σi
+i,j+1
+])⟩
+/bracehtipupleft /bracehtipdownright/bracehtipdownleft/bracehtipupright
+B1
++
+H∑
+j=h
+2
+K∑
+k=1
+αK
+k
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AiKN H
+δ
+)
+N
+⟨
+dj
+h,
+√ ⏐⏐⏐⏐VarP ˆπk ,V
+i,j
+(
+Eπ∼ζ
+[
+V
+π,σi
+i,j+1
+])
+− VarP ˆπk
+j
+(
+Eπ∼ζ
+[
+V
+π,σi
+i,j+1
+])⏐⏐⏐⏐
+⟩
+/bracehtipupleft /bracehtipdownright/bracehtipdownleft /bracehtipupright
+B2
+.
+(124)
+We then analyze the bounds for the terms B1 andB2 separately.
+• Controlling B1.
+39
+
+===== PAGE 40 =====
+First, applying Lemma 2 gives
+B1 =
+H∑
+j=h
+⟨
+dj
+h, 2
+K∑
+k=1
+αK
+k
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N
+√
+VarP ˆπk ,V
+i,j
+(
+Eπ∼ζ
+[
+V
+π,σi
+i,j+1
+])⟩
+≤ 2
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N
+H∑
+j=h
+⟨
+dj
+h,
+√
+Var∑K
+k=1 αK
+k P ˆπk ,V
+i,j
+(
+Eπ∼ζ
+[
+V
+π,σi
+i,j+1
+])⟩
+≤ 2
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N
+/radicaltp/radicalvertex/radicalvertex√ H
+H∑
+j=h
+⟨
+dj
+h, Var∑K
+k=1 αK
+k P ˆπk ,V
+i,j
+(
+Eπ∼ζ
+[
+V
+π,σi
+i,j+1
+])⟩
+, (125)
+where the last inequality arises from the Cauchy-Schwartz i nequality. Before proceeding, we introduce
+the following facts for the key elements in ( 125).
+Lemma 15. Consider any δ∈ (0, 1). With probability at least 1− δ, one has for all (h, i)∈ [H]× [n]:
+H∑
+j=h
+⟨
+dj
+h, Var∑K
+k=1 αK
+k P ˆπk ,V
+i,j
+(
+Eπ∼ζ
+[
+V
+π,σi
+i,j+1
+])⟩
+≤3H
+(
+max
+s∈S
+Eπ∼ζ
+[
+V
+π
+i,h+1(s)
+]
+− min
+s∈S
+Eπ∼ζ
+[
+V
+π
+i,h+1(s)
+] )
+1 + 2H
+√
+log( 18S ∑n
+i=1 AinKN H
+δ )
+N
+
+ . (126)
+Proof. See Appendix C.4.8.
+Lemma 16 (Lemma 3, (Shi et al. , 2024)). For all (i, h)∈ [n]×[H], the auxiliary estimate Eπ∼ζ
+[
+V
+π,σi
+i,h
+]
+obeys
+max
+s∈S
+Eπ∼ζ
+[
+V
+π,σi
+i,h (s)
+]
+− min
+s∈S
+Eπ∼ζ
+[
+V
+π,σi
+i,h (s)
+]
+≤ min
+{ 1
+σi
+, H− h + 1
+}
+.
+max
+s∈S
+Eπ∼ζ
+[
+V π,σi
+i,h (s)
+]
+− min
+s∈S
+Eπ∼ζ
+[
+V π,σi
+i,h (s)
+]
+≤ min
+{ 1
+σi
+, H− h + 1
+}
+.
+Proof. Similar to Lemma 10, Lemma 16 can be directly veriﬁed by following the same proof pipeline
+of ( Shi et al. , 2024, Lemma 3).
+Apply Lemma 15 to ( 125), we arrive at
+B1≤ 2
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N
+/radicaltp/radicalvertex/radicalvertex√ H
+H∑
+j=h
+⟨
+dj
+h, Var∑K
+k=1 αK
+k P ˆπk ,V
+i,j
+(
+Eπ∼ζ
+[
+V
+π,σi
+i,j+1
+])⟩
+≤
+√
+3H 2
+(
+max
+s∈S
+Eπ∼ζ
+[
+V
+π
+i,h+1(s)
+]
+− min
+s∈S
+Eπ∼ζ
+[
+V
+π
+i,h+1(s)
+] )
+· 2
+/radicaltp/radicalvertex/radicalvertex/radicalvertex√
+log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N ·
+
+1 + 2H
+√
+log( 18S ∑n
+i=1 AinKN H
+δ )
+N
+
+
+(i)
+≤2
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AinKN nH
+δ
+)
+N
+/radicaltp/radicalvertex/radicalvertex/radicalvertex√ 3H 2 min
+{ 1
+σi
+, H− h + 1
+} 
+1 + 2H
+√
+log( 18S ∑n
+i=1 AinKN H
+δ )
+N
+
+
+40
+
+===== PAGE 41 =====
+≤ 6
+/radicaltp/radicalvertex/radicalvertex√ H 2 min{1/σi, H} log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N , (127)
+where (i) holds by Lemma 16, and the ﬁnal inequality follows by taking N ≥
+4H 2 log
+(
+18S ∑n
+i=1 AiKnN H
+δ
+)
+.
+• Controlling B2. Initially, we introduce the following fact that can be veri feid similar to Lemma 11.
+Lemma 17. For transition kernel P ′∈ RS and any ~P ∈ RS such that ~P ∈U σi (P ′), the following
+bounds are established for all (i, h)∈ [n]× [H]:
+⏐⏐⏐VarP ′
+(
+Eπ∼ζ
+[
+V
+π,σi
+i,h
+])
+− Var ~P
+(
+Eπ∼ζ
+[
+V
+π,σi
+i,h
+])⏐⏐⏐≤ min
+{ 1
+σi
+, H− h + 1
+}
+.
+It is observed that the main term of B2 in ( 124) obeys
+⏐⏐⏐⏐VarP ˆπk
+j
+(
+Eπ∼ζ
+[
+V
+π,σi
+i,j+1
+])
+− VarP ˆπk ,V
+i,j
+(
+Eπ∼ζ
+[
+V
+π,σi
+i,j+1
+])⏐⏐⏐⏐
+(i)
+≤
+‖‖‖‖VarP ˆπk
+j
+(
+Eπ∼ζ
+[
+V
+π,σi
+i,j+1
+])
+− VarP ˆπk ,V
+i,j
+(
+Eπ∼ζ
+[
+V
+π,σi
+i,j+1
+])‖‖‖‖
+∞
+1
+≤ min
+{ 1
+σi
+, H− h + 1
+}
+1, (128)
+where the last inequality holds by applying Lemma 11 for each s∈S in a entry-wise manner. Specif-
+ically, for each s∈ S, let V = V
+π,σi
+i,j+1, P ′ = Ea∼ˆπk
+j (s)[P
+ˆπk
+−i
+j,s,ai ], and ~P = Eai∼ˆπk
+i,j (s)[P ˆπk,V
+i,j,s,ai ], which
+satisﬁes
+‖P ′− ~P‖1 =
+‖‖‖‖Eai∼ˆπk
+i,j (s)[P
+ˆπk
+−i
+j,s,ai ]− Eai∼ˆπk
+i,j (s)[P ˆπk,V
+i,j,s,ai ]
+‖‖‖‖
+1
+≤ Eai∼ˆπk
+i,j (s)
+‖‖‖P
+ˆπk
+−i
+j,s,ai− argmin
+P∈U σi
+(
+P
+ˆπk
+−i
+j,s,ai
+)PEπ∼ζ
+[
+V
+π,σi
+i,j+1
+] ‖‖‖
+1
+≤ σi. (129)
+The above matrix notations can be referred to P ˆπk
+j (cf A.1.1) and P ˆπk,V
+i,j (cf. ( 112)).
+Plugging ( 128) back to ( 124) yields
+B2 =
+H∑
+j=h
+2
+K∑
+k=1
+αK
+k
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N
+⟨
+dj
+h,
+√ ⏐⏐⏐⏐VarP ˆπk ,V
+i,j
+(
+Eπ∼ζ
+[
+V
+π,σi
+i,j+1
+])
+− VarP ˆπk
+j
+(
+Eπ∼ζ
+[
+V
+π,σi
+i,j+1
+])⏐⏐⏐⏐
+⟩
+≤
+H∑
+j=h
+2
+K∑
+k=1
+αK
+k
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N
+⟨
+dj
+h,
+√
+min
+{ 1
+σi
+, H
+}
+1
+⟩
+≤ 2
+/radicaltp/radicalvertex/radicalvertex√ H 2 min
+{
+1
+σi
+, H
+}
+log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N (130)
+Consequently, combining the results in ( 127) and ( 130) and inserting back to ( 124) gives
+Eπ∼ζ
+[
+V π,σi
+i,h (s)
+]
+− Eπ∼ζ
+[
+V
+π,σi
+i,h (s)
+]
+≤
+H log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N + cr
+√
+H 2 log( KSnH
+δ )
+K +B1 +B2
+41
+
+===== PAGE 42 =====
+≤
+H log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N + cr
+√
+H 2 log( KSnH
+δ )
+K + 8
+/radicaltp/radicalvertex/radicalvertex√ H 2 min
+{
+1
+σi
+, H
+}
+log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N
+≤ cr
+√
+H 2 log( KSnH
+δ )
+K + 12
+/radicaltp/radicalvertex/radicalvertex√ H 2 min
+{
+1
+σi
+, H
+}
+log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N , (131)
+where the last inequality holds by taking N≥ 4H 2 log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+.
+Step 4: controlling the second term in (119). To do so, similar to ( 121), we deﬁne
+wh
+h = es and
+(
+wj
+h
+)⊤
+= e⊤
+s
+[ j−1∏
+r=h
+( K∑
+k=1
+αK
+k P ˆπk,V
+i,r
+)]
+, ∀j = h + 1,··· , H, (132)
+and observe that
+wh
+j· 1 = 1 , ∀j = h, h + 1,··· , H. (133)
+With the above notations in mind, following the routine of ( 123) gives: for any s∈S ,
+Eπ∼ζ
+[
+V π,σi
+i,h (s)
+]
+− Eπ∼ζ
+[
+V
+π,σi
+i,h (s)
+]
+≤
+H∑
+j=h
+⟨
+wj
+h, 2
+K∑
+k=1
+αK
+k
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N
+√
+VarP ˆπk
+j
+(
+Eπ∼ζ
+[
+V
+π,σi
+i,j+1
+])
++
+log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N 1 + cr
+√
+log( KSnH
+δ )
+K 1
+⟩
+≤
+H log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N + cr
+√
+H 2 log( KSnH
+δ )
+K
++
+H∑
+j=h
+⟨
+wj
+h, 2
+K∑
+k=1
+αK
+k
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N
+√
+VarP ˆπk
+j
+(
+Eπ∼ζ
+[
+V
+π,σi
+i,j+1
+])⟩
+, (134)
+where the ﬁrst inequality holds by ( 118) and ( 120). Furthermore, we can further decompose the above
+expression as follows:
+Eπ∼ζ
+[
+V π,σi
+i,h (s)
+]
+− Eπ∼ζ
+[
+V
+π,σi
+i,h (s)
+]
+(i)
+≤
+H log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N + cr
+√
+H 2 log( KSnH
+δ )
+K
++
+H∑
+j=h
+⟨
+wj
+h, 2
+K∑
+k=1
+αK
+k
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N
+√
+VarP ˆπk ,V
+i,j
+(
+Eπ∼ζ
+[
+V π,σi
+i,j+1
+])
+⟩
+/bracehtipupleft /bracehtipdownright/bracehtipdownleft/bracehtipupright
+B3
++
+H∑
+j=h
+⟨
+wj
+h, 2
+K∑
+k=1
+αK
+k
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N
+√ ⏐⏐⏐⏐VarP ˆπk
+j
+(
+Eπ∼ζ
+[
+V π,σi
+i,j+1
+])
+− VarP ˆπk ,V
+i,j
+(
+Eπ∼ζ
+[
+V π,σi
+i,j+1
+])⏐⏐⏐⏐
+⟩
+/bracehtipupleft /bracehtipdownright/bracehtipdownleft /bracehtipupright
+B4
+42
+
+===== PAGE 43 =====
++
+H∑
+j=h
+⟨
+wj
+h, 2
+K∑
+k=1
+αK
+k
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N
+√
+VarP ˆπk
+j
+(
+Eπ∼ζ
+[
+V
+π,σi
+i,j+1
+]
+− Eπ∼ζ
+[
+V π,σi
+i,j+1
+] )⟩
+/bracehtipupleft /bracehtipdownright/bracehtipdownleft /bracehtipupright
+B5
+(135)
+where (i) holds due to the triangle inequality and the fundam ental inequality
+√
+VarP (V + V ′)≤
+√
+VarP (V )+√
+VarP (V ′) for any transition kernel P∈ RS and vectors V, V ′∈ RS.
+In the following, we will control the three main terms B3,B4,B5 separately.
+• Controlling B3. To begin with, we observe that
+B3 =
+H∑
+j=h
+⟨
+wj
+h, 2
+K∑
+k=1
+αK
+k
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N
+√
+VarP ˆπk ,V
+i,j
+(
+Eπ∼ζ
+[
+V π,σi
+i,j+1
+])
+⟩
+≤ 2
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N
+H∑
+j=h
+⟨
+wj
+h,
+√
+Var∑K
+k=1 αK
+k P ˆπk ,V
+i,j
+(
+Eπ∼ζ
+[
+V π,σi
+i,j+1
+])
+⟩
+≤ 2
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N
+/radicaltp/radicalvertex/radicalvertex√ H
+H∑
+j=h
+⟨
+wj
+h, Var∑K
+k=1 αK
+k P ˆπk ,V
+i,j
+(
+Eπ∼ζ
+[
+V π,σi
+i,j+1
+])⟩
+where the ﬁrst inequality holds by applying the two inequali ties in Lemma 2 subsequently, and the last
+line arises from Cauchy-Schwartz inequality.
+Before proceeding, we introduce the following lemma for ess ential terms in B3.
+Lemma 18. For any joint policy π, we have for all (h, i)∈ [H]× [n]:
+H∑
+j=h
+⟨
+wj
+h, Var∑K
+k=1 αK
+k P ˆπk ,V
+i,j
+(
+Eπ∼ζ
+[
+V π,σi
+i,j+1
+])⟩
+≤ 3H
+(
+max
+s∈S
+Eπ∼ζ
+[
+V π,σi
+i,h (s)
+]
+− min
+s∈S
+Eπ∼ζ
+[
+V π,σi
+i,h (s)
+] )
+.
+(136)
+Proof. See Appendix C.4.9.
+Then applying Lemma 18 and Lemma 16 to the above expression yields
+B3≤ 2
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N
+/radicaltp/radicalvertex/radicalvertex√ H
+H∑
+j=h
+⟨
+wj
+h, Var∑K
+k=1 αK
+k P ˆπk ,V
+i,j
+(
+Eπ∼ζ
+[
+V π,σi
+i,j+1
+])⟩
+≤ 2
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N
+√
+3H 2
+(
+max
+s∈S
+Eπ∼ζ
+[
+V π,σi
+i,h (s)
+]
+− min
+s∈S
+Eπ∼ζ
+[
+V π,σi
+i,h (s)
+)]
+≤ 4
+/radicaltp/radicalvertex/radicalvertex√ H 2 min{1/σi, H} log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N . (137)
+• Controlling B4 andB5. With similar analysis as Lemma 11, we have the following lemma:
+Lemma 19. For any joint policy π, transition kernel P ′∈ RS, and any ~P∈ RS such that ~P∈U σi (P ′),
+the following bounds are established for all (i, h)∈ [n]× [H]:
+⏐⏐⏐VarP ′
+(
+Eπ∼ζ
+[
+V π,σi
+i,h
+])
+− Var ~P
+(
+Eπ∼ζ
+[
+V π,σi
+i,h
+])⏐⏐⏐≤ min
+{ 1
+σi
+, H− h + 1
+}
+.
+43
+
+===== PAGE 44 =====
+First, following the same pipeline of ( 128), we have
+⏐⏐⏐⏐VarP ˆπk
+j
+(
+Eπ∼ζ
+[
+V π,σi
+i,j+1
+])
+− VarP ˆπk ,V
+i,j
+(
+Eπ∼ζ
+[
+V π,σi
+i,j+1
+])⏐⏐⏐⏐≤ min
+{ 1
+σi
+, H− h + 1
+}
+1, (138)
+which directly leads to
+B4 =
+H∑
+j=h
+⟨
+wj
+h, 2
+K∑
+k=1
+αK
+k
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N
+√ ⏐⏐⏐⏐VarP ˆπk
+j
+(
+Eπ∼ζ
+[
+V π,σi
+i,j+1
+])
+− VarP ˆπk ,V
+i,j
+(
+Eπ∼ζ
+[
+V π,σi
+i,j+1
+])⏐⏐⏐⏐
+⟩
+≤
+H∑
+j=h
+⟨
+wj
+h, 2
+K∑
+k=1
+αK
+k
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N
+√
+min
+{ 1
+σi
+, H
+}
+1
+⟩
+= 2
+/radicaltp/radicalvertex/radicalvertex√ H 2 min{1/σi, H} log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N . (139)
+Then the remainder of the proof shall focus on B5. Recalling the deﬁnition in ( 135), one has
+B5 =
+H∑
+j=h
+⟨
+wj
+h, 2
+K∑
+k=1
+αK
+k
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N
+√
+VarP ˆπk
+j
+(
+Eπ∼ζ
+[
+V
+π,σi
+i,j+1
+]
+− Eπ∼ζ
+[
+V π,σi
+i,j+1
+] )⟩
+≤
+H∑
+j=h
+⟨
+wj
+h, 2
+K∑
+k=1
+αK
+k
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N
+√ ‖‖‖VarP ˆπk
+j
+(
+Eπ∼ζ
+[
+V
+π,σi
+i,j+1
+]
+− Eπ∼ζ
+[
+V π,σi
+i,j+1
+] )‖‖‖
+∞
+1
+⟩
+≤ 2
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N
+H∑
+j=h
+⟨
+wj
+h,
+‖‖‖Eπ∼ζ
+[
+V
+π,σi
+i,j+1
+]
+− Eπ∼ζ
+[
+V π,σi
+i,j+1
+] ‖‖‖
+∞
+1
+⟩
+≤ 2
+/radicaltp/radicalvertex/radicalvertex√ H 2 log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N max
+h≤j≤H
+‖‖‖Eπ∼ζ
+[
+V
+π,σi
+i,j+1
+]
+− Eπ∼ζ
+[
+V π,σi
+i,j+1
+] ‖‖‖
+∞
+. (140)
+Summing up the results in ( 137), ( 139), and ( 140) and inserting back to ( 135), we conclude that
+Eπ∼ζ
+[
+V π,σi
+i,h (s)
+]
+− Eπ∼ζ
+[
+V
+π,σi
+i,h (s)
+]
+≤
+H log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N + cr
+√
+H 2 log
+(KSnH
+δ
+)
+K +B3 +B4 +B5
+≤
+H log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N + cr
+√
+H 2 log
+(KSnH
+δ
+)
+K + 6
+/radicaltp/radicalvertex/radicalvertex√ H 2 min{1/σi, H} log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N
++ 2
+/radicaltp/radicalvertex/radicalvertex√ H 2 log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N max
+h≤j≤H
+‖‖‖Eπ∼ζ
+[
+V
+π,σi
+i,j+1
+]
+− Eπ∼ζ
+[
+V π,σi
+i,j+1
+] ‖‖‖
+∞
+. (141)
+Step 5: summing up the results to bound term A and C. Inserting (131) and ( 141) back into ( 119),
+we observe that
+⏐⏐⏐Eπ∼ζ
+[
+V π,σi
+i,h
+]
+− Eπ∼ζ
+[
+V
+π,σi
+i,h
+] ⏐⏐⏐
+≤ max
+{
+Eπ∼ζ
+[
+V π,σi
+i,h
+]
+− Eπ∼ζ
+[
+V
+π,σi
+i,h
+]
+, Eπ∼ζ
+[
+V
+π,σi
+i,h
+]
+− Eπ∼ζ
+[
+V π,σi
+i,h
+]}
+44
+
+===== PAGE 45 =====
+≤ max
+{
+cr
+√
+H 2 log
+(KSnH
+δ
+)
+K 1 + 12
+/radicaltp/radicalvertex/radicalvertex√ H 2 min
+{
+1
+σi
+, H
+}
+log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N 1,
+H log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N 1
++ 2
+/radicaltp/radicalvertex/radicalvertex√ H 2 log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N max
+h≤j≤H
+‖‖‖Eπ∼ζ
+[
+V
+π,σi
+i,j+1
+]
+− Eπ∼ζ
+[
+V π,σi
+i,j+1
+] ‖‖‖
+∞
+1 + cr
+√
+H 2 log
+(KSnH
+δ
+)
+K 1
++ 6
+/radicaltp/radicalvertex/radicalvertex√ H 2 min{ 1
+σi
+, H} log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N 1
+}
+,
+which indicates that
+max
+h∈[H]
+‖‖‖Eπ∼ζ
+[
+V π,σi
+i,h
+]
+− Eπ∼ζ
+[
+V
+π,σi
+i,h
+] ‖‖‖
+∞
+(142)
+≤ cr
+√
+H 2 log( KSnH
+δ )
+K + 12
+/radicaltp/radicalvertex/radicalvertex√ H 2 min
+{
+1
+σi
+, H
+}
+log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N +
+H log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N
++ 2
+/radicaltp/radicalvertex/radicalvertex√ H 2 log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N max
+h∈[H]
+‖‖‖Eπ∼ζ
+[
+V
+π
+i,h+1
+]
+− Eπ∼ζ
+[
+V π,σi
+i,H+1
+] ‖‖‖
+∞
+(i)
+≤ cr
+√
+H 2 log( KSnH
+δ )
+K + 12
+/radicaltp/radicalvertex/radicalvertex√ H 2 min
+{
+1
+σi
+, H
+}
+log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N
++
+H log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N + 1
+2 max
+h∈[H]
+‖‖‖Eπ∼ζ
+[
+V
+π,σi
+i,h
+]
+− Eπ∼ζ
+[
+V π,σi
+i,h
+] ‖‖‖
+∞
+≤ 2cr
+√
+H 2 log( KSnH
+δ )
+K + 24
+/radicaltp/radicalvertex/radicalvertex√ H 2 min
+{
+1
+σi
+, H
+}
+log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N +
+2H log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N
+(143)
+where (i) holds when N ≥ 4H 2 log
+(
+18S ∑n
+i=1 AiN nH
+δ
+)
+, and invoking the basic fact that Eπ∼ζ
+[
+V
+π
+i,H+1
+]
+=
+Eπ∼ζ
+[
+V π,σi
+i,H+1
+]
+= 0 . Finally, applying ( 143) and setting either ˆπk
+h = ˜π⋆
+i× πk
+−i,h orˆπk
+h = πk
+h, we arrive at the
+following upper bounds on term A and term C:
+A = Eπ∼ˆξ
+[
+V ⋆,π−i,σi
+i,h
+]
+− Eπ∼ˆξ
+[
+V
+~π⋆
+i ,π−i
+i,h
+]
+≤ 2cr
+√
+H 2 log( KSnH
+δ )
+K 1 + 24
+/radicaltp/radicalvertex/radicalvertex√ H 2 min
+{
+1
+σi
+, H
+}
+log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N 1 +
+2H log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N 1,
+(144)
+C = Eπ∼ˆξ
+[
+V
+π,σi
+i,h
+]
+− Eπ∼ˆξ
+[
+V π,σi
+i,h
+]
+≤ 2cr
+√
+H 2 log( KSnH
+δ )
+K 1 + 24
+/radicaltp/radicalvertex/radicalvertex√ H 2 min
+{
+1
+σi
+, H
+}
+log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N 1 +
+2H log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N 1.
+(145)
+Step 6: summing up the results to complete the proof. Combining the bounds for A in ( 144), B in
+(108), and C in ( 145), the term of interest in ( 90) can be controlled by
+Eπ∼ˆξ
+[
+V ⋆,π−i,σi
+i,1
+]
+− Eπ∼ˆξ
+[
+V π
+i,1
+]
+≤ 36cb
+√
+H 3 log3( KS ∑n
+i=1 Ai
+δ )
+K 1 + 4cr
+√
+H 2 log( KSnH
+δ )
+K 1
+45
+
+===== PAGE 46 =====
++
+4H log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N 1 + 48
+/radicaltp/radicalvertex/radicalvertex√ H 2 min
+{
+1
+σi
+, H
+}
+log
+(
+18S ∑n
+i=1 AiKN nH
+δ
+)
+N 1.
+Therefore, there exists a constant C, such that when N and K satisﬁes:
+N≥ CH 2 min
+{ 1
+min1≤i≤n σi
+, H
+}
+log
+(18S∑ n
+i=1 AiKN nH
+δ
+) 1
+ǫ2 , K ≥ CH 3 log3
+(KS∑ n
+i=1 AiH
+δ
+) 1
+ǫ2
+we can achieve maxi∈[n] Eπ∼ˆξ
+[
+V ⋆,π−i,σi
+i,1
+]
+− Eπ∼ˆξ
+[
+V π
+i,1
+]
+≤ ǫ· 1 with probability at least 1− δ. Consequently,
+it holds as long as the total number of samples satisﬁes
+Nall = HS
+n∑
+i=1
+AiKN = ˜O
+(S∑ n
+i=1 AiH 6
+ǫ4 min
+{ 1
+min1≤i≤n σi
+, H
+})
+.
+C.4 Proof of auxiliary lemmas
+C.4.1 Proof of Lemma 7
+We will prove Lemma 7 by the following induction argument. To begin with, for the b ase case, we consider
+the ﬁnal time step H + 1, where we have
+∀i∈ [n] : ˆVi,H+1 = Eπ∼ˆξ
+[
+V
+⋆,π−i,σi
+i,H+1
+]
+= 0
+by deﬁnition. To continue, we assume that for subsequent ste ps, the following holds
+∀(j, i)∈ [h + 1,··· , H]× [n] : ˆVi,j≥ Eπ∼ˆξ
+[
+V
+⋆,π−i,σi
+i,j
+]
+.
+So the rest of the proof is to verify for the time step h to complete the induction argument.
+Towards this, for any s∈S at time step h, let lk =−qk
+i,h(s,·)∈ RAi for all k≥ 1, then the update rule
+of Algorithm 2 can be viewed as the FTRL algorithm applied to the loss vector s{lk}k∈[K]. Speciﬁcally, we
+invoke Theorem 3 with lk =−qk
+i,h(s,·) and arrive at
+max
+ai∈Ai
+K∑
+k=1
+αK
+k qk
+i,h(s, ai)−
+K∑
+k=1
+αK
+k
+⟨
+πk
+i,h(s), qk
+i,h(s,·)
+⟩
+=
+K∑
+k=1
+αK
+k
+⟨
+πk
+i,h(s), lk
+⟩
+− min
+a∈A
+[ K∑
+k=1
+αK
+k lk(a)
+]
+(i)
+≤ 5
+3
+K∑
+k=2
+αK
+k
+ηkαk
+1− αk
+Varπk
+i,h(s)
+(
+qk
+i,h(s,·)
+)
++ log Ai
+ηK+1
++ τi,h
+≤ 5
+3
+K/2∑
+k=2
+(
+2cα
+)1.5
+log2 K√
+kH
+αK
+k Varπk
+i,h(s)
+(
+qk
+i,h(s,·)
+)
+/bracehtipupleft /bracehtipdownright/bracehtipdownleft/bracehtipupright
+C1
++ 20
+3
+K∑
+k=K/2+1
+αK
+k
+√
+cα log2 K
+KH Varπk
+i,h(s)
+(
+qk
+i,h(s,·)
+)
++ log Ai
+ηK+1/bracehtipupleft/bracehtipdownright/bracehtipdownleft/bracehtipupright
+C2
++τi,h,s, (146)
+where (i) holds by applying Lemma 4 and Theorem 3 with τi,h,s deﬁned as
+τi,h,s := 5
+3 αK
+1 η2
+‖‖q1
+i,h(s,·)
+‖‖2
+∞ +
+{
+3
+K∑
+k=2
+αK
+k
+η2
+kα2
+k
+(1− αk)2
+‖‖qk
+i,h(s,·)
+‖‖3
+∞1
+( ηkαk
+1− αk
+‖‖qk
+i,h(s,·)
+‖‖
+∞ > 1
+3
+)}
+46
+
+===== PAGE 47 =====
++ 3αK
+1 η2
+2
+‖‖q1
+i,h(s,·)
+‖‖3
+∞. (147)
+Here, the last inequality arises from applying ηkαk≤
+√
+2cα log2 K
+kH from Lemma 4 and ( 43c) from Lemma 3
+to the ﬁrst term. To further control the above expression, we ﬁrst derive upper bound for C1,C2, and τi,h,s
+in ( 146) separately.
+• For the term C1, we have
+5
+3
+K/2∑
+k=2
+αK
+k
+(
+2cα
+)1.5
+log2 K√
+kH
+Varπk
+i,h(s)
+(
+qk
+i,h(s,·)
+)
+≤ 5
+3· (2cα
+)1.5
+log2 K·
+K/2∑
+k=2
+1
+K 6√
+kH
+Varπk
+i,h(s)
+(
+qk
+i,h(s,·)
+)
+≤ 5
+3· (2cα
+)1.5
+log2 K
+K/2∑
+k=2
+1
+K 6
+√
+kH
+‖‖qk
+i,h(s,·)
+‖‖2
+∞≤ 5
+3· (2cα
+)1.5
+log2 K H 3/2
+K 6
+K/2∑
+k=2
+1√
+k
+≤ 2(2cα
+)1.5
+H 3/2 log2 K
+K 6 ·
+√
+K/2≤ 2(2cα
+)1.5
+H 3/2 log2 K
+K 5 , (148)
+where the ﬁrst inequality follows from the result of Lemma 3 that αK
+k ≤ 1/K 6 for all k≤ K/2, and the
+third inequality holds due to the fact
+‖‖qk
+i,h(s,·)
+‖‖
+∞≤ H.
+• For the term C2, we have
+log Ai
+ηK+1
+= log Ai
+√
+αKH
+log K≤
+√
+2cαH log2 Ai
+K , (149)
+where the ﬁrst equality holds by the deﬁnition of ηK+1 in ( 22), and the last inequality is obtained by
+(43a) in Lemma 3.
+• For the term τi,h,s, we ﬁrst observe that
+ηkαk
+1− αk
+‖‖qk
+i,h(s,·)
+‖‖
+∞≤
+√
+2cα log2 K
+kH
+1
+2cα log K
+· H =
+√
+8c3αH log4 K
+k ≤ 1
+3 (150)
+when k≥ c9H log4 K for some suﬃciently large constant c9 > 0, where the ﬁrst inequality holds by
+applying 1− αk≥ 1
+2cα log K , ηkαk =
+√
+2cα log2 K
+kH of Lemma 4 and
+‖‖qk
+i,h(s,·)
+‖‖
+∞≤ H.
+Consequently, recalling the fact that η2 = log K
+α1H = log K
+H , one has
+5
+3 αK
+1 η2
+‖‖q1
+i,h(s,·)
+‖‖2
+∞ +
+{
+3
+K∑
+k=2
+αK
+k
+η2
+kα2
+k
+(1− αk)2
+‖‖qk
+i,h(s,·)
+‖‖3
+∞1
+( ηkαk
+1− αk
+‖‖qk
+i,h(s,·)
+‖‖
+∞ > 1
+3
+)}
++ 3αK
+1 η2
+2
+‖‖q1
+i,h(s,·)
+‖‖3
+∞
+≤ 5
+3K 6
+√
+log K
+H
+‖‖q1
+i,h(s,·)
+‖‖2
+∞ +
+(
+2cα log K
+)2
+K 6
+
+
+3
+c9H2 log4 K
+δ∑
+k=2
+η2
+kα2
+k
+‖‖qk
+i,h(s,·)
+‖‖3
+∞
+
+
+ + 3
+K 6
+log K
+H
+‖‖q1
+i,h(s,·)
+‖‖3
+∞
+≤ 6 log K√
+HK 6
+‖‖qk
+i,h(s,·)
+‖‖3
+∞ + 3
+(
+2cα log K
+)2
+K 6
+
+
+
+c9H2 log4 K
+δ∑
+k=2
+η2
+kα2
+k
+‖‖qk
+i,h(s,·)
+‖‖3
+∞
+
+
+ . (151)
+Here, the penultimate inequality follows from applying the fact αK
+k ≤ 1
+K 6 for all k≤ K
+2 in Lemma 3
+yields
+5
+3 αK
+1 η2‖q1
+i,h(s,·)‖2
+∞≤ 5
+3K 6
+√
+log K
+H ‖q1
+i,h(s,·)‖2
+∞,
+3αK
+1 η2
+2‖q1
+i,h(s,·)‖3
+∞≤ 3
+K 6
+log K
+H ‖q1
+i,h(s,·)‖3
+∞
+47
+
+===== PAGE 48 =====
+and
+{
+3
+K∑
+k=2
+αK
+k
+η2
+kα2
+k
+(1− αk)2‖qk
+i,h(s,·)‖3
+∞1
+( ηkαk
+1− αk
+‖qk
+i,h(s,·)‖∞ > 1
+3
+)}
+≤ 3· (2cα log K)2
+{ K∑
+k=2
+αK
+k η2
+kα2
+k‖qk
+i,h(s,·)‖3
+∞1
+( ηkαk
+1− αk
+‖qk
+i,h(s,·)‖∞ > 1
+3
+)}
+≤ 3· (2cα log K)2
+
+
+
+c9H log4 K
+δ∑
+k=2
+αK
+k η2
+kα2
+k‖qk
+i,h(s,·)‖3
+∞
+
+
+
+≤ 3 (2cα log K)2
+K 6
+
+
+
+c9H log4 K
+δ∑
+k=2
+η2
+kα2
+k‖qk
+i,h(s,·)‖3
+∞
+
+
+ ,
+where the ﬁrst inequality arises from applying 1− αk≥ 1
+2cα log K , the penultimate inequality holds by
+(150), and the last inequality holds by the facts αK
+k ≤ 1
+K 6 when k≤ c9H log4 K≤ K (see Lemma 3).
+To continue, ( 151) can be further controlled as
+6 log K√
+HK 6
+‖‖qk
+i,h(s,·)
+‖‖3
+∞ + 3
+(
+2cα log K
+)2
+K 6
+
+
+
+c9H log4 K
+δ∑
+k=2
+η2
+kα2
+k
+‖‖qk
+i,h(s,·)
+‖‖3
+∞
+
+
+
+≤ 24c3
+α log4 K√
+HK 6
+{ K∑
+k=1
+1
+k H 3
+}
+≤ 24c3
+αH 3 log5 K
+K 6 ≤ 1
+K 4 , (152)
+where the ﬁrst inequality follows from the fact ηkαk =
+√
+2cα log2 K
+kH (see Lemma 4) and‖qk
+i,h(s,·)‖∞≤ H,
+and the last inequality holds by letting K≥
+√
+24c3αH 3 log5 K.
+Inserting the results of the three terms back to ( 146), we arrive at
+max
+ai∈Ai
+K∑
+k=1
+αK
+k qk
+i,h(s, ai)−
+K∑
+k=1
+αK
+k
+⟨
+πk
+i,h, qk
+i,h(s,·)
+⟩
+≤C 1 + 20
+3
+K∑
+k=K/2+1
+αK
+k
+√
+cα log2 K
+KH Varπk
+i,h(s)
+(
+qk
+i,h(s,·)
+)
++C2 + τi,h,s
+≤ 2(2cα
+)1.5
+H 3/2 log2 K
+K 5 + 20
+3
+√
+cα log2 K
+KH
+K∑
+k=K/2+1
+αK
+k Varπk
+i,h(s)
+(
+qk
+i,h(s,·)
+)
++
+√
+2cαH log2 Ai
+K + 1
+K 4
+≤ 10
+√
+cα log3(KA i)
+KH
+K∑
+k=1
+αK
+k Varπk
+i,h(s)
+(
+qk
+i,h(s,·)
+)
++ 2
+√
+cαH log3(KA i)
+K (153)
+= βi,h(s), (154)
+where the second inequality follows from inserting the resu lts in ( 148), ( 149), and ( 150) subsequently, the
+penultimate inequality holds by letting K≥ c9H log4 K, and the last equality is induced by the deﬁnition
+of βi,h(s) in ( 23) by setting the constant cb properly.
+Finally, recalling the deﬁnition of Eπ∼ˆξ
+[
+V
+⋆,π−i,σi
+i,h (s)
+]
+in ( 88), we have for all s∈S ,
+Eπ∼ˆξ
+[
+V
+⋆,π−i,σi
+i,h (s)
+]
+= max
+ai∈Ai
+K∑
+k=1
+αK
+k
+[
+rk
+i,h(s, ai) + inf
+P∈U σi (P k
+i,h,s,ai )
+PEπ∼ˆξ
+[
+V
+⋆,π−i,σi
+i,h+1
+] ]
+48
+
+===== PAGE 49 =====
+≤ max
+ai∈Ai
+K∑
+k=1
+αK
+k
+[
+rk
+i,h(s, ai) + inf
+P∈U σi (P k
+i,h,s,ai
+)
+PˆVi,h+1
+]
+≤
+K∑
+k=1
+αK
+k Eai∼πk
+i,h(s)
+[
+rk
+i,h(s, ai) + inf
+P∈U σi (P k
+i,h,s,ai )
+PˆVi,h+1
+]
++ βi,h(s)
+≤ ˆVi,h(s),
+where the ﬁrst inequality holds by the induction hypothesis of the step h + 1, and the last inequality follows
+from the update rule in line 25 in Algorithm 2.
+C.4.2 Proof of Lemma 8
+We will prove the lemma by induction argument. To proceed, fo r the base case H + 1, the following fact
+holds immediately
+ˆVi,H+1 = Eπ∼ˆξ
+[
+V
+π,σi
+i,H+1
+]
+= 0
+due to the deﬁnition of ˆVi,H+1 (see Algorithm 2) and Eπ∼ˆξ
+[
+V
+π,σi
+i,H+1
+]
+(see (89)). Then assuming the following
+induction assumption holds
+ˆVi,j≥ Eπ∼ˆξ
+[
+V
+π,σi
+i,j
+]
+, ∀j = h + 1,··· , H,
+we will focus on showing that it also holds for time step h. According to the deﬁnition of Eπ∼ˆξ
+[
+V
+π,σi
+i,h
+]
+in
+(88), we have for any s∈S ,
+Eπ∼ˆξ
+[
+V
+π,σi
+i,h (s)
+]
+=
+K∑
+k=1
+αK
+k Eai∼πk
+i,h(s)
+[
+rk
+i,h(s, ai) + inf
+P∈U σi (P k
+i,h,s,ai )
+PEπ∼ˆξ
+[
+V
+π,σi
+i,h+1
+] ]
+≤
+K∑
+k=1
+αK
+k Eai∼πk
+i,h(s)
+[
+rk
+i,h(s, ai) + inf
+P∈U σi (P k
+i,h,s,ai )
+PˆVi,h+1
+]
+≤
+K∑
+k=1
+αK
+k Eai∼πk
+i,h(s)
+[
+rk
+i,h(s, ai) + inf
+P∈U σi (P k
+i,h,s,ai
+)
+PˆVi,h+1
+]
++ βi,h(s)
+≤ min
+{ K∑
+k=1
+αK
+k Eai∼πk
+i,h(s)
+[
+rk
+i,h(s, ai) + inf
+P∈U σi (P k
+i,h,s,ai )
+PˆVi,h+1
+]
++ βi,h(s), H− h + 1
+}
+= ˆVi,h(s).
+where the ﬁst inequality is achieved by the induction assump tion, the penultimate line holds by βi,h(s)≥ 0,
+the last line arises from the fundamental fact Eπ∼ˆξ
+[
+V
+π,σi
+i,h (s)
+]
+≤ H− h + 1, and then the deﬁnition of ˆVi,h
+in line 25 of Algorithm 2.
+C.4.3 Proof of Lemma 9
+Recall that for all s∈S , bonus term βi,h(s) is deﬁned as
+βi,h(s) = cb
+√
+log3( KS ∑n
+i=1 Ai
+δ )
+KH
+K∑
+k=1
+αK
+k
+{
+Varπk
+i,h(·|s)
+(
+qk
+i,h(s,·)
+)
++ H
+}
+. (155)
+For any k∈ [K], recalling the deﬁnition of qk
+i,h(s,·) in ( 18) gives
+Varπk
+i,h(·|s)
+(
+qk
+i,h(s,·)
+)
+49
+
+===== PAGE 50 =====
+≤ 2Varπk
+i,h(·|s)
+(
+rk
+i,h(s,·)
+)
++ 2Varπk
+i,h(·|s)
+(
+ˆP
+πk
+−i, ˆV
+i,h,s,· ˆVi,h+1
+)
+(i)
+≤ 2 + 2
+
+∑
+ai∈Ai
+πk
+i,h(ai| s)ˆP
+πk
+−i, ˆV
+i,h,s,ai
+(
+ˆVi,h+1◦ˆVi,h+1
+)
+−
+(∑
+ai∈Ai
+πk
+i,h(ai| s)ˆP
+πk
+−i, ˆV
+i,h,s,ai
+ˆVi,h+1
+)2
+
+= 2 + 2
+⟨
+es, VarP k, ˆV
+i,h
+ˆVi,h+1
+⟩
+. (156)
+where es denotes an S-dimensional standard basis supported on the s-th element, the ﬁrst inequality holds
+by the the elementary inequality VarP (V + V ′)≤ 2 (VarP (V ) + VarP (V ′)) for any transition kernel P∈ RS
+and vector V, V ′ ∈ RS, and (i) is satisﬁed due to
+⏐⏐⏐rk
+i,h(s, ai)
+⏐⏐⏐≤ 1 and
+⏐⏐⏐⏐ˆP
+πk
+−i, ˆV
+i,h (s′| s, ai)
+⏐⏐⏐⏐≤ 1 for all
+s, s′∈S , ai∈A i. Inserting ( 156) back into ( 155) and rewriting in the vector form lead to
+βi,h≤ 3cb
+√
+log3( KS ∑n
+i=1 Ai
+δ )
+KH
+(
+H· 1 +
+K∑
+k=1
+αK
+k VarP k, ˆV
+i,h
+ˆVi,h+1
+)
+C.4.4 Proof for Lemma 11
+Firstly, we introduce a set of robust value function variant s:
+∀(i, h)∈ n× [H], V
+span
+i,h := Eπ∼ˆξ
+[
+V
+π,σi
+i,h
+]
+− min
+s′∈S
+Eπ∼ˆξ
+[
+V
+π,σi
+i,h (s′)
+]
+, (157)
+which normalizes the robust value function V
+π,σi
+i,h . Applying Lemma 10 leads to
+‖‖‖V
+span
+i,h
+‖‖‖
+∞
+≤ min
+{ 1
+σi
+, H− h + 1
+}
+. (158)
+To continue, consider any transition kernel P ′∈ RS and any ~P∈ RS satisfying ~P∈U σi (P ′). For any
+(i, h)∈ [n]× [H], the diﬀerence between the variances obeys
+⏐⏐⏐VarP ′
+(
+Eπ∼ˆξ
+[
+V
+π,σi
+i,h
+])
+− Var ~P
+(
+Eπ∼ˆξ
+[
+V
+π,σi
+i,h
+])⏐⏐⏐ =
+⏐⏐VarP ′
+(
+V
+span
+i,h
+)
+− Var ~P
+(
+V
+span
+i,h
+)⏐⏐
+≤
+‖‖~P− P ′‖‖
+1
+‖‖‖V
+span
+i,h
+‖‖‖
+∞
+≤ σi
+(
+min
+{ 1
+σi
+, H− h + 1
+}) 2
+≤ min
+{ 1
+σi
+, H− h + 1
+}
+.
+(159)
+C.4.5 Proof of Lemma 12
+To control the term of interest
+H∑
+j=h
+⟨
+bj
+h, Var∑K
+k=1 αK
+k P k,V
+i,j
+(
+Eπ∼ˆξ
+[
+V
+π,σi
+i,j+1
+])⟩
+,
+this section follows the pipeline in Appendix C.4.8, which we show here for completeness. We ﬁrst introduce
+some auxiliary notations for convenience.
+Deﬁnition 3. For any (h, i)∈ [H]× [n], we denote
+• V
+min
+h := min s∈S Eπ∼ˆξ
+[
+V
+π,σi
+i,h (s)
+]
+as the minimum value of all the entries.
+• V
+′
+h := Eπ∼ˆξ
+[
+V
+π,σi
+i,h
+]
+− V
+min
+h 1: the expected truncated value function following the distrib ution over all
+online policies.
+50
+
+===== PAGE 51 =====
+• rmin
+i,h =∑ K
+k=1 αK
+k Eai∼πk
+i,h
+[rk
+i,h(·, ai)] +
+(
+V
+min
+h+1− V
+min
+h
+)
+1: the expected truncated reward function.
+Applying the deﬁnition of Eπ∼ˆξ
+[
+V
+π,σi
+i,h
+]
+in ( 88) and P k,ˆξ,V
+i,h (see ( 93) and ( 94)) leads to
+V
+′
+h = Eπ∼ˆξ
+[
+V
+π,σi
+i,h
+]
+− V
+min
+h 1 =
+K∑
+k=1
+αK
+k Eai∼πk
+i,h
+[rk
+i,h(·, ai)] +
+K∑
+k=1
+αK
+k P k,ˆξ,V
+i,h Eπ∼ˆξ
+[
+V
+π,σi
+i,h+1
+]
+− V
+min
+h 1
+=
+K∑
+k=1
+αK
+k Eai∼πk
+i,h
+[rk
+i,h(·, ai)] +
+(
+V
+min
+h+1− V
+min
+h
+)
+1 +
+K∑
+k=1
+αK
+k P k,ˆξ,V
+i,h V
+′
+h+1 (160)
+= rmin
+i,h +
+K∑
+k=1
+αK
+k P k,ˆξ,V
+i,h V
+′
+h+1. (161)
+With above fact in mind, one has
+Var∑K
+k=1 αK
+k P k, ˆξ,V
+i,h
+(
+Eπ∼ˆξ
+[
+V
+π,σi
+i,h+1
+])
+(i)
+= Var∑K
+k=1 αK
+k P k, ˆξ,V
+i,h
+(
+V
+′
+h+1
+)
+=
+K∑
+k=1
+αK
+k P k,ˆξ,V
+i,h
+(
+V
+′
+h+1◦ V
+′
+h+1
+)
+−
+( K∑
+k=1
+αK
+k P k,ˆξ,V
+i,h V
+′
+h+1
+)
+◦
+( K∑
+k=1
+αK
+k P k,ˆξ,V
+i,h V
+′
+h+1
+)
+(ii)
+=
+K∑
+k=1
+αK
+k P k,ˆξ,V
+i,h
+(
+V
+′
+h+1◦ V
+′
+h+1
+)
+−
+(
+V
+′
+h− rmin
+i,h
+)◦2
+=
+K∑
+k=1
+αK
+k P k,ˆξ,V
+i,h
+(
+V
+′
+h+1◦ V
+′
+h+1
+)
+− V
+′
+h◦ V
+′
+h + 2V
+′
+h◦ rmin
+i,h − rmin
+i,h ◦ rmin
+i,h
+≤
+K∑
+k=1
+αK
+k P k,ˆξ,V
+i,h
+(
+V
+′
+h+1◦ V
+′
+h+1
+)
+− V
+′
+h◦ V
+′
+h + 2‖V
+′
+h‖∞1, (162)
+where (i) follows from the fact that Var∑K
+k=1 αK
+k
+ˆP
+πk ,V
+i,h
+(V−b1) = Var∑K
+k=1 αK
+k
+ˆP
+πk ,V
+i,h
+(V ) for any value vector V ∈
+RS and scalar b, (ii) holds by ( 161), and the last inequality arises from rmin
+i,h ≤∑ K
+k=1 αK
+k Eai∼πk rk
+i,h(·, ai)≤ 1
+since V
+min
+h+1− V
+min
+h ≤ 0 (see Deﬁnition 3).
+Consequently, invoking the deﬁnition of bj
+h in ( 121), combined with ( 162), we arrive at
+H∑
+j=h
+⟨
+bj
+h, Var∑K
+k=1 αK
+k
+ˆP
+πk ,V
+i,h
+(
+Eπ∼ˆξ
+[
+V
+π,σi
+i,j+1
+])⟩
+=
+H∑
+j=h
+(
+bj
+h
+)⊤
+( K∑
+k=1
+αK
+k P k,ˆξ,V
+i,h
+(
+V
+′
+j+1◦ V
+′
+j+1
+)
+− V
+′
+j◦ V
+′
+j + 2‖V
+′
+h‖∞1
+)
+(i)
+≤
+H∑
+j=h
+[ (
+bj
+h
+)⊤
+( K∑
+k=1
+αK
+k P k,ˆξ,V
+i,h
+(
+V
+′
+j+1◦ V
+′
+j+1
+)
+− V
+′
+j◦ V
+′
+j
+)]
++ 2H
+‖‖‖V
+′
+h
+‖‖‖
+∞
+which follows by the fact
+‖‖‖V
+′
+h
+‖‖‖
+∞
+≥
+‖‖‖V
+′
+h+1
+‖‖‖
+∞
+≥···≥
+‖‖‖V
+′
+H
+‖‖‖
+∞
+and the property of bj
+h in ( 98). Finally,
+applying the deﬁnition of bj
+h gives
+H∑
+j=h
+⟨
+bj
+h, Var∑K
+k=1 αK
+k
+ˆP
+πk ,V
+i,h
+(
+Eπ∼ˆξ
+[
+V
+π,σi
+i,j+1
+])⟩
+51
+
+===== PAGE 52 =====
+=
+H∑
+j=h
+[ (
+bj+1
+h
+)⊤(
+V
+′
+j+1◦ V
+′
+j+1
+)
+− (bj
+h)⊤
+(
+V
+′
+j◦ V
+′
+j
+)]
++ 2H
+‖‖‖V
+′
+h
+‖‖‖
+∞
+≤
+‖‖bH+1
+h
+‖‖
+1
+‖‖‖V
+′
+H+1◦ V
+′
+H+1
+‖‖‖
+∞
++ 2H
+‖‖‖V
+′
+h
+‖‖‖
+∞
+≤ 3H
+‖‖‖V
+′
+h
+‖‖‖
+∞
+, (163)
+where the last line also holds by the fact
+‖‖‖V
+′
+h
+‖‖‖
+∞
+≥
+‖‖‖V
+′
+h+1
+‖‖‖
+∞
+≥···≥
+‖‖‖V
+′
+H
+‖‖‖
+∞
+.
+C.4.6 Proof of Lemma 13
+To begin with, we start by analyzing the term of interest for a ny (s, ai)∈S×A i,
+⏐⏐⏐⏐P
+ˆπk
+−i,V
+i,h,s,ai V− P k,V
+i,h,s,ai V
+⏐⏐⏐⏐ =
+⏐⏐⏐⏐⏐⏐⏐
+inf
+P∈U σi
+(
+P
+ˆπk
+−i
+h,s,ai
+)PV− inf
+P∈U σi
+(
+P k
+i,h,s,ai
+)PV
+⏐⏐⏐⏐⏐⏐⏐
+(i)
+=
+⏐⏐⏐⏐ max
+α∈[mins V (s),maxs V (s)]
+[
+P
+ˆπk
+−i
+h,s,ai [V ]α− σi
+(
+α− min
+s′
+[V ]α(s′)
+)]
+− max
+α∈[mins V (s),maxs V (s)]
+[
+P k
+i,h,s,ai[V ]α− σi
+(
+α− min
+s′
+[V ]α(s′)
+)]⏐⏐⏐⏐
+≤ max
+α∈[mins V (s),maxs V (s)]
+⏐⏐⏐⏐P
+ˆπk
+−i
+h,s,ai [V ]α− P k
+i,h,s,ai[V ]α
+⏐⏐⏐⏐, (164)
+where the last inequality uses the fact that the maximum oper ator is 1-Lipschitz.
+For any ﬁxed (α, k, s, ai)∈ [0, H]× [K]×S×A i, applying Bernstein’s inequality yields: with probabilit y
+at least 1− δ,
+⏐⏐⏐⏐P
+ˆπk
+−i
+h,s,ai[V ]α− P k
+i,h,s,ai [V ]α
+⏐⏐⏐⏐≤
+√
+2 log
+(2
+δ
+)
+N
+√
+Var
+P
+ˆπk
+−i
+h,s,ai
+([V ]α) + 2H log
+(2
+δ
+)
+3N , (165)
+since P k
+i,h,s,ai is the average of N i.i.d sample following the distribution of P
+ˆπk
+−i
+h,s,ai. To extend the pointwise
+bound to a union bound, we ﬁrst construct an ǫ1-net Nǫ1 over [0, H] for α, whose size satisﬁes |Nǫ1|≤ 3H
+ǫ1
+(Vershynin, 2018). Next, for any (k, s, ai)∈ [K]×S×A i, we have
+⏐⏐⏐⏐P
+ˆπk
+−i
+h,s,ai[V ]α− P k
+i,h,s,ai [V ]α
+⏐⏐⏐⏐
+(i)
+≤ max
+α∈Nε1
+⏐⏐⏐⏐P
+ˆπk
+−i
+h,s,ai [V ]α− P k
+i,h,s,ai [V ]α
+⏐⏐⏐⏐+ ε1
+(ii)
+≤
+/radicaltp/radicalvertex/radicalvertex√ 2 log
+(2S ∑n
+i=1 Ai|Nε1 |Kn
+δ
+)
+N
+√
+Var
+P
+ˆπk
+−i
+h,s,ai
+([V ]α) +
+2H log
+(2S ∑n
+i=1 Ai|Nε1 |Kn
+δ
+)
+3N + ε1
+≤
+/radicaltp/radicalvertex/radicalvertex√ 2 log
+(2S ∑n
+i=1 Ai|Nε1 |Kn
+δ
+)
+N
+√
+Var
+P
+ˆπk
+−i
+h,s,ai
+([V ]α) +
+2H log
+(2S ∑n
+i=1 Ai|Nε1 |Kn
+δ
+)
+3N + ε1
+(iii)
+≤
+/radicaltp/radicalvertex/radicalvertex√ 2 log
+(
+2S ∑n
+i=1 AiN Kn
+δ
+)
+N
+√
+Var
+P
+ˆπk
+−i
+h,s,ai
+(V ) +
+H log
+(
+2S ∑n
+i=1 AiN Kn
+δ
+)
+N , (166)
+Here, (i) follows from the fact that the function
+⏐⏐⏐⏐P
+ˆπk
+−i
+h,s,ai[V ]α− P k
+i,h,s,ai[V ]α
+⏐⏐⏐⏐ is 1-Lipschitz with respect to α,
+and that any α∈ [0, H] lies within an ǫ1-net centered around some point inside Nǫ1; (ii) holds by the virtue
+of ( 165), and (iii) holds when we set ε1 =
+H log
+( 2S ∑n
+i=1 Ai N Kn
+δ
+)
+3N , based on the fact that |Nε1|≤ 9N .
+52
+
+===== PAGE 53 =====
+Inserting this back into ( 164) gives
+⏐⏐⏐⏐P
+ˆπk
+−i,V
+i,h V− P k,V
+i,h V
+⏐⏐⏐⏐≤
+/radicaltp/radicalvertex/radicalvertex√ 2 log
+(
+2S ∑n
+i=1 AiN Kn
+δ
+)
+N
+√
+Var
+P
+ˆπk
+−i
+h
+(V ) +
+H log
+(
+2S ∑n
+i=1 AiN Kn
+δ
+)
+N 1
+≤ 3
+/radicaltp/radicalvertex/radicalvertex√ H 2 log
+(
+2S ∑n
+i=1 AiN Kn
+δ
+)
+N 1, (167)
+where the last inequality holds when N ≥ log
+(
+2S ∑n
+i=1 AiN Kn
+δ
+)
+, and base on the elementary fact that
+Var
+P
+ˆπk
+−i
+h
+(V )≤ H 2.
+Finally, we transfer the above results to vector form as belo w:
+⏐⏐⏐P ˆπk,V
+i,h Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+]
+− P k,ζ,V
+i,h Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+] ⏐⏐⏐
+=
+⏐⏐⏐Πˆπk
+i
+h
+(
+P ˆπk,V
+i,h Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+]
+− P k,ζ,V
+i,h Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+])⏐⏐⏐
+≤ Πˆπk
+i
+h
+⏐⏐⏐P ˆπk,V
+i,h Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+]
+− P k,ζ,V
+i,h Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+] ⏐⏐⏐
+(i)
+≤ 2
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AiN HK
+δ
+)
+N Πˆπk
+i
+h
+√
+Var
+P
+ˆπk
+−i
+h
+(
+Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+])
++
+log
+(
+18S ∑n
+i=1 AiN HK
+δ
+)
+N 1
+(ii)
+≤ 2
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AiN HK
+δ
+)
+N
+√
+VarP ˆπk
+h
+(
+Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+])
++
+log
+(
+18S ∑n
+i=1 AiN HK
+δ
+)
+N 1
+≤ 3
+/radicaltp/radicalvertex/radicalvertex√ H 2 log
+(
+2S ∑n
+i=1 AiN Kn
+δ
+)
+N 1, (168)
+where (i) follows from applying ( 167) with V = Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+]
+, (ii) follows from Lemma 2 and the deﬁnition
+of P ˆπk
+h =∏ ˆπk
+h P 0
+h = Π ˆπk
+i
+h P
+ˆπk
+−i
+h in Appendix A.1.1, and the last inequality holds by ‖V‖∞≤ H and letting
+N≥ log
+(
+18S ∑n
+i=1 AiN HK
+δ
+)
+.
+C.4.7 Proof of Lemma 14
+We ﬁrst introduce a modiﬁed version of the Freedman inequali ty for martingales ( Freedman, 1975), which
+is introduced in Li et al. (2024, Theorem 5) and crucial for our analysis.
+Theorem 5 (Theorem 5, Li et al. (2024)). Suppose Yn =∑ n
+k=1 Xk∈ R, where{Xk} is a real-valued scalar
+sequence such that
+|Xk|≤ R and E [Xk|{ Xj}j<k ] = 0 for all k≥ 1
+for some constant R > 0. Deﬁne
+Wn :=
+n∑
+k=1
+Ek−1[X 2
+k],
+where Ek−1 denotes the conditional expectation given {Xj}j<k . For any κ > 0, with probability at least 1− δ,
+the following holds:
+|Yn|≤
+√
+8Wn log 3n
+δ + 5R log 3n
+δ ≤ κWn +
+(2
+κ + 5R
+)
+log 3n
+δ . (169)
+53
+
+===== PAGE 54 =====
+In order to apply Theorem 5, we let
+R = max
+k∈[K]
+⏐⏐αK
+k
+⟨
+ˆπk
+i,h(·| s), rk
+i,h(s,·)
+⟩⏐⏐≤
+{
+max
+k∈[K]
+αK
+k
+}{
+max
+k∈[K]
+‖ˆπk
+i,h(s)‖1‖rk
+i,h‖∞
+}
+≤ 2cα log K
+K ,
+which holds by αK
+k ≤ 2cα log K
+K in Lemma 3,‖ˆπk
+i,h(s)‖1 = 1 and‖rk
+i,h‖∞≤ 1. In addition, we deﬁne and
+observe that
+WK =
+K∑
+k=1
+(αK
+k )2Varh,k−1
+(⟨
+ˆπk
+i,h(s), rk
+i,h(s,·)
+⟩)
+≤
+{
+max
+k∈[K]
+αK
+k
+} { K∑
+k=1
+αK
+k Varh,k−1
+(⟨
+ˆπk
+i,h(s), rk
+i,h(s,·)
+⟩)
+}
+=
+{
+max
+k∈[K]
+αK
+k
+} { K∑
+k=1
+αK
+k Varh,k−1
+(
+Ea∼ˆπk
+i,h(s)
+[⟨
+ea, rk
+i,h(s,·)
+⟩
+|| rk
+i,h(s,·)
+] )}
+≤ 2cα log K
+K
+K∑
+k=1
+αK
+k Varh,k−1(rk
+i,h(s, ak,s)),
+where we use Varh,k−1[·] to denote the variance operator conditioned on the informat ion available before the
+start of the k-th round of data collection for time step h. Here, the last inequality arises from deﬁning a set
+of auxiliary random actions
+ak,s∼ˆπk
+i,h(s), (170)
+which are independent from rk
+i,h conditioned on the previous history before the start of the k-th round of
+data collection for time step h, and then applying Lemma 3 and the law of total variation. With above facts
+in mind, applying Freedman’s inequality (Lemma 5) with κ1 =
+√
+K log(K/δ) gives
+⏐⏐⏐⏐⏐
+K∑
+k=1
+αK
+k Eai∼ˆπk
+i,h
+[rk
+i,h(s, ai)]−
+K∑
+k=1
+αK
+k Eai∼ˆπk
+i,h
+[r
+ˆπk
+−i
+i,h (s, ai)]
+⏐⏐⏐⏐⏐
+≤ κ1WK +
+( 2
+κ1
++ 5R1
+)
+log
+(3K
+δ
+)
+≤ 2cα
+√
+log3(K
+δ
+)
+K
+K∑
+k=1
+αK
+k Varh,k−1
+(
+rk
+i,h(s, ak,s)
+)
++
+(
+2
+√
+1
+K log
+(K
+δ
+)+ 10cα log K
+K
+)
+log
+(3K
+δ
+)
+≤ 2cα
+√
+log3(K
+δ
+)
+K
+K∑
+k=1
+αK
+k Varh,k−1
+(
+rk
+i,h(s, ak,s)
+)
++ 4
+√
+log
+(3K
+δ
+)
+K ,
+with probability at least 1− δ. Taking a union bound over s∈S gives
+K∑
+k=1
+αK
+k
+⏐⏐⏐rˆπk
+i,h− rˆπk
+i,h
+⏐⏐⏐≤ cr
+√
+log(KS/δ )
+K 1,
+where cr is some absolute constant.
+C.4.8 Proof of Lemma 15
+The proof follows the framework of ( Shi et al. , 2024, Lemma 5), with diﬀerences in the details. We provide
+the full proof here for completeness.
+One key aspect of the proof is truncating the terms of interes t to consider their true ranges during
+controlling∑ H
+j=h
+⟨
+dj
+h, Var∑K
+k=1 αK
+k P ˆπk ,V
+i,j
+(
+Eπ∼ζ
+[
+V
+π,σi
+i,j+1
+])⟩
+. Towards this, we ﬁrst introduce some auxiliary
+notations as below.
+54
+
+===== PAGE 55 =====
+Deﬁnition 4. For any (h, i)∈ [H]× [n], we denote
+• V
+min
+h := min s∈S Eπ∼ζ
+[
+V
+π,σi
+i,h (s)
+]
+: the minimum value of all the entries in vector Eπ∼ζ
+[
+V
+π,σi
+i,h
+]
+.
+• V
+′
+h := Eπ∼ζ
+[
+V
+π,σi
+i,h
+]
+− V
+min
+h 1: the truncated expected value function associated with the d istribution ζ.
+• rmin
+i,h =∑ K
+k=1 αK
+k Eai∼ˆπk
+i,h
+[rk
+i,h(·, ai)] +
+(
+V
+min
+h+1− V
+min
+h
+)
+1: the truncated expected reward function.
+With them in mind, we introduce the following fact of V
+′
+h:
+V
+′
+h = Eπ∼ζ
+[
+V
+π,σi
+i,h
+]
+− V
+min
+h 1
+=
+K∑
+k=1
+αK
+k Eai∼ˆπk
+i,h
+[rk
+i,h(·, ai)] +
+K∑
+k=1
+αK
+k P k,ζ,V
+i,h Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+]
+− V
+min
+h 1, (171)
+which holds by the deﬁnition of Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+]
+in (110) and transferring it to a vector form with the deﬁnition
+of P k,ζ,V
+i,h in ( 113). To continue, one has
+V
+′
+h =
+K∑
+k=1
+αK
+k Eai∼ˆπk
+i,h
+[rk
+i,h(·, ai)] +
+K∑
+k=1
+αK
+k P ˆπk,V
+i,h Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+]
++
+( K∑
+k=1
+αK
+k P k,ζ,V
+i,h −
+K∑
+k=1
+αK
+k P ˆπk,V
+i,h
+)
+Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+]
+− V
+min
+h 1
+=
+K∑
+k=1
+αK
+k Eai∼ˆπk
+i,h
+[rk
+i,h(·, ai)] +
+(
+V
+min
+h+1− V
+min
+h
+)
+1
++
+K∑
+k=1
+αK
+k P ˆπk,V
+i,h V
+′
+h+1 +
+( K∑
+k=1
+αK
+k P k,ζ,V
+i,h −
+K∑
+k=1
+αK
+k P ˆπk,V
+i,h
+)
+Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+]
+= rmin
+i,h +
+K∑
+k=1
+αK
+k P ˆπk,V
+i,h V
+′
+h+1 +
+( K∑
+k=1
+αK
+k P k,ζ,V
+i,h −
+K∑
+k=1
+αK
+k P ˆπk,V
+i,h
+)
+Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+]
+, (172)
+which follows from Deﬁnition 4. With above facts in mind, the main term in Lemma 15 can be controlled as
+Var∑K
+k=1 αK
+k P ˆπk ,V
+i,h
+(
+Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+])
+(i)
+= Var∑K
+k=1 αK
+k P ˆπk ,V
+i,h
+(
+V
+′
+h+1
+)
+=
+K∑
+k=1
+αK
+k P ˆπk,V
+i,h
+(
+V
+′
+h+1◦ V
+′
+h+1
+)
+−
+( K∑
+k=1
+αK
+k P ˆπk,V
+i,h V
+′
+h+1
+)
+◦
+( K∑
+k=1
+αK
+k P ˆπk,V
+i,h V
+′
+h+1
+)
+,
+where (i) follows from the fact that Var∑K
+k=1 αK
+k P ˆπk ,V
+i,h
+(V− b1) = Var ∑K
+k=1 αK
+k P ˆπk ,V
+i,h
+(V ) for any value vector
+V ∈ RS and scalar b. Then applying ( 172) leads to
+Var∑K
+k=1 αK
+k P ˆπk ,V
+i,h
+(
+Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+])
+=
+K∑
+k=1
+αK
+k P ˆπk,V
+i,h
+(
+V
+′
+h+1◦ V
+′
+h+1
+)
+−
+(
+V
+′
+h− rmin
+i,h −
+( K∑
+k=1
+αK
+k P k,ζ,V
+i,h −
+K∑
+k=1
+αK
+k P ˆπk,V
+i,h
+)
+Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+]) ◦2
+=
+K∑
+k=1
+αK
+k P ˆπk,V
+i,h
+(
+V
+′
+h+1◦ V
+′
+h+1
+)
+− V
+′
+h◦ V
+′
+h + 2V
+′
+h◦
+(
+rmin
+i,h +
+( K∑
+k=1
+αK
+k P k,ζ,V
+i,h −
+K∑
+k=1
+αK
+k P ˆπk,V
+i,h
+)
+Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+])
+55
+
+===== PAGE 56 =====
+−
+(
+rmin
+i,h +
+( K∑
+k=1
+αK
+k P k,ζ,V
+i,h −
+K∑
+k=1
+αK
+k P ˆπk,V
+i,h
+)
+Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+]) ◦2
+.
+≤
+K∑
+k=1
+αK
+k P ˆπk,V
+i,h
+(
+V
+′
+h+1◦ V
+′
+h+1
+)
+− V
+′
+h◦ V
+′
+h + 2
+‖‖V
+′
+h
+‖‖
+∞
+(
+1 +
+⏐⏐⏐
+( K∑
+k=1
+αK
+k P k,ζ,V
+i,h −
+K∑
+k=1
+αK
+k P ˆπk,V
+i,h
+)
+Eπ∼ζ
+[
+V
+π,σi
+i,h+1
+] ⏐⏐⏐
+)
+≤
+K∑
+k=1
+αK
+k P ˆπk,V
+i,h
+(
+V
+′
+h+1◦ V
+′
+h+1
+)
+− V
+′
+h◦ V
+′
+h + 2
+‖‖V
+′
+h
+‖‖
+∞1 + 6‖V ′
+h‖∞
+/radicaltp/radicalvertex/radicalvertex√ H 2 log
+(
+18S ∑n
+i=1 AinHN K
+δ
+)
+N 1, (173)
+where the penultimate inequality follows from the fact that rmin
+i,h ≤∑ K
+k=1 αK
+k Eai∼ˆπk
+i,h
+[rk
+i,h(·, ai)]≤ 1 due to
+V min
+h+1− V min
+h ≤ 0 (see Deﬁnition 4), and the last inequality arises from Lemma 13.
+Consequently, along with the deﬁnition of dj
+h in ( 121), applying ( 173) yields
+H∑
+j=h
+⟨
+dj
+h, Var∑K
+k=1 αK
+k P ˆπk ,V
+i,j
+(
+Eπ∼ζ
+[
+V
+π,σi
+i,j+1
+])⟩
+=
+H∑
+j=h
+(dj
+h)⊤
+( K∑
+k=1
+αK
+k P ˆπk,V
+i,j
+(
+V
+′
+j+1◦ V
+′
+j+1
+)
+− V
+′
+j◦ V
+′
+j + 2‖V
+′
+j‖∞1 + 6‖V
+′
+j‖∞
+/radicaltp/radicalvertex/radicalvertex√ H 2 log
+(
+18S ∑n
+i=1 AinHN K
+δ
+)
+N 1
+)
+(i)
+≤
+H∑
+j=h
+[
+(dj
+h)⊤
+( K∑
+k=1
+αK
+k P ˆπk,V
+i,j
+(
+V
+′
+j+1◦ V
+′
+j+1
+)
+− V
+′
+j◦ V
+′
+j
+)]
++ 2H‖V
+′
+h‖∞
++ 6H 2‖V
+′
+h‖∞
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AinHN K
+δ
+)
+N
+where (i) holds by the basic fact ‖V
+′
+h‖∞≥‖ V
+′
+h+1‖∞≥···≥‖ V
+′
+H‖∞, and the property of dh
+j in ( 122).
+Finally, applying deﬁnition of dj
+h in ( 121) further leads to
+H∑
+j=h
+⟨
+dj
+h, Var∑K
+k=1 αK
+k P ˆπk ,V
+i,j
+(
+Eπ∼ζ
+[
+V
+π,σi
+i,j+1
+])⟩
+=
+H∑
+j=h
+[
+(dj+1
+h )⊤
+(
+V
+′
+j+1◦ V
+′
+j+1
+)
+− (dj
+h)⊤
+(
+V
+′
+j◦ V
+′
+j
+)]
++ 2H‖V
+′
+h‖∞ + 6H 2‖V
+′
+h‖∞
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AinHN K
+δ
+)
+N
+≤
+‖‖dH+1
+h
+‖‖
+1
+‖‖‖V
+′
+H+1◦ V
+′
+H+1
+‖‖‖
+∞
++ 2H‖V
+′
+h‖∞ + 6H 2‖V
+′
+h‖∞
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AinHN K
+δ
+)
+N
+≤ 3H‖V
+′
+h‖∞ + 6H 2‖V
+′
+h‖∞
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AinHN K
+δ
+)
+N
+= 3H‖V
+′
+h‖∞
+
+1 + 2H
+/radicaltp/radicalvertex/radicalvertex√ log
+(
+18S ∑n
+i=1 AinHN K
+δ
+)
+N
+
+ ,
+where the last inequality holds by the basic fact ‖V
+′
+h‖∞≥‖ V
+′
+h+1‖∞≥···≥‖ V
+′
+H‖∞.
+56
+
+===== PAGE 57 =====
+C.4.9 Proof of Lemma 18
+To control
+H∑
+j=h
+⟨
+wj
+h, Var∑K
+k=1 αK
+k P ˆπk ,V
+i,j
+(
+Eπ∼ζ
+[
+V π,σi
+i,j+1
+])⟩
+,
+this section also follows the pipeline in Appendix C.4.8, which we show here for completeness. We ﬁrst
+introduce some auxiliary notations for convenience.
+Deﬁnition 5. For any (h, i)∈ [H]× [n], we denote, we denote
+• V min
+h := min s∈S Eπ∼ζ
+[
+V π,σi
+i,h (s)
+]
+: the minimum value of all the entries in the vector Eπ∼ζ
+[
+V π,σi
+i,h
+]
+.
+• V ′
+h := Eπ∼ζ
+[
+V π,σi
+i,h
+]
+− V min
+h 1: the truncated expected robust value function associated wi th ζ.
+• rmin
+i,h =∑ K
+k=1 αK
+k Eai∼πk
+i,h
+[r
+ˆπk
+−i
+i,h (·, ai)] +
+(
+V min
+h+1− V min
+h
+)
+1: the truncated expected reward function asso-
+ciated with distribution ζ.
+Then applying the robust Bellman’s consistency equation in (34) with the deﬁnition of P ˆπk,V
+i,h in ( 31b)
+and its matrix version gives
+V ′
+h = Eπ∼ζ
+[
+V π,σi
+i,h
+]
+− V min
+h 1 =
+K∑
+k=1
+αK
+k rˆπk
+i,h +
+K∑
+k=1
+αK
+k P ˆπk,V
+i,h Eπ∼ζ
+[
+V π,σi
+i,h+1
+]
+− V min
+h 1
+=
+K∑
+k=1
+αK
+k rˆπk
+i,h +
+(
+V min
+h+1− V min
+h
+)
+1 +
+K∑
+k=1
+αK
+k P ˆπk,V
+i,h V ′
+h+1 (174)
+= rmin
+i,h +
+K∑
+k=1
+αK
+k P ˆπk,V
+i,h V ′
+h+1. (175)
+With the above fact in hand, the term of interest can be contro lled by
+Var∑K
+k=1 αK
+k P ˆπk ,V
+i,h
+(
+Eπ∼ζ
+[
+V π,σi
+i,h+1
+])
+(i)
+= Var∑K
+k=1 αK
+k P ˆπk ,V
+i,h
+(V ′
+h+1)
+=
+K∑
+k=1
+αK
+k P ˆπk,V
+i,h
+(
+V ′
+h+1◦ V ′
+h+1
+)
+−
+( K∑
+k=1
+αK
+k P ˆπk,V
+i,h V ′
+h+1
+)
+◦
+( K∑
+k=1
+αK
+k P ˆπk,V
+i,h V ′
+h+1
+)
+(ii)
+=
+K∑
+k=1
+αK
+k P ˆπk,V
+i,h
+(
+V ′
+h+1◦ V ′
+h+1
+)
+−
+(
+V ′
+h− rmin
+i,h
+)◦2
+=
+K∑
+k=1
+αK
+k P ˆπk,V
+i,h
+(
+V ′
+h+1◦ V ′
+h+1
+)
+− V ′
+h◦ V ′
+h + 2V ′
+h◦ rmin
+i,h − rmin
+i,h ◦ rmin
+i,h
+≤
+K∑
+k=1
+αK
+k P ˆπk,V
+i,h
+(
+V ′
+h+1◦ V ′
+h+1
+)
+− V ′
+h◦ V ′
+h + 2‖V ′
+h‖∞1, (176)
+where (i) follows from the fact that Var∑K
+k=1 αK
+k P ˆπk ,V
+i,h
+(V−b1) = Var∑K
+k=1 αK
+k P ˆπk ,V
+i,h
+(V ) for any value vector V ∈
+RS and scalar b, (ii) holds by ( 175), and the last inequality arises from rmin
+i,h ≤ rπ
+i,h≤ 1 since V min
+h+1− V min
+h ≤ 0
+by Deﬁnition 5.
+Consequently, applying ( 176) with the deﬁnition of wj
+h in ( 132), we arrive at
+H∑
+j=h
+⟨
+wj
+h, Var∑K
+k=1 αK
+k P ˆπk ,V
+i,h
+(
+Eπ∼ζ
+[
+V π,σi
+i,j+1
+])⟩
+57
+
+===== PAGE 58 =====
+≤
+H∑
+j=h
+(wj
+h)⊤
+( K∑
+k=1
+αK
+k P ˆπk,V
+i,j
+(
+V ′
+j+1◦ V ′
+j+1
+)
+− V ′
+j◦ V ′
+j + 2‖V ′
+h‖∞1
+)
+(i)
+≤
+H∑
+j=h
+[
+(wj
+h)⊤
+( K∑
+k=1
+αK
+k P ˆπk,V
+i,j
+(
+V ′
+j+1◦ V ′
+j+1
+)
+− V ′
+j◦ V ′
+j
+)]
++ 2H‖V ′
+h‖∞
+=
+H∑
+j=h
+[
+(wj+1
+h )⊤(
+V ′
+j+1◦ V ′
+j+1
+)
+− (wj
+h)⊤(
+V ′
+j◦ V ′
+j
+)]
++ 2H‖V ′
+h‖∞
+≤‖ wH+1
+h ‖1
+‖‖V ′
+H+1◦ V ′
+H+1
+‖‖
+∞ + 2H‖V ′
+h‖∞
+≤ 3H‖V ′
+h‖∞, (177)
+where (i) and the last inequality hold by the fact ‖V ′
+h‖∞≥‖ V ′
+h+1‖∞≥···≥‖ V ′
+H‖∞ and the property of
+wj
+h in ( 133), and the last equality follows from the deﬁnition of wj
+h in ( 132).
+58

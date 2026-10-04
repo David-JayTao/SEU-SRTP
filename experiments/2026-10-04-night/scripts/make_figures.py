@@ -440,13 +440,18 @@ def fig_scaling_reward_normalized():
     if not runs:
         return
 
+    def seed_of(e):
+        """Every run must be labelled with its seed: three 2v2 runs all rendering
+        as "2v2" makes the legend unreadable and invites misreading one seed's
+        trajectory as the scale's."""
+        return e.rsplit("_s", 1)[1] if "_s" in e else "0"
+
     fig, axes = plt.subplots(1, 2, figsize=(13, 4.6))
     ax = axes[0]
     handles = []
     for i, n in enumerate(sorted(runs)):
         for (xs, ys, e) in runs[n]:
-            lab = f"{n}v{n}" + ("" if e.endswith("s1") or "_s" not in e else
-                                " (seed " + e.rsplit("_s", 1)[1] + ")")
+            lab = f"{n}v{n} (seed {seed_of(e)})"
             ax.plot(xs, ys, color=CAT[i % 4], lw=2, ls=DASH[i % 4], marker="o",
                     ms=3.5, markevery=max(1, len(xs) // 12))
             handles.append(Line2D([], [], color=CAT[i % 4], lw=2,
@@ -475,7 +480,7 @@ def fig_scaling_reward_normalized():
             if tv:
                 ax.plot(tv, yv, color=CAT[i % 4], lw=2, ls=DASH[i % 4], marker="o",
                         ms=3.5, markevery=max(1, len(tv) // 12),
-                        label=f"{n}v{n}")
+                        label=f"{n}v{n} (seed {seed_of(e)})")
     ax.axhline(0, color=MUTED, lw=1, ls=":")
     ax.set_xlabel("wall-clock since run start (hours)")
     ax.set_ylabel("average episode reward / N")
