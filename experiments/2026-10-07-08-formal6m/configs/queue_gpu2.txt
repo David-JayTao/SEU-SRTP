@@ -1,0 +1,3 @@
+# Lane A (P0): 10v10 NoWeapon formal scaling -- the long pole. 20 threads.
+# name|threads|num_env_steps|time_limit_s|env|scenario|algo|seed|extra
+f6m_10v10_noweapon_s0|20|6e6|108000|MultipleCombat|10v10/scaling_noweapon/HierarchySelfplay|mappo|0|--use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-episodes 1 --eval-interval 2

@@ -1,0 +1,3 @@
+# Lane D (P2): 2v2 NoWeapon formal scaling (generated config). 4 threads.
+# name|threads|num_env_steps|time_limit_s|env|scenario|algo|seed|extra
+f6m_2v2_noweapon_s0|4|6e6|108000|MultipleCombat|2v2/scaling_noweapon/HierarchySelfplay|mappo|0|--use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-episodes 1 --eval-interval 2
