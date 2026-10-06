@@ -127,6 +127,7 @@ def main(argv=None):
         return
     rows.sort(key=lambda r: (r["team_size"], r["experiment"], r["episode"]))
 
+    out_dir.mkdir(parents=True, exist_ok=True)
     with open(out_path, "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
         w.writeheader()

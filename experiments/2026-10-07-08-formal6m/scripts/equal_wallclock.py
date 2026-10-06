@@ -46,7 +46,7 @@ Usage
   python equal_wallclock.py                       # 1h..24h budgets, live data
   python equal_wallclock.py --hours 0.1 0.25 0.5  # tighter budgets
   python equal_wallclock.py --method first-crossing
-  python equal_wallclock.py --root ../../2026-10-04-night   # pilot reference
+  python equal_wallclock.py --root <other-campaign-dir>   # cross-campaign reference
 """
 
 from __future__ import annotations

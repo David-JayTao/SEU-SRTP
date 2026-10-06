@@ -16,6 +16,43 @@ Measured calibration points (2026-10-07):
 | 03:11 | 5 | 44 | 42.0 / 48 | 451 |
 | 03:17 | 7 | 50 | 41.0 / 48 | 672 |
 | 03:19 | 9 | 56 | 42.2 / 48 | 668 |
+| 03:46 | 9 | 56 | 43.0 / 48 | ~810 |
+
+Steady-state per-lane FPS at 9 lanes / 56 threads (03:46), with the CPU cost of
+each lane expressed as FPS per rollout thread:
+
+| lane | threads | FPS | FPS/thread | ETA to 6M |
+|---|---|---|---|---|
+| 10v10 s0 | 20 | 67 cum. (**74 marginal**) | 3.7 | 01:35–03:55 Oct 8 |
+| 5v5 s0 | 8 | 81 | 10.1 | 22:50 Oct 7 |
+| 3v3 s0 | 8 | 127 | 15.9 | 15:45 Oct 7 |
+| 2v2 s0 | 4 | 78 | 19.5 | 23:20 Oct 7 |
+| official 2v2 s0 | 4 | 78 | 19.5 | 00:10 Oct 8 |
+| 1v1 vsBaseline | 3 | 119 | 39.7 | 17:30 Oct 7 |
+| 1v1 Selfplay | 3 | 106 | 35.3 | 18:50 Oct 7 |
+| 1v1 HierSelfplay | 3 | 85 | 28.3 | 22:20 Oct 7 |
+| 1v1 Shoot HierSelfplay | 3 | 55 | 18.3 | **~09:40 Oct 8 — marginal** |
+
+(FPS/thread varies 21× across lanes, which is the whole reason a flat
+thread-per-job allocation is wrong and why the allocation is chosen per lane.)
+
+### 1v1/ShootMissile is structurally ~2× slower — not contention
+
+`--use-prior` (implemented only in `algorithms/ppo/ppo_actor.py`) roughly halves
+SingleCombat throughput. Pilot measurement at an identical 10 threads:
+
+| pilot run | threads | FPS |
+|---|---|---|
+| `official_1v1_selfplay` | 10 | 324 |
+| `official_1v1_shoot_hier_selfplay` | 10 | 170 |
+
+This campaign reproduces it at 3 threads (1v1 Selfplay 106 FPS = 35.3/thread,
+1v1 Shoot 55 FPS = 18.3/thread — the same ~2:1 ratio). **Consequence: at 3
+threads the Shoot baseline needs ~30.3 h, i.e. it lands at roughly 98% of 6M by
+the freeze.** It is kept rather than killed+relaunched because a relaunch would
+create a second `run<N>/` directory and a restarted partial trajectory is not a
+clean formal run. It will be reported as `time_cutoff` with the steps actually
+reached, never as `completed_6M`.
 
 Adding the two SingleCombat lanes at 03:10 raised aggregate throughput by **+221
 env-steps/s at zero measured cost to the other five lanes** (10v10 held at 70 FPS,

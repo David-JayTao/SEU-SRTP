@@ -40,7 +40,7 @@ Usage
   python equal_sample.py                          # 1M..6M budgets, live data
   python equal_sample.py --steps 60000 120000     # tighter budgets
   python equal_sample.py --method first-crossing
-  python equal_sample.py --root ../../2026-10-04-night   # pilot reference
+  python equal_sample.py --root <other-campaign-dir>   # cross-campaign reference
 """
 
 from __future__ import annotations

@@ -42,7 +42,11 @@ LEGACY_GPU_QUEUES = {"queue_extra.txt": "0", "queue_seeds.txt": "1"}
 EP_RE = re.compile(
     r"Scenario (?P<scenario>\S+) Algo (?P<algo>\S+) Exp (?P<exp>\S+) "
     r"updates (?P<ep>\d+)/(?P<episodes>\d+) episodes, "
-    r"total num timesteps (?P<steps>\d+)/(?P<total>\d+), FPS (?P<fps>[\d.]+)\.")
+    r"total num timesteps (?P<steps>\d+)/(?P<total>\d+), "
+    # FPS is normally printed with a trailing period ("FPS 133."), but accept a
+    # missing one too: `[\d.]+\.` would silently truncate "12.5" to "12" (the
+    # group backtracks to "12" so the literal "." can match the decimal point).
+    r"FPS (?P<fps>\d+(?:\.\d+)?)\.?")
 TRAIN_REW_RE = re.compile(r"average episode rewards is (?P<v>-?[\d.eE+]+)")
 EVAL_REW_RE = re.compile(r"eval average episode rewards: (?P<v>-?[\d.eE+]+)")
 RENDER_REW_RE = re.compile(r"render episode reward of agent: (?P<v>-?[\d.eE+-]+)")
