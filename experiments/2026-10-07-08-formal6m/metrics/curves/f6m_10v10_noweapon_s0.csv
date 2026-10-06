@@ -1,0 +1,2 @@
+episode,total_num_steps,fps,average_episode_rewards,value_loss,policy_loss,policy_entropy_loss,policy_entropy_true_sum,actor_grad_norm,critic_grad_norm,ratio,wall_time
+0,60000,70.0,-17.62111083984375,63.634671211242676,-0.003274331032298505,-0.0003169379313476384,3.8032551761716604,0.4581006199121475,59.74909706115723,1.000116229057312,1791313863.8663127

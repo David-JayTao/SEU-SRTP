@@ -1,29 +1,43 @@
 #!/usr/bin/env python
 """Collect every experiment's stdout log + metrics.jsonl into analysis-ready CSVs.
 
-Produces
---------
-metrics/summary.csv          one row per experiment (status, steps, FPS, wall
-                             time, final train/eval reward, checkpoint path, ...)
-metrics/curves/<exp>.csv     per-episode learning curves
+Produces (all under <campaign>/metrics/ by default):
+  summary.csv          one row per experiment (status, steps, FPS, wall time,
+                       final train/eval reward, checkpoint path, ...)
+  curves/<exp>.csv     per-episode learning curves
+
+The campaign root is DERIVED FROM THIS FILE'S LOCATION
+(<campaign>/scripts/collect_metrics.py -> <campaign>) so this same script works
+for any campaign without edits. Overrides, for cross-campaign comparisons
+(pair --campaign-root on the foreign campaign with --out-dir back home so the
+foreign campaign stays read-only):
+
+  --campaign-root / $CAMPAIGN_ROOT   campaign dir (logs/, configs/, status/, metrics/)
+  --results-root  / $RESULTS_ROOT    results tree holding <env>/<scen>/<algo>/<exp>/run*/
+                                     (default: derived from the campaign root as
+                                     <repo>/scripts/results)
+  --out-dir       / $OUT_DIR         where summary.csv + curves/ are written
+                                     (default: <campaign-root>/metrics)
 
 Everything is derived from artefacts on disk (the tee'd stdout logs and the
 per-run metrics.jsonl), so it can be re-run at any time without touching the
-training processes -- important because the runs are still going.
+training processes -- important because the runs are still going. Partial runs
+are handled deliberately: a run may be a few percent in, have a one-line
+metrics.jsonl and hold only actor_0.pt and no actor_latest.pt yet.
 """
+import argparse
 import csv
 import glob
 import json
 import os
 import re
-import sys
 from datetime import datetime
+from pathlib import Path
 
-REPO = "/root/autodl-tmp/SEU-SRTP"
-EXP_DIR = os.path.join(REPO, "experiments/2026-10-04-night")
-LOG_DIR = os.path.join(EXP_DIR, "logs")
-OUT_DIR = os.path.join(EXP_DIR, "metrics")
-RESULTS_DIR = os.path.join(REPO, "scripts/results")
+DEFAULT_CAMPAIGN = Path(__file__).resolve().parents[1]
+
+# Legacy 2026-10-04 queue filenames whose GPU is not encoded in the name.
+LEGACY_GPU_QUEUES = {"queue_extra.txt": "0", "queue_seeds.txt": "1"}
 
 EP_RE = re.compile(
     r"Scenario (?P<scenario>\S+) Algo (?P<algo>\S+) Exp (?P<exp>\S+) "
@@ -41,18 +55,78 @@ SEED_RE = re.compile(r"^algo\s+:\s+\S+\s+seed=(?P<n>\d+)", re.M)
 GPU_RE = re.compile(r"^gpu\s+:\s+(?P<g>\d+)", re.M)
 
 
-def queue_metadata():
+def resolve_paths(argv=None):
+    """Resolve (campaign_dir, results_dir, out_dir) from CLI/env/defaults."""
+    ap = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--campaign-root", default=os.environ.get("CAMPAIGN_ROOT"),
+                    help="campaign directory; default: derived from this script's "
+                         f"location ({DEFAULT_CAMPAIGN})")
+    ap.add_argument("--results-root", default=os.environ.get("RESULTS_ROOT"),
+                    help="root of the raw results tree; default: "
+                         "<campaign-root>/../../scripts/results")
+    ap.add_argument("--out-dir", default=os.environ.get("OUT_DIR"),
+                    help="output dir for summary.csv/curves; default: "
+                         "<campaign-root>/metrics")
+    args = ap.parse_args(argv)
+
+    campaign = (Path(args.campaign_root).expanduser().resolve()
+                if args.campaign_root else DEFAULT_CAMPAIGN)
+    # Campaigns live at <repo>/experiments/<name>, so the repo -- and with it
+    # the shared scripts/results tree -- is derivable from the campaign root.
+    repo = campaign.parents[1] if len(campaign.parents) > 1 else campaign
+    results = (Path(args.results_root).expanduser().resolve()
+               if args.results_root else repo / "scripts" / "results")
+    out = (Path(args.out_dir).expanduser().resolve()
+           if args.out_dir else campaign / "metrics")
+    return campaign, results, out
+
+
+def status_ledgers(campaign):
+    """All queue status ledgers, both naming schemes, deduped and sorted.
+
+    wave 1 (run_queue.sh):       status/queue_gpu<N>.status
+    wave 2 (run_queue_lane.sh):  status/queue_<queuefile-stem>.status
+                                 e.g. configs/queue_1v1a.txt ->
+                                      status/queue_queue_1v1a.status
+    """
+    status_dir = Path(campaign) / "status"
+    files = set()
+    for pat in ("queue_gpu*.status", "queue_queue_*.status"):
+        files.update(glob.glob(str(status_dir / pat)))
+    return sorted(files)
+
+
+def status_ledger_gpu(campaign):
+    """experiment -> gpu, read from the ledgers' '>>> name start ... gpu=N' lines."""
+    gpu = {}
+    for f in status_ledgers(campaign):
+        for line in open(f, encoding="utf-8", errors="replace"):
+            m = re.match(r">>> (\S+) start\b.*\bgpu=(\d+)", line)
+            if m:
+                gpu.setdefault(m.group(1), m.group(2))
+    return gpu
+
+
+def queue_gpu_hint(queue_file):
+    """GPU id encoded in a wave-1 queue filename (queue_gpu0.txt, queue_gpu1b.txt)."""
+    m = re.match(r"queue_gpu(\d+)[a-z]*\.txt$", os.path.basename(queue_file))
+    return m.group(1) if m else None
+
+
+def queue_metadata(campaign):
     """experiment -> {env_name, scenario, algo, seed, gpu, n_threads}.
 
     Fallback for jobs launched before run_train.sh started writing its header
     into the log file: the queue definitions still carry the same information.
+    Reads every configs/queue_*.txt (both waves); the GPU comes from the
+    filename when it encodes one, otherwise from the status ledgers.
     """
     meta = {}
-    for qf in glob.glob(os.path.join(EXP_DIR, "configs", "queue_*.txt")):
-        gpu_map = {"queue_gpu0.txt": 0, "queue_extra.txt": 0, "queue_gpu1.txt": 1,
-                   "queue_seeds.txt": 1, "queue_gpu2.txt": 2}
-        gpu = gpu_map.get(os.path.basename(qf), "")
-        for line in open(qf):
+    ledger_gpu = status_ledger_gpu(campaign)
+    for qf in sorted(glob.glob(str(Path(campaign) / "configs" / "queue_*.txt"))):
+        gpu = queue_gpu_hint(qf) or LEGACY_GPU_QUEUES.get(os.path.basename(qf), "")
+        for line in open(qf, encoding="utf-8", errors="replace"):
             line = line.strip()
             if not line or line.startswith("#"):
                 continue
@@ -60,8 +134,30 @@ def queue_metadata():
             if len(p) < 8:
                 continue
             meta[p[0]] = {"env_name": p[4], "scenario": p[5], "algo": p[6],
-                          "seed": p[7], "gpu": gpu, "n_threads": p[1]}
+                          "seed": p[7], "gpu": gpu or ledger_gpu.get(p[0], ""),
+                          "n_threads": p[1]}
     return meta
+
+
+def find_checkpoint(run_dir):
+    """Newest actor checkpoint, preferring actor_latest.pt.
+
+    Safe on partial runs: a run holding only actor_0.pt so far (actor_latest.pt
+    is written on the next checkpoint cycle) reports actor_0.pt, not nothing.
+    """
+    if not run_dir:
+        return None
+    latest = os.path.join(run_dir, "actor_latest.pt")
+    if os.path.exists(latest):
+        return latest
+
+    def episode(path):
+        m = re.match(r"actor_(\d+)\.pt$", os.path.basename(path))
+        return int(m.group(1)) if m else -1
+
+    numbered = [p for p in glob.glob(os.path.join(run_dir, "actor_*.pt"))
+                if episode(p) >= 0]
+    return max(numbered, key=episode) if numbered else None
 
 
 def parse_log(path):
@@ -146,12 +242,15 @@ def load_jsonl(path):
     return rows
 
 
-def main():
-    os.makedirs(os.path.join(OUT_DIR, "curves"), exist_ok=True)
-    summary = []
-    qmeta = queue_metadata()
+def main(argv=None):
+    campaign, results_dir, out_dir = resolve_paths(argv)
+    log_dir = campaign / "logs"
 
-    for logpath in sorted(glob.glob(os.path.join(LOG_DIR, "*.log"))):
+    os.makedirs(os.path.join(out_dir, "curves"), exist_ok=True)
+    summary = []
+    qmeta = queue_metadata(campaign)
+
+    for logpath in sorted(glob.glob(str(log_dir / "*.log"))):
         meta, eps = parse_log(logpath)
         exp = os.path.basename(logpath).split("_seed")[0]
         if not eps and not meta.get("crashed"):
@@ -166,7 +265,7 @@ def main():
         # locate the run dir (metrics.jsonl lives next to the checkpoints)
         run_dir = None
         if meta.get("env_name") and meta.get("scenario") and meta.get("algo"):
-            pattern = os.path.join(RESULTS_DIR, meta["env_name"], meta["scenario"],
+            pattern = os.path.join(str(results_dir), meta["env_name"], meta["scenario"],
                                    meta["algo"], exp, "run*", "metrics.jsonl")
             cands = sorted(glob.glob(pattern))
             if cands:
@@ -196,8 +295,7 @@ def main():
                       if k != "total_num_steps"})
 
         mtime = datetime.fromtimestamp(os.path.getmtime(logpath)).isoformat()
-        ckpt = os.path.join(run_dir, "actor_latest.pt") if run_dir else None
-        ckpt_ok = bool(ckpt and os.path.exists(ckpt))
+        ckpt = find_checkpoint(run_dir)
 
         last = eps[-1] if eps else {}
         first = eps[0] if eps else {}
@@ -240,11 +338,11 @@ def main():
             "ratio_last": last.get("ratio"),
             "crashed": meta.get("crashed"),
             "run_dir": run_dir,
-            "checkpoint_path": ckpt if ckpt_ok else None,
+            "checkpoint_path": ckpt,
             "log_path": logpath,
         })
 
-        curve_path = os.path.join(OUT_DIR, "curves", f"{exp}.csv")
+        curve_path = os.path.join(str(out_dir), "curves", f"{exp}.csv")
         keys = ["episode", "total_num_steps", "fps", "average_episode_rewards",
                 "value_loss", "policy_loss", "policy_entropy_loss",
                 "policy_entropy_true_sum",
@@ -255,7 +353,7 @@ def main():
             for e in eps:
                 w.writerow(e)
 
-    summary_path = os.path.join(OUT_DIR, "summary.csv")
+    summary_path = os.path.join(str(out_dir), "summary.csv")
     if summary:
         keys = list(summary[0].keys())
         with open(summary_path, "w", newline="") as f:
@@ -263,12 +361,14 @@ def main():
             w.writeheader()
             w.writerows(summary)
 
+    print(f"campaign root : {campaign}")
+    print(f"results root  : {results_dir}")
     print(f"wrote {summary_path}  ({len(summary)} experiments)")
-    print(f"wrote {OUT_DIR}/curves/*.csv")
+    print(f"wrote {out_dir}/curves/*.csv")
     for s in summary:
         print(f"  {s['experiment']:38s} steps={str(s['steps_done']):>10s} "
               f"fps={str(s['fps_last']):>7s} rew={str(s['train_reward_last'])[:9]:>9s} "
-              f"eval={str(s['eval_reward_last'])[:9]:>9s} crashed={s['crashed']}")
+              f"eval={str(s['eval_reward_last'])[:9]:>9s} ckpt={str(s['checkpoint_path']).rsplit('/', 1)[-1]!r:>18s} crashed={s['crashed']}")
 
 
 if __name__ == "__main__":
