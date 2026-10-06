@@ -194,7 +194,75 @@ TBD
 
 ## 10. Representation / Critic Scalability
 
-TBD
+**This section is complete and does not depend on the training runs finishing.**
+It is a pure model-construction measurement (`scripts/critic_scaling_probe.py`,
+output `metrics/critic_scaling.json`), it takes ~7 s, and the values it produces
+for N = 2/3/5/10 are **bit-identical to the ones the 2026-10-04 pilot measured
+independently** — which is the reproducibility evidence for this section.
+
+### 10.1 Measured dimensions and parameter counts
+
+| N | total agents | local obs dim | share_obs dim | actor params | critic params | critic 1st-layer params | critic 1st-layer MAC / env step |
+|---|---|---|---|---|---|---|---|
+| 2 | 4 | 27 | 108 | 154,891 | 163,969 | 13,952 | 331,776 |
+| 3 | 6 | 39 | 234 | 156,427 | 180,097 | 30,080 | 1,078,272 |
+| 5 | 10 | 63 | 630 | 159,499 | 230,785 | 80,768 | 4,838,400 |
+| 10 | 20 | 123 | 2,460 | 167,179 | 465,025 | 315,008 | 37,785,600 |
+| **N=2 → N=10 growth** | 4→20 | **4.56×** | **22.78×** | **1.08×** | **2.84×** | **22.58×** | **113.9×** |
+
+### 10.2 The scaling exponents
+
+Least-squares fit of `log(quantity)` against `log(N)` over the four measured
+points:
+
+| quantity | exponent vs N | R² | reading |
+|---|---|---|---|
+| local obs dim | **0.94** | 0.9998 | O(N) — an agent's own view grows with the number of *others* it observes |
+| **share_obs dim** | **1.94** | **1.0000** | **O(N²)** |
+| actor params | **0.05** | 0.9566 | **O(1)** — essentially independent of N |
+| **critic 1st-layer params** | **1.94** | **0.9999** | **O(N²)** |
+| total critic params | 0.65 | 0.9286 | sub-quadratic, because the recurrent core is fixed size |
+
+The reasons are all readable off the code and are exact, not fitted:
+
+- `share_obs` is the concatenation of the observations of **all 2N agents**
+  (`envs/JSBSim/envs/env_base.py::get_state` hstacks `get_obs` over every agent),
+  so `share_obs_dim = obs_dim × 2N`. Since `obs_dim = O(N)`, the product is
+  **exactly O(N²)**. Verified numerically at all four points: 27×4=108,
+  39×6=234, 63×10=630, 123×20=2460. ✔
+- The actor consumes only `obs_dim` (O(N)) but its MLP is a fixed
+  `128×128` (`--hidden-size "128 128"`), so its parameter count moves by 8% over
+  a 5× increase in N.
+- The critic consumes `share_obs`, so its **input layer** — the only part of it
+  that touches N — grows O(N²), i.e. 22.6× over the same range.
+
+### 10.3 What this does and does not establish
+
+**FACT.** In this codebase the centralised critic is the only learned component
+whose *representation* grows super-linearly in team size, and it grows as
+exactly N². The policy is essentially scale-invariant in parameter count.
+
+**OBSERVATION.** The same O(N²) structure — the fully concatenated global state —
+is simultaneously the cause of the environment-side bottleneck diagnosed as F8 in
+`docs/night_failures.md` (`get_state()` calling `get_obs` over all 2N agents,
+twice per step). One architectural choice produces both a computational and a
+representational N² term. Notably, the measured `critic 1st-layer MAC/env step`
+grows **113.9×** for a 5× growth in N.
+
+**HYPOTHESIS (not established here).** An O(N²)-sized critic input is a plausible
+contributor to a *learning* scalability gap, but this campaign has not isolated
+it: we have not run a critic with a sub-quadratic input (attention, factorised,
+or local critic) on the same task. Any such claim needs that controlled
+comparison, which is explicitly out of scope this round (§4.4).
+
+**CANNOT CONCLUDE.** These are *parameter and FLOP* counts. They say nothing on
+their own about achievable reward. A large critic input is not by itself a defect
+— it is the definition of a centralised critic. The measurement bounds the size
+of the problem; it does not demonstrate that the size is what limits learning.
+
+> Note on the `extrapolated` entries in `metrics/critic_scaling.json`: only the
+> four `measured` entries are used anywhere in this report. The extrapolated
+> entries are model-construction projections for other N and are **not** evidence.
 
 ## 11. Sample / Learning Scalability
 
@@ -206,7 +274,70 @@ TBD
 
 ## 13. Failures and Fixes
 
-TBD — 见 `experiments/2026-10-07-08-formal6m/status/incidents.md`
+Full detail in `experiments/2026-10-07-08-formal6m/status/incidents.md`
+(F-numbers), continuing the `docs/night_failures.md` F1–F9 series.
+
+### 13.1 Inherited from the pilot (not re-run, not re-derived)
+
+| id | what | status this round |
+|---|---|---|
+| F1 | JSBSim `data` submodule missing → env cannot initialise | already fixed; not seen |
+| F2 | `gym` missing | irrelevant (one render script); not on the training path |
+| F3 | non-wandb branch dropped all PPO diagnostics | already fixed (`metrics.jsonl`); this campaign depends on it |
+| F4 | official scripts' `--clip-params` typo + hard wandb dependency | worked around in the launcher, values unchanged |
+| F5 | generated scaling configs overwrote the NoWeapon variants | already fixed; configs verified: 10v10/scaling_noweapon is `hierarchical_multiplecombat` with 20 aircraft |
+| F6 | status snapshot mis-parsed setproctitle'd workers | already fixed |
+| F7 | env benchmark measured under load, not intrinsically | addressed by reporting quiet **and** loaded |
+| **F8** | **env throughput is CPU-bound, main process idle** | **confirmed as the binding constraint this round; see §9** |
+| **F9** | **`1v1/ShootMissile/HierarchyVsBaseline` cannot run at all** | **confirmed; deliberately excluded, recorded `not_applicable`** |
+
+### 13.2 New this round
+
+| id | what | category |
+|---|---|---|
+| **F10** | `scaling_table.py` emitted `peak_cpu_cores_host = 175.9` for a 48-core box | `Other` (measurement bug) |
+| **F11** | representation columns (obs dims, param counts) were empty because `critic_scaling_probe.py` was never invoked | `Other` (missing instrumentation) |
+| **F12** | `make_manifest.py`'s end-of-job regex never matched the real ledger line, so **finished lanes were silently reported as running** | `Other` (instrumentation bug, inherited from the pilot) |
+| **F13** | analysis scripts hardcoded the pilot's campaign path | `Other` (portability) |
+
+**F10** — the sampler (`os_watchdog.sh`) writes `cpu_busy_pct` already normalised
+to the 48-core cgroup quota, but `scaling_table.py` multiplied it by the
+host-denominator constant 192/100. The result was a physically impossible 175.9
+cores. Fixed by deriving the multiplier from `/sys/fs/cgroup/cpu.max` at runtime
+and **renaming the column to `peak_busy_cores_of_48_quota`** so the ambiguity
+cannot recur; the legacy pilot schema is still reconstructed correctly (it
+reproduces the pilot's historical 65.3). This is a pure instrumentation fix — no
+training behaviour was touched.
+
+**F11** — fixed by wiring the existing probe into `scaling_table.py` (cached, ~7 s).
+The probe had to be *run*, not written: the method existed but nothing called it,
+so the Representational-Scalability section (§10) would have had no data at all.
+
+**Why these matter for the report.** F10–F13 are all `Other` — instrumentation
+and measurement defects. None of them is evidence about the algorithm, and per
+the pilot's own discipline (`docs/night_failures.md` §判定纪律) **none of them may
+be cited as support for a curse-of-multiagency claim.** F10 in particular is a
+good example of the failure mode the pilot warned about: a number that looked
+like a scaling result (175.9 "cores" at N=10) and was actually a unit error.
+
+### 13.3 Not run, and honestly labelled
+
+- `1v1/ShootMissile/HierarchyVsBaseline` — `not_applicable` (F9, upstream bug, 0 steps).
+- `1v1/DodgeMissile/*` family — out of scope this round; the pilot covered them.
+- `1/heading` (SingleControl) — an L1 official entry that is not a multi-agent
+  task. Deferred to a spare lane; if it does not run, it is `not_started`, not
+  `failed`.
+
+### 13.4 One process-level caveat about this codebase
+
+`run_train.sh` captures `$?` from a `python … | tee` pipeline **without
+`pipefail`** (lines 102–104), so every job records `exited with code 0` —
+including crashes and SIGINT timeouts. Additionally
+`scripts/train/train_jsbsim.py:107-133` always allocates the next free `run<N>`
+directory and no launcher exposes `--model-dir`, so **a relaunch silently starts
+a fresh run in `run2/` rather than resuming**. Both facts mean: exit codes are
+not evidence of success, and no job is auto-restarted. Success is judged only
+from step progress in `metrics.jsonl` plus the absence of `Traceback`.
 
 ## 14. What We Can Conclude
 
