@@ -136,6 +136,7 @@ def main(argv=None):
             rec[f"reward_per_enemy@{s}"] = None if got is None else round(got[1] / n, 4)
         rows.append(rec)
 
+    out_dir.mkdir(parents=True, exist_ok=True)
     with open(out_path, "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
         w.writeheader()

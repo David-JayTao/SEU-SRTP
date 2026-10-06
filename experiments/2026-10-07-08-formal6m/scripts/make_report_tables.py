@@ -31,10 +31,16 @@ while every write stays under --out-dir.
 
 Status vocabulary (sections E/F; exact tokens)
 ----------------------------------------------
-  completed_6M    target reached (the num_env_steps budget from log/ledger)
+  completed_6M    target reached (the num_env_steps budget from log/ledger), or
+                  the run exhausted its full episode schedule and exited
+                  cleanly (rc=0). The runner floors the episode count --
+                  episodes = num_env_steps // 3000 // threads -- so e.g. the
+                  3-thread 1v1 lanes terminate at 5,994,000/6,000,000 steps by
+                  construction: that is completion, not failure.
   running         started and still writing (fresh artefacts, no end marker)
-  failed          stopped short of target with an error that is not a clean
-                  interrupt, or went silent after real progress
+  failed          stopped short of target/episode schedule with an error that
+                  is not a clean interrupt, or went silent after real progress
+                  without having consumed the whole episode schedule
   time_cutoff     stopped short of target by a clean interrupt (the queue's
                   `timeout -s INT` wall-clock cap raises KeyboardInterrupt)
   early_error     error before the first PPO update completed (e.g. F9)
@@ -97,6 +103,9 @@ STATUS_ZH = {
 # `TypeError: 'NoneType' object is not subscriptable`; it is recorded as
 # not_applicable, not as a failure of this campaign, and was never launched.
 # The experiment id is the one it would have had under this campaign's naming.
+# Such ids are specific to a campaign generation, so an entry is emitted only
+# when the reported campaign itself uses the same experiment-family prefix
+# (f6m_); a foreign-campaign view (--campaign-root) never gains this row.
 KNOWN_NOT_APPLICABLE = [{
     "experiment": "f6m_official_1v1_shoot_hier_vsbaseline",
     "scenario": "1v1/ShootMissile/HierarchyVsBaseline",
@@ -229,7 +238,7 @@ def parse_log(path):
     out = {"start": None, "seed": None, "threads": None, "steps": None,
            "target": None, "fps": None, "rew_first": None, "rew_last": None,
            "evals": [], "traceback": False, "clean_interrupt": False,
-           "exit_code": None}
+           "exit_code": None, "update_last": None, "updates_total": None}
     m = START_RE.search(txt)
     if m:
         out["start"] = parse_dt(m.group(1))
@@ -246,6 +255,10 @@ def parse_log(path):
         out["steps"] = int(mm.group("steps"))
         out["target"] = int(mm.group("total"))
         out["fps"] = float(mm.group("fps"))
+        # "updates ep/eps" prints the 0-based index of the update just finished,
+        # so after the whole (floored) schedule ep == eps - 1.
+        out["update_last"] = int(mm.group("ep"))
+        out["updates_total"] = int(mm.group("eps"))
     rews = TRAIN_REW_RE.findall(txt)
     if rews:
         out["rew_first"], out["rew_last"] = float(rews[0]), float(rews[-1])
@@ -309,6 +322,7 @@ def build_record(camp, repo, name, planned, ledger):
         "start": st.get("start"), "end": st.get("end"), "rc": st.get("rc"),
         "log": None, "run_dir": None, "checkpoint": None, "mtime": None,
         "traceback": False, "clean_interrupt": False, "exit_code": None,
+        "update_last": None, "updates_total": None,
         "status": None,
     }
     log = latest_log(camp, name)
@@ -332,6 +346,8 @@ def build_record(camp, repo, name, planned, ledger):
         rec["traceback"] = lg["traceback"]
         rec["clean_interrupt"] = lg["clean_interrupt"]
         rec["exit_code"] = lg["exit_code"]
+        rec["update_last"] = lg["update_last"]
+        rec["updates_total"] = lg["updates_total"]
         rec["mtime"] = log.stat().st_mtime
 
     run_dir = find_run_dir(repo, name)
@@ -385,6 +401,15 @@ def classify(rec, now, stale_min):
         if steps is None or steps < threads * 3000:   # died inside update 0
             return "early_error"
         return "failed"
+    # A clean end (rc=0) after the runner consumed its entire floored episode
+    # schedule is completion, not failure: episodes = num_env_steps // 3000 //
+    # threads floors, so e.g. the 3-thread 1v1 lanes stop short of the 6M
+    # budget at 5,994,000 steps BY CONSTRUCTION (666 episodes x 9,000).
+    if (ended and rec.get("update_last") is not None
+            and rec.get("updates_total")
+            and rec["update_last"] >= rec["updates_total"] - 1
+            and steps is not None and rec["exit_code"] in (None, 0)):
+        return "completed_6M"
     # ended (or silent) without a crash signature and short of target
     return "failed"
 
@@ -579,6 +604,14 @@ SCALING_HDR = ["Scale", "Agents", "Seed", "Steps", "FPS", "Wall time",
                "CPU", "RAM", "VRAM", "Status"]
 
 
+def campaign_owns(na_exp, records):
+    """True iff the reported campaign uses the same experiment-family prefix
+    (everything up to the first '_') as a KNOWN_NOT_APPLICABLE id. Keeps this
+    campaign's documented-anchor rows out of foreign-campaign views."""
+    prefix = na_exp.split("_", 1)[0] + "_"
+    return any(r["exp"].startswith(prefix) for r in records)
+
+
 def official_table(records, now):
     """Section E -- one row per official baseline run (see report §5)."""
     sel = sorted((r for r in records
@@ -594,6 +627,8 @@ def official_table(records, now):
             r["status"], r["checkpoint"] or "-",
         ]) + " |")
     for na in KNOWN_NOT_APPLICABLE:
+        if not campaign_owns(na["experiment"], records):
+            continue
         if any(r["exp"] == na["experiment"] for r in sel):
             continue
         out.append("| " + " | ".join([
@@ -683,7 +718,7 @@ def main(argv=None):
     scaling = run_child("scaling_table.py",
                         ["--campaign-root", str(camp), "--out-dir", str(out_dir)], repo)
     norm = run_child("normalized_scaling.py",
-                     ["--campaign-root", str(camp)], repo)
+                     ["--campaign-root", str(camp), "--out-dir", str(out_dir)], repo)
 
     planned, ledger = load_ledger(camp)
     names = sorted(set(planned)
@@ -699,8 +734,8 @@ def main(argv=None):
     by_exp = {r["exp"]: r for r in records}
     peaks = reads_peaks(out_dir)
 
-    official_md, official_rows = official_table(records, now)
-    scaling_md, scaling_rows = scaling_table(records, peaks, now)
+    official_md, _ = official_table(records, now)
+    scaling_md, _ = scaling_table(records, peaks, now)
 
     queued = sorted(r["exp"] for r in records
                     if r["status"] == "not_applicable" and r["exp"] in planned
@@ -710,7 +745,7 @@ def main(argv=None):
         "# 报告表格快照（自动生成，勿手改）",
         "",
         "由 `scripts/make_report_tables.py` 在每次 sweep 时重新生成。",
-        f"campaign root: `{camp}`（本文件位置推导；--campaign-root/F6M 环境变量可覆盖）",
+        f"campaign root: `{camp}`（本文件位置推导；--campaign-root / $CAMPAIGN_ROOT 可覆盖）",
         "",
         "## A. Baseline 复现与缩放实验状态",
         "",
@@ -733,7 +768,9 @@ def main(argv=None):
         official_md,
         "",
         f"_Status ∈ {{{', '.join(STATUS_VOCAB)}}}；Steps 为目标 6,000,000 vectorised env steps 的已完成量；"
-        "running 行的 Steps/FPS/Wall time/reward 为生成时刻的实时值（Wall time = 队列启动至今）。_",
+        "running 行的 Steps/FPS/Wall time/reward 为生成时刻的实时值（Wall time = 队列启动至今）。"
+        "3-thread 的 1v1 lane 因 runner 取整（6e6 // 3000 // 3 = 666 episodes）在 5,994,000 步即自然结束，"
+        "计为 completed_6M（不是 failed）。_",
         "",
         f"_F9: `{F9_SCENARIO}` 是官方入口但在首个 env step 即报错（TypeError），本轮未启动，"
         "按 `status/running_jobs.md` 记为 not_applicable。_",

@@ -174,6 +174,7 @@ def main(argv=None):
     rows.sort(key=lambda r: (r["variant"], r["team_size"], str(r["seed"])))
     out = out_dir / "scaling_table.csv"
     if rows:
+        out_dir.mkdir(parents=True, exist_ok=True)
         with open(out, "w", newline="") as f:
             w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
             w.writeheader()
