@@ -643,14 +643,18 @@ def scaling_table(records, peaks, now):
     for r in records:
         m = RUN_RE.match(r["exp"])
         if m:
-            sel.append((int(m.group("n")), r))
-    sel.sort(key=lambda t: (t[0], t[1]["exp"]))
+            sel.append((int(m.group("n")), m.group("variant"), r))
+    sel.sort(key=lambda t: (t[0], t[2]["exp"]))
     out = ["| " + " | ".join(SCALING_HDR) + " |", "|" + "---|" * len(SCALING_HDR)]
-    for n, r in sel:
+    for n, variant, r in sel:
         p = peaks.get(r["exp"], {})
         rw = r["rew_last"]
         rw_norm = "-"
-        if rw is not None:
+        # reward/N is only valid where the reward is a SUM over the team's N
+        # agents -- the NoWeapon family (PostureReward). A ShootMissile reward
+        # is not a team sum, so no normalisation for it (the section footnote
+        # already says ShootMissile is not applicable); N == 1 is the identity.
+        if rw is not None and (n == 1 or variant == "noweapon"):
             try:
                 rw_norm = fmt(float(rw) / n)
             except (TypeError, ValueError):

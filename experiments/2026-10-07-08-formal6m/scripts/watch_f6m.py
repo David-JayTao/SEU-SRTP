@@ -218,6 +218,50 @@ def tmux_sessions() -> list[str]:
     return [l.split(":")[0] for l in out.strip().splitlines() if ":" in l]
 
 
+def sync_history_schema(hist: Path, header: list) -> None:
+    """Make sure `hist`'s stored header is exactly `header`.
+
+    The per-job column set follows JOBS, which grew from 5 to 9 experiments
+    mid-campaign. The original implementation wrote the header only when the
+    file did not exist, so the extra columns stayed unnamed and every named
+    *_steps column silently held a shifted FPS value (repaired 2026-10-07).
+    Re-sync whenever the header no longer matches: legacy-width rows
+    are migrated by column NAME; rows already as wide as the new header are
+    kept verbatim (their leading fields must not be re-interpreted through
+    the stale old header). Normal sweeps -- header matches -- stay a plain
+    append and never rewrite the file.
+    """
+    if not hist.exists():
+        hist.parent.mkdir(parents=True, exist_ok=True)
+        with hist.open("w", newline="") as fh:
+            csv.writer(fh).writerow(header)
+        return
+    with hist.open(newline="") as fh:
+        table = list(csv.reader(fh))
+    if not table:
+        with hist.open("w", newline="") as fh:
+            csv.writer(fh).writerow(header)
+        return
+    old_header, body = table[0], table[1:]
+    if old_header == header:
+        return
+    fixed = []
+    for row in body:
+        if len(row) == len(old_header):
+            by_name = dict(zip(old_header, row))
+            fixed.append([by_name.get(c, "") for c in header])
+        elif len(row) == len(header):
+            fixed.append(row)
+        else:  # last resort: pad short rows / truncate over-long ones
+            fixed.append((row + [""] * len(header))[: len(header)])
+    with hist.open("w", newline="") as fh:
+        w = csv.writer(fh)
+        w.writerow(header)
+        w.writerows(fixed)
+    print(f"throughput_history.csv: header updated to {len(header)} fields, "
+          f"{len(fixed)} rows migrated")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--stall-min", type=float, default=30.0,
@@ -327,16 +371,18 @@ def main() -> int:
     print(txt)
 
     # Append one row per sweep to a CSV history -- this is the throughput-vs-time
-    # record used later for the equal-wall-clock analysis.
+    # record used later for the equal-wall-clock analysis. The column set
+    # follows JOBS, so sync_history_schema() first guarantees the stored header
+    # still describes the rows being appended (it silently lagged when the job
+    # list grew from 5 to 9 on 2026-10-07 03:19).
     hist = CAMP / "metrics" / "throughput_history.csv"
-    new = not hist.exists()
+    header = (["timestamp_local", "aggregate_fps", "load1", "cpu_busy_pct",
+               "train_cpu_pct", "rss_gb"]
+              + [f"{r['exp']}_fps" for r in rows]
+              + [f"{r['exp']}_steps" for r in rows])
+    sync_history_schema(hist, header)
     with hist.open("a", newline="") as fh:
         w = csv.writer(fh)
-        if new:
-            w.writerow(["timestamp_local", "aggregate_fps", "load1", "cpu_busy_pct",
-                        "train_cpu_pct", "rss_gb"]
-                       + [f"{r['exp']}_fps" for r in rows]
-                       + [f"{r['exp']}_steps" for r in rows])
         w.writerow([state["timestamp_local"], agg_fps, s["load1"], s["cpu_busy_pct"],
                     p["cpu_pct"], p["rss_gb"]]
                    + [(r["fps"] or "") for r in rows]

@@ -71,6 +71,24 @@ ACTIVE_MIN = 15.0  # metrics.jsonl touched within N minutes => run still writing
 OK_STATUS = {"exact", "interp", "cross"}  # statuses that carry a real value
 PRIMARY_VARIANTS = {"noweapon", "scaling_noweapon"}  # the N-scaling family
 
+
+def per_enemy(reward, team_size, variant):
+    """reward/N, defined ONLY for the NoWeapon family.
+
+    The division is exact only when the logged reward is the SUM over the
+    team's N agents, which holds for PostureReward (NoWeapon) runs.  A
+    ShootMissile reward is not a team sum, so dividing it by N would be
+    silently wrong and is never done; N == 1 is the identity and is kept for
+    every family so 1v1 rows still carry a value.
+    """
+    if reward is None or not team_size:
+        return None
+    if team_size == 1:
+        return reward
+    if variant in PRIMARY_VARIANTS or "noweapon" in (variant or ""):
+        return reward / team_size
+    return None
+
 X_MODE = "hours"
 
 LOG_RE = re.compile(r"^(?P<exp>.+)_seed(?P<seed>\d+)_gpu(?P<gpu>\d+)_\d{8}_\d{6}\.log$")
@@ -359,7 +377,7 @@ def fill_cells(recs: list, budgets: list, method: str) -> None:
         for b in budgets:
             lab = budget_label(b)
             v, st, br = value_at(rec["curve"]["points"], rec["curve"]["nan_xs"], b, method)
-            pv = None if v is None else v / rec["team_size"]
+            pv = per_enemy(v, rec["team_size"], rec["variant"])
             cells[lab] = (v, pv, st, br)
         rec["cells"] = cells
 

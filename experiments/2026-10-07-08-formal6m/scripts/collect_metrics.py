@@ -48,7 +48,13 @@ EP_RE = re.compile(
     # group backtracks to "12" so the literal "." can match the decimal point).
     r"FPS (?P<fps>\d+(?:\.\d+)?)\.?")
 TRAIN_REW_RE = re.compile(r"average episode rewards is (?P<v>-?[\d.eE+]+)")
-EVAL_REW_RE = re.compile(r"eval average episode rewards: (?P<v>-?[\d.eE+]+)")
+# Two eval print styles exist: jsbsim_runner / share_jsbsim_runner print
+# "eval average episode rewards:", the selfplay runner prints "ego average
+# episode rewards:" (followed by "opponent average episode rewards:" -- the
+# pattern must not pick the opponent line up as the ego value).  Anchoring on
+# "(?:eval|ego)" matches exactly the leading token of each line, never the
+# "opponent" one.
+EVAL_REW_RE = re.compile(r"(?:eval|ego) average episode rewards: (?P<v>-?[\d.eE+]+)")
 RENDER_REW_RE = re.compile(r"render episode reward of agent: (?P<v>-?[\d.eE+-]+)")
 START_RE = re.compile(r"^start\s+:\s+(?P<t>\S+)", re.M)
 GIT_RE = re.compile(r"^git commit : (?P<h>\w+)", re.M)
@@ -278,11 +284,20 @@ def main(argv=None):
 
         # Merge metrics.jsonl by total_num_steps. A single step can carry more
         # than one record (the training diagnostics and, when eval is on, the
-        # eval infos), so records for the same step must be unioned -- a plain
-        # dict assignment would let the eval record shadow value_loss/entropy.
+        # eval infos), so records for the same step must be unioned. The eval
+        # record is written only AFTER the eval episodes finish -- its wall_time
+        # can be minutes later than the training update's -- so the training
+        # record must win every shared key, or the curve's wall_time becomes
+        # the eval timestamp instead of the training update's. A training
+        # record is the one carrying average_episode_rewards; eval-only keys
+        # (eval_average_episode_rewards, eval_elo_gain, ...) still merge in.
         by_step = {}
         for r in jrows:
-            by_step.setdefault(r["total_num_steps"], {}).update(r)
+            cur = by_step.setdefault(r["total_num_steps"], {})
+            is_train = "average_episode_rewards" in r
+            for k, v in r.items():
+                if is_train or k not in cur:
+                    cur[k] = v
 
         # undo the batch-size normalisation that ACTLayer applies to entropy
         ent_rows = entropy_batch_rows(meta.get("n_threads"))
@@ -303,6 +318,23 @@ def main(argv=None):
 
         last = eps[-1] if eps else {}
         first = eps[0] if eps else {}
+        # eval_reward_last: prefer the raw metrics.jsonl eval record -- full
+        # precision, and it also covers the selfplay runner whose eval line is
+        # "ego average episode rewards". Fall back to the log line (either
+        # style) when no eval record exists, e.g. for a pruned jsonl. Only
+        # eval records at or before the last completed step count; a record
+        # can never sit past the log's last step, but never extrapolate.
+        steps_done = last.get("total_num_steps")
+        eval_rows = [r for r in jrows
+                     if isinstance(r.get("eval_average_episode_rewards"),
+                                   (int, float))]
+        if steps_done is not None:
+            before_or_at = [r for r in eval_rows
+                            if r["total_num_steps"] <= steps_done]
+            eval_rows = before_or_at or eval_rows
+        eval_reward_last = (max(eval_rows, key=lambda r: r["total_num_steps"])
+                            ["eval_average_episode_rewards"]
+                            if eval_rows else meta.get("last_eval_reward"))
         # slope of average_episode_rewards over the last third of the run
         slope = None
         rewards = [e.get("average_episode_rewards") for e in eps
@@ -333,7 +365,7 @@ def main(argv=None):
             "train_reward_first": rewards[0] if rewards else None,
             "train_reward_last": rewards[-1] if rewards else None,
             "train_reward_tail_slope": round(slope, 4) if slope is not None else None,
-            "eval_reward_last": meta.get("last_eval_reward"),
+            "eval_reward_last": eval_reward_last,
             "value_loss_last": last.get("value_loss"),
             "policy_loss_last": last.get("policy_loss"),
             "entropy_loss_last": last.get("policy_entropy_loss"),
