@@ -1,2 +1,4 @@
 timestamp_local,aggregate_fps,load1,cpu_busy_pct,train_cpu_pct,rss_gb,f6m_10v10_noweapon_s0_fps,f6m_5v5_noweapon_s0_fps,f6m_3v3_noweapon_s0_fps,f6m_2v2_noweapon_s0_fps,f6m_official_2v2_noweapon_s0_fps,f6m_10v10_noweapon_s0_steps,f6m_5v5_noweapon_s0_steps,f6m_3v3_noweapon_s0_steps,f6m_2v2_noweapon_s0_steps,f6m_official_2v2_noweapon_s0_steps
 2026-10-07 02:56:07 ,0,31.44,21,3056.7,22.87,,,,,,0,0,0,0,0
+2026-10-07 02:56:35 ,0,39.09,21,3049.4,23.17,,,,,,0,0,0,0,0
+2026-10-07 03:02:27 ,385,43.5,20,2936.1,27.37,,87,131,86,81,0,24000,48000,36000,36000
