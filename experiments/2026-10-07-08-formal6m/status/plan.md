@@ -111,6 +111,71 @@ Rule for each freed lane, in priority order (§14 of the campaign brief):
 4. **Never** start a job that cannot produce a useful partial result before
    10:00 Oct 8.
 
+### Drain-time arithmetic (why late lanes can only take short jobs)
+
+A lane freeing at time *t* can host a job only if
+`6e6 / expected_FPS_at_those_threads <= (09:00 Oct 8 - t)`. Using the measured
+per-thread rates (2v2 ≈ 19.5, 3v3 ≈ 16, 5v5 ≈ 10, 10v10 ≈ 3.7 env-steps/s/thread):
+
+| lane frees | threads | window left | 6M at 8 threads needs | fits? |
+|---|---|---|---|---|
+| 3v3 @15:40 | 8 | 17.3 h | 3v3 (10.4 h) ✔, 2v2 (10.4 h) ✔, 5v5 (20.8 h) ✘ | yes (small scales) |
+| 5v5 @22:50 | 8 | 10.2 h | 2v2 (10.4 h) ~, 3v3 (10.4 h) ~, anything bigger ✘ | marginal |
+| 2v2 @23:20 | 4 | 9.7 h | 2v2 at 4 thr (20 h) ✘ | no |
+| off2v2 @00:10 | 4 | 8.8 h | ✘ for 6M; fine for 1/heading (2.8 h) | short jobs only |
+| 10v10 @~01:30 | 20 | 7.5 h | 2v2 seed at 20 thr (4.3 h) ✔, 3v3 seed (5.2 h) ✔, 5v5 (8.3 h) ✘ | generous |
+
+**Consequence: the only genuinely useful 6M-capable slot after ~23:00 is the
+10v10 lane's 20 threads when it completes at ~01:30 Oct 8.** That is the slot to
+hold for a second seed at 2v2 or 3v3. Everything freeing between 22:50 and 00:10
+can only take `1/heading` (SingleControl, ~590 FPS at 10 threads, ~2.8 h) or a
+partial Shoot-scaling run.
+
+**No lane can host 5v5 seed 1 at 6M.** Starting it at 15:40 on the 3v3 lane gets
+it to roughly 5.0M by the freeze (5v5 needs ~20.8 h at 8 threads against a 17.3 h
+window). If it is started anyway it must be reported as `time_cutoff` with the
+steps actually reached — which is still a usable variance sample over 0–5M, but
+is a weaker deliverable than a complete 3v3 seed 1. **Decision deferred to
+15:40 with live numbers in hand.**
+
+## Final-phase tasks (do at ~09:00 Oct 8, once training stops competing for CPU)
+
+These are cheap, single-core, inference-only probes that need a QUIET machine or
+trained checkpoints, so they are deliberately deferred to the freeze window.
+
+1. **`offline_eval.py` on every final f6m checkpoint** (`--run-dir <...>/run1
+   --episodes 8`). Yields for each lane a low-variance `mean_return`,
+   `std_return` and, critically, **`mean_episode_length`**.
+   *Why this matters:* `average_episode_rewards` is computed as
+   `buffer.rewards.sum() / (buffer.masks == False).sum()`
+   (`runner/share_jsbsim_runner.py:112`) — i.e. a **per-agent-episode** mean over
+   the learner's `num_agents // 2` team. Because `PostureReward` sums over an
+   agent's enemies, that quantity scales with N, which is why `reward/N` is the
+   right normalisation. **But it is still confounded if the mean episode LENGTH
+   differs across N** (reward accumulates per step, so shorter episodes give
+   smaller-magnitude per-episode rewards regardless of skill). The probe
+   measures the length directly instead of assuming it away.
+2. **`critic_scaling_probe.py`** on a quiet box — fills the representation
+   columns (local obs dim, share_obs dim, actor/critic param counts vs N).
+3. **`env_bench.py`** quiet-mode re-measurement for the computational-scaling
+   figure; the pilot's `quiet`/`loaded` pair is the precedent for reporting both.
+4. **`obs_cost_profile.py`** to re-confirm the O(N²) observation-construction
+   attribution (pilot F8) under this campaign's configuration.
+
+## Two eval-measurement facts inherited from the pilot (do not re-derive)
+
+- **MultipleCombat evaluation is deterministic.** Re-evaluating one checkpoint 8
+  times gave `std_return = 0.0` (`docs/overnight_repro_scaling_2026-10-04.md`
+  §5.1). So the `--eval-episodes 1` series wobbling between −28 and −280 across
+  training is **not** eval sampling noise; it is the policy *and the re-drawn
+  self-play opponent* changing. Per-checkpoint the estimator has zero variance
+  and unknown (potentially large) bias — so eval curves are suggestive only, and
+  no conclusion in this report rests on a single eval point.
+- **`--eval-interval 2` means eval every 2 PPO updates**, and at 10v10 an eval
+  costs ~140–156 s (`metrics.jsonl` `wall_time` deltas). At 100 updates that is
+  ~2 h of the 10v10 lane's wall-clock — already inside the reported FPS, which is
+  a wall-clock average, not a pure step rate.
+
 ## Explicitly not done, and why
 
 - **10v10 second seed**: needs ~26 h at the threads available; the earliest a

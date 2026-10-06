@@ -678,12 +678,20 @@ def add_end_labels(ax, items, pad_frac=0.055):
                 clip_on=False)
 
 
+def _box_hits(box, boxes):
+    x0, y0, x1, y1 = box
+    return any(not (x1 < b[0] or x0 > b[2] or y1 < b[1] or y0 > b[3])
+               for b in boxes)
+
+
 def label_points(ax, pts, dy_frac=0.035):
     """Direct labels for scatter points: pts = [(x, y, text, colour)].
 
-    Labels sit just above their point, staggered downward when several land at
-    the same value; near the left/right edge they grow inward, so a point on
-    the axis never clips its own label.
+    A label prefers the slot just above its point; when neighbours crowd the
+    same band it searches outwards (up first, then down) for the nearest slot
+    whose rendered box clears every plotted marker and every already-placed
+    label, so a label never sits on a data point.  Near the left/right edge
+    labels grow inward, so a point on the axis never clips its own label.
     """
     pts = [(x, y, t, c) for (x, y, t, c) in pts if x is not None and y is not None]
     if not pts:
@@ -693,22 +701,59 @@ def label_points(ax, pts, dy_frac=0.035):
     ymin, ymax = ax.get_ylim()
     xmin, xmax = ax.get_xlim()
     gap = (ymax - ymin) * dy_frac
+    ax_bb = ax.get_window_extent()
+    # rendered boxes of every marker currently drawn on this axes, sized from
+    # each line's own marker size so small compare glyphs block less
+    marker_boxes = []
+    for ln in ax.get_lines():
+        if ln.get_marker() in ("", "None", None):
+            continue
+        xd = np.asarray(ln.get_xdata(), dtype=float)
+        yd = np.asarray(ln.get_ydata(), dtype=float)
+        if xd.size == 0 or xd.size != yd.size:
+            continue
+        r = ln.get_markersize() * fig.dpi / 144.0 + 3.5
+        for px, py in ax.transData.transform(np.column_stack([xd, yd])):
+            marker_boxes.append((px - r, py - r, px + r, py + r))
     placed = []
     for x, y, t, c in sorted(pts, key=lambda it: -it[1]):
-        yy = y + gap * 0.6
-        while any(abs(yy - p) < gap for p in placed):
-            yy -= gap
-        placed.append(yy)
-        ann = ax.annotate(t, xy=(x, y), xytext=(x, yy), textcoords="data",
-                          fontsize=7.5, color=c, ha="center", va="bottom")
-        # nudge horizontally until the label is inside the axes box
+        best_score, best_yy = None, None
+        for k in range(41):
+            # base slot just above the point, then alternately further up /
+            # slightly down; take the first conflict-free slot, else the
+            # least-conflicted one
+            step = (k + 1) // 2
+            off = 0.6 + step if k % 2 else 0.6 - step
+            yy = y + gap * off
+            ann = ax.annotate(t, xy=(x, y), xytext=(x, yy), textcoords="data",
+                              fontsize=7.5, color=c, ha="center", va="bottom")
+            fig.canvas.draw()
+            bb = ann.get_window_extent()
+            box = (bb.x0, bb.y0, bb.x1, bb.y1)
+            ann.remove()
+            score = 0 if (box[3] <= ax_bb.y1 and box[1] >= ax_bb.y0) else 100
+            score += sum(1 for b in marker_boxes if _box_hits(box, [b]))
+            padded = (box[0] - 2, box[1] - 2, box[2] + 2, box[3] + 2)
+            score += sum(1 for b in placed if _box_hits(padded, [b]))
+            if best_score is None or score < best_score:
+                best_score, best_yy = score, yy
+            if score == 0:
+                break
+        ann = ax.annotate(t, xy=(x, y), xytext=(x, best_yy),
+                          textcoords="data", fontsize=7.5, color=c,
+                          ha="center", va="bottom")
         fig.canvas.draw()
         bb = ann.get_window_extent()
+        placed.append((bb.x0 - 2, bb.y0 - 2, bb.x1 + 2, bb.y1 + 2))
+        # nudge horizontally until the label is inside the axes box
         (bx0, _), (bx1, _) = ax.transData.inverted().transform(
             [(bb.x0, bb.y0), (bb.x1, bb.y1)])
         nudge = xmin - bx0 if bx0 < xmin else (xmax - bx1 if bx1 > xmax else 0.0)
         if nudge:
-            ann.set_position((x + nudge, yy))
+            ann.set_position((x + nudge, best_yy))
+            fig.canvas.draw()
+            bb = ann.get_window_extent()
+            placed[-1] = (bb.x0 - 2, bb.y0 - 2, bb.x1 + 2, bb.y1 + 2)
 
 
 def _line_display_points(ax):
@@ -1195,6 +1240,34 @@ def fig_throughput(runs, compare, camp, suffix=""):
 # --------------------------------------------------------------------------
 # figure 5: CPU / RAM / VRAM vs N
 # --------------------------------------------------------------------------
+def cpu_budget_note():
+    """What CPU supply the reader should read the CPU panel against.
+
+    The training runs execute under the session's cgroup CPU quota (48 cores
+    on this box), not the full host.  Prefer that effective budget; fall back
+    to the host count when no quota is configured or visible.
+    """
+    host = os.cpu_count() or 1
+    budget = None
+    try:  # cgroup v2
+        quota, period = Path("/sys/fs/cgroup/cpu.max").read_text().split()
+        if quota != "max":
+            budget = max(1, int(quota) // int(period))
+    except (OSError, ValueError):
+        pass
+    if budget is None:
+        try:  # cgroup v1
+            q = int(Path("/sys/fs/cgroup/cpu/cpu.cfs_quota_us").read_text())
+            p = int(Path("/sys/fs/cgroup/cpu/cpu.cfs_period_us").read_text())
+            if q > 0 and p > 0:
+                budget = max(1, q // p)
+        except (OSError, ValueError):
+            pass
+    if budget is None or budget >= host:
+        return f"host: {host} logical CPUs"
+    return f"host: {host} logical CPUs; cgroup budget: {budget} cores"
+
+
 def fig_resource_scaling(runs, compare, camp, suffix=""):
     fname = f"formal_resource_scaling{suffix}.png"
     peaks = resource_peaks(camp)
@@ -1250,9 +1323,8 @@ def fig_resource_scaling(runs, compare, camp, suffix=""):
                 ax.plot([], [], ls="none", marker=CMP_MARK, ms=7,
                         color=CMP_COLOUR, label=f"[{label}]")
         if key == "cpu":
-            ax.text(0.02, 0.97, f"host: {os.cpu_count()} logical CPUs",
-                    transform=ax.transAxes, fontsize=7.5, color=INK2,
-                    ha="left", va="top")
+            ax.text(0.02, 0.97, cpu_budget_note(), transform=ax.transAxes,
+                    fontsize=7.5, color=INK2, ha="left", va="top")
         ax.set_xlabel("team size N")
         ax.set_ylabel(ylab)
         ax.set_title(title, fontsize=10.5)
