@@ -1,0 +1,10 @@
+wrote /root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/metrics/scaling_table.csv (4 rows)
+
+| scale | variant | agents | obs | share_obs | actor_p | critic_p | thr | seed | FPS | s/vec-step | s/rollout-ep | agent-steps/s | ag-steps/s/thr | steps | eps | rew_first | rew_last | slope | eval_rew | value_loss | critic_gn | entropy | NaN? | learnable? |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 2v2 | noweapon | 4 | 27 | 108 | 154891 | 163969 | 4 | 0 | 77 | 0.052 | 155.8 | 308 | 77 | 600000 | 50 | -3.51 | 20.5 | +0.694 | -0.928 | 0.375 | 10.1 | -0.00131 | no | improving |
+| 3v3 | noweapon | 6 | 39 | 234 | 156427 | 180097 | 8 | 0 | 127 | 0.063 | 189 | 762 | 95.2 | 984000 | 41 | -5.32 | 26.6 | +0.912 | 17.6 | 0.918 | 11 | -0.000704 | no | improving |
+| 5v5 | noweapon | 10 | 63 | 630 | 159499 | 230785 | 8 | 0 | 82 | 0.0976 | 292.7 | 820 | 102 | 624000 | 26 | -9.12 | -6.66 | -0.0187 | -12 | 7.26 | 24.2 | -0.000762 | no | flat/declining |
+| 10v10 | noweapon | 20 | 123 | 2460 | 167179 | 465025 | 20 | 0 | 76 | 0.263 | 789.5 | 1520 | 76 | 540000 | 9 | -17.6 | -17.6 | -0.0853 | -55.9 | 70.4 | 47.2 | -0.000315 | no | flat/declining |
+
+campaign peaks so far: CPU peak 46.8 busy cores of the 48-core quota (97.6% of quota; formal-6M sampler (quota-normalised)), RAM 52.6 GB, VRAM 2386 MB (single job uses <1.5 GB)

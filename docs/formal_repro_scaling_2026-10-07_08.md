@@ -260,9 +260,53 @@ their own about achievable reward. A large critic input is not by itself a defec
 — it is the definition of a centralised critic. The measurement bounds the size
 of the problem; it does not demonstrate that the size is what limits learning.
 
-> Note on the `extrapolated` entries in `metrics/critic_scaling.json`: only the
-> four `measured` entries are used anywhere in this report. The extrapolated
-> entries are model-construction projections for other N and are **not** evidence.
+### 10.4 Projection: where the centralised critic stops fitting
+
+`metrics/critic_scaling.json` also carries an `extrapolated` block. **These are
+projections, not measurements** — they extend the exact dimension formulas above
+beyond the four N we can actually construct. They are reported here only because
+they are computed from a *measured* calibration on this GPU (68.9 G-MAC/s,
+fixed batch 256) and because they answer "what breaks first?".
+
+| N | total agents | share_obs dim | critic 1st-layer params | analyst buffer for `share_obs` | est. critic fwd / env step | source |
+|---|---|---|---|---|---|---|
+| 2 | 4 | 108 | 13,952 | 0.03 GB | 0.005 ms | measured |
+| 3 | 6 | 234 | 30,080 | 0.09 GB | 0.016 ms | measured |
+| 5 | 10 | 630 | 80,768 | 0.42 GB | 0.070 ms | measured |
+| 10 | 20 | 2,460 | 315,008 | 3.30 GB | 0.548 ms | measured |
+| 20 | 40 | 9,720 | 1,244,288 | **26.1 GB** | 4.3 ms | *projected* |
+| 50 | 100 | 60,300 | 7,718,528 | **404 GB** | 67 ms | *projected* |
+| 100 | 200 | 240,600 | 30,796,928 | **3,228 GB** | 536 ms | *projected* |
+
+**Buffer assumption matters and is stated:** the projection uses
+`n_rollout_threads = 12` (the probe's default), i.e.
+`(3001 × 12 × N × share_dim × 4)` bytes. This campaign runs 10v10 at
+`n_rollout_threads = 20`, for which the same formula gives **5.9 GB**, not 3.3 GB.
+The scaling in N is what matters and is independent of that constant; the absolute
+GB figures are not — always read them with the thread count attached.
+
+**FACT.** The `share_obs` replay buffer is O(N²) in memory. Under this campaign's
+own configuration the 10v10 buffer is ~5.9 GB, and it grows ~4× per doubling of N
+because both the agent count and each agent's observation length grow.
+
+**OBSERVATION.** On a 1 TB box, the projected N=50 (100-agent) `share_obs` buffer
+alone is ~0.4 TB at 12 threads, and N=100 is ~3.2 TB. So for this architecture the
+**memory wall arrives before the compute wall** — and long before any question
+about whether the learning algorithm scales.
+
+**HYPOTHESIS.** This is a strong candidate for why "just use a global critic" does
+not extend to large N: the bottleneck is a *representation* choice (concatenating
+every agent's observation) rather than the critic's capacity or the optimiser.
+Any sub-quadratic critic (attention / factorised / locality-restricted) removes
+this term by construction — but that is a claim about memory, and **whether it
+also improves learning is exactly what this campaign did not test** (§4.4).
+
+**CANNOT CONCLUDE.** These projections assume the environment itself scales
+harmlessly to 40/100/200 aircraft. It does not follow that the *task* is even
+well-posed at those sizes, and none of it was run.
+
+> **Only the four `measured` entries are evidence.** Everywhere else in this
+> report, `metrics/critic_scaling.json`'s `extrapolated` block is ignored.
 
 ## 11. Sample / Learning Scalability
 

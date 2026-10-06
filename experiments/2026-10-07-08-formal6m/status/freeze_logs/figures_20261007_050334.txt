@@ -1,0 +1,21 @@
+campaign : /root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m
+repo     : /root/autodl-tmp/SEU-SRTP
+loaded 9 experiments with at least one logged update
+  f6m_official_1v1_hier_selfplay_s1          N=  1 seed=1   steps=  513k fps=    81 threads=3 source=f6m_official_1v1_hier_selfplay_s1_seed1_gpu0_20261007_031755.log
+  f6m_official_1v1_selfplay_s1               N=  1 seed=1   steps=  702k fps=   103 threads=3 source=f6m_official_1v1_selfplay_s1_seed1_gpu0_20261007_031014.log
+  f6m_official_1v1_shoot_hier_selfplay_s1    N=  1 seed=1   steps=  360k fps=    56 threads=3 source=f6m_official_1v1_shoot_hier_selfplay_s1_seed1_gpu2_20261007_031755.log
+  f6m_official_1v1_vsbaseline_s1             N=  1 seed=1   steps=  819k fps=   120 threads=3 source=f6m_official_1v1_vsbaseline_s1_seed1_gpu1_20261007_031014.log
+  f6m_2v2_noweapon_s0                        N=  2 seed=0   steps=  588k fps=    77 threads=4 source=f6m_2v2_noweapon_s0_seed0_gpu0_20261007_025433.log
+  f6m_official_2v2_noweapon_s0               N=  2 seed=0   steps=  588k fps=    76 threads=4 source=f6m_official_2v2_noweapon_s0_seed0_gpu1_20261007_025433.log
+  f6m_3v3_noweapon_s0                        N=  3 seed=0   steps=  960k fps=   126 threads=8 source=f6m_3v3_noweapon_s0_seed0_gpu0_20261007_025433.log
+  f6m_5v5_noweapon_s0                        N=  5 seed=0   steps=  624k fps=    82 threads=8 source=f6m_5v5_noweapon_s0_seed0_gpu1_20261007_025433.log
+  f6m_10v10_noweapon_s0                      N= 10 seed=0   steps=  540k fps=    74 threads=20 source=f6m_10v10_noweapon_s0_seed0_gpu2_20261007_025431.log
+resource sample: 9 experiments -> /root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/metrics/resources.csv
+wrote formal_learning_curves_steps.png  (332 KB)
+wrote formal_learning_curves_walltime.png  (340 KB)
+wrote formal_scaling_reward_normalized.png  (199 KB)
+wrote formal_throughput_vs_agents.png  (211 KB)
+wrote formal_resource_scaling.png  (119 KB)
+wrote formal_critic_scaling.png  (183 KB)
+
+figures in /root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/figures
