@@ -83,6 +83,31 @@ curse-of-multiagency claim.
 
 ---
 
+## F15 — probe `--out` resolves against the repo root, not the invocation cwd
+
+- **Category**: `Other` (portability trap)
+- **Detected**: 2026-10-07 05:03, by the first dry-run of `freeze.sh` — the
+  non-fatal step runner surfaced it instead of aborting the freeze
+- **Symptoms**: `FileNotFoundError: [Errno 2] No such file or directory:
+  'metrics/critic_scaling.json'`, raised **after** the probe had printed its
+  entire results table. Easy to miss: the table looks like success.
+- **Cause**: `critic_scaling_probe.py:27` does `os.chdir(REPO)` at import time
+  (as `offline_eval.py` does), so a relative `--out` is resolved against
+  `/root/autodl-tmp/SEU-SRTP`, not the caller's cwd. No `metrics/` directory
+  exists there.
+- **Fix**: `freeze.sh` passes an absolute `--out`. The trap is left in the probe
+  itself (it is a near-verbatim copy of the pilot's, and `scaling_table.py`
+  already calls it with an absolute path) but is now called out in a comment.
+- **Verification**: freeze sweep goes 10/10 `ok`; `metrics/critic_scaling.json`
+  has 4 `measured` + 7 `extrapolated` entries.
+- **Semantic impact**: none, but note the *first* freeze run reported
+  `critic_probe FAILED` while `metrics/critic_scaling.json` still existed from an
+  earlier `scaling_table.py` invocation — i.e. a stale artefact can mask a broken
+  regeneration step. This is why the step outcomes are recorded explicitly in
+  `status/freeze_summary.md` rather than inferred from the presence of outputs.
+
+---
+
 ## F14 — `1v1` ShootMissile lane is structurally ~2× slower, and will miss 6M
 
 - **Category**: `Computational scalability` (NOT algorithmic)

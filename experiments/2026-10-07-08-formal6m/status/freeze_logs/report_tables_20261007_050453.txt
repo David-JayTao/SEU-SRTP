@@ -1,0 +1,19 @@
+wrote /root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/metrics/report_tables.md
+
+=== E. OFFICIAL BASELINE TABLE ===
+| Experiment | Seed | Steps | Wall time | FPS | Initial reward | Final reward | Eval | Status | Checkpoint |
+|---|---|---|---|---|---|---|---|---|---|
+| f6m_official_1v1_hier_selfplay_s1 | 1 | 522,000 | 1.80 h | 81 | -69.367 | 10.441 | 31.438 | running | actor_latest.pt |
+| f6m_official_1v1_selfplay_s1 | 1 | 711,000 | 1.92 h | 103 | -156.44 | -79.477 | -278.47 | running | actor_latest.pt |
+| f6m_official_1v1_shoot_hier_selfplay_s1 | 1 | 360,000 | 1.80 h | 56 | -192.88 | -21.936 | -434.72 | running | actor_latest.pt |
+| f6m_official_1v1_vsbaseline_s1 | 1 | 828,000 | 1.92 h | 120 | -207.14 | -32.71 | - | running | actor_latest.pt |
+| f6m_official_2v2_noweapon_s0 | 0 | 588,000 | 2.18 h | 76 | -3.5066 | 10.988 | 29.017 | running | actor_latest.pt |
+| f6m_official_1v1_shoot_hier_vsbaseline | - | - | - | - | - | - | - | not_applicable | - |
+
+=== F. SCALING TABLE ===
+| Scale | Agents | Seed | Steps | FPS | Wall time | Reward raw | Reward normalized | Value loss | Critic grad | CPU | RAM | VRAM | Status |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 2v2 | 4 | 0 | 600,000 | 77 | 2.18 h | 20.485 | 10.243 | 0.37464 | 10.067 | 2.9 | 2.97 GB | 536 MB | running |
+| 3v3 | 6 | 0 | 984,000 | 127 | 2.18 h | 26.641 | 8.8802 | 0.91838 | 10.953 | 5.5 | 4.61 GB | 650 MB | running |
+| 5v5 | 10 | 0 | 624,000 | 82 | 2.18 h | -6.6609 | -1.3322 | 7.2553 | 24.165 | 6.0 | 4.85 GB | 656 MB | running |
+| 10v10 | 20 | 0 | 540,000 | 76 | 2.19 h | -17.613 | -1.7613 | 70.401 | 47.242 | 15.7 | 15.18 GB | 1036 MB | running |
