@@ -1,0 +1,3 @@
+# Wave 2, lane F (P1): official 1v1 NoWeapon Selfplay (L1, official .sh entry).
+f6m_official_1v1_selfplay_s1|3|6e6|108000|SingleCombat|1v1/NoWeapon/Selfplay|ppo|1|--use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 1 --eval-episodes 1
+f6m_official_1v1_shoot_hier_selfplay_s1|3|6e6|108000|SingleCombat|1v1/ShootMissile/HierarchySelfplay|ppo|1|--use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 1 --eval-episodes 1 --use-prior

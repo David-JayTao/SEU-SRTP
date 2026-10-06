@@ -1,0 +1,2 @@
+timestamp,load1,load5,cpu_busy_pct,mem_used_gb,mem_total_gb,n_train_procs,gpu0_util,gpu0_mem_mb,gpu1_util,gpu1_mem_mb,gpu2_util,gpu2_mem_mb,train_cpu_pct,train_rss_gb,tmux_sessions
+2026-10-07T03:02:25+08:00,43.50,33.27,76.4,44.1,1007.5,55,12,1199,3,1205,0,464,2939.3,27.36,6
