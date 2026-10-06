@@ -45,12 +45,28 @@ TARGET_STEPS = 6_000_000
 # Experiment name -> (scale label, n_rollout_threads). Kept explicit rather than
 # inferred, so the monitor keeps working even if a process is mid-restart.
 JOBS = {
+    # Experiment line B -- N-v-N NoWeapon scaling, generated configs (L3).
     "f6m_10v10_noweapon_s0": ("10v10", 20),
     "f6m_5v5_noweapon_s0": ("5v5", 8),
     "f6m_3v3_noweapon_s0": ("3v3", 8),
     "f6m_2v2_noweapon_s0": ("2v2", 4),
-    "f6m_official_2v2_noweapon_s0": ("official_2v2", 4),
+    # Experiment line A -- official baselines. L1 unless noted.
+    "f6m_official_2v2_noweapon_s0": ("official_2v2", 4),          # L1 official .sh entry
+    "f6m_official_1v1_selfplay_s1": ("o_1v1_selfplay", 3),        # L1
+    "f6m_official_1v1_vsbaseline_s1": ("o_1v1_vsbaseline", 3),    # L1
+    "f6m_official_1v1_shoot_hier_selfplay_s1": ("o_1v1_shoot", 3),  # L1, --use-prior
+    "f6m_official_1v1_hier_selfplay_s1": ("o_1v1_hier", 3),       # L2 official YAML, no .sh
 }
+
+# Every experiment name the campaign may launch, including queued ones. Used to
+# detect an accidental DUPLICATE run (two training processes writing the same
+# experiment name into sibling run1/run2 dirs).
+ALL_EXPERIMENTS = list(JOBS) + [
+    "f6m_3v3_noweapon_s1",
+    "f6m_2v2_noweapon_s1",
+    "f6m_5v5_noweapon_s1",
+    "f6m_10v10_noweapon_s1",
+]
 
 FPS_RE = re.compile(r"updates (\d+)/(\d+) episodes, total num timesteps (\d+)/(\d+), FPS (\d+)")
 EVAL_RE = re.compile(r"eval average episode rewards: (-?[\d.eE+-]+)")
@@ -67,6 +83,23 @@ def find_run_dir(exp: str) -> Path | None:
     """Locate the run dir for an experiment name (the runner nests by env/scenario/algo)."""
     hits = list(RESULTS.glob(f"**/{exp}/run1"))
     return hits[0] if hits else None
+
+
+def find_duplicate_runs() -> list[str]:
+    """Detect two run dirs for one experiment name.
+
+    train_jsbsim.py always allocates the next free run<N>, so if the same
+    experiment name is ever launched twice it silently creates run2/ beside
+    run1/ and the two trajectories must not be spliced together. Flag it loudly.
+    """
+    dups = []
+    for exp in ALL_EXPERIMENTS:
+        dirs = sorted(RESULTS.glob(f"**/{exp}"))
+        for d in dirs:
+            runs = sorted(p.name for p in d.glob("run*") if p.is_dir())
+            if len(runs) > 1:
+                dups.append(f"{exp}: {runs} under {d}")
+    return dups
 
 
 def read_metrics(run_dir: Path | None) -> dict:
@@ -229,6 +262,7 @@ def main() -> int:
         "timestamp_local": datetime.now().strftime("%Y-%m-%d %H:%M:%S %Z"),
         "aggregate_fps": agg_fps,
         "jobs": rows,
+        "duplicate_runs": find_duplicate_runs(),
         "system": system_stats(),
         "procs": proc_stats(),
         "tmux": tmux_sessions(),
@@ -273,7 +307,8 @@ def main() -> int:
     s = state["system"]
     p = state["procs"]
     lines.append("")
-    lines.append(f"- load1 **{s['load1']}**  cpu_busy **{s['cpu_busy_pct']}%**  "
+    lines.append(f"- load1 **{s['load1']}**  cpu_busy **{s['cpu_busy_pct']}%** (of the host's 192 logical CPUs; "
+                 f"multiply by 4 to read as a fraction of the 48-core quota)  "
                  f"train procs **{p['n_procs']}** using **{p['cpu_pct']}%** CPU, "
                  f"**{p['rss_gb']} GB** RSS")
     lines.append(f"- RAM used {s['mem'].get('used_gb')} GB / {s['mem'].get('total_gb')} GB "
@@ -281,6 +316,11 @@ def main() -> int:
     for g in s["gpu"]:
         lines.append(f"- GPU{g['index']}: util {g['util']}%, VRAM {g['mem_mib']} MiB")
     lines.append(f"- tmux: {', '.join(state['tmux']) or 'none'}")
+    if state["duplicate_runs"]:
+        lines.append("")
+        lines.append("**DUPLICATE RUN DIRS DETECTED (do not splice these trajectories):**")
+        for d in state["duplicate_runs"]:
+            lines.append(f"- {d}")
 
     txt = "\n".join(lines)
     (CAMP / "status" / "monitor_latest.md").write_text(txt + "\n")

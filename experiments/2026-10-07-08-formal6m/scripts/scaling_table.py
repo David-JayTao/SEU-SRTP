@@ -12,19 +12,55 @@ formulas; nothing here is asserted from expectation.
   critic_params    = measured from the real PPOCritic
   FPS / steps / rewards / losses   from logs + metrics.jsonl
   CPU / RAM / VRAM  from system_samples.csv during the run
+
+Partial runs are fine: summary.csv is rebuilt from on-disk artefacts, and every
+column a young run has not produced yet is simply left empty.
+
+The campaign root is DERIVED FROM THIS FILE'S LOCATION
+(<campaign>/scripts/scaling_table.py -> parents[1] = <campaign>), so the same
+script targets whichever campaign it is copied into. Explicit overrides for
+cross-campaign comparisons (point the READS at the foreign campaign and the
+writes back home, so the foreign campaign stays untouched):
+    --campaign-root DIR / CAMPAIGN_ROOT   campaign that is read
+    --out-dir DIR       / OUT_DIR         where scaling_table.csv goes
+                                          (default: <campaign-root>/metrics)
 """
+import argparse
 import csv
-import glob
 import json
 import os
 import re
-import sys
+from pathlib import Path
 
-REPO = "/root/autodl-tmp/SEU-SRTP"
-EXP = os.path.join(REPO, "experiments/2026-10-04-night")
-METRICS = os.path.join(EXP, "metrics")
+DEFAULT_CAMPAIGN = Path(__file__).resolve().parents[1]
 
-sys.path.insert(0, os.path.join(REPO, "experiments/2026-10-04-night/scripts"))
+# Scaling-run names, both campaign generations:
+#   pilot 2026-10-04 night : scaling_<N>v<N>_<variant>[_s<seed>]
+#   formal 6M campaign     : f6m_<N>v<N>_<variant>_s<seed>
+# "official_*" anchor runs are deliberately NOT matched here -- this matches
+# the pilot output schema, where the official anchors are their own series in
+# normalized_scaling.py.
+SCALING_RE = re.compile(
+    r"^(?:scaling_|f6m_)(?P<n>\d+)v\d+_(?P<variant>noweapon|shoot)(?:_s(?P<seed>\d))?$")
+
+
+def resolve_paths(argv=None):
+    """(campaign read, metrics dir written).
+
+    --campaign-root / $CAMPAIGN_ROOT selects the campaign that is read;
+    --out-dir / $OUT_DIR selects where outputs go (default: that campaign's
+    metrics/). Splitting the two is what lets a cross-campaign comparison read
+    a foreign campaign without writing anything into it.
+    """
+    ap = argparse.ArgumentParser(add_help=False)
+    ap.add_argument("--campaign-root", default=None)
+    ap.add_argument("--out-dir", default=None)
+    ns, _ = ap.parse_known_args(argv)
+    root = ns.campaign_root or os.environ.get("CAMPAIGN_ROOT")
+    campaign = Path(root).expanduser().resolve() if root else DEFAULT_CAMPAIGN
+    out = ns.out_dir or os.environ.get("OUT_DIR")
+    out_dir = Path(out).expanduser().resolve() if out else campaign / "metrics"
+    return campaign, out_dir
 
 
 def read_csv(p):
@@ -41,23 +77,22 @@ def fnum(v):
         return None
 
 
-def load_arch():
-    p = os.path.join(METRICS, "critic_scaling.json")
+def load_arch(metrics_dir):
+    p = os.path.join(metrics_dir, "critic_scaling.json")
     if not os.path.exists(p):
-        return {}
+        return {}, {}
     d = json.load(open(p))
     return {m["team_size"]: m for m in d["measured"]}, {e["team_size"]: e for e in d["extrapolated"]}
 
 
-def load_resources():
-    rows = read_csv(os.path.join(EXP, "system/system_samples.csv"))
-    return rows
+def load_resources(campaign):
+    return read_csv(campaign / "system" / "system_samples.csv")
 
 
-def has_nan(exp):
+def has_nan(metrics_dir, exp):
     """A NaN in the run would show up as a nan reward or a pdb.set_trace hang;
     the assert in env_base._pack would abort the run. Report from the curve."""
-    p = os.path.join(METRICS, "curves", f"{exp}.csv")
+    p = os.path.join(metrics_dir, "curves", f"{exp}.csv")
     for r in read_csv(p):
         for k in ("average_episode_rewards", "value_loss", "critic_grad_norm"):
             v = r.get(k, "")
@@ -66,10 +101,12 @@ def has_nan(exp):
     return "no"
 
 
-def main():
-    meas, ext = load_arch()
-    summary = read_csv(os.path.join(METRICS, "summary.csv"))
-    res = load_resources()
+def main(argv=None):
+    campaign, out_dir = resolve_paths(argv)
+    metrics = campaign / "metrics"
+    meas, ext = load_arch(metrics)
+    summary = read_csv(metrics / "summary.csv")
+    res = load_resources(campaign)
     peak_vram = 0
     for c in ("gpu0_mem_mb", "gpu1_mem_mb", "gpu2_mem_mb"):
         for r in res:
@@ -80,11 +117,11 @@ def main():
     rows = []
     for s in summary:
         e = s["experiment"]
-        m = re.match(r"scaling_(\d+)v\d+_(noweapon|shoot)(_s(\d))?$", e)
+        m = SCALING_RE.match(e)
         if not m:
             continue
-        n = int(m.group(1))
-        variant = m.group(2)
+        n = int(m.group("n"))
+        variant = m.group("variant")
         a = meas.get(n) or ext.get(n) or {}
         obs_dim = a.get("obs_dim")
         share_dim = a.get("share_obs_dim")
@@ -127,7 +164,7 @@ def main():
             "critic_grad_norm": s.get("critic_grad_norm_last"),
             "actor_grad_norm": s.get("actor_grad_norm_last"),
             "ratio": s.get("ratio_last"),
-            "nan_observed": has_nan(e),
+            "nan_observed": has_nan(metrics, e),
             "peak_cpu_cores_host": round(peak_cpu, 1),
             "peak_ram_gb_host": round(peak_ram, 1),
             "peak_vram_mb_host": round(peak_vram),
@@ -135,7 +172,7 @@ def main():
         })
 
     rows.sort(key=lambda r: (r["variant"], r["team_size"], str(r["seed"])))
-    out = os.path.join(METRICS, "scaling_table.csv")
+    out = out_dir / "scaling_table.csv"
     if rows:
         with open(out, "w", newline="") as f:
             w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
@@ -173,7 +210,7 @@ def main():
             g("critic_loss_value"), g("critic_grad_norm"), g("entropy_loss"),
             r["nan_observed"], learning,
         ]) + " |")
-    print(f"\nhost peaks during the whole night: CPU {peak_cpu:.1f}/48 cores, "
+    print(f"\nhost peaks over the campaign so far: CPU {peak_cpu:.1f}/48 cores, "
           f"RAM {peak_ram:.1f} GB, VRAM {peak_vram:.0f} MB (single job uses <1.5 GB)")
 
 

@@ -15,6 +15,15 @@ The normalisation used here is derived from the reward structure, not fitted:
                                          and a squared loss scales like its square
   * critic_grad_norm-> grad_norm / N     gradient magnitude scales with the target
 
+IMPORTANT: the reward/N convention ("reward per enemy") is exact ONLY for the
+**NoWeapon** family, whose per-step reward literally sums over enemies
+(`for enm in env.agents[agent_id].enemies` in PostureReward.get_reward). It must
+NOT be applied to the **ShootMissile** family: those scenarios add
+MissilePostureReward (a missile-relative term, not a per-enemy sum) and their
+EventDrivenReward hit/kill events do not aggregate per enemy, so dividing by N
+has no derivation there. (The value_loss/N^2 and grad_norm/N columns inherit
+the same restriction, since they follow from the reward scaling.)
+
 A quantity that is *purely* reward-scale would come out constant after this
 normalisation. Anything that keeps growing is a residual effect worth naming.
 
@@ -23,21 +32,52 @@ Only the hierarchical_noWeapon family is compared: same task class
 non-hierarchical `2v2/NoWeapon/Selfplay` uses a different action space (raw
 4-dim control) and `1/heading` is a single-agent control task with its own
 reward, so both are excluded from the cross-N series.
+
+Partial runs are fine: a run with only a few logged episodes contributes those
+episodes; rows missing value_loss are skipped.
+
+The campaign root is DERIVED FROM THIS FILE'S LOCATION
+(<campaign>/scripts/normalized_scaling.py -> parents[1] = <campaign>), so the
+same script targets whichever campaign it is copied into. Explicit overrides
+for cross-campaign comparisons (point the READS at the foreign campaign and the
+writes back home, so the foreign campaign stays untouched):
+    --campaign-root DIR / CAMPAIGN_ROOT   campaign that is read
+    --out-dir DIR       / OUT_DIR         where normalized_scaling.csv goes
+                                          (default: <campaign-root>/metrics)
 """
+import argparse
 import csv
 import glob
 import os
 import re
+from pathlib import Path
 
-EXP = "/root/autodl-tmp/SEU-SRTP/experiments/2026-10-04-night"
-CURVES = os.path.join(EXP, "metrics/curves")
-OUT = os.path.join(EXP, "metrics/normalized_scaling.csv")
+DEFAULT_CAMPAIGN = Path(__file__).resolve().parents[1]
 
-SERIES = [
-    # (regex on experiment name, N, label)
-    (r"^official_2v2_noweapon$", 2, "2v2 official (hier, 2v2 template)"),
-    (r"^scaling_(\d+)v\d+_noweapon(_s\d)?$", None, "scaling noweapon"),
-]
+# Cross-N series, both campaign generations:
+#   pilot 2026-10-04 night : official_2v2_noweapon / scaling_<N>v<N>_noweapon[_s<k>]
+#   formal 6M campaign     : f6m_official_2v2_noweapon_s0 / f6m_<N>v<N>_noweapon_s0
+OFFICIAL_2V2_RE = re.compile(r"^(?:f6m_)?official_2v2_noweapon(?:_s\d)?$")
+SCALING_NOWEAPON_RE = re.compile(r"^(?:scaling_|f6m_)(\d+)v\d+_noweapon(?:_s\d)?$")
+
+
+def resolve_paths(argv=None):
+    """(campaign read, metrics dir written).
+
+    --campaign-root / $CAMPAIGN_ROOT selects the campaign that is read;
+    --out-dir / $OUT_DIR selects where outputs go (default: that campaign's
+    metrics/). Splitting the two is what lets a cross-campaign comparison read
+    a foreign campaign without writing anything into it.
+    """
+    ap = argparse.ArgumentParser(add_help=False)
+    ap.add_argument("--campaign-root", default=None)
+    ap.add_argument("--out-dir", default=None)
+    ns, _ = ap.parse_known_args(argv)
+    root = ns.campaign_root or os.environ.get("CAMPAIGN_ROOT")
+    campaign = Path(root).expanduser().resolve() if root else DEFAULT_CAMPAIGN
+    out = ns.out_dir or os.environ.get("OUT_DIR")
+    out_dir = Path(out).expanduser().resolve() if out else campaign / "metrics"
+    return campaign, out_dir
 
 
 def rows_for(path, exp, n, label):
@@ -55,6 +95,8 @@ def rows_for(path, exp, n, label):
             "experiment": exp, "label": label, "team_size": n,
             "total_agents": 2 * n, "episode": int(r["episode"]),
             "env_steps": int(r["total_num_steps"]), "fps": g("fps"),
+            # reward_per_enemy = reward / N. Exact only for the NoWeapon family
+            # (PostureReward sums over enemies); NEVER apply to ShootMissile.
             "reward": rw, "reward_per_enemy": rw / n,
             "value_loss": vl, "value_loss_per_N2": vl / (n * n),
             "critic_grad_norm": cg,
@@ -65,14 +107,18 @@ def rows_for(path, exp, n, label):
     return out
 
 
-def main():
+def main(argv=None):
+    campaign, out_dir = resolve_paths(argv)
+    curves = campaign / "metrics" / "curves"
+    out_path = out_dir / "normalized_scaling.csv"
+
     rows = []
-    for path in sorted(glob.glob(os.path.join(CURVES, "*.csv"))):
+    for path in sorted(glob.glob(os.path.join(curves, "*.csv"))):
         exp = os.path.basename(path)[:-4]
-        if exp == "official_2v2_noweapon":
+        if OFFICIAL_2V2_RE.match(exp):
             rows += rows_for(path, exp, 2, "2v2 official hier")
             continue
-        m = re.match(r"^scaling_(\d+)v\d+_noweapon(_s\d)?$", exp)
+        m = SCALING_NOWEAPON_RE.match(exp)
         if m:
             rows += rows_for(path, exp, int(m.group(1)), "scaling noweapon")
 
@@ -81,11 +127,11 @@ def main():
         return
     rows.sort(key=lambda r: (r["team_size"], r["experiment"], r["episode"]))
 
-    with open(OUT, "w", newline="") as f:
+    with open(out_path, "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
         w.writeheader()
         w.writerows(rows)
-    print(f"wrote {OUT} ({len(rows)} rows)\n")
+    print(f"wrote {out_path} ({len(rows)} rows)\n")
 
     # Mean over the first K episodes. Episode 0 alone is a single point; this is
     # the version that should be quoted, with its episode count attached.
