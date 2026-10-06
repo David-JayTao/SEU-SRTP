@@ -333,31 +333,50 @@ independently** — which is the reproducibility evidence for this section.
 | 10 | 20 | 123 | 2,460 | 167,179 | 465,025 | 315,008 | 37,785,600 |
 | **N=2 → N=10 growth** | 4→20 | **4.56×** | **22.78×** | **1.08×** | **2.84×** | **22.58×** | **113.9×** |
 
-### 10.2 The scaling exponents
+### 10.2 Exact closed forms (stronger than a fitted exponent)
 
-Least-squares fit of `log(quantity)` against `log(N)` over the four measured
-points:
+Fitting exponents was unnecessary: the dependence is exactly determined by the
+architecture, and the closed forms below reproduce **all four measured points
+exactly**, with no free parameters.
 
-| quantity | exponent vs N | R² | reading |
-|---|---|---|---|
-| local obs dim | **0.94** | 0.9998 | O(N) — an agent's own view grows with the number of *others* it observes |
-| **share_obs dim** | **1.94** | **1.0000** | **O(N²)** |
-| actor params | **0.05** | 0.9566 | **O(1)** — essentially independent of N |
-| **critic 1st-layer params** | **1.94** | **0.9999** | **O(N²)** |
-| total critic params | 0.65 | 0.9286 | sub-quadratic, because the recurrent core is fixed size |
+| quantity | closed form | N=2 | N=3 | N=5 | N=10 | exact? |
+|---|---|---|---|---|---|---|
+| local obs dim | `12N + 3` | 27 | 39 | 63 | 123 | ✔ |
+| **share_obs dim** | **`2N·(12N + 3) = 24N² + 6N`** | 108 | 234 | 630 | 2,460 | ✔ |
+| actor params | `128·(12N+3) + 151,435` | 154,891 | 156,427 | 159,499 | 167,179 | ✔ |
+| **critic params** | **`128·(24N²+6N) + 150,145`** | 163,969 | 180,097 | 230,785 | 465,025 | ✔ |
 
-The reasons are all readable off the code and are exact, not fitted:
+Why these hold, straight off the code:
 
+- An agent's own observation is `12N + 3`-dimensional: a fixed 3-dimensional
+  self-state plus **12 features for each of the N enemies** (heading, relative
+  position, velocity, …). The agent's view of its own team-mates enters through
+  the shared state, not its local observation.
 - `share_obs` is the concatenation of the observations of **all 2N agents**
-  (`envs/JSBSim/envs/env_base.py::get_state` hstacks `get_obs` over every agent),
-  so `share_obs_dim = obs_dim × 2N`. Since `obs_dim = O(N)`, the product is
-  **exactly O(N²)**. Verified numerically at all four points: 27×4=108,
-  39×6=234, 63×10=630, 123×20=2460. ✔
-- The actor consumes only `obs_dim` (O(N)) but its MLP is a fixed
-  `128×128` (`--hidden-size "128 128"`), so its parameter count moves by 8% over
-  a 5× increase in N.
-- The critic consumes `share_obs`, so its **input layer** — the only part of it
-  that touches N — grows O(N²), i.e. 22.6× over the same range.
+  (`envs/JSBSim/envs/env_base.py::get_state` hstacks `get_obs` over every agent).
+  So `share_obs_dim = 2N × obs_dim = 2N(12N+3)`, and the N² term is structural:
+  one factor of N from "more agents" times a second factor of N from "each agent
+  observes more enemies".
+- Both networks are MLPs whose first layer is `share_or_obs_dim × 128`; the
+  remaining `151,435` / `150,145` parameters (recurrent core + heads) are
+  **constants independent of N**.
+
+**Consequences, read directly off the closed forms:**
+
+| quantity | N=2 → N=10 growth | asymptotic |
+|---|---|---|
+| local obs dim | 4.56× | Θ(N) |
+| **share_obs dim** | **22.78×** | **Θ(N²)** |
+| actor params | **1.08×** | Θ(1) |
+| **critic params** | 2.84× | Θ(N²) |
+| critic first-layer params | 22.58× | Θ(N²) |
+| critic first-layer MAC / env step | 113.9× | Θ(N³) |
+
+The `Θ(N³)` in the last row is worth stating plainly: the critic's first layer
+does `O(N²)`-wide work for `O(N)` agents, hence **cubic** total work per
+environment step. For comparison the *environment* was measured at N^1.64
+(§9.1) — so the centralised critic is, asymptotically, the more aggressive
+scaling term of the two.
 
 ### 10.3 What this does and does not establish
 
