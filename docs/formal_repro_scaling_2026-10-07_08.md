@@ -190,7 +190,94 @@ TBD
 
 ## 9. Computational Scalability
 
-TBD
+### 9.1 The intrinsic cost of one environment step
+
+From the pilot's environment-only benchmark (`metrics/env_bench_scaling.json`,
+`scripts/env_bench.py`, random actions, no learning), re-fitted here:
+
+| condition | cost per env step vs N | R² | cost per aircraft vs N | R² |
+|---|---|---|---|---|
+| **quiet** (machine otherwise idle) | **N^1.64** | 0.9989 | N^0.64 | 0.9927 |
+| loaded (5 concurrent queues) | N^1.44 | 0.9937 | N^0.44 | 0.9369 |
+
+Per-aircraft cost rises from 2.32 ms (N=2) to 6.39 ms (N=10) on a quiet machine —
+i.e. **the environment does not merely have more aircraft to simulate; each
+aircraft gets more expensive.** That is the signature of an N-dependent per-step
+term, and it is exactly the O(N²) observation construction diagnosed as F8:
+`MultipleCombatTask.get_obs()` walks every partner and enemy for every agent, and
+`BaseEnv.get_state()` then calls `get_obs` again for all 2N agents and hstacks the
+result — two O(N²) passes per step. Amortised over N aircraft this gives the
+measured N^0.64. Note the exponent being *lower* under load (1.44) is not a
+speedup: contention adds a roughly constant overhead per step, which flattens a
+power law. Both are reported, per the pilot's F7 discipline.
+
+### 9.2 What training actually achieves
+
+`FPS` is the runner's own accounting (wall-clock, and it includes eval). Divided
+by the rollout threads allocated, and compared against the single-core intrinsic
+rate:
+
+| N | threads | FPS | steps/s per thread | intrinsic single-core | achieved fraction |
+|---|---|---|---|---|---|
+| 2 | 4 | 77 | 19.2 | 107.8 | **17.9%** |
+| 3 | 8 | 126 | 15.8 | 60.3 | **26.1%** |
+| 5 | 8 | 82 | 10.2 | 25.4 | **40.4%** |
+| 10 | 20 | 76 | 3.8 | 7.8 | **48.6%** |
+
+**OBSERVATION.** Achieved thread efficiency *rises* with N. This is the
+counter-intuitive part, and it is explained by the same mechanism: at N=2 a
+vectorised step takes ~9 ms, so the per-step fixed costs (IPC to the learner,
+action dispatch, Python overhead) are a large fraction of it; at N=10 a step
+takes ~128 ms and the same fixed costs amortise. So each worker approaches its
+intrinsic rate precisely *because* the task got slow.
+
+**FACT.** Consequently the wall-clock to a fixed step budget grows much faster
+than the intrinsic N^1.64, because at small N the parallel efficiency is worse.
+At the thread allocation used here, 6M steps cost roughly:
+
+| N | threads | hours to 6M |
+|---|---|---|
+| 2 | 4 | ~21.7 |
+| 3 | 8 | ~13.2 |
+| 5 | 8 | ~20.3 |
+| 10 | 20 | ~21.9 |
+
+which is why the thread allocation is per-lane rather than flat (§4.5, and
+`status/plan.md` for the full derivation). Note that at *equal threads* 10v10
+would need ~52 h — 2.4× the wall-clock of 2v2 — for the same 6M env steps. The
+`n_rollout_threads` confound in §4.5 is the price of removing that.
+
+### 9.3 Aggregate scheduling throughput
+
+The binding resource is CPU, not GPU (GPU utilisation stayed 0–39% and VRAM
+≤ 2.4 GB/job across nine concurrent lanes). The campaign was therefore scheduled
+against **aggregate useful env-steps/s**:
+
+| time | lanes | rollout threads | cores busy (of 48 quota) | aggregate env-steps/s |
+|---|---|---|---|---|
+| 03:11 | 5 | 44 | 42.0 | 451 |
+| 03:17 | 7 | 50 | 41.0 | 672 |
+| 03:46 | 9 | 56 | 43.0 | ~800 |
+| steady | 9 | 56 | 43–47 | ~798 |
+
+**FACT.** Adding two 3-thread SingleCombat lanes at 03:10 raised aggregate
+throughput from 451 to ~670 env-steps/s.
+
+**FACT (the cost, stated honestly).** It was not free for the P0 job:
+`f6m_10v10_noweapon_s0`'s cumulative FPS fell from 70 to 64 over the next two
+updates before recovering, settling at a **marginal** rate of ~74–76. The
+cumulative figure lags because it is an average since start. The 10v10 lane still
+projects to finish 6M at ~01:30–03:00 on Oct 8, i.e. with margin, which is why
+the trade was accepted.
+
+**OBSERVATION.** `load1` reached 44–45 while only ~43 of 48 cores were busy.
+Load average is therefore a poor scheduler signal here, and GPU idleness is a
+useless one: the GPU was 0–39% utilised for the entire campaign. The decisions
+were made on measured aggregate env-steps/s and on the P0 lane's own FPS.
+
+**CATEGORISATION.** Everything in this section is `Computational scalability`.
+None of it is evidence about the learning algorithm, and it must not be read as
+such — a slow environment is not a MARL failure.
 
 ## 10. Representation / Critic Scalability
 
