@@ -56,15 +56,17 @@ JOBS = {
     "f6m_official_1v1_vsbaseline_s1": ("o_1v1_vsbaseline", 3),    # L1
     "f6m_official_1v1_shoot_hier_selfplay_s1": ("o_1v1_shoot", 3),  # L1, --use-prior
     "f6m_official_1v1_hier_selfplay_s1": ("o_1v1_hier", 3),       # L2 official YAML, no .sh
+    # Wave 4 -- second seeds (only --seed differs from the seed-0 lane).
+    "f6m_5v5_noweapon_s1": ("5v5 s1", 10),
+    "f6m_3v3_noweapon_s1": ("3v3 s1", 8),
 }
 
 # Every experiment name the campaign may launch, including queued ones. Used to
 # detect an accidental DUPLICATE run (two training processes writing the same
 # experiment name into sibling run1/run2 dirs).
 ALL_EXPERIMENTS = list(JOBS) + [
-    "f6m_3v3_noweapon_s1",
     "f6m_2v2_noweapon_s1",
-    "f6m_5v5_noweapon_s1",
+    "f6m_5v5_noweapon_s0",
     "f6m_10v10_noweapon_s1",
 ]
 
@@ -328,7 +330,15 @@ def main() -> int:
             "value_loss": m["value_loss"], "critic_grad_norm": m["critic_grad_norm"],
             "actor_grad_norm": m["actor_grad_norm"],
             "nan": m["nan"], "inf": m["inf"], "traceback": lg["traceback"],
-            "stalled": (age_min is not None and age_min > args.stall_min),
+            # The reachable budget is quantised by thread count (incident F17):
+            # the runner floors num_env_steps // 3000 // threads, so a 3-thread
+            # lane caps at 5,994,000 and can never equal TARGET_STEPS. Compare
+            # against its own achievable maximum, or a lane that finished
+            # perfectly is misreported as stalled forever.
+            "achievable": (TARGET_STEPS // 3000 // threads) * 3000 * threads,
+            "done": steps >= (TARGET_STEPS // 3000 // threads) * 3000 * threads,
+            "stalled": (age_min is not None and age_min > args.stall_min
+                        and steps < (TARGET_STEPS // 3000 // threads) * 3000 * threads),
             "age_min": age_min,
             "run_dir": str(run_dir) if run_dir else None,
             "log": lg["log_path"],
@@ -370,7 +380,10 @@ def main() -> int:
             flags.append("**Inf**")
         if r["traceback"]:
             flags.append("**Traceback**")
-        if r["stalled"]:
+        if r["done"]:
+            flags.append("**complete**" if r["steps"] == r["target"]
+                         else f"**complete {r['steps']:,} of {r['target']:,}**")
+        elif r["stalled"]:
             flags.append(f"**STALL {r['age_min']}m**")
         if not flags:
             flags.append("ok")
