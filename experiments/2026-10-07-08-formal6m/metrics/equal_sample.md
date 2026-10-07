@@ -1,6 +1,6 @@
 # Equal-sample-budget comparison -- 2026-10-07-08-formal6m
 
-- generated: 2026-10-07 17:50:46
+- generated: 2026-10-07 21:00:43
 - source campaign: `/root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m`
 - run outputs: `/root/autodl-tmp/SEU-SRTP/scripts/results`
 - budgets: 1M, 2M, 3M, 4M, 5M, 6M vectorised env steps (one PPO update = n_rollout_threads * 3000)
@@ -12,31 +12,31 @@ cells: mean reward (mean reward per enemy) [runs contributing]; * = at least one
 
 | variant | N | runs | furthest | 1M | 2M | 3M | 4M | 5M | 6M |
 |---|---|---|---|---|---|---|---|---|---|
-| noweapon | 2 | 1/1 | 4164000 | +23.75 (+11.88)* [1] | +24.39 (+12.20)* [1] | +16.32 (+8.16) [1] | +19.93 (+9.96)* [1] | pending | pending |
-| noweapon | 3 | 2/2 | 6000000 | +31.80 (+10.60)* [1] | +35.31 (+11.77)* [1] | +36.06 (+12.02) [1] | +35.79 (+11.93)* [1] | +36.07 (+12.02)* [1] | +35.93 (+11.98) [1] |
-| noweapon | 5 | 2/2 | 4320000 | -1.64 (-0.33)* [1] | +48.80 (+9.76)* [1] | +50.30 (+10.06) [1] | +23.14 (+4.63)* [1] | pending | pending |
-| noweapon | 10 | 1/1 | 3660000 | -17.27 (-1.73)* [1] | -11.70 (-1.17)* [1] | -10.63 (-1.06) [1] | pending | pending | pending |
-| official_hier_selfplay | 1 | 1/1 | 4347000 | +20.87 (+20.87)* [1] | +33.13 (+33.13)* [1] | -104.04 (-104.04)* [1] | -8.07 (-8.07)* [1] | pending | pending |
-| official_selfplay | 1 | 1/1 | 5517000 | -64.91 (-64.91)* [1] | +4.94 (+4.94)* [1] | +25.58 (+25.58)* [1] | +13.12 (+13.12)* [1] | +30.33 (+30.33)* [1] | pending |
-| official_shoot_hier_selfplay | 1 | 1/1 | 3213000 | -17.92 (-17.92)* [1] | -68.91 (-68.91)* [1] | -29.38 (-29.38)* [1] | pending | pending | pending |
+| noweapon | 2 | 1/1 | 5052000 | +23.75 (+11.88)* [1] | +24.39 (+12.20)* [1] | +16.32 (+8.16) [1] | +19.93 (+9.96)* [1] | +15.89 (+7.95)* [1] | pending |
+| noweapon | 3 | 2/2 | 6000000 | +28.87 (+9.62)* [2] | +35.31 (+11.77)* [1] | +36.06 (+12.02) [1] | +35.79 (+11.93)* [1] | +36.07 (+12.02)* [1] | +35.93 (+11.98) [1] |
+| noweapon | 5 | 2/2 | 5184000 | +1.40 (+0.28)* [2] | +48.80 (+9.76)* [1] | +50.30 (+10.06) [1] | +23.14 (+4.63)* [1] | +24.43 (+4.89)* [1] | pending |
+| noweapon | 10 | 1/1 | 4320000 | -17.27 (-1.73)* [1] | -11.70 (-1.17)* [1] | -10.63 (-1.06) [1] | -4.73 (-0.47)* [1] | pending | pending |
+| official_hier_selfplay | 1 | 1/1 | 5301000 | +20.87 (+20.87)* [1] | +33.13 (+33.13)* [1] | -104.04 (-104.04)* [1] | -8.07 (-8.07)* [1] | -73.70 (-73.70)* [1] | pending |
+| official_selfplay | 1 | 1/1 | 5994000 | -64.91 (-64.91)* [1] | +4.94 (+4.94)* [1] | +25.58 (+25.58)* [1] | +13.12 (+13.12)* [1] | +30.33 (+30.33)* [1] | pending |
+| official_shoot_hier_selfplay | 1 | 1/1 | 3924000 | -17.92 (-17.92)* [1] | -68.91 (-68.91)* [1] | -29.38 (-29.38)* [1] | pending | pending | pending |
 | official_vsbaseline | 1 | 1/1 | 5994000 | +11.29 (+11.29)* [1] | +12.07 (+12.07)* [1] | +23.52 (+23.52)* [1] | +26.45 (+26.45)* [1] | +29.82 (+29.82)* [1] | pending |
-| official_noweapon | 2 | 1/1 | 4056000 | +15.14 (+7.57)* [1] | +21.62 (+10.81)* [1] | +23.13 (+11.57) [1] | +22.42 (+11.21)* [1] | pending | pending |
+| official_noweapon | 2 | 1/1 | 4920000 | +15.14 (+7.57)* [1] | +21.62 (+10.81)* [1] | +23.13 (+11.57) [1] | +22.42 (+11.21)* [1] | pending | pending |
 
 ## Per-run detail
 
 | experiment | N | seed | thr | rows | max steps | state | 1M | 2M | 3M | 4M | 5M | 6M |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| f6m_official_1v1_hier_selfplay_s1 | 1 | 1 | 3 | 483 | 4347000 | active | +20.87 (+20.87)* | +33.13 (+33.13)* | -104.04 (-104.04)* | -8.07 (-8.07)* | pending | pending |
-| f6m_official_1v1_selfplay_s1 | 1 | 1 | 3 | 613 | 5517000 | active | -64.91 (-64.91)* | +4.94 (+4.94)* | +25.58 (+25.58)* | +13.12 (+13.12)* | +30.33 (+30.33)* | pending |
-| f6m_official_1v1_shoot_hier_selfplay_s1 | 1 | 1 | 3 | 357 | 3213000 | active | -17.92 (-17.92)* | -68.91 (-68.91)* | -29.38 (-29.38)* | pending | pending | pending |
+| f6m_official_1v1_hier_selfplay_s1 | 1 | 1 | 3 | 589 | 5301000 | active | +20.87 (+20.87)* | +33.13 (+33.13)* | -104.04 (-104.04)* | -8.07 (-8.07)* | -73.70 (-73.70)* | pending |
+| f6m_official_1v1_selfplay_s1 | 1 | 1 | 3 | 666 | 5994000 | idle | -64.91 (-64.91)* | +4.94 (+4.94)* | +25.58 (+25.58)* | +13.12 (+13.12)* | +30.33 (+30.33)* | pending |
+| f6m_official_1v1_shoot_hier_selfplay_s1 | 1 | 1 | 3 | 436 | 3924000 | active | -17.92 (-17.92)* | -68.91 (-68.91)* | -29.38 (-29.38)* | pending | pending | pending |
 | f6m_official_1v1_vsbaseline_s1 | 1 | 1 | 3 | 666 | 5994000 | idle | +11.29 (+11.29)* | +12.07 (+12.07)* | +23.52 (+23.52)* | +26.45 (+26.45)* | +29.82 (+29.82)* | pending |
-| f6m_2v2_noweapon_s0 | 2 | 0 | 4 | 347 | 4164000 | active | +23.75 (+11.88)* | +24.39 (+12.20)* | +16.32 (+8.16) | +19.93 (+9.96)* | pending | pending |
-| f6m_official_2v2_noweapon_s0 | 2 | 0 | 4 | 338 | 4056000 | active | +15.14 (+7.57)* | +21.62 (+10.81)* | +23.13 (+11.57) | +22.42 (+11.21)* | pending | pending |
+| f6m_2v2_noweapon_s0 | 2 | 0 | 4 | 421 | 5052000 | active | +23.75 (+11.88)* | +24.39 (+12.20)* | +16.32 (+8.16) | +19.93 (+9.96)* | +15.89 (+7.95)* | pending |
+| f6m_official_2v2_noweapon_s0 | 2 | 0 | 4 | 410 | 4920000 | active | +15.14 (+7.57)* | +21.62 (+10.81)* | +23.13 (+11.57) | +22.42 (+11.21)* | pending | pending |
 | f6m_3v3_noweapon_s0 | 3 | 0 | 8 | 250 | 6000000 | complete | +31.80 (+10.60)* | +35.31 (+11.77)* | +36.06 (+12.02) | +35.79 (+11.93)* | +36.07 (+12.02)* | +35.93 (+11.98) |
-| f6m_3v3_noweapon_s1 | 3 | 1 | 8 | 7 | 168000 | active | pending | pending | pending | pending | pending | pending |
-| f6m_5v5_noweapon_s0 | 5 | 0 | 8 | 180 | 4320000 | active | -1.64 (-0.33)* | +48.80 (+9.76)* | +50.30 (+10.06) | +23.14 (+4.63)* | pending | pending |
-| f6m_5v5_noweapon_s1 | 5 | 1 | 10 | 5 | 150000 | active | pending | pending | pending | pending | pending | pending |
-| f6m_10v10_noweapon_s0 | 10 | 0 | 20 | 61 | 3660000 | active | -17.27 (-1.73)* | -11.70 (-1.17)* | -10.63 (-1.06) | pending | pending | pending |
+| f6m_3v3_noweapon_s1 | 3 | 1 | 8 | 63 | 1512000 | active | +25.94 (+8.65)* | pending | pending | pending | pending | pending |
+| f6m_5v5_noweapon_s0 | 5 | 0 | 8 | 216 | 5184000 | active | -1.64 (-0.33)* | +48.80 (+9.76)* | +50.30 (+10.06) | +23.14 (+4.63)* | +24.43 (+4.89)* | pending |
+| f6m_5v5_noweapon_s1 | 5 | 1 | 10 | 39 | 1170000 | active | +4.44 (+0.89)* | pending | pending | pending | pending | pending |
+| f6m_10v10_noweapon_s0 | 10 | 0 | 20 | 72 | 4320000 | active | -17.27 (-1.73)* | -11.70 (-1.17)* | -10.63 (-1.06) | -4.73 (-0.47)* | pending | pending |
 
 ## Notes
 
@@ -44,4 +44,5 @@ cells: mean reward (mean reward per enemy) [runs contributing]; * = at least one
 - A run contributes to a group mean at a budget only once its metrics.jsonl reaches that budget; the [k] suffix counts contributing runs.
 - Cross-campaign reference: `--root <campaign dir>` (or LAG_CAMPAIGN_ROOT); outputs always land in this campaign's metrics/.
 - Raw per-cell statuses/brackets: metrics/equal_sample.csv.
+- skipped (no NvN scale token in name): f6m_official_heading_s5
 

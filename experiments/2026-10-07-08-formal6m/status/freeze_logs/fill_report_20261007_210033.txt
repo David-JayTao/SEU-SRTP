@@ -1,0 +1,10 @@
+fill_report: campaign=/root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m
+fill_report: report  =/root/autodl-tmp/SEU-SRTP/docs/formal_repro_scaling_2026-10-07_08.md
+  section5 : 15 lines
+  section6 : 12 lines
+  section7 : 17 lines
+  section8 : 17 lines
+  section11: 36 lines
+  section12: 43 lines
+  section17: 19 lines
+fill_report: wrote /root/autodl-tmp/SEU-SRTP/docs/formal_repro_scaling_2026-10-07_08.md (60220 bytes)

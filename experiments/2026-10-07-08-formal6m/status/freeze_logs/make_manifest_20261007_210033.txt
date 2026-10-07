@@ -1,0 +1,15 @@
+campaign root : /root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m
+wrote /root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/manifest.csv  (12 rows)
+resources     : {'vram_mb': 3310, 'ram_gb': 87.1, 'cpu_cores': 44.3}
+  f6m_official_1v1_selfplay_s1           running (truncated by time cap) gpu= 0 steps   5994000/       6e6 fps=  104.0
+  f6m_official_1v1_vsbaseline_s1         running (truncated by time cap) gpu= 1 steps   5994000/       6e6 fps=  122.0
+  f6m_official_1v1_hier_selfplay_s1      running                gpu= 0 steps   5301000/       6e6 fps=   83.0
+  f6m_official_1v1_shoot_hier_selfplay_s1 running                gpu= 2 steps   3915000/       6e6 fps=   61.0
+  f6m_3v3_noweapon_s1                    running                gpu= 0 steps   1512000/       6e6 fps=  118.0
+  f6m_5v5_noweapon_s1                    running                gpu= 2 steps   1170000/       6e6 fps=   89.0
+  f6m_3v3_noweapon_s0                    completed              gpu= 0 steps   6000000/       6e6 fps=  125.0
+  f6m_2v2_noweapon_s0                    running                gpu= 0 steps   5052000/       6e6 fps=   77.0
+  f6m_5v5_noweapon_s0                    running                gpu= 1 steps   5184000/       6e6 fps=   79.0
+  f6m_official_2v2_noweapon_s0           running                gpu= 1 steps   4920000/       6e6 fps=   75.0
+  f6m_10v10_noweapon_s0                  running                gpu= 2 steps   4320000/       6e6 fps=   66.0
+  f6m_official_heading_s5                running                gpu= 0 steps   1956000/       6e6 fps=  272.0
