@@ -223,3 +223,26 @@ curse-of-multiagency claim.
 - **Lesson**: `--use-prior` is an official flag on an official entry point, so it
   is preserved — but it must be budgeted for. A per-lane thread allocation that
   ignores per-lane FPS/thread will systematically starve the armed baselines.
+
+---
+
+## N1 — NOT A FAILURE. `1v1/NoWeapon/HierarchySelfplay` degrades in its second half
+
+Logged here only so it is not later mistaken for an unrecorded anomaly. Full
+write-up in `docs/formal_repro_scaling_2026-10-07_08.md` §11.1.
+
+- **Category**: `Algorithmic scalability` / `Sample scalability` (candidate — not established)
+- **Evidence**: splitting `f6m_official_1v1_hier_selfplay_s1` (488 training rows)
+  into quarters gives monotone `critic_grad_norm` medians **108 → 112 → 266 → 473**
+  against reward medians **+24.1 → +22.4 → −17.2 → −89.7**, with almost no
+  overlap between the first and last quarter's interquartile ranges.
+- **Checked first, deliberately**: the triggering point (`critic_grad_norm = 1274`,
+  reward `−333` at 4.39M steps) is the extreme of a real trend, *not* divergence —
+  no NaN, no Inf anywhere in the run (or in any of the 11 lanes).
+- **Contrast**: the sibling `f6m_official_1v1_selfplay_s1` (same env, scenario
+  family, seed and hyperparameters; **non**-hierarchical task) has a falling
+  critic gradient and rising reward over the same window.
+- **Action taken**: **none.** A degradation is a result, not an engineering
+  fault; §16 of the brief forbids modifying the algorithm to rescue a run. The
+  lane finishes and is reported at whatever it reaches.
+- **Not evidence for** a curse of multiagency: N=1 per side, single seed.
