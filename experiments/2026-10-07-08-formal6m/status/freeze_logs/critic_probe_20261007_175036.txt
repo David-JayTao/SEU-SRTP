@@ -1,0 +1,19 @@
+device=cuda:0 batch_threads=12
+{"team_size": 2, "variant": "noweapon", "total_agents": 4, "obs_dim": 27, "share_obs_dim": 108, "actor_params": 154891, "critic_params": 163969, "critic_first_layer_params": 13952, "batch_rows": 24, "actor_fwd_ms_batch": 2.85, "critic_fwd_ms_batch": 0.501, "critic_bwd_ms_batch": 6.006, "critic_fwd_ms_per_agent": 0.0209, "critic_fwd_ms_fixed256": 0.7886, "critic_bwd_ms_fixed256": 4.944, "critic_fwd_us_per_sample_fixed256": 3.081, "critic_first_layer_MAC_per_envstep": 331776}
+{"team_size": 3, "variant": "noweapon", "total_agents": 6, "obs_dim": 39, "share_obs_dim": 234, "actor_params": 156427, "critic_params": 180097, "critic_first_layer_params": 30080, "batch_rows": 36, "actor_fwd_ms_batch": 3.014, "critic_fwd_ms_batch": 0.482, "critic_bwd_ms_batch": 5.462, "critic_fwd_ms_per_agent": 0.0134, "critic_fwd_ms_fixed256": 0.8879, "critic_bwd_ms_fixed256": 4.8455, "critic_fwd_us_per_sample_fixed256": 3.468, "critic_first_layer_MAC_per_envstep": 1078272}
+{"team_size": 5, "variant": "noweapon", "total_agents": 10, "obs_dim": 63, "share_obs_dim": 630, "actor_params": 159499, "critic_params": 230785, "critic_first_layer_params": 80768, "batch_rows": 60, "actor_fwd_ms_batch": 2.867, "critic_fwd_ms_batch": 0.477, "critic_bwd_ms_batch": 4.745, "critic_fwd_ms_per_agent": 0.0079, "critic_fwd_ms_fixed256": 0.8247, "critic_bwd_ms_fixed256": 4.9646, "critic_fwd_us_per_sample_fixed256": 3.222, "critic_first_layer_MAC_per_envstep": 4838400}
+{"team_size": 10, "variant": "noweapon", "total_agents": 20, "obs_dim": 123, "share_obs_dim": 2460, "actor_params": 167179, "critic_params": 465025, "critic_first_layer_params": 315008, "batch_rows": 120, "actor_fwd_ms_batch": 2.979, "critic_fwd_ms_batch": 0.529, "critic_bwd_ms_batch": 4.503, "critic_fwd_ms_per_agent": 0.0044, "critic_fwd_ms_fixed256": 0.6098, "critic_bwd_ms_fixed256": 4.1075, "critic_fwd_us_per_sample_fixed256": 2.382, "critic_first_layer_MAC_per_envstep": 37785600}
+
+calibrated effective throughput: 132.2 G-MAC/s (fixed batch 256)
+
+=== scaling table ===
+   N  agents    obs    share  criticL1param     MAC/step  criticfwd/step   sharebuf  src
+   2       4     27      108          13952       331776         0.003ms     0.03GB  [measured]
+   3       6     39      234          30080      1078272         0.008ms     0.09GB  [measured]
+   5      10     63      630          80768      4838400         0.037ms     0.42GB  [measured]
+  10      20    123     2460         315008     37785600         0.286ms     3.30GB  [measured]
+  20      40    243     9720        1244288    298598400         2.259ms    26.08GB  [extrapolated]
+  50     100    603    60300        7718528   4631040000        35.033ms   404.48GB  [extrapolated]
+ 100     200   1203   240600       30796928  36956160000       279.569ms  3227.77GB  [extrapolated]
+
+wrote /root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/metrics/critic_scaling.json
