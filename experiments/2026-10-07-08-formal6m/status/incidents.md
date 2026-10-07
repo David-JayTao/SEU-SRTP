@@ -226,6 +226,55 @@ curse-of-multiagency claim.
 
 ---
 
+## F18 — `offline_eval.py`'s default opponent is a NULL policy, so its default numbers mean nothing
+
+- **Category**: `Other` (measurement trap — the most dangerous kind: it produces
+  plausible-looking numbers)
+- **Detected**: 2026-10-07 ~18:05, while validating the freeze-time probe on the
+  completed `f6m_3v3_noweapon_s0` lane, before relying on it.
+- **Symptoms**: the default invocation returned
+  `mean_return = −55.85`, `std_return = 0.0`, `mean_episode_length = 1000` on a
+  lane whose **training** reward was **+35.93**. Two red flags: a 90-point gap
+  from training, and an episode length pinned exactly at `max_steps`.
+- **Cause**: in `scripts/offline_eval.py` the opponent's actions are filled with
+  **zeros** unless `--selfplay` is passed:
+  ```python
+  if is_multi and args.selfplay:
+      full[n_ego:] = actions        # mirror match
+  elif n_ego < n_agents:
+      full[n_ego:] = 0              # NULL opponent -- never manoeuvres, never fires
+  ```
+  A null opponent cannot end an episode, so **length = 1000 is an artifact of the
+  opponent doing nothing**, and −55.85 is the reward against an unresisting
+  target. Neither number describes the trained policy.
+- **Why it is dangerous**: `mean_return = −55.85` looks like a result. Quoted
+  without this context it would read as "the 3v3 policy is bad", when it is
+  actually "the 3v3 policy accumulates −55.85 against an opponent that never
+  moves". This is the same failure class as F10 (175.9 cores) and F16 (62 of 48
+  cores): a number that is *internally* consistent and *externally* meaningless.
+- **Second, separate bug found in the same file**: `build_run_dir_args` read
+  `algo = cfg[-2]`, which is the **experiment name**, not the algorithm
+  (`cfg[-3]`). Verified cosmetic *for this script* — the policy class is chosen
+  from `env_name` (`is_multi = env_name == "MultipleCombat"`), not from `algo` —
+  but the mis-parsed value is written into the output JSON as provenance, so it
+  was actively misleading about what had been evaluated.
+- **Fix**:
+  1. `algo = cfg[-3]`.
+  2. The null-opponent branch now carries an explicit comment stating that the
+     default mode is not an evaluation and that `--selfplay` is required for any
+     measurement meant to mean anything.
+  3. `freeze.sh` now passes `--selfplay` for every freeze-time offline eval.
+  4. Episode-length comparisons across N are only made in `--selfplay` mode.
+- **Verification**: re-run on the same checkpoint with `--selfplay`; the reported
+  `selfplay_mirror` flag flips to `true` and the result is recorded in
+  `metrics/offline_eval_*.json` at freeze time.
+- **Lesson**: when a measurement tool has a default mode, *read what the default
+  actually does before trusting its output* — especially when the output is
+  plausible. This check cost ~10 minutes and would otherwise have put a
+  fabricated-looking "evaluation" into the final report.
+
+---
+
 ## N1 — NOT A FAILURE. `1v1/NoWeapon/HierarchySelfplay` degrades in its second half
 
 Logged here only so it is not later mistaken for an unrecorded anomaly. Full

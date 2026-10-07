@@ -44,7 +44,7 @@ def build_run_dir_args(run_dir):
     var = os.path.basename(cfg[-1])
     if not var.startswith("run"):
         raise SystemExit("--run-dir must point at a runN directory")
-    algo = cfg[-2]
+    algo = cfg[-3]
     idx = cfg.index("results")
     env_name = cfg[idx + 1]
     scenario = "/".join(cfg[idx + 2:-3])
@@ -159,6 +159,12 @@ def main():
             if is_multi and args.selfplay:
                 full[n_ego:] = actions            # opponent mirrors the same checkpoint
             elif n_ego < n_agents:
+                # DEFAULT (no --selfplay): the opponent emits action 0, i.e. it never
+                # manoeuvres and never fires. This is a NULL opponent, not an
+                # evaluation. Returns and episode lengths measured in this mode say
+                # nothing about policy strength -- in particular an episode that runs
+                # to max_steps here only reflects that a null opponent cannot end it.
+                # Use --selfplay for any measurement that is meant to mean anything.
                 full[n_ego:] = 0
             if is_multi:
                 obs, _share, rew, dones, _info = env.step(full)
