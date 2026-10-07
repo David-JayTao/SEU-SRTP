@@ -237,3 +237,27 @@ that `f6m_5v5_noweapon_s1` is **not necessarily lost**: its nominal ETA assumes
 today's contention. By 01:15 Oct 8 roughly 22 rollout threads will have freed, so
 if its marginal rate rises from 95 to ~120 FPS it reaches 6M around 07:30–08:00.
 Its progress is therefore tracked explicitly rather than assumed censored.
+
+### 18:45 — CPU is at the quota edge; the remaining official L1 entry gets the next free lane
+
+Container CPU is **42–43 of 48 cores (87–90%)** and `nr_throttled` has risen from
+0.078% to **1.28% of periods** and is still creeping (~+0.035%/2 min). Small
+enough that aggregate throughput is unaffected (991 env-steps/s, unchanged since
+the second seeds started), and the two second seeds are worth far more than the
+~1.3% they cost — but the box is now genuinely at its ceiling, so no further
+concurrency without a corresponding free-up.
+
+**Plan: at ~19:05 `f6m_official_1v1_selfplay_s1` completes and frees 3 threads.**
+Rather than leave them idle, add the one official L1 training entry not yet run:
+
+| job | scenario | algo | seed | threads | why |
+|---|---|---|---|---|---|
+| `f6m_official_heading_s5` | `SingleControl 1/heading` | ppo | 5 | **4** | the last unrun official L1 entry (brief P3); ~236 FPS at 4 threads → 6M in ~7 h, done ~02:10 |
+
+**4 threads, not 3**, because the thread count must divide 2000 (F17) or the lane
+silently caps at 5,994,000. SingleControl is 1 aircraft and CPU-cheap, so 4
+threads plus the freed 3 keeps us inside the quota.
+
+**Note the honest framing of this lane**: `1/heading` is SingleControl, i.e. *not*
+a multi-agent task. It completes the official inventory and is reported as a
+single-agent control, **not** as evidence about multi-agent scaling.
