@@ -743,11 +743,145 @@ TBD
 
 ## 15. What We Cannot Conclude
 
-TBD
+This section is deliberately written to be readable *before* the final numbers
+are in, because none of it depends on them. Every item below is a structural
+limit of the design, not a caveat about a particular value.
+
+**1. We cannot claim any kind of convergence result.** 6M is a **budget
+reduction** from the official 1e8, adopted because 1e8 needs several hundred
+hours per run here (§2, §4.1). A run at 6M may be mid-improvement, at a plateau,
+or past a degradation; this report says which, per lane, and never says
+"converged" without the evidence for that specific lane.
+
+**2. We cannot claim a curse of multiagency.** The phrase describes a
+*difficulty that grows with the number of agents*. To support it we would need
+(a) more than one seed per scale, (b) the agent-count effect separated from the
+compute effect, and (c) at least one controlled mechanism comparison. This
+campaign has one of the three: one seed per scale for the scaling family (the
+second seeds for 3v3 and 5v5 were launched late and may be time-censored). A
+difference in reward-per-enemy between N=2 and N=10 at 6M is an **observation of
+a difference**, and §14 will report it as exactly that.
+
+**3. We cannot attribute any observed N-dependence to a mechanism.** The
+centralised critic's representation is provably O(N²) (§10) and the environment
+cost is measurably N^1.64 (§9.1) — but this campaign ran **no controlled critic
+variant** (no attention, factorised, local or graph critic). Establishing that
+the O(N²) *input* is what limits *learning* requires running a sub-quadratic
+critic on the same task with everything else fixed. That is a next-round
+experiment (§16), not a result.
+
+**4. We cannot separate computational scalability from learning scalability.**
+`n_rollout_threads` differs across scale (4/8/8/20 for N=2/3/5/10 — §4.5), so the
+PPO update batch differs too. Every cross-N reward difference therefore carries
+an unresolved batch-size contribution. This is the single largest confound in
+the campaign and it is stated up front rather than buried; it does **not** affect
+same-N comparisons (seeds) or any within-lane trajectory.
+
+**5. We cannot compare raw per-episode reward across N.** `PostureReward` sums
+over an agent's enemies, so raw reward scales with N by construction; `reward/N`
+is the normalisation used throughout, and it is valid **only for the NoWeapon
+family** (§4, §24 of the brief). Even normalised, per-episode reward is
+confounded if mean episode *length* varies with N — reward accumulates per step.
+The campaign measures that directly with `offline_eval.py` at freeze time
+(`mean_episode_length`, `status/plan.md`); until those numbers are in, no
+per-episode cross-N claim is safe.
+
+**6. We cannot make a statistical statement about seed variance.** At most two
+scales get a second seed, and those may be at different training stages when the
+window closes. §12 refuses to compute a spread from one run, by design.
+
+**7. We cannot bound 10v10's variance at all.** The highest-priority second seed
+in the brief (10v10) is infeasible in this window: it needs ~20 threads for
+~20 h, and no lane large enough frees before ~03:25 Oct 8. Its absence is a
+recorded gap, not an oversight (§14 of the brief, `status/plan.md`).
+
+**8. We cannot generalise beyond this environment and this configuration.**
+`envs/JSBSim` implementing LAG with a 12-feature-per-enemy observation, a fixed
+128×128 MLP actor and a concatenation-based centralised critic, at
+`buffer_size=3000`, `lr=3e-4`, `gamma=0.99`. Statements here are about *this*
+system.
+
+**9. We cannot read anything into the eval curves beyond direction.** Per-checkpoint
+MultipleCombat evaluation is deterministic (pilot §5.1, std = 0 over 8 repeats),
+so the eval series' wobble is the *policy and the redrawn self-play opponent*
+changing — not sampling noise, and not a calibrated estimate either. It is a
+single deterministic episode per evaluation point.
+
+**10. Eval/diagnostic quantities are read at different updates.** The `Eval`
+column can lag the `Steps` column by one or two updates because eval rows are
+sparser than training rows, and figures refresh only at each freeze (§13,
+generator notes). No cell is fabricated; but a reader comparing across columns
+should know they are not always the same update.
+
+---
 
 ## 16. Next Experiments
 
-TBD
+Ranked by **which measured uncertainty the experiment would remove**, not by
+ease. Each entry names the specific limitation from §15 it addresses.
+
+### Tier 1 — would change a conclusion
+
+**N1. 10v10 second seed (removes §15.7).** ~20 h at 20 threads. Without it the
+headline scale has a single trajectory and its variance is unknown. This is the
+first thing to spend the next window on, and the reason the brief ranks it above
+everything else.
+
+**N2. Controlled critic-variant comparison (removes §15.3).** The *only* way to
+test the curse-of-multiagency hypothesis rather than describe a difference. Hold
+the environment, policy, seed, step budget and thread count fixed; vary **only**
+the critic's input structure:
+  - `concat` (current baseline, O(N²) input)
+  - `attention` over per-agent embeddings (O(N²) compute, O(N) parameters-per-agent)
+  - `factorised` / mean-field (O(N) input)
+  - `local` critic (O(1) input, no centralisation)
+The prediction from §10 is that the concat critic is the first to hit a wall —
+but the *learning* consequence is the open question. Run at N ∈ {2, 5, 10}, 2 seeds.
+
+**N3. Fixed-opponent control for the §11.1 degradation (removes §15.2's weakest
+point).** `1v1/NoWeapon/HierarchySelfplay` degrades over its second half while
+the non-hierarchical sibling improves. Re-run both against a *frozen* opponent to
+separate "self-play non-stationarity" from "hierarchical task is harder". Cheap:
+1v1 at 3 threads is ~100 FPS.
+
+### Tier 2 — would sharpen a conclusion
+
+**N4. Episode-length normalisation (removes §15.5).** `offline_eval.py` already
+reports `mean_episode_length` per checkpoint; run it across N at freeze and
+report reward *per step* alongside reward per episode. Without this, cross-N
+reward comparisons rest on an unverified assumption.
+
+**N5. Constant-thread scaling re-run (removes §15.4).** Re-run N ∈ {2,3,5} at a
+single `n_rollout_threads` (8 divides 2000 exactly, so the budget stays exact) to
+get a batch-size-clean sub-curve. 10v10 cannot join at 8 threads in a 31 h
+window; the clean sub-curve plus a flagged 10v10 point is still far better than
+four confounded points. **Alternatively** hold `n_rollout_threads × buffer_size`
+constant by trading threads for buffer size.
+
+**N6. Extend the key lanes to 10M/30M (addresses §15.1 for the important lanes).**
+Only where the curve is still clearly improving at 6M. Candidates by current
+evidence: `3v3` and `2v2` (both still rising at their latest logged step),
+`10v10` if it is still improving. Do **not** extend lanes that have plateaued —
+that is budget burned for nothing (§14 of the brief).
+
+### Tier 3 — engineering, must be a separate experiment
+
+**N7. Observation-construction cost (does not address a §15 limit — it buys
+wall-clock).** `get_state()` calls `get_obs()` for all 2N agents *in addition to*
+the per-agent `get_obs()`, doing the O(N²) work twice per step (pilot F8, §9.1).
+A single-pass implementation should recover most of the measured 18–49% achieved
+fraction (§9.2). **This must be run as its own A/B**
+(`engineering_speedup_old` vs `engineering_speedup_cached`) verifying identical
+obs / reward / done / transitions, and the result may **not** be folded into the
+formal scaling curves (§17 of the brief). It is included here because it is the
+cheapest available speedup for *every* future scaling experiment.
+
+### Explicitly not next
+
+Implementing Graph-MAPPO / Attention-MAPPO / Hypergraph / World-Model as a
+contribution. N2 is the *measurement* that would justify one of them; writing the
+method first would be choosing the answer before asking the question (§31 of the
+brief).
 
 ## 17. Running / Time-Censored Jobs
 
