@@ -285,31 +285,45 @@ would need ~52 h — 2.4× the wall-clock of 2v2 — for the same 6M env steps. 
 
 ### 9.3 Aggregate scheduling throughput
 
-The binding resource is CPU, not GPU (GPU utilisation stayed 0–39% and VRAM
+The binding resource is CPU, not GPU (GPU utilisation stayed 0–45% and VRAM
 ≤ 2.4 GB/job across nine concurrent lanes). The campaign was therefore scheduled
 against **aggregate useful env-steps/s**:
 
-| time | lanes | rollout threads | cores busy (of 48 quota) | aggregate env-steps/s |
+| time | lanes | rollout threads | CPU used (of 48 quota) | aggregate env-steps/s |
 |---|---|---|---|---|
-| 03:11 | 5 | 44 | 42.0 | 451 |
-| 03:17 | 7 | 50 | 41.0 | 672 |
-| 03:46 | 9 | 56 | 43.0 | ~800 |
-| steady | 9 | 56 | 43–47 | ~798 |
+| 03:11 | 5 | 44 | — | 451 |
+| 03:17 | 7 | 50 | — | 672 |
+| ~05:00 | 9 | 56 | ~35–39 | ~798 |
+| 17:30 | 9 (+2 seeds) | 66 | 38–42 | ~800 |
 
 **FACT.** Adding two 3-thread SingleCombat lanes at 03:10 raised aggregate
-throughput from 451 to ~670 env-steps/s.
+throughput from 451 to ~670 env-steps/s, and later additions took the campaign to
+~800 env-steps/s while remaining inside the CPU quota.
 
-**FACT (the cost, stated honestly).** It was not free for the P0 job:
-`f6m_10v10_noweapon_s0`'s cumulative FPS fell from 70 to 64 over the next two
-updates before recovering, settling at a **marginal** rate of ~74–76. The
-cumulative figure lags because it is an average since start. The 10v10 lane still
-projects to finish 6M at ~01:30–03:00 on Oct 8, i.e. with margin, which is why
-the trade was accepted.
+**FACT (a measurement error, corrected — incident F16).** Every CPU figure in
+earlier drafts of this section was wrong. They came from `/proc/stat`, which in
+this container reports the **host's** 192 logical CPUs and returns deltas
+alternating between 0 and ~200 cores between consecutive 5-second samples while
+the container is demonstrably busy. The authoritative source is the container's
+own cgroup accounting, and by that measure the campaign used **~38–42 of its 48
+cores (≈80–87%), with `nr_throttled` at 0.02–0.04% of periods** — i.e. the quota
+was never actually binding.
 
-**OBSERVATION.** `load1` reached 44–45 while only ~43 of 48 cores were busy.
-Load average is therefore a poor scheduler signal here, and GPU idleness is a
-useless one: the GPU was 0–39% utilised for the entire campaign. The decisions
-were made on measured aggregate env-steps/s and on the P0 lane's own FPS.
+**OBSERVATION (revised in light of the above).** `f6m_10v10_noweapon_s0`'s
+*cumulative* FPS fell from 70 to 64 across the two updates following the 03:10
+additions, then recovered to 74–76. Cumulative FPS is an average since run start,
+so a dip is the arithmetic consequence of any slower interval and is not by
+itself evidence of sustained contention. Since the quota turns out never to have
+been saturated, **the honest reading is that the added lanes cost 10v10 little or
+nothing measurable**, and the initial dip should not be cited as a scheduling
+cost. What *is* solid: the 10v10 lane finished with margin.
+
+**OBSERVATION.** `load1` reached 74 at 17:23 while the container was using 38 of
+48 cores. Load average counts runnable-and-blocked tasks across the host and is a
+poor scheduler signal here; GPU idleness is a useless one (the GPU sat at 0–45%
+for the entire campaign). The decisions were made on measured aggregate
+env-steps/s, on the container's own cgroup CPU accounting, and on the P0 lane's
+own FPS.
 
 **CATEGORISATION.** Everything in this section is `Computational scalability`.
 None of it is evidence about the learning algorithm, and it must not be read as

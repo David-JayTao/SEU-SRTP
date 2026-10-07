@@ -83,6 +83,56 @@ curse-of-multiagency claim.
 
 ---
 
+## F16 — `/proc/stat` is unusable in this container; every CPU figure derived from it was wrong
+
+- **Category**: `Other` (measurement bug — and the most consequential one found)
+- **Detected**: 2026-10-07 ~17:21, when adding a lane pushed the reported
+  "cores busy" to 65.5 on a box whose quota is 48. A figure above the quota is
+  impossible, so the instrument was suspect rather than the load.
+- **Symptoms**: the `/proc/stat` `cpu` aggregate, sampled every 4–5 s, returned
+  busy deltas alternating between **0.0 cores and ~200 cores** while the
+  container was demonstrably busy. 200 ≈ the **host's** 192 logical CPUs, not the
+  container's 48. Reported values over the campaign's life ranged up to 124% of
+  quota.
+- **Cause**: the container's `/proc/stat` exposes host-wide counters (an lxcfs
+  style view), while `nproc` reports 48 and `/sys/fs/cgroup/cpu.max` grants 48.
+  The three disagree. A naive `busy_ticks / (elapsed × USER_HZ)` therefore
+  measures the *host*, not this container.
+- **Authoritative source** (now used): the container's own cgroup accounting —
+  `/sys/fs/cgroup/cpu.stat` `usage_usec` deltas, with the quota from
+  `/sys/fs/cgroup/cpu.max`. By that measure the campaign used **~38–42 of 48
+  cores (80–87%)** and `nr_throttled` stayed at **0.02–0.04% of periods**, i.e.
+  the CPU quota was **never actually binding**.
+- **Fix**:
+  - `os_watchdog.sh` now measures from cgroup `cpu.stat` and writes
+    `system/system_samples_v2.csv` with columns
+    `cpu_busy_pct_of_quota, busy_cores_of_quota, quota_cores, nr_throttled_pct`.
+    The v1 file is **kept on disk unaltered as the historical record** but its
+    `cpu_busy_pct` column must not be used.
+  - `watch_f6m.py` uses the same source and prints
+    `container CPU X / 48 cores (Y% of quota, throttled Z% of periods)`.
+  - `scaling_table.py` and `make_manifest.py` prefer the v2 file, read
+    `busy_cores_of_quota` **directly without rescaling**, and label the source in
+    their output (`cgroup cpu.stat (authoritative)`); the legacy path is retained
+    only so old files still parse, and is labelled `UNRELIABLE`.
+- **Verification**: v1 vs v2 at the same instant — v1 `124.4`, v2 `79.6%` =
+  `38.21 / 48` cores. `scaling_table.csv` now reports
+  `peak_busy_cores_of_48_quota = 38.2` with the authoritative label.
+- **Semantic impact on the experiment**: none — training was unaffected.
+  **Semantic impact on the report**: large. Section 9.3's "≈43 of 48 cores,
+  saturated" narrative was an artifact, and the claim that adding lanes cost the
+  10v10 lane throughput is **not supported** — the quota was never saturated, and
+  the observed cumulative-FPS dip is explained by cumulative averaging alone.
+  Both were corrected rather than left standing.
+- **Transferred lesson**: a derived metric that exceeds its own physical bound
+  (cores > quota, utilisation > 100%) is a *unit error*, not a finding. The same
+  class of error as F10 — and F10's 175.9 "cores" and this one share a root
+  cause: trusting a sampler's denominator instead of checking it against the
+  cgroup. Note also that the pilot's `monitor.sh` used the same `/proc/stat`
+  method, so the pilot's CPU columns carry the same defect.
+
+---
+
 ## F15 — probe `--out` resolves against the repo root, not the invocation cwd
 
 - **Category**: `Other` (portability trap)

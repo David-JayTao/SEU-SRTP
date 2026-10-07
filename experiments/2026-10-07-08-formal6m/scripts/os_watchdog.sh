@@ -8,11 +8,23 @@
 # in status/incidents.md) rather than automatically.
 #
 # Column schema is a SUPERSET of the 2026-10-04 campaign's system_samples.csv so
-# that experiments/2026-10-07-08-formal6m/scripts/make_manifest.py (whose
-# resource_peaks() selects columns by the regex `gpu\d_mem_mb`) works unmodified.
+# that make_manifest.py (whose resource_peaks() selects columns by the regex
+# `gpu\d_mem_mb`) works unmodified.
 #
-# cpu_busy_pct is expressed as a percentage of the 48-core cgroup QUOTA, not of
-# the host's 192 logical CPUs -- the quota is the resource we can actually spend.
+# CPU measurement -- IMPORTANT (incident F16)
+# -------------------------------------------
+# /proc/stat is NOT a reliable CPU source in this container. It reports the HOST's
+# 192 logical CPUs and, in repeated 5-second samples, returns deltas alternating
+# between 0 and ~200 cores' worth of ticks while the container is demonstrably
+# busy. Any "N of 48 cores busy" figure derived from it is meaningless.
+#
+# The authoritative source is the container's own cgroup accounting:
+#   /sys/fs/cgroup/cpu.stat  usage_usec   (microseconds of CPU actually consumed)
+# and the quota is /sys/fs/cgroup/cpu.max (4800000/100000 = 48 cores).
+# We therefore emit cpu_busy_pct measured as a fraction of the QUOTA from
+# cpu.stat, plus the raw cores, and we no longer emit a /proc/stat-derived value.
+# v1 samples (system_samples.csv) used the /proc/stat method and must not be used
+# for CPU claims; v2 writes system_samples_v2.csv with the corrected schema.
 #
 # Usage: os_watchdog.sh [interval_seconds]
 set -u
@@ -21,13 +33,13 @@ INTERVAL=${1:-600}
 CAMP=/root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m
 CONDA=/root/miniconda3
 PY=${CONDA}/envs/jsbsim/bin/python
-SAMPLES="${CAMP}/system/system_samples.csv"
+SAMPLES="${CAMP}/system/system_samples_v2.csv"
 EVENTS="${CAMP}/system/events.log"
 
 mkdir -p "${CAMP}/system" "${CAMP}/status"
 
 if [ ! -f "${SAMPLES}" ]; then
-    echo "timestamp,load1,load5,cpu_busy_pct,mem_used_gb,mem_total_gb,n_train_procs,gpu0_util,gpu0_mem_mb,gpu1_util,gpu1_mem_mb,gpu2_util,gpu2_mem_mb,train_cpu_pct,train_rss_gb,tmux_sessions" > "${SAMPLES}"
+    echo "timestamp,load1,load5,cpu_busy_pct_of_quota,busy_cores_of_quota,quota_cores,nr_throttled_pct,mem_used_gb,mem_total_gb,n_train_procs,gpu0_util,gpu0_mem_mb,gpu1_util,gpu1_mem_mb,gpu2_util,gpu2_mem_mb,train_rss_gb,tmux_sessions" > "${SAMPLES}"
 fi
 
 echo "$(date -Is) watchdog started interval=${INTERVAL}s" >> "${EVENTS}"
@@ -42,26 +54,26 @@ while true; do
     G1U=$(echo "$GPU" | cut -d, -f3); G1M=$(echo "$GPU" | cut -d, -f4)
     G2U=$(echo "$GPU" | cut -d, -f5); G2M=$(echo "$GPU" | cut -d, -f6)
 
-    # CPU occupancy from /proc/stat deltas. /proc/stat's aggregate line counts
-    # all host CPUs, so normalise against the observed total, not the quota.
-    read -r _ u n s i w irq sirq st _ < /proc/stat
-    T1=$((u+n+s+i+w+irq+sirq+st)); I1=$i
+    # CPU occupancy from the container's own cgroup accounting (see header).
+    QUOTA=$(awk '{print $1/$2}' /sys/fs/cgroup/cpu.max 2>/dev/null)
+    QUOTA=${QUOTA:-48}
+    U1=$(awk '/usage_usec/{print $2}' /sys/fs/cgroup/cpu.stat)
     sleep 2
-    read -r _ u n s i w irq sirq st _ < /proc/stat
-    T2=$((u+n+s+i+w+irq+sirq+st)); I2=$i
-    DT=$((T2-T1)); DI=$((I2-I1))
-    # busy_core_seconds/s -> cores; express as % of the 48-core quota
-    BUSY=$(awk -v dt="${DT}" -v di="${DI}" 'BEGIN{ if(dt>0) printf "%.1f", 100.0*(dt-di)/dt; else print "0" }')
-    # BUSY is % of host logical CPUs; convert to % of quota (48 of 192)
-    BUSYQ=$(awk -v b="${BUSY}" 'BEGIN{ printf "%.1f", b*192.0/48.0 }')
+    U2=$(awk '/usage_usec/{print $2}' /sys/fs/cgroup/cpu.stat)
+    CORES=$(awk -v a="${U1}" -v b="${U2}" 'BEGIN{printf "%.2f", (b-a)/1e6/2}')
+    BUSYQ=$(awk -v c="${CORES}" -v q="${QUOTA}" 'BEGIN{printf "%.1f", 100.0*c/q}')
+    # throttling over the whole container life -- a leading indicator that the
+    # quota is actually binding
+    THROT=$(awk '/nr_periods/{p=$2} /nr_throttled/{t=$2} END{if(p>0) printf "%.4f", 100.0*t/p; else print "0"}' \
+            /sys/fs/cgroup/cpu.stat)
 
-    read -r NPROC CPU RSS < <(ps -eo rss,pcpu,args --no-headers 2>/dev/null \
+    read -r NPROC RSS < <(ps -eo rss,args --no-headers 2>/dev/null \
         | grep -E -- "-MultipleCombat-|train_jsbsim.py" \
-        | awk '{n++; c+=$2; r+=$1} END {printf "%d %.1f %.2f", n, c, r/1024/1024}')
+        | awk '{n++; r+=$1} END {printf "%d %.2f", n, r/1024/1024}')
 
     NSESS=$(tmux ls 2>/dev/null | wc -l)
 
-    echo "${TS},${LOAD1},${LOAD5},${BUSYQ},${MEMUSED},${MEMTOT},${NPROC:-0},${G0U},${G0M},${G1U},${G1M},${G2U},${G2M},${CPU:-0},${RSS:-0},${NSESS}" >> "${SAMPLES}"
+    echo "${TS},${LOAD1},${LOAD5},${BUSYQ},${CORES},${QUOTA},${THROT},${MEMUSED},${MEMTOT},${NPROC:-0},${G0U},${G0M},${G1U},${G1M},${G2U},${G2M},${RSS:-0},${NSESS}" >> "${SAMPLES}"
 
     # Event detection: a job's worker count dropping to zero while it has not
     # finished is the signal worth recording.

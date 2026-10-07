@@ -127,12 +127,22 @@ def load_arch(metrics_dir, out_dir=None):
 
 
 def load_resources(campaign):
-    """(header, rows) of system/system_samples.csv.
+    """(header, rows) of the preferred system sampler file.
+
+    Prefers `system_samples_v2.csv` (incident F16): v1 derives cpu_busy_pct from
+    /proc/stat, which in this container reports the HOST's 192 logical CPUs and
+    returns deltas alternating between 0 and ~200 cores between consecutive
+    samples while the container is busy, so its CPU column is not usable. v2
+    reads the container's own cgroup `cpu.stat` and carries `busy_cores_of_quota`
+    directly. v1 remains on disk as the historical record.
 
     The header is returned even for a file with no data rows yet, because the
     column set identifies the sampler generation (see cpu_peaks).
     """
-    p = campaign / "system" / "system_samples.csv"
+    base = campaign / "system"
+    p = base / "system_samples_v2.csv"
+    if not os.path.exists(p):
+        p = base / "system_samples.csv"
     if not os.path.exists(p):
         return [], []
     with open(p, newline="") as f:
@@ -185,15 +195,28 @@ def cpu_peaks(header, rows, quota):
         (host_cores/quota_cores, the same factor os_watchdog.sh applies in
         reverse); net effect for the cores column: pct * host_cores/100, i.e.
         exactly the pilot's old 1.92 multiplier for that schema.
+      * v2 os_watchdog.sh (header carries busy_cores_of_quota) -- reads the
+        container's own cgroup cpu.stat, cores are given DIRECTLY; no rescaling.
+      * legacy formal sampler (header carries train_cpu_pct) -- cpu_busy_pct was
+        derived from /proc/stat, which is unreliable in this container (incident
+        F16); kept only so old files still parse.
+
     Returns (None, None, None) when no usable samples exist.
     """
+    if "busy_cores_of_quota" in header:
+        cores = [fnum(r.get("busy_cores_of_quota")) for r in rows]
+        cores = [c for c in cores if c is not None]
+        if not cores:
+            return None, None, None
+        peak = max(cores)
+        return peak * 100.0 / quota, peak, "cgroup cpu.stat (authoritative)"
     vals = [fnum(r.get("cpu_busy_pct")) for r in rows]
     vals = [v for v in vals if v is not None]
     if not vals:
         return None, None, None
     if "train_cpu_pct" in header:
         pct = max(vals)                                   # already % of quota
-        src = "formal-6M sampler (quota-normalised)"
+        src = "procstat-derived sampler (UNRELIABLE, incident F16)"
     else:
         pct = max(vals) * read_host_cores() / quota       # host-% -> quota-%
         src = "pilot sampler (host-normalised, rescaled to quota)"

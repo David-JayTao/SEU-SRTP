@@ -1,0 +1,5 @@
+# Second seed at N=3. The pilot found the largest seed spread at 3v3 (7.66 reward/N,
+# exceeding every between-scale gap), so reproducing a second 3v3 seed is the most
+# informative variance point available once 5v5's second seed is already running.
+# 8 threads -> 6000000//3000//8 = 250 exactly.
+f6m_3v3_noweapon_s1|8|6e6|80000|MultipleCombat|3v3/scaling_noweapon/HierarchySelfplay|mappo|1|--use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 2 --eval-episodes 1

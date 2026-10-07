@@ -23,17 +23,16 @@ TARGET=6000000
 declare -A LANES=(
   [f6m_10v10_noweapon_s0]=20
   [f6m_5v5_noweapon_s0]=8
-  [f6m_3v3_noweapon_s0]=8
   [f6m_2v2_noweapon_s0]=4
+  [f6m_5v5_noweapon_s1]=10
   [f6m_official_2v2_noweapon_s0]=4
   [f6m_official_1v1_selfplay_s1]=3
-  [f6m_official_1v1_vsbaseline_s1]=3
   [f6m_official_1v1_shoot_hier_selfplay_s1]=3
   [f6m_official_1v1_hier_selfplay_s1]=3
 )
 
 # Decision points at which the operator wants to re-plan lane allocation.
-DECISION_POINTS=("2026-10-07 15:30" "2026-10-07 22:30" "2026-10-08 00:00" "2026-10-08 01:30" "2026-10-08 08:30" "2026-10-08 09:00")
+DECISION_POINTS=("2026-10-07 19:00" "2026-10-07 22:30" "2026-10-08 00:00" "2026-10-08 01:30" "2026-10-08 08:30" "2026-10-08 09:00")
 
 started=$(date +%s)
 declare -A prev_alive prev_steps dp_done

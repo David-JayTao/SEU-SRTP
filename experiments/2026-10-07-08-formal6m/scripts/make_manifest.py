@@ -199,9 +199,25 @@ def cpu_busy_scale(fieldnames):
     return float(cpus) / 100.0
 
 
+def sampler_path(campaign):
+    """Preferred sampler file: the corrected cgroup one when it exists.
+
+    Incident F16: `system_samples.csv` (v1) derives cpu_busy_pct from /proc/stat,
+    which in this container reports the HOST's 192 logical CPUs and returns
+    deltas alternating between 0 and ~200 cores between consecutive samples while
+    the container is demonstrably busy. Its CPU column is therefore not usable.
+    `system_samples_v2.csv` reads the container's own cgroup `cpu.stat`, and
+    carries `busy_cores_of_quota` directly. v1 is kept on disk as the historical
+    record but is only used when v2 is absent.
+    """
+    base = Path(campaign) / "system"
+    v2 = base / "system_samples_v2.csv"
+    return v2 if v2.exists() else (base / "system_samples.csv")
+
+
 def resource_peaks(campaign):
     """Peak VRAM / RAM / cores observed while the monitor was sampling."""
-    path = str(Path(campaign) / "system" / "system_samples.csv")
+    path = str(sampler_path(campaign))
     rows = read_csv(path)
     if not rows:
         return None
@@ -218,7 +234,11 @@ def resource_peaks(campaign):
     ram = 0.0
     for r in rows:
         try:
-            cpu = max(cpu, float(r["cpu_busy_pct"]) * scale)
+            # v2 carries cores directly and must not be rescaled.
+            if "busy_cores_of_quota" in r:
+                cpu = max(cpu, float(r["busy_cores_of_quota"]))
+            else:
+                cpu = max(cpu, float(r["cpu_busy_pct"]) * scale)
             ram = max(ram, float(r["mem_used_gb"]))
         except (ValueError, KeyError):
             pass
