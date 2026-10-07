@@ -59,6 +59,8 @@ JOBS = {
     # Wave 4 -- second seeds (only --seed differs from the seed-0 lane).
     "f6m_5v5_noweapon_s1": ("5v5 s1", 10),
     "f6m_3v3_noweapon_s1": ("3v3 s1", 8),
+    # Wave 5 -- the last unrun official L1 entry (single-agent control, P3).
+    "f6m_official_heading_s5": ("o_heading", 4),
 }
 
 # Every experiment name the campaign may launch, including queued ones. Used to

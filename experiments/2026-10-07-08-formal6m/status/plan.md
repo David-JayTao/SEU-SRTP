@@ -261,3 +261,30 @@ threads plus the freed 3 keeps us inside the quota.
 **Note the honest framing of this lane**: `1/heading` is SingleControl, i.e. *not*
 a multi-agent task. It completes the official inventory and is reported as a
 single-agent control, **not** as evidence about multi-agent scaling.
+
+### 19:07 — the real concurrency limit: bursty throttling, not average CPU
+
+A 90-second window measurement separates two things the instantaneous samples
+conflated:
+
+| quantity | value |
+|---|---|
+| CPU consumed, 90 s average | **35.3 of 48 cores (74% of quota)** |
+| throttled periods, same window | **5.22%** |
+| throttled periods, campaign lifetime | 1.49% |
+
+Average utilisation is only 74%, yet 5% of scheduling periods are throttled. That
+is the signature of **bursty oversubscription**: cgroup-v2 throttling fires when
+the container exceeds its 100 ms-period quota, and with 70+ worker processes a
+synchronised moment (several lanes beginning a rollout or ending an episode at
+once) can exceed it even though the long-run average sits well below the cap.
+
+**Consequence for scheduling.** The usable capacity is not "48 minus average
+usage". It is 48 cores of *smooth* capacity, and a workload that is bursty loses
+a few percent of it to throttling. So the earlier reasoning — "average is 74%, so
+there are ~13 cores spare" — was wrong, and no further lanes are added. Twelve is
+the ceiling for this campaign.
+
+**Cost check.** Aggregate throughput is 992 env-steps/s, unchanged since the
+second seeds were added, so the throttling cost is small relative to what those
+lanes contribute (~190 env-steps/s). Kept, not rolled back — but the box is done.
