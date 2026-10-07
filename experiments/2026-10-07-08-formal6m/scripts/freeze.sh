@@ -99,9 +99,13 @@ if [ "${WITH_PROBES}" = "1" ]; then
     for exp in f6m_2v2_noweapon_s0 f6m_3v3_noweapon_s0 f6m_5v5_noweapon_s0 f6m_10v10_noweapon_s0; do
         d=$(find "${REPO}/scripts/results" -type d -name "${exp}" 2>/dev/null | head -1)
         [ -z "$d" ] && continue
+        # --selfplay is REQUIRED for this measurement to mean anything: without it
+        # offline_eval's opponent emits action 0 (a null policy that never
+        # manoeuvres or fires), so returns and episode lengths measured that way
+        # describe an unresisting opponent, not the trained policy (incident F18).
         run_step "offline_eval_${exp}" \
             taskset -c 0,1 "${PY}" scripts/offline_eval.py --run-dir "${d}/run1" \
-            --episodes 8 --threads 2
+            --episodes 8 --threads 2 --selfplay
     done
     run_step env_bench        taskset -c 0 "${PY}" scripts/env_bench.py
     run_step obs_cost_profile taskset -c 0 "${PY}" scripts/obs_cost_profile.py
