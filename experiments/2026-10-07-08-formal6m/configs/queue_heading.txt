@@ -1,0 +1,5 @@
+# The one official L1 training entry not yet run (brief P3). SingleControl is a
+# SINGLE-AGENT task: this completes the official inventory and is reported as a
+# single-agent control, NOT as evidence about multi-agent scaling.
+# 4 threads so 6000000//3000//4 = 500 exactly (F17: 3 threads would cap at 5,994,000).
+f6m_official_heading_s5|4|6e6|40000|SingleControl|1/heading|ppo|5|
