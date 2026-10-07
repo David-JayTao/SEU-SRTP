@@ -204,12 +204,12 @@ Official baseline lanes of this campaign. `Status` uses the campaign vocabulary 
 
 | Experiment | Seed | Steps | Wall time | FPS | Initial reward | Final reward | Eval | Status | Checkpoint |
 |---|---|---|---|---|---|---|---|---|---|
-| f6m_official_1v1_hier_selfplay_s1 | 1 | 5,310,000 | 17.73 h | 83 | -69.367 | -59.148 | -401.63 | running | actor_latest.pt |
+| f6m_official_1v1_hier_selfplay_s1 | 1 | 5,994,000 | 20.05 h | 83 | -69.367 | -92.807 | -307.07 | completed_at_ceiling | actor_latest.pt |
 | f6m_official_1v1_selfplay_s1 | 1 | 5,994,000 | 15.90 h | 104 | -156.44 | 26.933 | 36.368 | completed_at_ceiling | actor_latest.pt |
-| f6m_official_1v1_shoot_hier_selfplay_s1 | 1 | 3,924,000 | 17.73 h | 61 | -192.88 | -54.206 | 0.13253 | running | actor_latest.pt |
+| f6m_official_1v1_shoot_hier_selfplay_s1 | 1 | 4,572,000 | 20.73 h | 61 | -192.88 | -116.09 | 0.14566 | running | actor_latest.pt |
 | f6m_official_1v1_vsbaseline_s1 | 1 | 5,994,000 | 13.59 h | 122 | -207.14 | 27.785 | - | completed_at_ceiling | actor_latest.pt |
-| f6m_official_2v2_noweapon_s0 | 0 | 4,920,000 | 18.12 h | 75 | -3.5066 | 19.587 | 31.619 | running | actor_latest.pt |
-| f6m_official_heading_s5 | 5 | 1,980,000 | 2.02 h | 272 | -14.825 | 168.26 | - | running | actor_latest.pt |
+| f6m_official_2v2_noweapon_s0 | 0 | 5,748,000 | 21.12 h | 75 | -3.5066 | 24.635 | 30.189 | running | actor_latest.pt |
+| f6m_official_heading_s5 | 5 | 4,956,000 | 5.02 h | 274 | -14.825 | 266.55 | - | running | actor_latest.pt |
 | f6m_official_1v1_shoot_hier_vsbaseline | - | - | - | - | - | - | - | not_applicable | - |
 
 _3-thread lanes (`f6m_official_1v1_*`) stop at **5,994,000** of the 6,000,000-step target: the runner floors `episodes = 6e6//3000//threads` = 666, and 666 x 9,000 = 5,994,000. That is `completed_at_ceiling` (completion at the lane's own reachable budget), never a cutoff — see §17._
@@ -224,12 +224,12 @@ N-v-N formal scaling table, one row per (scale, seed). `Reward normalized` = fin
 
 | Scale | Agents | Seed | Steps | FPS | Wall time | Reward raw | Reward normalized | Value loss | Critic grad | CPU | RAM | VRAM | Status |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 2v2 | 4 | 0 | 5,052,000 | 77 | 18.12 h | 24.692 | 12.346 | 0.1139 | 4.8956 | 2.9 | 2.97 GB | 536 MB | running |
+| 2v2 | 4 | 0 | 5,892,000 | 77 | 21.12 h | 24.063 | 12.031 | 0.084599 | 3.0249 | 2.9 | 2.97 GB | 536 MB | running |
 | 3v3 | 6 | 0 | 6,000,000 | 125 | 13.29 h | 35.932 | 11.977 | 0.17833 | 7.3129 | 5.5 | 4.61 GB | 650 MB | completed_6M |
-| 3v3 | 6 | 1 | 1,512,000 | 118 | 3.61 h | 4.3149 | 1.4383 | 0.43618 | 10.678 | 5.6 | 4.48 GB | 650 MB | running |
-| 5v5 | 10 | 0 | 5,184,000 | 79 | 18.12 h | 30.456 | 6.0912 | 0.7578 | 11.637 | 6.2 | 4.85 GB | 660 MB | running |
-| 5v5 | 10 | 1 | 1,170,000 | 89 | 3.69 h | 6.2114 | 1.2423 | 2.3144 | 25.935 | 7.4 | 5.59 GB | 712 MB | running |
-| 10v10 | 20 | 0 | 4,320,000 | 66 | 18.12 h | -0.15033 | -0.015033 | 6.2294 | 44.173 | 16.0 | 15.19 GB | 1036 MB | running |
+| 3v3 | 6 | 1 | 2,856,000 | 120 | 6.61 h | 35.694 | 11.898 | 0.19354 | 11.08 | 5.6 | 4.48 GB | 650 MB | running |
+| 5v5 | 10 | 0 | 6,000,000 | 79 | 20.94 h | 39.786 | 7.9571 | 0.77586 | 20.828 | 6.2 | 4.85 GB | 660 MB | completed_6M |
+| 5v5 | 10 | 1 | 2,190,000 | 91 | 6.69 h | 14.674 | 2.9348 | 0.63622 | 16.307 | 7.4 | 5.59 GB | 712 MB | running |
+| 10v10 | 20 | 0 | 4,980,000 | 66 | 21.12 h | -0.35489 | -0.035489 | 4.4003 | 37.175 | 16.0 | 15.19 GB | 1036 MB | running |
 
 _Wall time = run start to last log write (running rows: to generation time); Steps/FPS/rewards of a `running` row are live values at generation time. CPU/RAM/VRAM are this run's own process peaks from `metrics/resources.csv`; a cell marked `deg` fell back to the campaign-wide peak from `scaling_table.csv` because no per-lane sample exists yet. `n_rollout_threads` differs between scales (§4.5), so FPS is not cross-N comparable; `Reward normalized` and the per-agent view in §7/§11 are._
 <!-- /AUTO:section6 -->
@@ -241,17 +241,17 @@ Equal-sample comparison: mean training reward of each lane at matched vectorised
 
 | Experiment | N | Seed | Threads | Steps reached | State | 1M | 2M | 3M | 4M | 5M | 6M |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| f6m_official_1v1_hier_selfplay_s1 | 1 | 1 | 3 | 5,301,000 | active | 20.875* | 33.131* | -104.04* | -8.0676* | -73.701* | pending |
+| f6m_official_1v1_hier_selfplay_s1 | 1 | 1 | 3 | 5,994,000 | idle | 20.875* | 33.131* | -104.04* | -8.0676* | -73.701* | pending |
 | f6m_official_1v1_selfplay_s1 | 1 | 1 | 3 | 5,994,000 | idle | -64.908* | 4.9369* | 25.578* | 13.116* | 30.325* | pending |
-| f6m_official_1v1_shoot_hier_selfplay_s1 | 1 | 1 | 3 | 3,924,000 | active | -17.923* | -68.911* | -29.384* | pending | pending | pending |
+| f6m_official_1v1_shoot_hier_selfplay_s1 | 1 | 1 | 3 | 4,572,000 | active | -17.923* | -68.911* | -29.384* | -18.621* | pending | pending |
 | f6m_official_1v1_vsbaseline_s1 | 1 | 1 | 3 | 5,994,000 | idle | 11.295* | 12.07* | 23.519* | 26.451* | 29.823* | pending |
-| f6m_2v2_noweapon_s0 | 2 | 0 | 4 | 5,052,000 | active | 23.755 (11.877)* | 24.393 (12.197)* | 16.315 (8.1576) | 19.93 (9.9648)* | 15.895 (7.9474)* | pending |
-| f6m_official_2v2_noweapon_s0 | 2 | 0 | 4 | 4,920,000 | active | 15.143 (7.5713)* | 21.623 (10.812)* | 23.131 (11.566) | 22.421 (11.211)* | pending | pending |
+| f6m_2v2_noweapon_s0 | 2 | 0 | 4 | 5,892,000 | active | 23.755 (11.877)* | 24.393 (12.197)* | 16.315 (8.1576) | 19.93 (9.9648)* | 15.895 (7.9474)* | pending |
+| f6m_official_2v2_noweapon_s0 | 2 | 0 | 4 | 5,748,000 | active | 15.143 (7.5713)* | 21.623 (10.812)* | 23.131 (11.566) | 22.421 (11.211)* | 21.308 (10.654)* | pending |
 | f6m_3v3_noweapon_s0 | 3 | 0 | 8 | 6,000,000 | complete | 31.799 (10.6)* | 35.312 (11.771)* | 36.062 (12.021) | 35.791 (11.93)* | 36.074 (12.025)* | 35.932 (11.977) |
-| f6m_3v3_noweapon_s1 | 3 | 1 | 8 | 1,512,000 | active | 25.937 (8.6457)* | pending | pending | pending | pending | pending |
-| f6m_5v5_noweapon_s0 | 5 | 0 | 8 | 5,184,000 | active | -1.6399 (-0.328)* | 48.802 (9.7603)* | 50.304 (10.061) | 23.136 (4.6272)* | 24.429 (4.8857)* | pending |
-| f6m_5v5_noweapon_s1 | 5 | 1 | 10 | 1,170,000 | active | 4.4416 (0.8883)* | pending | pending | pending | pending | pending |
-| f6m_10v10_noweapon_s0 | 10 | 0 | 20 | 4,320,000 | active | -17.266 (-1.7266)* | -11.699 (-1.1699)* | -10.626 (-1.0626) | -4.7305 (-0.4731)* | pending | pending |
+| f6m_3v3_noweapon_s1 | 3 | 1 | 8 | 2,856,000 | active | 25.937 (8.6457)* | 32.554 (10.851)* | pending | pending | pending | pending |
+| f6m_5v5_noweapon_s0 | 5 | 0 | 8 | 6,000,000 | complete | -1.6399 (-0.328)* | 48.802 (9.7603)* | 50.304 (10.061) | 23.136 (4.6272)* | 24.429 (4.8857)* | 39.786 (7.9571) |
+| f6m_5v5_noweapon_s1 | 5 | 1 | 10 | 2,190,000 | active | 4.4416 (0.8883)* | 16.279 (3.2557)* | pending | pending | pending | pending |
+| f6m_10v10_noweapon_s0 | 10 | 0 | 20 | 4,980,000 | active | -17.266 (-1.7266)* | -11.699 (-1.1699)* | -10.626 (-1.0626) | -4.7305 (-0.4731)* | pending | pending |
 
 _Cells: `reward (reward per enemy)` for NoWeapon lanes; `*` = value interpolated between the two bracketing PPO updates; `pending` = the lane has not reached that budget yet (nothing is extrapolated); `before-data`/`nan-gap` are the raw provenance tokens. Raw per-cell brackets are in `metrics/equal_sample.csv`. Per-enemy values are only shown for NoWeapon; a ShootMissile reward is not a team sum._
 <!-- /AUTO:section7 -->
@@ -263,17 +263,17 @@ Equal-wall-clock comparison: mean training reward of each lane at matched elapse
 
 | Experiment | N | Seed | Threads | Steps reached | State | 1h | 3h | 6h | 12h | 24h |
 |---|---|---|---|---|---|---|---|---|---|---|
-| f6m_official_1v1_hier_selfplay_s1 | 1 | 1 | 3 | 5,301,000 | active | 23.597* | 32.666* | 18.727* | -10.517* | pending |
+| f6m_official_1v1_hier_selfplay_s1 | 1 | 1 | 3 | 5,994,000 | idle | 23.597* | 32.666* | 18.727* | -10.517* | pending |
 | f6m_official_1v1_selfplay_s1 | 1 | 1 | 3 | 5,994,000 | idle | -156.74* | -20.315* | 36.362* | 29.107* | pending |
-| f6m_official_1v1_shoot_hier_selfplay_s1 | 1 | 1 | 3 | 3,924,000 | active | -18.116* | -26.653* | -60.931* | -12.236* | pending |
+| f6m_official_1v1_shoot_hier_selfplay_s1 | 1 | 1 | 3 | 4,572,000 | active | -18.116* | -26.653* | -60.931* | -12.236* | pending |
 | f6m_official_1v1_vsbaseline_s1 | 1 | 1 | 3 | 5,994,000 | idle | -8.6019* | 6.8271* | 12.368* | 29.232* | pending |
-| f6m_2v2_noweapon_s0 | 2 | 0 | 4 | 5,052,000 | active | 4.319 (2.1595)* | 22.78 (11.39)* | 21.227 (10.613)* | 11.739 (5.8694)* | pending |
-| f6m_official_2v2_noweapon_s0 | 2 | 0 | 4 | 4,920,000 | active | -0.5935 (-0.2967)* | 18.718 (9.359)* | 20.998 (10.499)* | 17.13 (8.5647)* | pending |
+| f6m_2v2_noweapon_s0 | 2 | 0 | 4 | 5,892,000 | active | 4.319 (2.1595)* | 22.78 (11.39)* | 21.227 (10.613)* | 11.739 (5.8694)* | pending |
+| f6m_official_2v2_noweapon_s0 | 2 | 0 | 4 | 5,748,000 | active | -0.5935 (-0.2967)* | 18.718 (9.359)* | 20.998 (10.499)* | 17.13 (8.5647)* | pending |
 | f6m_3v3_noweapon_s0 | 3 | 0 | 8 | 6,000,000 | complete | -1.2008 (-0.4003)* | 35.439 (11.813)* | 35.566 (11.855)* | 35.846 (11.949)* | pending |
-| f6m_3v3_noweapon_s1 | 3 | 1 | 8 | 1,512,000 | active | -0.0385 (-0.0128)* | 36.27 (12.09)* | pending | pending | pending |
-| f6m_5v5_noweapon_s0 | 5 | 0 | 8 | 5,184,000 | active | -7.7217 (-1.5443)* | -4.2391 (-0.8478)* | -4.0284 (-0.8057)* | 27.242 (5.4484)* | pending |
-| f6m_5v5_noweapon_s1 | 5 | 1 | 10 | 1,170,000 | active | -5.6468 (-1.1294)* | 0.1679 (0.0336)* | pending | pending | pending |
-| f6m_10v10_noweapon_s0 | 10 | 0 | 20 | 4,320,000 | active | -17.48 (-1.7479)* | -17.234 (-1.7234)* | -16.764 (-1.6764)* | -2.6125 (-0.2613)* | pending |
+| f6m_3v3_noweapon_s1 | 3 | 1 | 8 | 2,856,000 | active | -0.0385 (-0.0128)* | 36.27 (12.09)* | 34.085 (11.362)* | pending | pending |
+| f6m_5v5_noweapon_s0 | 5 | 0 | 8 | 6,000,000 | complete | -7.7217 (-1.5443)* | -4.2391 (-0.8478)* | -4.0284 (-0.8057)* | 27.242 (5.4484)* | pending |
+| f6m_5v5_noweapon_s1 | 5 | 1 | 10 | 2,190,000 | active | -5.6468 (-1.1294)* | 0.1679 (0.0336)* | 16.399 (3.2798)* | pending | pending |
+| f6m_10v10_noweapon_s0 | 10 | 0 | 20 | 4,980,000 | active | -17.48 (-1.7479)* | -17.234 (-1.7234)* | -16.764 (-1.6764)* | -2.6125 (-0.2613)* | pending |
 
 _Cells: `reward (reward per enemy)` for NoWeapon lanes; `*` = interpolated between bracketing updates; `pending` = not reached yet. Elapsed time is the lane's own `wall_time` minus its first logged timestamp, so it excludes queueing/startup. Scales use different `n_rollout_threads` (§4.5), so wall-clock reflects both learning speed and the scheduling choice. Raw brackets: `metrics/equal_wallclock.csv`._
 <!-- /AUTO:section8 -->
@@ -561,12 +561,12 @@ Per-scale reward-trajectory summary for the N-v-N lanes, from `metrics/summary.c
 
 | Scale | Seed | Steps reached (% of ceiling) | Status | First reward | Last reward | Reward / enemy | Tail slope | Still improving at final logged update? | Eval last |
 |---|---|---|---|---|---|---|---|---|---|
-| 2v2 | 0 | 5,052,000 (84.2%) | running | -3.5101 | 24.692 | 12.346 | +0.299 | improving (+0.299/update) | -12.768 |
+| 2v2 | 0 | 5,892,000 (98.2%) | running | -3.5101 | 24.063 | 12.031 | +0.094 | improving (+0.094/update) | -106.76 |
 | 3v3 | 0 | 6,000,000 (100.0%) | completed_6M | -5.3185 | 35.932 | 11.977 | +0.0089 | flat (+0.0089/update) | 47.839 |
-| 3v3 | 1 | 1,512,000 (25.2%) | running | -5.436 | 4.3149 | 1.4383 | -1.47 | declining (-1.47/update) | 46.352 |
-| 5v5 | 0 | 5,184,000 (86.4%) | running | -9.117 | 30.456 | 6.0912 | -0.097 | declining (-0.097/update) | -61.483 |
-| 5v5 | 1 | 1,170,000 (19.5%) | running | -9.0539 | 6.2114 | 1.2423 | +0.208 | improving (+0.208/update) | 42.159 |
-| 10v10 | 0 | 4,320,000 (72.0%) | running | -17.621 | -0.15033 | -0.015033 | +0.685 | improving (+0.685/update) | -34.074 |
+| 3v3 | 1 | 2,856,000 (47.6%) | running | -5.436 | 35.694 | 11.898 | +0.137 | improving (+0.137/update) | 47.507 |
+| 5v5 | 0 | 6,000,000 (100.0%) | completed_6M | -9.117 | 39.786 | 7.9571 | +0.365 | improving (+0.365/update) | -222.71 |
+| 5v5 | 1 | 2,190,000 (36.5%) | running | -9.0539 | 14.674 | 2.9348 | -0.585 | declining (-0.585/update) | -68.572 |
+| 10v10 | 0 | 4,980,000 (83.0%) | running | -17.621 | -0.35489 | -0.035489 | +0.0885 | improving (+0.0885/update) | -133.35 |
 
 _`Reward / enemy` divides by N and is the only cross-N-comparable reward for the NoWeapon family (PostureReward sums over enemies; see §4). A `running` lane's verdict is a statement about its final logged update at generation time, not about where it will end; a lane at `completed_*` is frozen at its final value. Values for scales with two seeds are per seed; §12 quantifies the spread._
 
@@ -574,12 +574,12 @@ Matched-sample budgets from `metrics/sample_efficiency.csv` (latest real measure
 
 | Scale | Seed | Max steps | 150k | 300k | 450k | 600k |
 |---|---|---|---|---|---|---|
-| 2v2 | 0 | 5,052,000 | -0.61 (-0.31) | 4.32 (2.16) | 21.05 (10.53) | 20.49 (10.24) |
+| 2v2 | 0 | 5,892,000 | -0.61 (-0.31) | 4.32 (2.16) | 21.05 (10.53) | 20.49 (10.24) |
 | 3v3 | 0 | 6,000,000 | -4.78 (-1.59) | -4.40 (-1.47) | -2.64 (-0.88) | 1.22 (0.41) |
-| 3v3 | 1 | 1,512,000 | -5.02 (-1.67) | -3.57 (-1.19) | 0.35 (0.12) | 1.75 (0.58) |
-| 5v5 | 0 | 5,184,000 | -8.87 (-1.77) | -8.29 (-1.66) | -6.30 (-1.26) | -5.74 (-1.15) |
-| 5v5 | 1 | 1,170,000 | -8.30 (-1.66) | -5.72 (-1.14) | -4.65 (-0.93) | 2.42 (0.48) |
-| 10v10 | 0 | 4,320,000 | -17.67 (-1.77) | -17.45 (-1.74) | -17.44 (-1.74) | -17.45 (-1.75) |
+| 3v3 | 1 | 2,856,000 | -5.02 (-1.67) | -3.57 (-1.19) | 0.35 (0.12) | 1.75 (0.58) |
+| 5v5 | 0 | 6,000,000 | -8.87 (-1.77) | -8.29 (-1.66) | -6.30 (-1.26) | -5.74 (-1.15) |
+| 5v5 | 1 | 2,190,000 | -8.30 (-1.66) | -5.72 (-1.14) | -4.65 (-0.93) | 2.42 (0.48) |
+| 10v10 | 0 | 4,980,000 | -17.67 (-1.77) | -17.45 (-1.74) | -17.44 (-1.74) | -17.45 (-1.75) |
 
 _`reward (reward/enemy)`; NoWeapon family only._
 
@@ -736,7 +736,7 @@ Seed variance for the N-v-N lanes. A spread is only computed where at least two 
 
 | Seed | Status | Threads | Steps reached | Ceiling | Final logged reward | Reward / enemy |
 |---|---|---|---|---|---|---|
-| 0 | running | 4 | 5,052,000 | 6,000,000 | 24.692 | 12.346 |
+| 0 | running | 4 | 5,892,000 | 6,000,000 | 24.063 | 12.031 |
 
 _Only one seed exists for 2v2 in this campaign, so **no spread is computed** (a spread needs at least two runs). The single-seed trend is in §11._
 
@@ -745,30 +745,30 @@ _Only one seed exists for 2v2 in this campaign, so **no spread is computed** (a 
 | Seed | Status | Threads | Steps reached | Ceiling | Final logged reward | Reward / enemy |
 |---|---|---|---|---|---|---|
 | 0 | completed_6M | 8 | 6,000,000 | 6,000,000 | 35.932 | 11.977 |
-| 1 | running | 8 | 1,512,000 | 6,000,000 | 4.3149 | 1.4383 |
+| 1 | running | 8 | 2,856,000 | 6,000,000 | 35.694 | 11.898 |
 
-_Spread over the final logged training reward at generation time: **31.6** raw (**10.5** per enemy), i.e. max - min over the 2 seeds._
+_Spread over the final logged training reward at generation time: **0.238** raw (**0.0793** per enemy), i.e. max - min over the 2 seeds._
 
-**Provisional:** seed 1 at 1,512,000 steps — the spread compares seeds at different training stages and will shrink or move as the incomplete lanes train. Treat it as an upper bound on the current difference, not a variance estimate.
+**Provisional:** seed 1 at 2,856,000 steps — the spread compares seeds at different training stages and will shrink or move as the incomplete lanes train. Treat it as an upper bound on the current difference, not a variance estimate.
 
 **5v5** — 2 lanes with data.
 
 | Seed | Status | Threads | Steps reached | Ceiling | Final logged reward | Reward / enemy |
 |---|---|---|---|---|---|---|
-| 0 | running | 8 | 5,184,000 | 6,000,000 | 30.456 | 6.0912 |
-| 1 | running | 10 | 1,170,000 | 6,000,000 | 6.2114 | 1.2423 |
+| 0 | completed_6M | 8 | 6,000,000 | 6,000,000 | 39.786 | 7.9571 |
+| 1 | running | 10 | 2,190,000 | 6,000,000 | 14.674 | 2.9348 |
 
 **Thread confound (§4.5):** the seeds of 5v5 do not share `n_rollout_threads` (seed 0: 8, seed 1: 10), so this comparison crosses batch-size differences as well as seeds.
 
-_Spread over the final logged training reward at generation time: **24.2** raw (**4.85** per enemy), i.e. max - min over the 2 seeds._
+_Spread over the final logged training reward at generation time: **25.1** raw (**5.02** per enemy), i.e. max - min over the 2 seeds._
 
-**Provisional:** seed 0 at 5,184,000 steps, seed 1 at 1,170,000 steps — the spread compares seeds at different training stages and will shrink or move as the incomplete lanes train. Treat it as an upper bound on the current difference, not a variance estimate.
+**Provisional:** seed 1 at 2,190,000 steps — the spread compares seeds at different training stages and will shrink or move as the incomplete lanes train. Treat it as an upper bound on the current difference, not a variance estimate.
 
 **10v10** — 1 lane with data.
 
 | Seed | Status | Threads | Steps reached | Ceiling | Final logged reward | Reward / enemy |
 |---|---|---|---|---|---|---|
-| 0 | running | 20 | 4,320,000 | 6,000,000 | -0.15033 | -0.015033 |
+| 0 | running | 20 | 4,980,000 | 6,000,000 | -0.35489 | -0.035489 |
 
 _Only one seed exists for 10v10 in this campaign, so **no spread is computed** (a spread needs at least two runs). The single-seed trend is in §11._
 
@@ -999,18 +999,18 @@ Every lane of this campaign with status, steps reached and the reason for any sh
 
 | Experiment | Scale | Threads | Steps reached | Ceiling | Status | Note |
 |---|---|---|---|---|---|---|
-| f6m_official_heading_s5 | o_heading | 4 | 1,980,000 | 6,000,000 | running | still writing (last write <2 min ago); 4,020,000 steps short of its ceiling at this snapshot |
-| f6m_official_1v1_hier_selfplay_s1 | o_1v1_hier | 3 | 5,310,000 | 5,994,000 | running | still writing (last write <2 min ago); 684,000 steps short of its ceiling at this snapshot |
+| f6m_official_heading_s5 | o_heading | 4 | 4,956,000 | 6,000,000 | running | still writing (last write <2 min ago); 1,044,000 steps short of its ceiling at this snapshot |
+| f6m_official_1v1_hier_selfplay_s1 | o_1v1_hier | 3 | 5,994,000 | 5,994,000 | completed_at_ceiling | reached its own ceiling 5,994,000 < 6,000,000 by construction (F17: runner floors episodes = 6e6//3000//3 = 666; a 3-thread lane can never reach 6M). Not a shortfall. |
 | f6m_official_1v1_selfplay_s1 | o_1v1_selfplay | 3 | 5,994,000 | 5,994,000 | completed_at_ceiling | reached its own ceiling 5,994,000 < 6,000,000 by construction (F17: runner floors episodes = 6e6//3000//3 = 666; a 3-thread lane can never reach 6M). Not a shortfall. |
-| f6m_official_1v1_shoot_hier_selfplay_s1 | o_1v1_shoot | 3 | 3,924,000 | 5,994,000 | running | still writing (last write <2 min ago); 2,070,000 steps short of its ceiling at this snapshot |
+| f6m_official_1v1_shoot_hier_selfplay_s1 | o_1v1_shoot | 3 | 4,572,000 | 5,994,000 | running | still writing (last write 2 min ago); 1,422,000 steps short of its ceiling at this snapshot |
 | f6m_official_1v1_vsbaseline_s1 | o_1v1_vsbaseline | 3 | 5,994,000 | 5,994,000 | completed_at_ceiling | reached its own ceiling 5,994,000 < 6,000,000 by construction (F17: runner floors episodes = 6e6//3000//3 = 666; a 3-thread lane can never reach 6M). Not a shortfall. |
-| f6m_2v2_noweapon_s0 | 2v2 | 4 | 5,052,000 | 6,000,000 | running | still writing (last write <2 min ago); 948,000 steps short of its ceiling at this snapshot |
-| f6m_official_2v2_noweapon_s0 | official_2v2 | 4 | 4,920,000 | 6,000,000 | running | still writing (last write <2 min ago); 1,080,000 steps short of its ceiling at this snapshot |
+| f6m_2v2_noweapon_s0 | 2v2 | 4 | 5,892,000 | 6,000,000 | running | still writing (last write <2 min ago); 108,000 steps short of its ceiling at this snapshot |
+| f6m_official_2v2_noweapon_s0 | official_2v2 | 4 | 5,748,000 | 6,000,000 | running | still writing (last write <2 min ago); 252,000 steps short of its ceiling at this snapshot |
 | f6m_3v3_noweapon_s0 | 3v3 | 8 | 6,000,000 | 6,000,000 | completed_6M | reached the 6,000,000-step target |
-| f6m_3v3_noweapon_s1 | 3v3 s1 | 8 | 1,512,000 | 6,000,000 | running | still writing (last write 3 min ago); 4,488,000 steps short of its ceiling at this snapshot |
-| f6m_5v5_noweapon_s0 | 5v5 | 8 | 5,184,000 | 6,000,000 | running | still writing (last write 3 min ago); 816,000 steps short of its ceiling at this snapshot |
-| f6m_5v5_noweapon_s1 | 5v5 s1 | 10 | 1,170,000 | 6,000,000 | running | still writing (last write <2 min ago); 4,830,000 steps short of its ceiling at this snapshot |
-| f6m_10v10_noweapon_s0 | 10v10 | 20 | 4,320,000 | 6,000,000 | running | still writing (last write 3 min ago); 1,680,000 steps short of its ceiling at this snapshot |
+| f6m_3v3_noweapon_s1 | 3v3 s1 | 8 | 2,856,000 | 6,000,000 | running | still writing (last write <2 min ago); 3,144,000 steps short of its ceiling at this snapshot |
+| f6m_5v5_noweapon_s0 | 5v5 | 8 | 6,000,000 | 6,000,000 | completed_6M | reached the 6,000,000-step target |
+| f6m_5v5_noweapon_s1 | 5v5 s1 | 10 | 2,190,000 | 6,000,000 | running | still writing (last write <2 min ago); 3,810,000 steps short of its ceiling at this snapshot |
+| f6m_10v10_noweapon_s0 | 10v10 | 20 | 4,980,000 | 6,000,000 | running | still writing (last write 10 min ago); 1,020,000 steps short of its ceiling at this snapshot |
 | f6m_official_1v1_shoot_hier_vsbaseline | 1v1 | 3 | - | - | not_applicable | not_applicable: F9 upstream bug (TypeError at the first env step); the official entry cannot run and was never launched |
 
 _Ceiling is the lane's own reachable budget: runner floors `episodes = 6e6//3000//threads`, so 3-thread lanes cap at 5,994,000 (F17) and 4/8/10/20-thread lanes reach 6,000,000 exactly. `Steps reached` is live for `running` lanes; a later freeze supersedes this table, and the auto-finalizer writes one at every snapshot (`status/final_state_history.md`)._
