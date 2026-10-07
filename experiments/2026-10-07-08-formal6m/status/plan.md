@@ -288,3 +288,49 @@ the ceiling for this campaign.
 **Cost check.** Aggregate throughput is 992 env-steps/s, unchanged since the
 second seeds were added, so the throttling cost is small relative to what those
 lanes contribute (~190 env-steps/s). Kept, not rolled back — but the box is done.
+
+---
+
+# 2026-10-08 01:14 — wave 6: second seeds into recovered capacity
+
+By 01:12 eight lanes had completed (5v5 s0, 3v3 s0, 2v2 s0, official 2v2 and
+heading all at exactly 6,000,000; the three 3-thread 1v1 lanes at their
+5,994,000 ceiling). Only 4 lanes were still running and container CPU had fallen
+to **30.8 of 48 cores**, freeing **29 rollout threads**.
+
+## What was launched, and why in that order
+
+| job | threads | rationale |
+|---|---|---|
+| `f6m_10v10_noweapon_s1` | **20** | The brief's #1 second seed, and it tests the campaign's **headline** result. |
+| `f6m_5v5_noweapon_s2` | **8** | A clean second comparison at the most volatile mid scale. |
+
+**Thread count is not a free parameter here.** For a *seed* comparison everything
+except `--seed` must match the seed-0 lane or the comparison additionally
+crosses the §4.5 batch-size confound. So 10v10 seed 1 runs at 20 threads
+(seed 0's value) and 5v5 seed 2 at 8 (seed 0's value) — **not** at the largest
+number the box could take. This deliberately trades coverage for comparability;
+the opposite trade would have produced two fast, uninterpretable runs.
+
+**Why 10v10 seed 1 matters most.** The scaling curve's striking feature is that
+10v10 sits at ≈0 reward (≈+0.06 per enemy) while 2v2/3v3/5v5 are all strongly
+positive (+8 to +12 per enemy). That is the headline, and it currently rests on
+**one trajectory**. A second 10v10 seed is the only available test of whether the
+result replicates. At 20 threads it reaches roughly **2.3M of 6M (≈38%)** by the
+freeze, so it will be `time_cutoff` — accepted deliberately, because a partial
+second trajectory at the headline scale is worth more than a complete run at a
+scale that is already well covered.
+
+**What was deliberately not run.** 2v2 seed 1: it would need 4 threads to match
+seed 0, buying only ~28% coverage at the scale with the *smoothest* seed-0 curve
+and therefore the least variance to resolve. The brief's #3 item
+(2v2 **or** 3v3 second seed) is already satisfied by `f6m_3v3_noweapon_s1`, which
+projects to complete.
+
+## Next free-up: 10v10 seed 0 at ~04:00 (20 threads, 5 h window)
+
+5 h is too short for any 6M run at N≥3 at the thread counts that keep a
+comparison clean. The best available use is a **new family** at small scale:
+`2v2/scaling_shoot` at 20 threads ≈ 390 FPS → 6M in ≈4.3 h, which fits. That adds
+an armed-combat point at a scale where the unarmed baseline is already complete,
+i.e. a matched armed-vs-unarmed comparison. Decided at 04:00 with live numbers.
