@@ -61,6 +61,9 @@ JOBS = {
     "f6m_3v3_noweapon_s1": ("3v3 s1", 8),
     # Wave 5 -- the last unrun official L1 entry (single-agent control, P3).
     "f6m_official_heading_s5": ("o_heading", 4),
+    # Wave 6 -- second/third seeds into capacity freed by the 01:12 completions.
+    "f6m_10v10_noweapon_s1": ("10v10 s1", 20),
+    "f6m_5v5_noweapon_s2": ("5v5 s2", 8),
 }
 
 # Every experiment name the campaign may launch, including queued ones. Used to
@@ -369,8 +372,10 @@ def main() -> int:
     lines = []
     lines.append(f"# Formal-6M monitor  {state['timestamp_local']}")
     lines.append("")
-    lines.append(f"**Aggregate throughput: {agg_fps} env-steps/s** across {len(rows)} jobs"
-                 f" ({sum(r['threads'] for r in rows)} rollout threads)")
+    live = [r for r in rows if not r["done"]]
+    lines.append(f"**Aggregate throughput: {agg_fps} env-steps/s** across {len(live)} live jobs"
+                 f" ({sum(r['threads'] for r in live)} rollout threads; "
+                 f"{len(rows) - len(live)} lanes completed and release their threads)")
     lines.append("")
     lines.append("| experiment | scale | thr | steps | % | FPS | ETA h | reward | eval | v_loss | critic_gn | flags |")
     lines.append("|---|---|---|---|---|---|---|---|---|---|---|---|")
