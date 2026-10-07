@@ -83,6 +83,48 @@ curse-of-multiagency claim.
 
 ---
 
+## F17 — the reachable step budget is quantised by thread count
+
+- **Category**: `Other` (experiment-design trap)
+- **Detected**: 2026-10-07 ~17:20, when `f6m_official_1v1_vsbaseline_s1` ended
+  cleanly at **5,994,000** instead of 6,000,000 — exactly below target, not short
+  by accident.
+- **Cause**: the runner computes
+  `episodes = num_env_steps // buffer_size // n_rollout_threads`
+  (`runner/share_jsbsim_runner.py:72`, `runner/jsbsim_runner.py:41`), so the
+  reachable total is `episodes × 3000 × threads`. With `num_env_steps = 6e6` and
+  `buffer_size = 3000`, a lane reaches the full budget **only if the thread count
+  divides 2000**:
+
+  | threads | episodes | reached | vs 6M |
+  |---|---|---|---|
+  | 3 | 666 | 5,994,000 | 99.9% |
+  | 4 | 500 | 6,000,000 | 100% |
+  | 8 | 250 | 6,000,000 | 100% |
+  | 10 | 200 | 6,000,000 | 100% |
+  | 20 | 100 | 6,000,000 | 100% |
+
+- **Symptom is silent**: no warning, no error, no truncated-run marker. The job
+  simply finishes 6,000 steps short and reports `exited with code 0`.
+- **Fix**: **not applied retrospectively.** Relaunching to change the thread count
+  would create a second `run<N>/` (see 13.4 of the report) and a spliced
+  trajectory is not a clean formal run. All four 1v1 lanes use 3 threads and are
+  therefore capped at 5,994,000. They are reported as **`completed` at
+  5,994,000 (99.9% of the nominal budget)** with the reason stated — **not** as
+  `completed_6M`, and not as `time_cutoff` (nothing was cut; the target was
+  unreachable by construction).
+- **Applied going forward**: every lane launched after this was chosen so that
+  its thread count divides 2000 — 5v5 seed 1 at 10 threads (200 episodes), 3v3
+  seed 1 at 8 threads (250 episodes).
+- **Verification**: 3v3 seed 0 at 8 threads reached exactly 6,000,000; 1v1
+  vsBaseline at 3 threads stopped at exactly 666 × 9000 = 5,994,000.
+- **Transferable lesson**: when a budget is expressed in units that the harness
+  floors, *check divisibility at launch time*. The same trap bit the pilot, whose
+  18-thread runs reached 864,000 of a nominal 900,000 and were reported with the
+  shortfall unexplained.
+
+---
+
 ## F16 — `/proc/stat` is unusable in this container; every CPU figure derived from it was wrong
 
 - **Category**: `Other` (measurement bug — and the most consequential one found)
