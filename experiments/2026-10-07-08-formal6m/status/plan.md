@@ -223,3 +223,17 @@ would silently finish 1.8% short.
 too little for any 6M run, so that capacity should go to (`1/heading`, ~2.8 h) or
 a partial Shoot-scaling run, or simply be left unused rather than started and
 abandoned.
+
+### Decision 17:30 — do NOT add a fourth seed yet
+
+After launching 5v5 s1 and 3v3 s1, measured container CPU rose to **41.6–43.6 of
+48 cores (87–91%)** with throttling still negligible (0.047%). That is close
+enough to the quota that adding another 10-thread lane would risk real
+throttling, which would fall hardest on the *tightest* lane — `f6m_5v5_noweapon_s1`
+at 95 FPS (nominal ETA ~10:50, i.e. already past the freeze).
+
+So the next seed waits for a lane to drain rather than being squeezed in. Note
+that `f6m_5v5_noweapon_s1` is **not necessarily lost**: its nominal ETA assumes
+today's contention. By 01:15 Oct 8 roughly 22 rollout threads will have freed, so
+if its marginal rate rises from 95 to ~120 FPS it reaches 6M around 07:30–08:00.
+Its progress is therefore tracked explicitly rather than assumed censored.
