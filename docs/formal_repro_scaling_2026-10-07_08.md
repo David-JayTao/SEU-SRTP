@@ -88,9 +88,27 @@ pilot 已经确立、本轮直接继承的事实：
 - **F5**：生成的 scaling 配置曾把 shoot 变体覆盖 noweapon 变体，
   已修复为 `scaling_noweapon/` 与 `scaling_shoot/` 分目录。
 - **"FSP" 不是 FSP**（`docs/baseline_inventory.md` §1.2b）：
-  `algorithms/utils/selfplay.py` 的 `FSP.choose` 是对全部历史 checkpoint 的
-  **均匀随机采样**，`update()` 是空函数，ELO 从不更新。
+  `algorithms/utils/selfplay.py:43` 的 `FSP.choose` 是对全部历史 checkpoint 的
+  **均匀随机采样**，`update()` 是空函数（`:46`）。
   本报告中一律称 **"MAPPO + uniform-random self-play over checkpoint history"**。
+
+  > **本轮对 pilot 该断言的一处修正（2026-10-07）**：pilot 写的是"ELO 从不更新"。
+  > 逐 runner 核实后，这句话**只对 MultipleCombat 成立**：
+  > - `runner/share_jsbsim_runner.py:356`（2v2/3v3/5v5/10v10 用它）：
+  >   `self.policy_pool[str(episode)] = self.all_args.init_elo` —— 每个历史
+  >   checkpoint 都写同一个常量（`--init-elo` 默认 **1000.0**，`config.py:237`），
+  >   旁边还留着 `# TODO: use eval results to update elo`。所以 pool 里的 ELO 恒定，
+  >   `PFSP` 也因此退化为均匀分布。
+  > - `runner/selfplay_jsbsim_runner.py:281`（SingleCombat 用它）：
+  >   `self.policy_pool[str(episode)] = self.latest_elo`，且 `:254`/`:256` 在每次
+  >   eval 后**确实更新**对手与自身的 ELO。实测日志亦可见：
+  >   `f6m_official_1v1_selfplay_s1` 打印 `elo gain: -0.173 | latest elo score: 1203.17`
+  >   （从初值 1000 升到 1203，即 ELO 在动）。
+  >
+  > **但结论不变**：两个 runner 的 `FSP.choose` 都是
+  > `np.random.choice(list(agents_elo.keys()))`，**对手选择仍然与 ELO 无关**。
+  > 所以"uniform-random self-play over checkpoint history"这一描述对两类任务
+  > 都成立；被修正的只是"ELO 从不更新"这一附带的机制说明。
 - **吞吐基准**（`metrics/env_bench_scaling.json`，单核，随机动作）：
   2v2 107.8 / 3v3 60.3 / 5v5 25.4 / 10v10 7.8 env-steps/s。
 

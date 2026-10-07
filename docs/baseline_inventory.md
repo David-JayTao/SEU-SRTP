@@ -219,3 +219,28 @@ class FSP(SelfplayAlgorithm):
 
 见 `experiments/2026-10-04-night/manifest.csv` 与
 `docs/overnight_repro_scaling_2026-10-04.md` §5/§7。
+
+---
+
+## 附录：2026-10-07 的一处修正（ELO 是否更新）
+
+本文 §1.2b 写道「`policy_pool[str(episode)] = self.all_args.init_elo`，
+**所有历史策略的 ELO 都是同一个初值**」。**该结论只对 MultipleCombat 成立。**
+2026-10-07 逐 runner 复核后：
+
+- `runner/share_jsbsim_runner.py:356`（MultipleCombat：2v2/3v3/5v5/10v10）
+  确实写常量 `init_elo`（默认 1000.0），ELO 恒定；`PFSP` 因此退化为均匀分布。
+  **本文原结论在此成立。**
+- `runner/selfplay_jsbsim_runner.py:281`（SingleCombat：1v1）写的是
+  `self.latest_elo`，且 `:254`/`:256` 在每次 eval 后更新对手与自身 ELO。
+  实测日志 `f6m_official_1v1_selfplay_s1` 打印
+  `elo gain: -0.173 | latest elo score: 1203.17`（初值 1000），**ELO 确实在更新**。
+  **本文原结论在此不成立。**
+
+**但 §1.2b 的核心结论不变**：两个 runner 的 `FSP.choose` 都是
+`np.random.choice(list(agents_elo.keys()))`（`algorithms/utils/selfplay.py:43`），
+对手选择与 ELO 无关。因此「MAPPO + 对历史 checkpoint 的均匀随机采样自博弈」
+这一表述对两类任务都仍然准确；被修正的只是「ELO 从不更新」这一附带的机制说明。
+
+方法学教训：本文的写法把由「share runner 的保存逻辑」得到的结论外推到了
+另一个 runner。**跨 runner 的断言必须逐 runner 验证。**
