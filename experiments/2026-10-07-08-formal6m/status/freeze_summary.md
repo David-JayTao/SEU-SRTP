@@ -1,10 +1,12 @@
-# Freeze 20261007_050453 — step outcomes
+# Freeze 20261007_175036 — step outcomes
 
+- auto_results: ok
 - collect_metrics: ok
 - critic_probe: ok
 - equal_sample: ok
 - equal_wallclock: ok
 - figures: ok
+- fill_report: ok
 - make_manifest: ok
 - normalized: ok
 - report_tables: ok
@@ -12,25 +14,27 @@
 - scaling_table: ok
 
 ## final per-job state
-# Formal-6M monitor  2026-10-07 05:04:53 
+# Formal-6M monitor  2026-10-07 17:50:36 
 
-**Aggregate throughput: 798 env-steps/s** across 9 jobs (56 rollout threads)
+**Aggregate throughput: 990 env-steps/s** across 11 jobs (74 rollout threads)
 
 | experiment | scale | thr | steps | % | FPS | ETA h | reward | eval | v_loss | critic_gn | flags |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| f6m_10v10_noweapon_s0 | 10v10 | 20 | 540,000 | 9.0% | 76 | 19.96 | -17.613 | -55.891 | 70.401 | 47.24 | ok |
-| f6m_5v5_noweapon_s0 | 5v5 | 8 | 624,000 | 10.4% | 82 | 18.21 | -6.661 | -12.025 | 7.255 | 24.17 | ok |
-| f6m_3v3_noweapon_s0 | 3v3 | 8 | 984,000 | 16.4% | 127 | 10.97 | 26.641 | 17.553 | 0.918 | 10.95 | ok |
-| f6m_2v2_noweapon_s0 | 2v2 | 4 | 600,000 | 10.0% | 77 | 19.48 | 20.485 | -0.928 | 0.375 | 10.07 | ok |
-| f6m_official_2v2_noweapon_s0 | official_2v2 | 4 | 588,000 | 9.8% | 76 | 19.78 | 10.988 | 29.017 | 0.387 | 7.74 | ok |
-| f6m_official_1v1_selfplay_s1 | o_1v1_selfplay | 3 | 711,000 | 11.8% | 103 | 14.26 | -79.477 | -278.469 | 34.649 | 341.51 | ok |
-| f6m_official_1v1_vsbaseline_s1 | o_1v1_vsbaseline | 3 | 828,000 | 13.8% | 120 | 11.97 | -32.710 | — | 17.844 | 109.90 | ok |
-| f6m_official_1v1_shoot_hier_selfplay_s1 | o_1v1_shoot | 3 | 360,000 | 6.0% | 56 | 27.98 | -21.936 | -434.719 | 5.330 | 5.58 | ok |
-| f6m_official_1v1_hier_selfplay_s1 | o_1v1_hier | 3 | 522,000 | 8.7% | 81 | 18.79 | 10.441 | 31.438 | 11.410 | 175.28 | ok |
+| f6m_10v10_noweapon_s0 | 10v10 | 20 | 3,660,000 | 61.0% | 68 | 9.56 | -7.014 | -174.117 | 16.302 | 42.85 | ok |
+| f6m_5v5_noweapon_s0 | 5v5 | 8 | 4,320,000 | 72.0% | 80 | 5.83 | -66.921 | -71.069 | 4.382 | 59.16 | ok |
+| f6m_3v3_noweapon_s0 | 3v3 | 8 | 6,000,000 | 100.0% | 125 | — | 35.932 | 47.839 | 0.178 | 7.31 | **complete** |
+| f6m_2v2_noweapon_s0 | 2v2 | 4 | 4,164,000 | 69.4% | 77 | 6.62 | 5.320 | -50.310 | 0.353 | 5.35 | ok |
+| f6m_official_2v2_noweapon_s0 | official_2v2 | 4 | 4,044,000 | 67.4% | 75 | 7.24 | 24.277 | 30.670 | 0.088 | 3.50 | ok |
+| f6m_official_1v1_selfplay_s1 | o_1v1_selfplay | 3 | 5,517,000 | 92.0% | 104 | 1.29 | 41.521 | 34.614 | 1.571 | 50.73 | ok |
+| f6m_official_1v1_vsbaseline_s1 | o_1v1_vsbaseline | 3 | 5,994,000 | 99.9% | 122 | 0.01 | 27.785 | — | 0.997 | 19.78 | **complete 5,994,000 of 6,000,000** |
+| f6m_official_1v1_shoot_hier_selfplay_s1 | o_1v1_shoot | 3 | 3,204,000 | 53.4% | 61 | 12.73 | -35.742 | 0.202 | 13.769 | 76.46 | ok |
+| f6m_official_1v1_hier_selfplay_s1 | o_1v1_hier | 3 | 4,347,000 | 72.5% | 83 | 5.53 | -237.127 | -438.764 | 37.264 | 703.23 | ok |
+| f6m_5v5_noweapon_s1 | 5v5 s1 | 10 | 120,000 | 2.0% | 81 | 20.16 | -8.551 | -5.615 | 16.539 | 21.96 | ok |
+| f6m_3v3_noweapon_s1 | 3v3 s1 | 8 | 168,000 | 2.8% | 114 | 14.21 | -5.323 | -72.597 | 4.332 | 11.06 | ok |
 
-- load1 **43.68**  cpu_busy **24%** (of the host's 192 logical CPUs; multiply by 4 to read as a fraction of the 48-core quota)  train procs **58** using **2819.5%** CPU, **30.45 GB** RSS
-- RAM used 51.4 GB / 1007.5 GB (avail 944.8 GB)
-- GPU0: util 46%, VRAM 2386 MiB
-- GPU1: util 12%, VRAM 1866 MiB
-- GPU2: util 7%, VRAM 1671 MiB
-- tmux: f6m_10v10, f6m_1v1hier, f6m_1v1shoot, f6m_1v1sp, f6m_1v1vs, f6m_2v2, f6m_3v3, f6m_5v5, f6m_off2v2, f6m_watch
+- load1 **61.58**  container CPU **30.72 / 48.0 cores** (64.0% of quota, throttled 0.3282% of periods)  train procs **69**, **36.03 GB** RSS
+- RAM used 87.0 GB / 1007.5 GB (avail 907.0 GB)
+- GPU0: util 33%, VRAM 2420 MiB
+- GPU1: util 6%, VRAM 1209 MiB
+- GPU2: util 11%, VRAM 2388 MiB
+- tmux: f6m_10v10, f6m_1v1hier, f6m_1v1shoot, f6m_1v1sp, f6m_1v1vs, f6m_2v2, f6m_3v3, f6m_3v3s1, f6m_5v5, f6m_5v5s1, f6m_events, f6m_finalize, f6m_off2v2, f6m_watch

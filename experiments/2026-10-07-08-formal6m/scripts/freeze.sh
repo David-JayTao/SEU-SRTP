@@ -76,6 +76,17 @@ run_step equal_sample      "${PY}" scripts/equal_sample.py
 run_step equal_wallclock   "${PY}" scripts/equal_wallclock.py
 run_step figures           "${PY}" scripts/make_figures.py
 run_step report_tables     "${PY}" scripts/make_report_tables.py
+# Self-filling report: rewrites the AUTO-marked regions of
+# docs/formal_repro_scaling_2026-10-07_08.md (§5-§8, §11, §12, §17) from the
+# CSVs regenerated above. Runs after watch_f6m.py (section 1), whose fresh
+# metrics/status.json supplies live steps/reward for lanes still training, so
+# this works whether a human agent is awake or only auto_finalize.sh is.
+run_step fill_report       "${PY}" scripts/fill_report.py
+# The unattended safety net: regenerates docs/formal_repro_scaling_auto_results.md
+# from the freshly collected metrics, so the numeric record exists even if the
+# hand-written report is never finished. Deliberately LAST: it reads the outputs
+# of all the steps above.
+run_step auto_results      "${PY}" scripts/make_auto_results.py
 
 # ------------------------------------- 3. inference-only probes (optional, slow)
 # These need the training runs to have stopped, or at least to be quiet, otherwise
@@ -111,7 +122,7 @@ echo "--- wrote status/freeze_summary.md"
 # ------------------------------------------------------------------ 5. commit
 if [ "${COMMIT}" = "1" ]; then
     cd "${REPO}" || exit 1
-    git add -A "experiments/2026-10-07-08-formal6m" "docs/formal_repro_scaling_2026-10-07_08.md"
+    git add -A "experiments/2026-10-07-08-formal6m" "docs/formal_repro_scaling_2026-10-07_08.md" "docs/formal_repro_scaling_auto_results.md"
     if git diff --cached --quiet; then
         echo "--- nothing to commit"
     else

@@ -1,0 +1,3 @@
+campaign root : /root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m
+wrote         : /root/autodl-tmp/SEU-SRTP/docs/formal_repro_scaling_auto_results.md
+lanes         : 11 (2 completed, 9 running)

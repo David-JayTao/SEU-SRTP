@@ -1,0 +1,24 @@
+# Formal-6M monitor  2026-10-07 17:40:54 
+
+**Aggregate throughput: 990 env-steps/s** across 11 jobs (74 rollout threads)
+
+| experiment | scale | thr | steps | % | FPS | ETA h | reward | eval | v_loss | critic_gn | flags |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| f6m_10v10_noweapon_s0 | 10v10 | 20 | 3,600,000 | 60.0% | 68 | 9.8 | -6.951 | -174.117 | 16.066 | 88.63 | ok |
+| f6m_5v5_noweapon_s0 | 5v5 | 8 | 4,272,000 | 71.2% | 80 | 6.0 | -4.352 | -35.957 | 1.020 | 29.00 | ok |
+| f6m_3v3_noweapon_s0 | 3v3 | 8 | 6,000,000 | 100.0% | 125 | — | 35.932 | 47.839 | 0.178 | 7.31 | **complete** |
+| f6m_2v2_noweapon_s0 | 2v2 | 4 | 4,116,000 | 68.6% | 77 | 6.8 | 22.373 | -35.781 | 0.141 | 5.34 | ok |
+| f6m_official_2v2_noweapon_s0 | official_2v2 | 4 | 4,008,000 | 66.8% | 75 | 7.38 | 23.199 | 33.523 | 0.080 | 3.81 | ok |
+| f6m_official_1v1_selfplay_s1 | o_1v1_selfplay | 3 | 5,454,000 | 90.9% | 104 | 1.46 | 38.324 | 30.293 | 1.456 | 52.99 | ok |
+| f6m_official_1v1_vsbaseline_s1 | o_1v1_vsbaseline | 3 | 5,994,000 | 99.9% | 122 | 0.01 | 27.785 | — | 0.997 | 19.78 | **complete 5,994,000 of 6,000,000** |
+| f6m_official_1v1_shoot_hier_selfplay_s1 | o_1v1_shoot | 3 | 3,168,000 | 52.8% | 61 | 12.9 | -14.605 | 1.028 | 0.674 | 3.13 | ok |
+| f6m_official_1v1_hier_selfplay_s1 | o_1v1_hier | 3 | 4,284,000 | 71.4% | 82 | 5.81 | -54.432 | -182.370 | 22.027 | 411.67 | ok |
+| f6m_5v5_noweapon_s1 | 5v5 s1 | 10 | 90,000 | 1.5% | 85 | 19.31 | -8.846 | -5.615 | 16.619 | 22.76 | ok |
+| f6m_3v3_noweapon_s1 | 3v3 s1 | 8 | 96,000 | 1.6% | 111 | 14.77 | -5.399 | -5.664 | 5.223 | 12.09 | ok |
+
+- load1 **59.24**  container CPU **41.89 / 48.0 cores** (87.3% of quota, throttled 0.2427% of periods)  train procs **69**, **36.04 GB** RSS
+- RAM used 87.1 GB / 1007.5 GB (avail 907.9 GB)
+- GPU0: util 46%, VRAM 2420 MiB
+- GPU1: util 5%, VRAM 1207 MiB
+- GPU2: util 3%, VRAM 2388 MiB
+- tmux: f6m_10v10, f6m_1v1hier, f6m_1v1shoot, f6m_1v1sp, f6m_1v1vs, f6m_2v2, f6m_3v3, f6m_3v3s1, f6m_5v5, f6m_5v5s1, f6m_events, f6m_finalize, f6m_off2v2, f6m_watch
