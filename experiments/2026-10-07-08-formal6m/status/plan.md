@@ -186,3 +186,40 @@ trained checkpoints, so they are deliberately deferred to the freeze window.
   convergence.
 - **Algorithm changes / env optimisation**: forbidden for the main line
   (comparability). See report §4.4.
+
+---
+
+## Revised drain plan (2026-10-07 17:45), after the CPU correction (F16)
+
+The earlier drain table assumed 43–47 of 48 cores were busy, i.e. no headroom.
+The cgroup measurement shows **~38–42 of 48** with no meaningful throttling, so
+two second seeds were launched immediately (5v5 s1 @10 thr, 3v3 s1 @8 thr) rather
+than waiting for lanes to drain.
+
+Projected drain times at current rates:
+
+| ~time (Oct 7/8) | lane freeing | threads |
+|---|---|---|
+| 19:20 | 1v1 Selfplay | 3 |
+| 23:30 | 1v1 HierSelfplay | 3 |
+| 23:50 | 5v5 s0 | 8 |
+| 00:45 | 2v2 s0 | 4 |
+| 01:15 | official 2v2 s0 | 4 |
+| 03:25 | 10v10 s0 | 20 |
+| ~06:00 | 1v1 Shoot | 3 |
+
+**Feasibility of a third seed.** A lane only helps if
+`6e6 / FPS_at_that_thread_count <= 09:20 Oct 8 - t`. From ~23:30 there are
+~9.8 h left, so a second seed needs ≥170 FPS. `2v2` reaches ~19.5 env-steps/s per
+thread, so **2v2 seed 1 at 10 threads (~195 FPS, ~8.5 h) fits** and is the next
+item in the brief's ranking (第三：2v2 / 3v3 seed 2). 3v3 seed 1 is already
+running at 8 threads.
+
+**Reminder on divisibility (F17).** Choose thread counts that divide 2000:
+4, 5, 8, 10, 16, 20, 25 … **not** 3, 6, 7, 9, 11. A lane launched at 11 threads
+would silently finish 1.8% short.
+
+**Reserve.** The 10v10 lane's 20 threads free at ~03:25 with only ~5.5 h left —
+too little for any 6M run, so that capacity should go to (`1/heading`, ~2.8 h) or
+a partial Shoot-scaling run, or simply be left unused rather than started and
+abandoned.
