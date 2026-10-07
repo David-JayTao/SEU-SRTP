@@ -1,0 +1,22 @@
+wrote /root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/metrics/report_tables.md
+
+=== E. OFFICIAL BASELINE TABLE ===
+| Experiment | Seed | Steps | Wall time | FPS | Initial reward | Final reward | Eval | Status | Checkpoint |
+|---|---|---|---|---|---|---|---|---|---|
+| f6m_official_1v1_hier_selfplay_s1 | 1 | 5,994,000 | 20.05 h | 83 | -69.367 | -92.807 | -307.07 | completed_6M | actor_latest.pt |
+| f6m_official_1v1_selfplay_s1 | 1 | 5,994,000 | 15.90 h | 104 | -156.44 | 26.933 | 36.368 | completed_6M | actor_latest.pt |
+| f6m_official_1v1_shoot_hier_selfplay_s1 | 1 | 4,572,000 | 20.73 h | 61 | -192.88 | -116.09 | 0.14566 | running | actor_latest.pt |
+| f6m_official_1v1_vsbaseline_s1 | 1 | 5,994,000 | 13.59 h | 122 | -207.14 | 27.785 | - | completed_6M | actor_latest.pt |
+| f6m_official_2v2_noweapon_s0 | 0 | 5,748,000 | 21.12 h | 75 | -3.5066 | 24.635 | 30.189 | running | actor_latest.pt |
+| f6m_official_heading_s5 | 5 | 4,956,000 | 5.02 h | 274 | -14.825 | 266.55 | - | running | actor_latest.pt |
+| f6m_official_1v1_shoot_hier_vsbaseline | - | - | - | - | - | - | - | not_applicable | - |
+
+=== F. SCALING TABLE ===
+| Scale | Agents | Seed | Steps | FPS | Wall time | Reward raw | Reward normalized | Value loss | Critic grad | CPU | RAM | VRAM | Status |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 2v2 | 4 | 0 | 5,892,000 | 77 | 21.12 h | 24.063 | 12.031 | 0.084599 | 3.0249 | 2.9 | 2.97 GB | 536 MB | running |
+| 3v3 | 6 | 0 | 6,000,000 | 125 | 13.29 h | 35.932 | 11.977 | 0.17833 | 7.3129 | 5.5 | 4.61 GB | 650 MB | completed_6M |
+| 3v3 | 6 | 1 | 2,856,000 | 120 | 6.61 h | 35.694 | 11.898 | 0.19354 | 11.08 | 5.6 | 4.48 GB | 650 MB | running |
+| 5v5 | 10 | 0 | 6,000,000 | 79 | 20.94 h | 39.786 | 7.9571 | 0.77586 | 20.828 | 6.2 | 4.85 GB | 660 MB | completed_6M |
+| 5v5 | 10 | 1 | 2,190,000 | 91 | 6.69 h | 14.674 | 2.9348 | 0.63622 | 16.307 | 7.4 | 5.59 GB | 712 MB | running |
+| 10v10 | 20 | 0 | 4,980,000 | 66 | 21.12 h | -0.35489 | -0.035489 | 4.4003 | 37.175 | 16.0 | 15.19 GB | 1036 MB | running |

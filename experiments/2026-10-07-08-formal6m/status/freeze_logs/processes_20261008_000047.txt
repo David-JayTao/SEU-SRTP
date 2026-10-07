@@ -1,0 +1,81 @@
+# Freeze snapshot 20261008_000047
+2026-10-08T00:00:47+08:00
+
+## running processes
+f6m_10v10: 1 windows (created Wed Oct  7 02:54:31 2026)
+f6m_1v1hier: 1 windows (created Wed Oct  7 03:17:55 2026)
+f6m_1v1shoot: 1 windows (created Wed Oct  7 03:17:55 2026)
+f6m_1v1sp: 1 windows (created Wed Oct  7 03:10:14 2026)
+f6m_1v1vs: 1 windows (created Wed Oct  7 03:10:14 2026)
+f6m_2v2: 1 windows (created Wed Oct  7 02:54:33 2026)
+f6m_3v3: 1 windows (created Wed Oct  7 02:54:33 2026)
+f6m_3v3s1: 1 windows (created Wed Oct  7 17:25:12 2026)
+f6m_5v5: 1 windows (created Wed Oct  7 02:54:33 2026)
+f6m_5v5s1: 1 windows (created Wed Oct  7 17:20:33 2026)
+f6m_events: 1 windows (created Wed Oct  7 19:04:52 2026)
+f6m_finalize: 1 windows (created Wed Oct  7 17:31:32 2026)
+f6m_heading: 1 windows (created Wed Oct  7 19:00:22 2026)
+f6m_off2v2: 1 windows (created Wed Oct  7 02:54:33 2026)
+f6m_watch: 1 windows (created Wed Oct  7 17:23:28 2026)
+
+  8035    21:06:16 22.4 mappo-MultipleCombat-f6m_10v10_noweapon_s0@liuyunxiao
+  8188    21:06:14 43.4 mappo-MultipleCombat-f6m_official_2v2_noweapon_s0@liuyunxiao
+  8191    21:06:14 40.8 mappo-MultipleCombat-f6m_2v2_noweapon_s0@liuyunxiao
+  8193    21:06:13 61.4 mappo-MultipleCombat-f6m_10v10_noweapon_s0@liuyunxiao
+  8194    21:06:13 61.4 mappo-MultipleCombat-f6m_10v10_noweapon_s0@liuyunxiao
+  8195    21:06:13 61.7 mappo-MultipleCombat-f6m_10v10_noweapon_s0@liuyunxiao
+  8196    21:06:13 61.9 mappo-MultipleCombat-f6m_10v10_noweapon_s0@liuyunxiao
+  8197    21:06:13 62.0 mappo-MultipleCombat-f6m_10v10_noweapon_s0@liuyunxiao
+  8198    21:06:13 62.1 mappo-MultipleCombat-f6m_10v10_noweapon_s0@liuyunxiao
+  8199    21:06:13 62.2 mappo-MultipleCombat-f6m_10v10_noweapon_s0@liuyunxiao
+  8200    21:06:13 62.4 mappo-MultipleCombat-f6m_10v10_noweapon_s0@liuyunxiao
+  8201    21:06:13 62.6 mappo-MultipleCombat-f6m_10v10_noweapon_s0@liuyunxiao
+  8202    21:06:13 62.5 mappo-MultipleCombat-f6m_10v10_noweapon_s0@liuyunxiao
+  8203    21:06:13 62.8 mappo-MultipleCombat-f6m_10v10_noweapon_s0@liuyunxiao
+  8204    21:06:13 62.8 mappo-MultipleCombat-f6m_10v10_noweapon_s0@liuyunxiao
+  8205    21:06:13 63.3 mappo-MultipleCombat-f6m_10v10_noweapon_s0@liuyunxiao
+  8206    21:06:13 63.3 mappo-MultipleCombat-f6m_10v10_noweapon_s0@liuyunxiao
+  8207    21:06:13 63.5 mappo-MultipleCombat-f6m_10v10_noweapon_s0@liuyunxiao
+  8208    21:06:13 63.5 mappo-MultipleCombat-f6m_10v10_noweapon_s0@liuyunxiao
+  8209    21:06:13 63.4 mappo-MultipleCombat-f6m_10v10_noweapon_s0@liuyunxiao
+  8210    21:06:13 63.6 mappo-MultipleCombat-f6m_10v10_noweapon_s0@liuyunxiao
+  8211    21:06:13 63.9 mappo-MultipleCombat-f6m_10v10_noweapon_s0@liuyunxiao
+  8212    21:06:13 64.2 mappo-MultipleCombat-f6m_10v10_noweapon_s0@liuyunxiao
+  8267    21:06:12 55.4 mappo-MultipleCombat-f6m_2v2_noweapon_s0@liuyunxiao
+  8268    21:06:12 55.5 mappo-MultipleCombat-f6m_2v2_noweapon_s0@liuyunxiao
+  8269    21:06:12 55.6 mappo-MultipleCombat-f6m_2v2_noweapon_s0@liuyunxiao
+  8270    21:06:12 55.7 mappo-MultipleCombat-f6m_2v2_noweapon_s0@liuyunxiao
+  8281    21:06:11 53.0 mappo-MultipleCombat-f6m_official_2v2_noweapon_s0@liuyunxiao
+  8285    21:06:11 53.1 mappo-MultipleCombat-f6m_official_2v2_noweapon_s0@liuyunxiao
+  8290    21:06:11 53.2 mappo-MultipleCombat-f6m_official_2v2_noweapon_s0@liuyunxiao
+  8293    21:06:11 53.3 mappo-MultipleCombat-f6m_official_2v2_noweapon_s0@liuyunxiao
+ 19295    20:42:52 45.5 ppo-SingleCombat-f6m_official_1v1_shoot_hier_selfplay_s1@liuyunxiao
+ 19314    20:42:49 48.2 ppo-SingleCombat-f6m_official_1v1_shoot_hier_selfplay_s1@liuyunxiao
+ 19315    20:42:49 48.2 ppo-SingleCombat-f6m_official_1v1_shoot_hier_selfplay_s1@liuyunxiao
+ 19316    20:42:49 48.1 ppo-SingleCombat-f6m_official_1v1_shoot_hier_selfplay_s1@liuyunxiao
+ 60308    06:40:14 26.5 mappo-MultipleCombat-f6m_5v5_noweapon_s1@liuyunxiao
+ 60320    06:40:11 59.1 mappo-MultipleCombat-f6m_5v5_noweapon_s1@liuyunxiao
+ 60321    06:40:11 61.1 mappo-MultipleCombat-f6m_5v5_noweapon_s1@liuyunxiao
+ 60322    06:40:11 61.5 mappo-MultipleCombat-f6m_5v5_noweapon_s1@liuyunxiao
+ 60323    06:40:11 62.3 mappo-MultipleCombat-f6m_5v5_noweapon_s1@liuyunxiao
+ 60324    06:40:11 62.3 mappo-MultipleCombat-f6m_5v5_noweapon_s1@liuyunxiao
+ 60325    06:40:11 62.7 mappo-MultipleCombat-f6m_5v5_noweapon_s1@liuyunxiao
+ 60326    06:40:11 62.9 mappo-MultipleCombat-f6m_5v5_noweapon_s1@liuyunxiao
+ 60327    06:40:11 63.0 mappo-MultipleCombat-f6m_5v5_noweapon_s1@liuyunxiao
+ 60328    06:40:11 63.2 mappo-MultipleCombat-f6m_5v5_noweapon_s1@liuyunxiao
+ 60329    06:40:11 63.3 mappo-MultipleCombat-f6m_5v5_noweapon_s1@liuyunxiao
+ 60980    06:35:35 36.2 mappo-MultipleCombat-f6m_3v3_noweapon_s1@liuyunxiao
+ 60984    06:35:32 55.9 mappo-MultipleCombat-f6m_3v3_noweapon_s1@liuyunxiao
+ 60985    06:35:32 56.2 mappo-MultipleCombat-f6m_3v3_noweapon_s1@liuyunxiao
+ 60986    06:35:32 56.4 mappo-MultipleCombat-f6m_3v3_noweapon_s1@liuyunxiao
+ 60987    06:35:32 56.4 mappo-MultipleCombat-f6m_3v3_noweapon_s1@liuyunxiao
+ 60988    06:35:32 56.6 mappo-MultipleCombat-f6m_3v3_noweapon_s1@liuyunxiao
+ 60989    06:35:32 56.8 mappo-MultipleCombat-f6m_3v3_noweapon_s1@liuyunxiao
+ 60990    06:35:32 56.8 mappo-MultipleCombat-f6m_3v3_noweapon_s1@liuyunxiao
+ 60991    06:35:32 56.9 mappo-MultipleCombat-f6m_3v3_noweapon_s1@liuyunxiao
+299335    05:00:25 67.9 ppo-SingleControl-f6m_official_heading_s5@liuyunxiao
+299337    05:00:23 27.4 ppo-SingleControl-f6m_official_heading_s5@liuyunxiao
+299338    05:00:23 27.4 ppo-SingleControl-f6m_official_heading_s5@liuyunxiao
+299339    05:00:23 27.3 ppo-SingleControl-f6m_official_heading_s5@liuyunxiao
+299340    05:00:23 27.1 ppo-SingleControl-f6m_official_heading_s5@liuyunxiao
+318966       00:00  0.0 grep -E -- -MultipleCombat-|-SingleCombat-|-SingleControl-
