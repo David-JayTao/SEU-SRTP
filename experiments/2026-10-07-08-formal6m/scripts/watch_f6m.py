@@ -187,15 +187,49 @@ def proc_stats() -> dict:
     return {"n_procs": n, "rss_gb": round(total_rss / 1024 / 1024, 2), "cpu_pct": round(total_cpu, 1)}
 
 
+def quota_cpu() -> dict:
+    """CPU actually consumed by this container, from its own cgroup accounting.
+
+    Do NOT use /proc/stat or vmstat here (incident F16): in this container
+    /proc/stat reports the HOST's 192 logical CPUs and returns deltas that
+    alternate between 0 and ~200 cores between consecutive 5-second samples while
+    the container is demonstrably busy, so any "N of 48 cores" figure derived
+    from it is meaningless. `cpu.stat usage_usec` is the container's own
+    accounting and is stable; `cpu.max` is the quota.
+    """
+    out = {"cores": None, "quota": None, "pct_of_quota": None, "throttled_pct": None}
+    try:
+        quota_raw = Path("/sys/fs/cgroup/cpu.max").read_text().split()
+        quota = float(quota_raw[0]) / float(quota_raw[1])
+        a = None
+        for line in Path("/sys/fs/cgroup/cpu.stat").read_text().splitlines():
+            if line.startswith("usage_usec"):
+                a = float(line.split()[1])
+        time.sleep(2)
+        b = None
+        for line in Path("/sys/fs/cgroup/cpu.stat").read_text().splitlines():
+            if line.startswith("usage_usec"):
+                b = float(line.split()[1])
+        if a is not None and b is not None:
+            cores = (b - a) / 1e6 / 2.0
+            out.update(cores=round(cores, 2), quota=quota,
+                       pct_of_quota=round(100 * cores / quota, 1))
+        periods = throttled = None
+        for line in Path("/sys/fs/cgroup/cpu.stat").read_text().splitlines():
+            if line.startswith("nr_periods"):
+                periods = float(line.split()[1])
+            elif line.startswith("nr_throttled"):
+                throttled = float(line.split()[1])
+        if periods:
+            out["throttled_pct"] = round(100 * throttled / periods, 4)
+    except Exception:  # noqa: BLE001
+        pass
+    return out
+
+
 def system_stats() -> dict:
     load = os.getloadavg()
-    vm = sh("vmstat 1 2 | tail -1").split()
-    cpu_busy = None
-    if len(vm) >= 15:
-        try:
-            cpu_busy = 100 - int(vm[14])  # id column
-        except ValueError:
-            pass
+    cpu_busy = quota_cpu()
     gpu = []
     q = sh("nvidia-smi --query-gpu=index,utilization.gpu,memory.used "
            "--format=csv,noheader,nounits")
@@ -210,7 +244,7 @@ def system_stats() -> dict:
             mem = {"total_gb": round(int(f[1]) / 1024, 1),
                    "used_gb": round(int(f[2]) / 1024, 1),
                    "avail_gb": round(int(f[6]) / 1024, 1)}
-    return {"load1": round(load[0], 2), "cpu_busy_pct": cpu_busy, "gpu": gpu, "mem": mem}
+    return {"load1": round(load[0], 2), "cpu_busy": cpu_busy, "gpu": gpu, "mem": mem}
 
 
 def tmux_sessions() -> list[str]:
@@ -351,10 +385,10 @@ def main() -> int:
     s = state["system"]
     p = state["procs"]
     lines.append("")
-    lines.append(f"- load1 **{s['load1']}**  cpu_busy **{s['cpu_busy_pct']}%** (of the host's 192 logical CPUs; "
-                 f"multiply by 4 to read as a fraction of the 48-core quota)  "
-                 f"train procs **{p['n_procs']}** using **{p['cpu_pct']}%** CPU, "
-                 f"**{p['rss_gb']} GB** RSS")
+    cb = s["cpu_busy"]
+    lines.append(f"- load1 **{s['load1']}**  container CPU **{cb.get('cores')} / {cb.get('quota')} cores** "
+                 f"({cb.get('pct_of_quota')}% of quota, throttled {cb.get('throttled_pct')}% of periods)  "
+                 f"train procs **{p['n_procs']}**, **{p['rss_gb']} GB** RSS")
     lines.append(f"- RAM used {s['mem'].get('used_gb')} GB / {s['mem'].get('total_gb')} GB "
                  f"(avail {s['mem'].get('avail_gb')} GB)")
     for g in s["gpu"]:
@@ -376,14 +410,15 @@ def main() -> int:
     # still describes the rows being appended (it silently lagged when the job
     # list grew from 5 to 9 on 2026-10-07 03:19).
     hist = CAMP / "metrics" / "throughput_history.csv"
-    header = (["timestamp_local", "aggregate_fps", "load1", "cpu_busy_pct",
+    header = (["timestamp_local", "aggregate_fps", "load1", "cpu_cores_of_quota", "cpu_pct_of_quota",
                "train_cpu_pct", "rss_gb"]
               + [f"{r['exp']}_fps" for r in rows]
               + [f"{r['exp']}_steps" for r in rows])
     sync_history_schema(hist, header)
     with hist.open("a", newline="") as fh:
         w = csv.writer(fh)
-        w.writerow([state["timestamp_local"], agg_fps, s["load1"], s["cpu_busy_pct"],
+        w.writerow([state["timestamp_local"], agg_fps, s["load1"],
+                    (s["cpu_busy"] or {}).get("cores"), (s["cpu_busy"] or {}).get("pct_of_quota"),
                     p["cpu_pct"], p["rss_gb"]]
                    + [(r["fps"] or "") for r in rows]
                    + [r["steps"] for r in rows])

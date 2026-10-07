@@ -147,3 +147,67 @@ Writes `metrics/status.json`, `status/monitor_latest.md`, and appends to
 `metrics/throughput_history.csv`. `tmux f6m_watch` additionally runs
 `scripts/os_watchdog.sh 600`, which appends to `system/system_samples.csv` and
 `system/events.log` and survives a dead Claude/VS Code session.
+
+---
+
+# Status at 2026-10-07 17:35 (14.7 h elapsed)
+
+## Completed (reached the full budget)
+
+| experiment | steps | target | FPS | lane freed |
+|---|---|---|---|---|
+| `f6m_3v3_noweapon_s0` | **6,000,000** | 6,000,000 | 125 | 16:12 (8 thr) |
+| `f6m_official_1v1_vsbaseline_s1` | **5,994,000** | 6,000,000 | 122 | 16:45 (3 thr) |
+
+Both exited cleanly (no leaked workers; queue ledgers show `queue drained`).
+
+**The 1v1 lanes cannot reach 6,000,000** — see "Granularity" below. 5,994,000 is
+their maximum achievable value, i.e. 99.9% of the nominal budget, and is
+`completed` rather than `time_cutoff`.
+
+## Wave 4 — second seeds, launched 17:20 and 17:27
+
+| tmux | experiment | scenario | seed | GPU | thr | launched | projected |
+|---|---|---|---|---|---|---|---|
+| `f6m_5v5s1` | `f6m_5v5_noweapon_s1` | `5v5/scaling_noweapon/HierarchySelfplay` | 1 | 2 | 10 | 17:20 | ~09:30–10:00 → likely `time_cutoff` near 5.9M |
+| `f6m_3v3s1` | `f6m_3v3_noweapon_s1` | `3v3/scaling_noweapon/HierarchySelfplay` | 1 | 0 | 8 | 17:27 | ~06:50 → should complete |
+
+Priority order followed (§14 of the brief): 5v5 second seed first (highest-ranked
+scale still feasible), then 3v3 — chosen over 2v2 because the pilot measured its
+**largest** seed spread at N=3 (7.66 reward/N, exceeding every between-scale gap),
+making it the most informative variance point available.
+
+Both use the identical config, algorithm and hyperparameters as seed 0; **only
+`--seed` differs**.
+
+## Granularity: the achievable step budget is quantised by thread count
+
+The runner computes `episodes = num_env_steps // buffer_size // n_rollout_threads`
+(`runner/share_jsbsim_runner.py:72`), so the reached total is
+`episodes × 3000 × threads`:
+
+| threads | episodes | steps reached | vs 6M |
+|---|---|---|---|
+| 3 | 666 | **5,994,000** | 99.9% |
+| 4 | 500 | 6,000,000 | 100% |
+| 8 | 250 | 6,000,000 | 100% |
+| 10 | 200 | 6,000,000 | 100% |
+| 20 | 100 | 6,000,000 | 100% |
+
+**Lesson**: a thread count must divide `6e6 / 3000 = 2000` evenly or the nominal
+budget is unreachable by construction — silently, with no error. The 3-thread 1v1
+lanes are the only affected ones (4 threads would have reached 6M exactly). Recorded
+as F17; not "fixed", because changing it would mean relaunching into a `run2/`.
+
+## CPU measurement corrected (F16)
+
+All CPU figures before 17:23 came from `/proc/stat`, which in this container
+reports the **host's** 192 CPUs and returns deltas alternating between 0 and ~200
+cores. They are **wrong** and must not be used. The authoritative measure is the
+container's cgroup `cpu.stat`:
+
+- campaign CPU: **~38–42 of the 48-core quota (~80–87%)**
+- `nr_throttled`: **0.02–0.04% of periods** — the quota was **never binding**
+
+So the earlier "we are at 48/48, no headroom" conclusion was an artifact, and the
+headroom is partly what the two second seeds above were launched into.
