@@ -1,14 +1,14 @@
 # commit hash 映射表（英文 message -> 中文 message）
 
-2026-10-08 用 `git filter-branch --msg-filter` 把分支 `exp/formal-6m-20261007` 上 `main..HEAD` 的全部 71 个 commit message 从英文改写为中文。
-**除 message 外没有任何改动**：每个 commit 的 tree、author/committer 身份与时间戳都与旧 commit 逐条核对一致（`git diff backup/pre-chinese-rewrite HEAD --stat` 为空，`main` 分支本身未动）。
+2026-10-08 用 `git filter-branch --msg-filter` 把分支 `exp/formal-6m-20261007` 上 `main..HEAD` 的 71 个 commit message（改写时的全部内容）从英文改写为中文。
+**除 message 外没有任何改动**：每个 commit 的 tree、author/committer 身份与时间戳都与旧 commit 逐条核对一致。改写后的 tip 是 `fa4c6e9`，`git diff backup/pre-chinese-rewrite fa4c6e9 --stat` 为空（只改 message，内容一个字都没变）；`main` 分支本身未动。
 
 commit message 参与 commit hash 的计算，message 一改 hash 必变，所以：
 
 - **pilot 的 `manifest.csv` 和 `docs/baseline_inventory.md` 里记录的旧 hash 已失效**，要用下面这张表回溯；旧 hash 与新 hash 之间没有前缀关系，不要前缀匹配。
 - 备份（均未删除）：tag `backup/pre-chinese-rewrite` 与 branch `backup/formal-6m-english` 都仍指向旧的最终 commit `6c5bd99`；filter-branch 另外留下 `refs/original/refs/heads/exp/formal-6m-20261007`，同样指向 `6c5bd99`。
 - 唯一无需翻译的 commit 是 `d133be63`（"导出了进展的pdf"，本来就是中文），其 message 逐字节未改；但它的父 commit 也被重写，所以它的 hash 仍然变了——71 个 commit 的 hash 全部变化。
-- 改写完成之后本分支又新增了 1 个 commit（不属于本次改写，也不在本表里）：`ef2f0f9` 文档：正式实验文档全部转为中文，补齐结论一节，commit message 统一改中文。
+- 改写完成之后本分支又新增了 2 个 commit（不属于本次改写，也不在本表里）：`ef2f0f9` 文档：正式实验文档全部转为中文，补齐结论一节，commit message 统一改中文；`a72f6f7` 文档：收尾主报告翻译的最后润色，并并入 hash 映射表。
 - 表按时间顺序（旧 -> 新）排列，与 `git log --reverse` 的输出一致。
 
 改写命令（filter-branch 要求工作区干净，而主工作区有实验监控在写的未提交文件，所以在一个干净的临时 worktree 里执行）：
