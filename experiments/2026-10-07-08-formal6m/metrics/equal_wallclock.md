@@ -1,6 +1,6 @@
 # Equal-wall-clock comparison -- 2026-10-07-08-formal6m
 
-- generated: 2026-10-08 08:30:32
+- generated: 2026-10-08 09:20:39
 - source campaign: `/root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m`
 - run outputs: `/root/autodl-tmp/SEU-SRTP/scripts/results`
 - budgets: 1h, 3h, 6h, 12h, 24h of elapsed run time (wall_time minus the run's FIRST timestamp)
@@ -35,10 +35,10 @@ cells: mean reward (mean reward per enemy) [runs contributing]; * = at least one
 | f6m_3v3_noweapon_s0 | 3 | 0 | 8 | 250 | 13.24 | 6000000 | complete | -1.20 (-0.40)* | +35.44 (+11.81)* | +35.57 (+11.86)* | +35.85 (+11.95)* | pending |
 | f6m_3v3_noweapon_s1 | 3 | 1 | 8 | 250 | 13.31 | 6000000 | complete | -0.04 (-0.01)* | +36.27 (+12.09)* | +34.08 (+11.36)* | +29.65 (+9.88)* | pending |
 | f6m_5v5_noweapon_s0 | 5 | 0 | 8 | 250 | 20.86 | 6000000 | complete | -7.72 (-1.54)* | -4.24 (-0.85)* | -4.03 (-0.81)* | +27.24 (+5.45)* | pending |
-| f6m_5v5_noweapon_s1 | 5 | 1 | 10 | 169 | 15.01 | 5070000 | active | -5.65 (-1.13)* | +0.17 (+0.03)* | +16.40 (+3.28)* | +14.74 (+2.95)* | pending |
-| f6m_5v5_noweapon_s2 | 5 | 2 | 8 | 85 | 7.12 | 2040000 | active | -8.72 (-1.74)* | -3.47 (-0.69)* | +1.75 (+0.35)* | pending | pending |
+| f6m_5v5_noweapon_s1 | 5 | 1 | 10 | 180 | 15.89 | 5400000 | active | -5.65 (-1.13)* | +0.17 (+0.03)* | +16.40 (+3.28)* | +14.74 (+2.95)* | pending |
+| f6m_5v5_noweapon_s2 | 5 | 2 | 8 | 96 | 8.00 | 2304000 | active | -8.72 (-1.74)* | -3.47 (-0.69)* | +1.75 (+0.35)* | pending | pending |
 | f6m_10v10_noweapon_s0 | 10 | 0 | 20 | 100 | 25.11 | 6000000 | complete | -17.48 (-1.75)* | -17.23 (-1.72)* | -16.76 (-1.68)* | -2.61 (-0.26)* | +17.30 (+1.73)* |
-| f6m_10v10_noweapon_s1 | 10 | 1 | 20 | 27 | 6.87 | 1620000 | active | -17.72 (-1.77)* | -15.80 (-1.58)* | -6.00 (-0.60)* | pending | pending |
+| f6m_10v10_noweapon_s1 | 10 | 1 | 20 | 31 | 7.81 | 1860000 | active | -17.72 (-1.77)* | -15.80 (-1.58)* | -6.00 (-0.60)* | pending | pending |
 
 ## Notes
 

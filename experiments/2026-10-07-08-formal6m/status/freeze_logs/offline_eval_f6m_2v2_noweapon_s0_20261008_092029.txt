@@ -1,0 +1,30 @@
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+{
+  "run_dir": "/root/autodl-tmp/SEU-SRTP/scripts/results/MultipleCombat/2v2/scaling_noweapon/HierarchySelfplay/mappo/f6m_2v2_noweapon_s0/run1",
+  "checkpoint": "/root/autodl-tmp/SEU-SRTP/scripts/results/MultipleCombat/2v2/scaling_noweapon/HierarchySelfplay/mappo/f6m_2v2_noweapon_s0/run1/actor_latest.pt",
+  "scenario": "2v2/scaling_noweapon/HierarchySelfplay",
+  "algo": "mappo",
+  "episodes": 8,
+  "n_agents": 4,
+  "selfplay_mirror": true,
+  "mean_return": -92.201,
+  "std_return": 0.0,
+  "stderr": 0.0,
+  "mean_episode_length": 1000,
+  "per_episode_returns": [
+    -92.201,
+    -92.201,
+    -92.201,
+    -92.201,
+    -92.201,
+    -92.201,
+    -92.201,
+    -92.201
+  ]
+}
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+

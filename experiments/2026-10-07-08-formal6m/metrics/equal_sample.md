@@ -1,6 +1,6 @@
 # Equal-sample-budget comparison -- 2026-10-07-08-formal6m
 
-- generated: 2026-10-08 08:30:32
+- generated: 2026-10-08 09:20:39
 - source campaign: `/root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m`
 - run outputs: `/root/autodl-tmp/SEU-SRTP/scripts/results`
 - budgets: 1M, 2M, 3M, 4M, 5M, 6M vectorised env steps (one PPO update = n_rollout_threads * 3000)
@@ -35,10 +35,10 @@ cells: mean reward (mean reward per enemy) [runs contributing]; * = at least one
 | f6m_3v3_noweapon_s0 | 3 | 0 | 8 | 250 | 6000000 | complete | +31.80 (+10.60)* | +35.31 (+11.77)* | +36.06 (+12.02) | +35.79 (+11.93)* | +36.07 (+12.02)* | +35.93 (+11.98) |
 | f6m_3v3_noweapon_s1 | 3 | 1 | 8 | 250 | 6000000 | complete | +25.94 (+8.65)* | +32.55 (+10.85)* | +35.05 (+11.68) | +36.90 (+12.30)* | +36.74 (+12.25)* | +34.47 (+11.49) |
 | f6m_5v5_noweapon_s0 | 5 | 0 | 8 | 250 | 6000000 | complete | -1.64 (-0.33)* | +48.80 (+9.76)* | +50.30 (+10.06) | +23.14 (+4.63)* | +24.43 (+4.89)* | +39.79 (+7.96) |
-| f6m_5v5_noweapon_s1 | 5 | 1 | 10 | 169 | 5070000 | active | +4.44 (+0.89)* | +16.28 (+3.26)* | +55.83 (+11.17) | +14.01 (+2.80)* | +51.73 (+10.35)* | pending |
-| f6m_5v5_noweapon_s2 | 5 | 2 | 8 | 85 | 2040000 | active | -5.97 (-1.19)* | +9.03 (+1.81)* | pending | pending | pending | pending |
+| f6m_5v5_noweapon_s1 | 5 | 1 | 10 | 180 | 5400000 | active | +4.44 (+0.89)* | +16.28 (+3.26)* | +55.83 (+11.17) | +14.01 (+2.80)* | +51.73 (+10.35)* | pending |
+| f6m_5v5_noweapon_s2 | 5 | 2 | 8 | 96 | 2304000 | active | -5.97 (-1.19)* | +9.03 (+1.81)* | pending | pending | pending | pending |
 | f6m_10v10_noweapon_s0 | 10 | 0 | 20 | 100 | 6000000 | complete | -17.27 (-1.73)* | -11.70 (-1.17)* | -10.63 (-1.06) | -4.73 (-0.47)* | -0.55 (-0.06)* | +0.39 (+0.04) |
-| f6m_10v10_noweapon_s1 | 10 | 1 | 20 | 27 | 1620000 | active | -11.66 (-1.17)* | pending | pending | pending | pending | pending |
+| f6m_10v10_noweapon_s1 | 10 | 1 | 20 | 31 | 1860000 | active | -11.66 (-1.17)* | pending | pending | pending | pending | pending |
 
 ## Notes
 
