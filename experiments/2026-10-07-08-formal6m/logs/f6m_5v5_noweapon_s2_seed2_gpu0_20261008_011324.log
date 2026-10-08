@@ -1,0 +1,874 @@
+================================================================
+EXPERIMENT : f6m_5v5_noweapon_s2
+git commit : d127a4006021b32edfcc9ac0603b87aa9606b91e  branch=exp/formal-6m-20261007
+env/scen   : MultipleCombat / 5v5/scaling_noweapon/HierarchySelfplay
+algo       : mappo   seed=2
+gpu        : 0
+threads    : 8   num_env_steps=6e6
+extra      : --use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 2 --eval-episodes 1
+log        : /root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/scripts/../logs/f6m_5v5_noweapon_s2_seed2_gpu0_20261008_011324.log
+start      : 2026-10-08T01:13:24+08:00
+================================================================
+choose to use gpu...
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+ Load selfplay opponents: Algo fsp, num_opponents 1.
+
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 0/250 episodes, total num timesteps 24000/6000000, FPS 76.
+
+average episode rewards is -8.990816497802735
+
+Start evaluation...
+ Choose opponents [np.str_('latest')] for evaluation
+ Load opponent latest for evaluation (1/1)
+ eval average episode rewards: -160.12122
+ Choose opponents [np.str_('0')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 1/250 episodes, total num timesteps 48000/6000000, FPS 70.
+
+average episode rewards is -9.124514770507812
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 2/250 episodes, total num timesteps 72000/6000000, FPS 72.
+
+average episode rewards is -8.862255859375
+
+Start evaluation...
+ Choose opponents [np.str_('0')] for evaluation
+ Load opponent 0 for evaluation (1/1)
+ eval average episode rewards: -80.83035
+ Choose opponents [np.str_('latest')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 3/250 episodes, total num timesteps 96000/6000000, FPS 70.
+
+average episode rewards is -9.0614501953125
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 4/250 episodes, total num timesteps 120000/6000000, FPS 72.
+
+average episode rewards is -9.110295867919922
+
+Start evaluation...
+ Choose opponents [np.str_('2')] for evaluation
+ Load opponent 2 for evaluation (1/1)
+ eval average episode rewards: -346.14764
+ Choose opponents [np.str_('1')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 5/250 episodes, total num timesteps 144000/6000000, FPS 71.
+
+average episode rewards is -9.005665588378907
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 6/250 episodes, total num timesteps 168000/6000000, FPS 72.
+
+average episode rewards is -8.977821350097656
+
+Start evaluation...
+ Choose opponents [np.str_('2')] for evaluation
+ Load opponent 2 for evaluation (1/1)
+ eval average episode rewards: -119.50956
+ Choose opponents [np.str_('latest')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 7/250 episodes, total num timesteps 192000/6000000, FPS 72.
+
+average episode rewards is -9.13669204711914
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 8/250 episodes, total num timesteps 216000/6000000, FPS 73.
+
+average episode rewards is -9.114511108398437
+
+Start evaluation...
+ Choose opponents [np.str_('6')] for evaluation
+ Load opponent 6 for evaluation (1/1)
+ eval average episode rewards: -186.18784
+ Choose opponents [np.str_('1')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 9/250 episodes, total num timesteps 240000/6000000, FPS 72.
+
+average episode rewards is -9.081812286376953
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 10/250 episodes, total num timesteps 264000/6000000, FPS 73.
+
+average episode rewards is -8.606948852539062
+
+Start evaluation...
+ Choose opponents [np.str_('0')] for evaluation
+ Load opponent 0 for evaluation (1/1)
+ eval average episode rewards: -229.12888
+ Choose opponents [np.str_('10')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 11/250 episodes, total num timesteps 288000/6000000, FPS 73.
+
+average episode rewards is -8.720462799072266
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 12/250 episodes, total num timesteps 312000/6000000, FPS 73.
+
+average episode rewards is -7.8551490783691404
+
+Start evaluation...
+ Choose opponents [np.str_('4')] for evaluation
+ Load opponent 4 for evaluation (1/1)
+ eval average episode rewards: -170.84921
+ Choose opponents [np.str_('9')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 13/250 episodes, total num timesteps 336000/6000000, FPS 73.
+
+average episode rewards is -8.086453247070313
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 14/250 episodes, total num timesteps 360000/6000000, FPS 73.
+
+average episode rewards is -8.737983703613281
+
+Start evaluation...
+ Choose opponents [np.str_('3')] for evaluation
+ Load opponent 3 for evaluation (1/1)
+ eval average episode rewards: -128.1603
+ Choose opponents [np.str_('11')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 15/250 episodes, total num timesteps 384000/6000000, FPS 73.
+
+average episode rewards is -7.782836151123047
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 16/250 episodes, total num timesteps 408000/6000000, FPS 74.
+
+average episode rewards is -7.872279357910156
+
+Start evaluation...
+ Choose opponents [np.str_('4')] for evaluation
+ Load opponent 4 for evaluation (1/1)
+ eval average episode rewards: -182.28851
+ Choose opponents [np.str_('6')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 17/250 episodes, total num timesteps 432000/6000000, FPS 74.
+
+average episode rewards is -8.988475036621093
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 18/250 episodes, total num timesteps 456000/6000000, FPS 74.
+
+average episode rewards is -8.902397918701173
+
+Start evaluation...
+ Choose opponents [np.str_('2')] for evaluation
+ Load opponent 2 for evaluation (1/1)
+ eval average episode rewards: -178.15134
+ Choose opponents [np.str_('5')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 19/250 episodes, total num timesteps 480000/6000000, FPS 73.
+
+average episode rewards is -8.776891326904297
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 20/250 episodes, total num timesteps 504000/6000000, FPS 73.
+
+average episode rewards is -8.613523864746094
+
+Start evaluation...
+ Choose opponents [np.str_('3')] for evaluation
+ Load opponent 3 for evaluation (1/1)
+ eval average episode rewards: -53.75526
+ Choose opponents [np.str_('9')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 21/250 episodes, total num timesteps 528000/6000000, FPS 73.
+
+average episode rewards is -8.748838806152344
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 22/250 episodes, total num timesteps 552000/6000000, FPS 73.
+
+average episode rewards is -8.772471618652343
+
+Start evaluation...
+ Choose opponents [np.str_('10')] for evaluation
+ Load opponent 10 for evaluation (1/1)
+ eval average episode rewards: -134.24893
+ Choose opponents [np.str_('18')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 23/250 episodes, total num timesteps 576000/6000000, FPS 73.
+
+average episode rewards is -5.333721923828125
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 24/250 episodes, total num timesteps 600000/6000000, FPS 73.
+
+average episode rewards is -4.376377868652344
+
+Start evaluation...
+ Choose opponents [np.str_('6')] for evaluation
+ Load opponent 6 for evaluation (1/1)
+ eval average episode rewards: -145.49715
+ Choose opponents [np.str_('5')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 25/250 episodes, total num timesteps 624000/6000000, FPS 73.
+
+average episode rewards is -8.274158477783203
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 26/250 episodes, total num timesteps 648000/6000000, FPS 73.
+
+average episode rewards is -8.968098449707032
+
+Start evaluation...
+ Choose opponents [np.str_('9')] for evaluation
+ Load opponent 9 for evaluation (1/1)
+ eval average episode rewards: -146.77466
+ Choose opponents [np.str_('0')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 27/250 episodes, total num timesteps 672000/6000000, FPS 73.
+
+average episode rewards is -8.749403381347657
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 28/250 episodes, total num timesteps 696000/6000000, FPS 74.
+
+average episode rewards is -8.396717834472657
+
+Start evaluation...
+ Choose opponents [np.str_('25')] for evaluation
+ Load opponent 25 for evaluation (1/1)
+ eval average episode rewards: 2.7326243
+ Choose opponents [np.str_('27')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 29/250 episodes, total num timesteps 720000/6000000, FPS 73.
+
+average episode rewards is -6.893171691894532
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 30/250 episodes, total num timesteps 744000/6000000, FPS 74.
+
+average episode rewards is -7.863603973388672
+
+Start evaluation...
+ Choose opponents [np.str_('30')] for evaluation
+ Load opponent 30 for evaluation (1/1)
+ eval average episode rewards: -1.5441506
+ Choose opponents [np.str_('2')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 31/250 episodes, total num timesteps 768000/6000000, FPS 74.
+
+average episode rewards is -8.811970520019532
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 32/250 episodes, total num timesteps 792000/6000000, FPS 74.
+
+average episode rewards is -9.043479919433594
+
+Start evaluation...
+ Choose opponents [np.str_('4')] for evaluation
+ Load opponent 4 for evaluation (1/1)
+ eval average episode rewards: -26.741968
+ Choose opponents [np.str_('23')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 33/250 episodes, total num timesteps 816000/6000000, FPS 74.
+
+average episode rewards is -4.20263557434082
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 34/250 episodes, total num timesteps 840000/6000000, FPS 74.
+
+average episode rewards is -2.6199737548828126
+
+Start evaluation...
+ Choose opponents [np.str_('3')] for evaluation
+ Load opponent 3 for evaluation (1/1)
+ eval average episode rewards: -11.98594
+ Choose opponents [np.str_('5')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 35/250 episodes, total num timesteps 864000/6000000, FPS 74.
+
+average episode rewards is -8.522173309326172
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 36/250 episodes, total num timesteps 888000/6000000, FPS 74.
+
+average episode rewards is -8.869989013671875
+
+Start evaluation...
+ Choose opponents [np.str_('30')] for evaluation
+ Load opponent 30 for evaluation (1/1)
+ eval average episode rewards: -38.764236
+ Choose opponents [np.str_('18')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 37/250 episodes, total num timesteps 912000/6000000, FPS 74.
+
+average episode rewards is -5.550361633300781
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 38/250 episodes, total num timesteps 936000/6000000, FPS 75.
+
+average episode rewards is -4.383939361572265
+
+Start evaluation...
+ Choose opponents [np.str_('30')] for evaluation
+ Load opponent 30 for evaluation (1/1)
+ eval average episode rewards: -133.16565
+ Choose opponents [np.str_('1')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 39/250 episodes, total num timesteps 960000/6000000, FPS 75.
+
+average episode rewards is -8.91487808227539
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 40/250 episodes, total num timesteps 984000/6000000, FPS 75.
+
+average episode rewards is -9.014564514160156
+
+Start evaluation...
+ Choose opponents [np.str_('15')] for evaluation
+ Load opponent 15 for evaluation (1/1)
+ eval average episode rewards: -114.780685
+ Choose opponents [np.str_('11')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 41/250 episodes, total num timesteps 1008000/6000000, FPS 75.
+
+average episode rewards is -4.4480632781982425
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 42/250 episodes, total num timesteps 1032000/6000000, FPS 75.
+
+average episode rewards is -5.16650390625
+
+Start evaluation...
+ Choose opponents [np.str_('3')] for evaluation
+ Load opponent 3 for evaluation (1/1)
+ eval average episode rewards: -138.94461
+ Choose opponents [np.str_('25')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 43/250 episodes, total num timesteps 1056000/6000000, FPS 75.
+
+average episode rewards is -4.375834274291992
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 44/250 episodes, total num timesteps 1080000/6000000, FPS 75.
+
+average episode rewards is -3.342650604248047
+
+Start evaluation...
+ Choose opponents [np.str_('14')] for evaluation
+ Load opponent 14 for evaluation (1/1)
+ eval average episode rewards: -128.5496
+ Choose opponents [np.str_('38')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 45/250 episodes, total num timesteps 1104000/6000000, FPS 75.
+
+average episode rewards is -2.263349151611328
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 46/250 episodes, total num timesteps 1128000/6000000, FPS 76.
+
+average episode rewards is -2.828074073791504
+
+Start evaluation...
+ Choose opponents [np.str_('45')] for evaluation
+ Load opponent 45 for evaluation (1/1)
+ eval average episode rewards: -82.48937
+ Choose opponents [np.str_('7')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 47/250 episodes, total num timesteps 1152000/6000000, FPS 76.
+
+average episode rewards is -7.318446350097656
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 48/250 episodes, total num timesteps 1176000/6000000, FPS 76.
+
+average episode rewards is -7.475077056884766
+
+Start evaluation...
+ Choose opponents [np.str_('44')] for evaluation
+ Load opponent 44 for evaluation (1/1)
+ eval average episode rewards: -42.68407
+ Choose opponents [np.str_('14')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 49/250 episodes, total num timesteps 1200000/6000000, FPS 76.
+
+average episode rewards is -3.103812599182129
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 50/250 episodes, total num timesteps 1224000/6000000, FPS 76.
+
+average episode rewards is -0.6836326599121094
+
+Start evaluation...
+ Choose opponents [np.str_('40')] for evaluation
+ Load opponent 40 for evaluation (1/1)
+ eval average episode rewards: -177.08801
+ Choose opponents [np.str_('44')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 51/250 episodes, total num timesteps 1248000/6000000, FPS 76.
+
+average episode rewards is -1.294563102722168
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 52/250 episodes, total num timesteps 1272000/6000000, FPS 76.
+
+average episode rewards is -1.2797847747802735
+
+Start evaluation...
+ Choose opponents [np.str_('7')] for evaluation
+ Load opponent 7 for evaluation (1/1)
+ eval average episode rewards: -10.100073
+ Choose opponents [np.str_('16')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 53/250 episodes, total num timesteps 1296000/6000000, FPS 76.
+
+average episode rewards is 0.7203177452087403
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 54/250 episodes, total num timesteps 1320000/6000000, FPS 77.
+
+average episode rewards is 3.292284393310547
+
+Start evaluation...
+ Choose opponents [np.str_('21')] for evaluation
+ Load opponent 21 for evaluation (1/1)
+ eval average episode rewards: -33.99519
+ Choose opponents [np.str_('52')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 55/250 episodes, total num timesteps 1344000/6000000, FPS 77.
+
+average episode rewards is -6.822599792480469
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 56/250 episodes, total num timesteps 1368000/6000000, FPS 77.
+
+average episode rewards is -4.849528884887695
+
+Start evaluation...
+ Choose opponents [np.str_('8')] for evaluation
+ Load opponent 8 for evaluation (1/1)
+ eval average episode rewards: -81.35029
+ Choose opponents [np.str_('56')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 57/250 episodes, total num timesteps 1392000/6000000, FPS 77.
+
+average episode rewards is -2.5051889419555664
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 58/250 episodes, total num timesteps 1416000/6000000, FPS 77.
+
+average episode rewards is -1.3973848342895507
+
+Start evaluation...
+ Choose opponents [np.str_('40')] for evaluation
+ Load opponent 40 for evaluation (1/1)
+ eval average episode rewards: -228.03667
+ Choose opponents [np.str_('45')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 59/250 episodes, total num timesteps 1440000/6000000, FPS 77.
+
+average episode rewards is 0.7123479843139648
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 60/250 episodes, total num timesteps 1464000/6000000, FPS 77.
+
+average episode rewards is 1.9305917739868164
+
+Start evaluation...
+ Choose opponents [np.str_('59')] for evaluation
+ Load opponent 59 for evaluation (1/1)
+ eval average episode rewards: -57.460266
+ Choose opponents [np.str_('25')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 61/250 episodes, total num timesteps 1488000/6000000, FPS 77.
+
+average episode rewards is 5.069278717041016
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 62/250 episodes, total num timesteps 1512000/6000000, FPS 77.
+
+average episode rewards is 1.9369787216186523
+
+Start evaluation...
+ Choose opponents [np.str_('61')] for evaluation
+ Load opponent 61 for evaluation (1/1)
+ eval average episode rewards: 56.60839
+ Choose opponents [np.str_('18')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 63/250 episodes, total num timesteps 1536000/6000000, FPS 77.
+
+average episode rewards is 5.5226692199707035
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 64/250 episodes, total num timesteps 1560000/6000000, FPS 77.
+
+average episode rewards is 3.4913848876953124
+
+Start evaluation...
+ Choose opponents [np.str_('42')] for evaluation
+ Load opponent 42 for evaluation (1/1)
+ eval average episode rewards: -34.59941
+ Choose opponents [np.str_('31')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 65/250 episodes, total num timesteps 1584000/6000000, FPS 77.
+
+average episode rewards is -1.6216407775878907
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 66/250 episodes, total num timesteps 1608000/6000000, FPS 77.
+
+average episode rewards is -2.117949676513672
+
+Start evaluation...
+ Choose opponents [np.str_('25')] for evaluation
+ Load opponent 25 for evaluation (1/1)
+ eval average episode rewards: -57.418957
+ Choose opponents [np.str_('7')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 67/250 episodes, total num timesteps 1632000/6000000, FPS 77.
+
+average episode rewards is -2.9243391036987303
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 68/250 episodes, total num timesteps 1656000/6000000, FPS 77.
+
+average episode rewards is -4.012944030761719
+
+Start evaluation...
+ Choose opponents [np.str_('9')] for evaluation
+ Load opponent 9 for evaluation (1/1)
+ eval average episode rewards: -3.662091
+ Choose opponents [np.str_('39')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 69/250 episodes, total num timesteps 1680000/6000000, FPS 77.
+
+average episode rewards is 2.476073455810547
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 70/250 episodes, total num timesteps 1704000/6000000, FPS 77.
+
+average episode rewards is 1.7972679138183594
+
+Start evaluation...
+ Choose opponents [np.str_('33')] for evaluation
+ Load opponent 33 for evaluation (1/1)
+ eval average episode rewards: -45.670506
+ Choose opponents [np.str_('59')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 71/250 episodes, total num timesteps 1728000/6000000, FPS 77.
+
+average episode rewards is 1.4314067840576172
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 72/250 episodes, total num timesteps 1752000/6000000, FPS 78.
+
+average episode rewards is 2.4893726348876952
+
+Start evaluation...
+ Choose opponents [np.str_('8')] for evaluation
+ Load opponent 8 for evaluation (1/1)
+ eval average episode rewards: -8.291934
+ Choose opponents [np.str_('69')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 73/250 episodes, total num timesteps 1776000/6000000, FPS 78.
+
+average episode rewards is 3.578722381591797
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 74/250 episodes, total num timesteps 1800000/6000000, FPS 78.
+
+average episode rewards is 3.3534164428710938
+
+Start evaluation...
+ Choose opponents [np.str_('69')] for evaluation
+ Load opponent 69 for evaluation (1/1)
+ eval average episode rewards: -7.7725763
+ Choose opponents [np.str_('18')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 75/250 episodes, total num timesteps 1824000/6000000, FPS 78.
+
+average episode rewards is 3.3942325592041014
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 76/250 episodes, total num timesteps 1848000/6000000, FPS 78.
+
+average episode rewards is 6.060644149780273
+
+Start evaluation...
+ Choose opponents [np.str_('55')] for evaluation
+ Load opponent 55 for evaluation (1/1)
+ eval average episode rewards: -31.871998
+ Choose opponents [np.str_('0')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 77/250 episodes, total num timesteps 1872000/6000000, FPS 78.
+
+average episode rewards is -6.855007934570312
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 78/250 episodes, total num timesteps 1896000/6000000, FPS 78.
+
+average episode rewards is -5.648902130126953
+
+Start evaluation...
+ Choose opponents [np.str_('67')] for evaluation
+ Load opponent 67 for evaluation (1/1)
+ eval average episode rewards: -2.8224797
+ Choose opponents [np.str_('39')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 79/250 episodes, total num timesteps 1920000/6000000, FPS 78.
+
+average episode rewards is 5.280841445922851
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 80/250 episodes, total num timesteps 1944000/6000000, FPS 78.
+
+average episode rewards is 5.918077850341797
+
+Start evaluation...
+ Choose opponents [np.str_('80')] for evaluation
+ Load opponent 80 for evaluation (1/1)
+ eval average episode rewards: -111.81699
+ Choose opponents [np.str_('60')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 81/250 episodes, total num timesteps 1968000/6000000, FPS 78.
+
+average episode rewards is 6.820410919189453
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 82/250 episodes, total num timesteps 1992000/6000000, FPS 78.
+
+average episode rewards is 8.78116683959961
+
+Start evaluation...
+ Choose opponents [np.str_('69')] for evaluation
+ Load opponent 69 for evaluation (1/1)
+ eval average episode rewards: -71.341255
+ Choose opponents [np.str_('17')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 83/250 episodes, total num timesteps 2016000/6000000, FPS 78.
+
+average episode rewards is 9.528923034667969
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 84/250 episodes, total num timesteps 2040000/6000000, FPS 78.
+
+average episode rewards is 4.205340576171875
+
+Start evaluation...
+ Choose opponents [np.str_('83')] for evaluation
+ Load opponent 83 for evaluation (1/1)
+ eval average episode rewards: -1.9794061
+ Choose opponents [np.str_('21')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 85/250 episodes, total num timesteps 2064000/6000000, FPS 78.
+
+average episode rewards is 7.4459083557128904
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 86/250 episodes, total num timesteps 2088000/6000000, FPS 78.
+
+average episode rewards is 6.918344116210937
+
+Start evaluation...
+ Choose opponents [np.str_('42')] for evaluation
+ Load opponent 42 for evaluation (1/1)
+ eval average episode rewards: -9.282805
+ Choose opponents [np.str_('51')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 87/250 episodes, total num timesteps 2112000/6000000, FPS 78.
+
+average episode rewards is -0.0837310791015625
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 88/250 episodes, total num timesteps 2136000/6000000, FPS 78.
+
+average episode rewards is -0.8239456176757812
+
+Start evaluation...
+ Choose opponents [np.str_('73')] for evaluation
+ Load opponent 73 for evaluation (1/1)
+ eval average episode rewards: -67.392944
+ Choose opponents [np.str_('71')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 89/250 episodes, total num timesteps 2160000/6000000, FPS 78.
+
+average episode rewards is 10.873292541503906
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 90/250 episodes, total num timesteps 2184000/6000000, FPS 79.
+
+average episode rewards is 7.541007232666016
+
+Start evaluation...
+ Choose opponents [np.str_('89')] for evaluation
+ Load opponent 89 for evaluation (1/1)
+ eval average episode rewards: -70.566696
+ Choose opponents [np.str_('90')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 91/250 episodes, total num timesteps 2208000/6000000, FPS 78.
+
+average episode rewards is 24.592166137695312
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 92/250 episodes, total num timesteps 2232000/6000000, FPS 79.
+
+average episode rewards is 25.108544921875
+
+Start evaluation...
+ Choose opponents [np.str_('15')] for evaluation
+ Load opponent 15 for evaluation (1/1)
+ eval average episode rewards: -74.312706
+ Choose opponents [np.str_('54')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 93/250 episodes, total num timesteps 2256000/6000000, FPS 79.
+
+average episode rewards is 7.4649208068847654
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 94/250 episodes, total num timesteps 2280000/6000000, FPS 79.
+
+average episode rewards is 5.275332641601563
+
+Start evaluation...
+ Choose opponents [np.str_('20')] for evaluation
+ Load opponent 20 for evaluation (1/1)
+ eval average episode rewards: -58.16261
+ Choose opponents [np.str_('42')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 95/250 episodes, total num timesteps 2304000/6000000, FPS 79.
+
+average episode rewards is 7.951112365722656
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 96/250 episodes, total num timesteps 2328000/6000000, FPS 79.
+
+average episode rewards is 5.054644775390625
+
+Start evaluation...
+ Choose opponents [np.str_('92')] for evaluation
+ Load opponent 92 for evaluation (1/1)
+ eval average episode rewards: -179.0805
+ Choose opponents [np.str_('79')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 97/250 episodes, total num timesteps 2352000/6000000, FPS 79.
+
+average episode rewards is 19.829437255859375
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_5v5_noweapon_s2 updates 98/250 episodes, total num timesteps 2376000/6000000, FPS 79.
+
+average episode rewards is 16.360836791992188
+
+Start evaluation...
+ Choose opponents [np.str_('39')] for evaluation
+ Load opponent 39 for evaluation (1/1)
+SubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterrupt
+SubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterrupt
+SubprocVecEnv worker: got KeyboardInterrupt
+
+
+
+
+
+Traceback (most recent call last):
+  File "/root/autodl-tmp/SEU-SRTP/scripts/train/train_jsbsim.py", line 163, in main
+    runner.run()
+  File "/root/autodl-tmp/SEU-SRTP/runner/share_jsbsim_runner.py", line 118, in run
+    self.eval(self.total_num_steps)
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/runner/share_jsbsim_runner.py", line 258, in eval
+    eval_obs, eval_share_obs, eval_rewards, eval_dones, eval_infos = self.eval_envs.step(eval_actions)
+                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 120, in step
+    return self.step_wait()
+           ^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 348, in step_wait
+    results = [env.step(a) for (a, env) in zip(self.actions, self.envs)]
+               ^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/JSBSim/envs/multiplecombat_env.py", line 83, in step
+    obs = self.get_obs()
+          ^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/JSBSim/envs/env_base.py", line 161, in get_obs
+    return dict([(agent_id, self.task.get_obs(self, agent_id)) for agent_id in self.agents.keys()])
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/JSBSim/tasks/multiplecombat_task.py", line 115, in get_obs
+    AO, TA, R, side_flag = get_AO_TA_R(ego_feature, feature, return_side=True)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/JSBSim/utils/utils.py", line 81, in get_AO_TA_R
+    side_flag = np.sign(np.cross([ego_vx, ego_vy], [delta_x, delta_y]))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/root/autodl-tmp/SEU-SRTP/scripts/train/train_jsbsim.py", line 176, in <module>
+    main(sys.argv[1:])
+  File "/root/autodl-tmp/SEU-SRTP/scripts/train/train_jsbsim.py", line 165, in main
+    traceback.print_exc()
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/traceback.py", line 178, in print_exc
+    def print_exc(limit=None, file=None, chain=True):
+    
+KeyboardInterrupt
+================================================================
+EXPERIMENT f6m_5v5_noweapon_s2 exited with code 0 at 2026-10-08T09:33:24+08:00
+================================================================

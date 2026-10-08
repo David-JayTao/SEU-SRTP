@@ -1,0 +1,306 @@
+================================================================
+EXPERIMENT : scaling_5v5_noweapon_s1
+git commit : 607a6d3df9ac543330f9de30f8142f2b6e88f3d3  branch=exp/repro-scaling-20261004
+env/scen   : MultipleCombat / 5v5/scaling_noweapon/HierarchySelfplay
+algo       : mappo   seed=1
+gpu        : 1
+threads    : 10   num_env_steps=900000
+extra      : --use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 2 --eval-episodes 1
+log        : /root/autodl-tmp/SEU-SRTP/experiments/2026-10-04-night/scripts/../logs/scaling_5v5_noweapon_s1_seed1_gpu1_20261004_051615.log
+start      : 2026-10-04T05:16:15+08:00
+================================================================
+choose to use gpu...
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+ Load selfplay opponents: Algo fsp, num_opponents 1.
+
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_5v5_noweapon_s1 updates 0/30 episodes, total num timesteps 30000/900000, FPS 102.
+
+average episode rewards is -9.05393798828125
+
+Start evaluation...
+ Choose opponents [np.str_('0')] for evaluation
+ Load opponent 0 for evaluation (1/1)
+ eval average episode rewards: 0.9675102
+ Choose opponents [np.str_('0')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_5v5_noweapon_s1 updates 1/30 episodes, total num timesteps 60000/900000, FPS 92.
+
+average episode rewards is -9.109093627929688
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_5v5_noweapon_s1 updates 2/30 episodes, total num timesteps 90000/900000, FPS 94.
+
+average episode rewards is -8.846201171875
+
+Start evaluation...
+ Choose opponents [np.str_('latest')] for evaluation
+ Load opponent latest for evaluation (1/1)
+ eval average episode rewards: -5.6146135
+ Choose opponents [np.str_('latest')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_5v5_noweapon_s1 updates 3/30 episodes, total num timesteps 120000/900000, FPS 91.
+
+average episode rewards is -8.551014404296875
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_5v5_noweapon_s1 updates 4/30 episodes, total num timesteps 150000/900000, FPS 92.
+
+average episode rewards is -8.297762451171875
+
+Start evaluation...
+ Choose opponents [np.str_('0')] for evaluation
+ Load opponent 0 for evaluation (1/1)
+ eval average episode rewards: -78.044304
+ Choose opponents [np.str_('2')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_5v5_noweapon_s1 updates 5/30 episodes, total num timesteps 180000/900000, FPS 91.
+
+average episode rewards is -8.258443603515625
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_5v5_noweapon_s1 updates 6/30 episodes, total num timesteps 210000/900000, FPS 91.
+
+average episode rewards is -7.760934448242187
+
+Start evaluation...
+ Choose opponents [np.str_('4')] for evaluation
+ Load opponent 4 for evaluation (1/1)
+ eval average episode rewards: -161.54443
+ Choose opponents [np.str_('6')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_5v5_noweapon_s1 updates 7/30 episodes, total num timesteps 240000/900000, FPS 89.
+
+average episode rewards is -7.96084716796875
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_5v5_noweapon_s1 updates 8/30 episodes, total num timesteps 270000/900000, FPS 90.
+
+average episode rewards is -7.3886566162109375
+
+Start evaluation...
+ Choose opponents [np.str_('latest')] for evaluation
+ Load opponent latest for evaluation (1/1)
+ eval average episode rewards: 39.514507
+ Choose opponents [np.str_('latest')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_5v5_noweapon_s1 updates 9/30 episodes, total num timesteps 300000/900000, FPS 89.
+
+average episode rewards is -5.72045654296875
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_5v5_noweapon_s1 updates 10/30 episodes, total num timesteps 330000/900000, FPS 90.
+
+average episode rewards is -5.625462646484375
+
+Start evaluation...
+ Choose opponents [np.str_('0')] for evaluation
+ Load opponent 0 for evaluation (1/1)
+ eval average episode rewards: -2.6338365
+ Choose opponents [np.str_('6')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_5v5_noweapon_s1 updates 11/30 episodes, total num timesteps 360000/900000, FPS 89.
+
+average episode rewards is -7.525220336914063
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_5v5_noweapon_s1 updates 12/30 episodes, total num timesteps 390000/900000, FPS 90.
+
+average episode rewards is -5.612569580078125
+
+Start evaluation...
+ Choose opponents [np.str_('12')] for evaluation
+ Load opponent 12 for evaluation (1/1)
+ eval average episode rewards: 16.628464
+ Choose opponents [np.str_('11')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_5v5_noweapon_s1 updates 13/30 episodes, total num timesteps 420000/900000, FPS 90.
+
+average episode rewards is -3.7306707763671874
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_5v5_noweapon_s1 updates 14/30 episodes, total num timesteps 450000/900000, FPS 91.
+
+average episode rewards is -4.647858276367187
+
+Start evaluation...
+ Choose opponents [np.str_('5')] for evaluation
+ Load opponent 5 for evaluation (1/1)
+ eval average episode rewards: 1.0078914
+ Choose opponents [np.str_('8')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_5v5_noweapon_s1 updates 15/30 episodes, total num timesteps 480000/900000, FPS 91.
+
+average episode rewards is -3.7145855712890623
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_5v5_noweapon_s1 updates 16/30 episodes, total num timesteps 510000/900000, FPS 92.
+
+average episode rewards is -2.8167132568359374
+
+Start evaluation...
+ Choose opponents [np.str_('4')] for evaluation
+ Load opponent 4 for evaluation (1/1)
+ eval average episode rewards: -5.3485246
+ Choose opponents [np.str_('10')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_5v5_noweapon_s1 updates 17/30 episodes, total num timesteps 540000/900000, FPS 92.
+
+average episode rewards is -1.8604571533203125
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_5v5_noweapon_s1 updates 18/30 episodes, total num timesteps 570000/900000, FPS 92.
+
+average episode rewards is -3.1803024291992186
+
+Start evaluation...
+ Choose opponents [np.str_('9')] for evaluation
+ Load opponent 9 for evaluation (1/1)
+ eval average episode rewards: 3.7652683
+ Choose opponents [np.str_('13')] for training
+...End evaluation
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_5v5_noweapon_s1 updates 19/30 episodes, total num timesteps 600000/900000, FPS 91.
+
+average episode rewards is 2.4158746337890626
+
+ Scenario 5v5/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_5v5_noweapon_s1 updates 20/30 episodes, total num timesteps 630000/900000, FPS 92.
+
+average episode rewards is 5.041533203125
+
+Start evaluation...
+ Choose opponents [np.str_('17')] for evaluation
+ Load opponent 17 for evaluation (1/1)
+ eval average episode rewards: 8.471016
+ Choose opponents [np.str_('3')] for training
+...End evaluation
+SubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterrupt
+
+
+SubprocVecEnv worker: got KeyboardInterrupt
+SubprocVecEnv worker: got KeyboardInterrupt
+SubprocVecEnv worker: got KeyboardInterrupt
+
+
+
+
+Traceback (most recent call last):
+  File "/root/autodl-tmp/SEU-SRTP/scripts/train/train_jsbsim.py", line 163, in main
+    runner.run()
+  File "/root/autodl-tmp/SEU-SRTP/runner/share_jsbsim_runner.py", line 81, in run
+    obs, share_obs, rewards, dones, infos = self.envs.step(actions)
+                                            ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 120, in step
+    return self.step_wait()
+           ^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 449, in step_wait
+    results = [remote.recv() for remote in self.remotes]
+               ^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+          ^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 430, in _recv_bytes
+    buf = self._recv(4)
+          ^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 395, in _recv
+    chunk = read(handle, remaining)
+            ^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/root/autodl-tmp/SEU-SRTP/scripts/train/train_jsbsim.py", line 176, in <module>
+    main(sys.argv[1:])
+  File "/root/autodl-tmp/SEU-SRTP/scripts/train/train_jsbsim.py", line 168, in main
+    envs.close()
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 110, in close
+    self.close_extras()
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 295, in close_extras
+    remote.recv()
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+          ^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 430, in _recv_bytes
+    buf = self._recv(4)
+          ^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 399, in _recv
+    raise EOFError
+EOFError
+================================================================
+EXPERIMENT scaling_5v5_noweapon_s1 exited with code 0 at 2026-10-04T07:16:16+08:00
+================================================================

@@ -1,0 +1,1 @@
+f6m_5v5_noweapon_s2|8|6e6|30000|MultipleCombat|5v5/scaling_noweapon/HierarchySelfplay|mappo|2|--use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 2 --eval-episodes 1

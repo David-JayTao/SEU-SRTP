@@ -1,0 +1,558 @@
+================================================================
+EXPERIMENT : official_1v1_dodgemissile_selfplay
+git commit : c144989547212074d8017ef25857bfbc7413c9d7  branch=exp/repro-scaling-20261004
+env/scen   : SingleCombat / 1v1/DodgeMissile/HierarchySelfplay
+algo       : ppo   seed=1
+gpu        : 0
+threads    : 10   num_env_steps=1e8
+extra      : --use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 1 --eval-episodes 1
+log        : /root/autodl-tmp/SEU-SRTP/experiments/2026-10-04-night/scripts/../logs/official_1v1_dodgemissile_selfplay_seed1_gpu0_20261004_080909.log
+start      : 2026-10-04T08:09:09+08:00
+================================================================
+choose to use gpu...
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+ Load selfplay opponents: Algo fsp, num_opponents 1.
+
+
+ Scenario 1v1/DodgeMissile/HierarchySelfplay Algo ppo Exp official_1v1_dodgemissile_selfplay updates 0/3333 episodes, total num timesteps 30000/100000000, FPS 208.
+
+average episode rewards is -265.3743318256579
+
+ Scenario 1v1/DodgeMissile/HierarchySelfplay Algo ppo Exp official_1v1_dodgemissile_selfplay updates 1/3333 episodes, total num timesteps 60000/100000000, FPS 204.
+
+average episode rewards is -255.06211703431373
+
+Start evaluation...
+ Choose opponents [np.str_('0')] for evaluation
+ Load opponent 0 for evaluation (1/1)
+ eval ego elo: 1000.0 | opponent average elo: 1000.0
+ ego average episode rewards: -70.24952697753906
+ opponent average episode rewards: -263.3714904785156
+ elo gain: 16.0 | latest elo score: 1016.0
+...End evaluation
+ Choose opponents [np.str_('0')] for training
+
+ Scenario 1v1/DodgeMissile/HierarchySelfplay Algo ppo Exp official_1v1_dodgemissile_selfplay updates 2/3333 episodes, total num timesteps 90000/100000000, FPS 201.
+
+average episode rewards is -265.0144270833333
+
+Start evaluation...
+ Choose opponents [np.str_('1')] for evaluation
+ Load opponent 1 for evaluation (1/1)
+ eval ego elo: 1016.0 | opponent average elo: 1016.0
+ ego average episode rewards: -0.2646692395210266
+ opponent average episode rewards: -500.8335876464844
+ elo gain: 16.0 | latest elo score: 1032.0
+...End evaluation
+ Choose opponents [np.str_('1')] for training
+
+ Scenario 1v1/DodgeMissile/HierarchySelfplay Algo ppo Exp official_1v1_dodgemissile_selfplay updates 3/3333 episodes, total num timesteps 120000/100000000, FPS 201.
+
+average episode rewards is -271.08915150316454
+
+Start evaluation...
+ Choose opponents [np.str_('0')] for evaluation
+ Load opponent 0 for evaluation (1/1)
+ eval ego elo: 1032.0 | opponent average elo: 984.0
+ ego average episode rewards: -301.0887756347656
+ opponent average episode rewards: 0.4619345963001251
+ elo gain: -18.196524540277366 | latest elo score: 1013.8034754597227
+...End evaluation
+ Choose opponents [np.str_('0')] for training
+
+ Scenario 1v1/DodgeMissile/HierarchySelfplay Algo ppo Exp official_1v1_dodgemissile_selfplay updates 4/3333 episodes, total num timesteps 150000/100000000, FPS 201.
+
+average episode rewards is -267.1655574845679
+
+Start evaluation...
+ Choose opponents [np.str_('3')] for evaluation
+ Load opponent 3 for evaluation (1/1)
+ eval ego elo: 1013.8034754597227 | opponent average elo: 1013.8034754597227
+ ego average episode rewards: -30.59792709350586
+ opponent average episode rewards: -295.044189453125
+ elo gain: 16.0 | latest elo score: 1029.8034754597227
+...End evaluation
+ Choose opponents [np.str_('1')] for training
+
+ Scenario 1v1/DodgeMissile/HierarchySelfplay Algo ppo Exp official_1v1_dodgemissile_selfplay updates 5/3333 episodes, total num timesteps 180000/100000000, FPS 200.
+
+average episode rewards is -268.64596774193546
+
+Start evaluation...
+ Choose opponents [np.str_('3')] for evaluation
+ Load opponent 3 for evaluation (1/1)
+ eval ego elo: 1029.8034754597227 | opponent average elo: 997.8034754597227
+ ego average episode rewards: -24.721906661987305
+ opponent average episode rewards: -294.4302673339844
+ elo gain: 14.530498471024522 | latest elo score: 1044.333973930747
+...End evaluation
+ Choose opponents [np.str_('0')] for training
+
+ Scenario 1v1/DodgeMissile/HierarchySelfplay Algo ppo Exp official_1v1_dodgemissile_selfplay updates 6/3333 episodes, total num timesteps 210000/100000000, FPS 201.
+
+average episode rewards is -247.62511837121212
+
+Start evaluation...
+ Choose opponents [np.str_('0')] for evaluation
+ Load opponent 0 for evaluation (1/1)
+ eval ego elo: 1044.333973930747 | opponent average elo: 1002.1965245402773
+ ego average episode rewards: -66.1355209350586
+ opponent average episode rewards: -265.6600036621094
+ elo gain: 14.068957476991951 | latest elo score: 1058.402931407739
+...End evaluation
+ Choose opponents [np.str_('1')] for training
+
+ Scenario 1v1/DodgeMissile/HierarchySelfplay Algo ppo Exp official_1v1_dodgemissile_selfplay updates 7/3333 episodes, total num timesteps 240000/100000000, FPS 201.
+
+average episode rewards is -261.90098741319446
+
+Start evaluation...
+ Choose opponents [np.str_('4')] for evaluation
+ Load opponent 4 for evaluation (1/1)
+ eval ego elo: 1058.402931407739 | opponent average elo: 1029.8034754597227
+ ego average episode rewards: 0.4969208240509033
+ opponent average episode rewards: -293.5789489746094
+ elo gain: 14.685913081682347 | latest elo score: 1073.0888444894215
+...End evaluation
+ Choose opponents [np.str_('5')] for training
+
+ Scenario 1v1/DodgeMissile/HierarchySelfplay Algo ppo Exp official_1v1_dodgemissile_selfplay updates 8/3333 episodes, total num timesteps 270000/100000000, FPS 202.
+
+average episode rewards is -254.48551897321428
+
+Start evaluation...
+ Choose opponents [np.str_('4')] for evaluation
+ Load opponent 4 for evaluation (1/1)
+ eval ego elo: 1073.0888444894215 | opponent average elo: 1015.1175623780404
+ ego average episode rewards: -16.69480323791504
+ opponent average episode rewards: -340.8863220214844
+ elo gain: 13.35482602467043 | latest elo score: 1086.443670514092
+...End evaluation
+ Choose opponents [np.str_('6')] for training
+
+ Scenario 1v1/DodgeMissile/HierarchySelfplay Algo ppo Exp official_1v1_dodgemissile_selfplay updates 9/3333 episodes, total num timesteps 300000/100000000, FPS 202.
+
+average episode rewards is -268.44304265202703
+
+Start evaluation...
+ Choose opponents [np.str_('2')] for evaluation
+ Load opponent 2 for evaluation (1/1)
+ eval ego elo: 1086.443670514092 | opponent average elo: 1032.0
+ ego average episode rewards: -501.1760559082031
+ opponent average episode rewards: -0.6088429093360901
+ elo gain: -18.486901346618875 | latest elo score: 1067.956769167473
+...End evaluation
+ Choose opponents [np.str_('4')] for training
+
+ Scenario 1v1/DodgeMissile/HierarchySelfplay Algo ppo Exp official_1v1_dodgemissile_selfplay updates 10/3333 episodes, total num timesteps 330000/100000000, FPS 202.
+
+average episode rewards is -256.40503472222224
+
+Start evaluation...
+ Choose opponents [np.str_('5')] for evaluation
+ Load opponent 5 for evaluation (1/1)
+ eval ego elo: 1067.956769167473 | opponent average elo: 1044.333973930747
+ ego average episode rewards: -13.26350212097168
+ opponent average episode rewards: -337.99755859375
+ elo gain: 14.913803351843672 | latest elo score: 1082.8705725193167
+...End evaluation
+ Choose opponents [np.str_('2')] for training
+
+ Scenario 1v1/DodgeMissile/HierarchySelfplay Algo ppo Exp official_1v1_dodgemissile_selfplay updates 11/3333 episodes, total num timesteps 360000/100000000, FPS 202.
+
+average episode rewards is -248.38678175403226
+
+Start evaluation...
+ Choose opponents [np.str_('4')] for evaluation
+ Load opponent 4 for evaluation (1/1)
+ eval ego elo: 1082.8705725193167 | opponent average elo: 1001.76273635337
+ ego average episode rewards: -0.13120834529399872
+ opponent average episode rewards: -321.47918701171875
+ elo gain: 12.331251173591848 | latest elo score: 1095.2018236929086
+...End evaluation
+ Choose opponents [np.str_('10')] for training
+
+ Scenario 1v1/DodgeMissile/HierarchySelfplay Algo ppo Exp official_1v1_dodgemissile_selfplay updates 12/3333 episodes, total num timesteps 390000/100000000, FPS 203.
+
+average episode rewards is -236.62088815789474
+
+Start evaluation...
+ Choose opponents [np.str_('2')] for evaluation
+ Load opponent 2 for evaluation (1/1)
+ eval ego elo: 1095.2018236929086 | opponent average elo: 1050.4869013466189
+ ego average episode rewards: -0.6385650038719177
+ opponent average episode rewards: -0.6385425329208374
+ elo gain: -2.04790380954579 | latest elo score: 1093.153919883363
+...End evaluation
+ Choose opponents [np.str_('4')] for training
+
+ Scenario 1v1/DodgeMissile/HierarchySelfplay Algo ppo Exp official_1v1_dodgemissile_selfplay updates 13/3333 episodes, total num timesteps 420000/100000000, FPS 203.
+
+average episode rewards is -226.29969233960176
+
+Start evaluation...
+ Choose opponents [np.str_('7')] for evaluation
+ Load opponent 7 for evaluation (1/1)
+ eval ego elo: 1093.153919883363 | opponent average elo: 1073.0888444894215
+ ego average episode rewards: -0.46881741285324097
+ opponent average episode rewards: -297.8293151855469
+ elo gain: 15.076995063677781 | latest elo score: 1108.2309149470407
+...End evaluation
+ Choose opponents [np.str_('7')] for training
+
+ Scenario 1v1/DodgeMissile/HierarchySelfplay Algo ppo Exp official_1v1_dodgemissile_selfplay updates 14/3333 episodes, total num timesteps 450000/100000000, FPS 203.
+
+average episode rewards is -182.48731704905063
+
+Start evaluation...
+ Choose opponents [np.str_('9')] for evaluation
+ Load opponent 9 for evaluation (1/1)
+ eval ego elo: 1108.2309149470407 | opponent average elo: 1067.956769167473
+ ego average episode rewards: -0.6312296390533447
+ opponent average episode rewards: -372.0145263671875
+ elo gain: 14.153569841125847 | latest elo score: 1122.3844847881664
+...End evaluation
+ Choose opponents [np.str_('1')] for training
+
+ Scenario 1v1/DodgeMissile/HierarchySelfplay Algo ppo Exp official_1v1_dodgemissile_selfplay updates 15/3333 episodes, total num timesteps 480000/100000000, FPS 204.
+
+average episode rewards is -226.8353498340708
+
+Start evaluation...
+ Choose opponents [np.str_('7')] for evaluation
+ Load opponent 7 for evaluation (1/1)
+ eval ego elo: 1122.3844847881664 | opponent average elo: 1058.0118494257438
+ ego average episode rewards: -0.24804532527923584
+ opponent average episode rewards: -313.1170654296875
+ elo gain: 13.068993041285083 | latest elo score: 1135.4534778294515
+...End evaluation
+ Choose opponents [np.str_('14')] for training
+
+ Scenario 1v1/DodgeMissile/HierarchySelfplay Algo ppo Exp official_1v1_dodgemissile_selfplay updates 16/3333 episodes, total num timesteps 510000/100000000, FPS 204.
+
+average episode rewards is -158.96084299395162
+
+Start evaluation...
+ Choose opponents [np.str_('0')] for evaluation
+ Load opponent 0 for evaluation (1/1)
+ eval ego elo: 1135.4534778294515 | opponent average elo: 988.1275670632854
+ ego average episode rewards: -433.3929748535156
+ opponent average episode rewards: -71.66453552246094
+ elo gain: -22.405229055851525 | latest elo score: 1113.0482487735999
+...End evaluation
+ Choose opponents [np.str_('6')] for training
+
+ Scenario 1v1/DodgeMissile/HierarchySelfplay Algo ppo Exp official_1v1_dodgemissile_selfplay updates 17/3333 episodes, total num timesteps 540000/100000000, FPS 204.
+
+average episode rewards is -189.35996791294642
+
+Start evaluation...
+ Choose opponents [np.str_('13')] for evaluation
+ Load opponent 13 for evaluation (1/1)
+ eval ego elo: 1113.0482487735999 | opponent average elo: 1108.2309149470407
+ ego average episode rewards: -404.2319030761719
+ opponent average episode rewards: -0.5763866901397705
+ elo gain: -16.221832205623024 | latest elo score: 1096.8264165679768
+...End evaluation
+ Choose opponents [np.str_('9')] for training
+
+ Scenario 1v1/DodgeMissile/HierarchySelfplay Algo ppo Exp official_1v1_dodgemissile_selfplay updates 18/3333 episodes, total num timesteps 570000/100000000, FPS 204.
+
+average episode rewards is -137.58154296875
+
+Start evaluation...
+ Choose opponents [np.str_('9')] for evaluation
+ Load opponent 9 for evaluation (1/1)
+ eval ego elo: 1096.8264165679768 | opponent average elo: 1053.8031993263473
+ ego average episode rewards: -0.6034416556358337
+ opponent average episode rewards: -356.3380126953125
+ elo gain: 14.02877297960664 | latest elo score: 1110.8551895475834
+...End evaluation
+ Choose opponents [np.str_('7')] for training
+
+ Scenario 1v1/DodgeMissile/HierarchySelfplay Algo ppo Exp official_1v1_dodgemissile_selfplay updates 19/3333 episodes, total num timesteps 600000/100000000, FPS 205.
+
+average episode rewards is -89.27391516644022
+
+Start evaluation...
+ Choose opponents [np.str_('1')] for evaluation
+ Load opponent 1 for evaluation (1/1)
+ eval ego elo: 1110.8551895475834 | opponent average elo: 1000.0
+ ego average episode rewards: -0.6388113498687744
+ opponent average episode rewards: -458.0560607910156
+ elo gain: 11.06139281880747 | latest elo score: 1121.916582366391
+...End evaluation
+ Choose opponents [np.str_('0')] for training
+
+ Scenario 1v1/DodgeMissile/HierarchySelfplay Algo ppo Exp official_1v1_dodgemissile_selfplay updates 20/3333 episodes, total num timesteps 630000/100000000, FPS 206.
+
+average episode rewards is -78.16689918154762
+
+Start evaluation...
+ Choose opponents [np.str_('17')] for evaluation
+ Load opponent 17 for evaluation (1/1)
+ eval ego elo: 1121.916582366391 | opponent average elo: 1096.8264165679768
+ ego average episode rewards: -8.72612476348877
+ opponent average episode rewards: -392.62310791015625
+ elo gain: 14.846559551428939 | latest elo score: 1136.76314191782
+...End evaluation
+ Choose opponents [np.str_('8')] for training
+
+ Scenario 1v1/DodgeMissile/HierarchySelfplay Algo ppo Exp official_1v1_dodgemissile_selfplay updates 21/3333 episodes, total num timesteps 660000/100000000, FPS 207.
+
+average episode rewards is -7.842416863692434
+
+Start evaluation...
+ Choose opponents [np.str_('13')] for evaluation
+ Load opponent 13 for evaluation (1/1)
+ eval ego elo: 1136.76314191782 | opponent average elo: 1124.4527471526637
+ ego average episode rewards: -470.8579406738281
+ opponent average episode rewards: -0.6386566758155823
+ elo gain: -16.566677506471777 | latest elo score: 1120.1964644113482
+...End evaluation
+ Choose opponents [np.str_('19')] for training
+
+ Scenario 1v1/DodgeMissile/HierarchySelfplay Algo ppo Exp official_1v1_dodgemissile_selfplay updates 22/3333 episodes, total num timesteps 690000/100000000, FPS 209.
+
+average episode rewards is -1.8458906173706056
+
+Start evaluation...
+ Choose opponents [np.str_('15')] for evaluation
+ Load opponent 15 for evaluation (1/1)
+ eval ego elo: 1120.1964644113482 | opponent average elo: 1135.4534778294515
+ ego average episode rewards: -177.0973358154297
+ opponent average episode rewards: -441.42816162109375
+ elo gain: 16.702160149596097 | latest elo score: 1136.8986245609442
+...End evaluation
+ Choose opponents [np.str_('10')] for training
+
+ Scenario 1v1/DodgeMissile/HierarchySelfplay Algo ppo Exp official_1v1_dodgemissile_selfplay updates 23/3333 episodes, total num timesteps 720000/100000000, FPS 210.
+
+average episode rewards is -0.6597103118896485
+
+Start evaluation...
+ Choose opponents [np.str_('8')] for evaluation
+ Load opponent 8 for evaluation (1/1)
+ eval ego elo: 1136.8986245609442 | opponent average elo: 1086.443670514092
+ ego average episode rewards: -421.78167724609375
+ opponent average episode rewards: -0.638909101486206
+ elo gain: -18.30733931964341 | latest elo score: 1118.5912852413007
+...End evaluation
+ Choose opponents [np.str_('7')] for training
+
+ Scenario 1v1/DodgeMissile/HierarchySelfplay Algo ppo Exp official_1v1_dodgemissile_selfplay updates 24/3333 episodes, total num timesteps 750000/100000000, FPS 212.
+
+average episode rewards is -0.27701940536499026
+
+Start evaluation...
+ Choose opponents [np.str_('3')] for evaluation
+ Load opponent 3 for evaluation (1/1)
+ eval ego elo: 1118.5912852413007 | opponent average elo: 983.2729769886981
+ ego average episode rewards: -0.403483122587204
+ opponent average episode rewards: -329.0636901855469
+ elo gain: 10.065446228016999 | latest elo score: 1128.6567314693177
+...End evaluation
+ Choose opponents [np.str_('6')] for training
+
+ Scenario 1v1/DodgeMissile/HierarchySelfplay Algo ppo Exp official_1v1_dodgemissile_selfplay updates 25/3333 episodes, total num timesteps 780000/100000000, FPS 213.
+
+average episode rewards is -0.350834584236145
+
+Start evaluation...
+ Choose opponents [np.str_('21')] for evaluation
+ Load opponent 21 for evaluation (1/1)
+ eval ego elo: 1128.6567314693177 | opponent average elo: 1120.1964644113482
+ ego average episode rewards: -92.74952697753906
+ opponent average episode rewards: -439.08447265625
+ elo gain: 15.610467292149217 | latest elo score: 1144.267198761467
+...End evaluation
+ Choose opponents [np.str_('17')] for training
+
+ Scenario 1v1/DodgeMissile/HierarchySelfplay Algo ppo Exp official_1v1_dodgemissile_selfplay updates 26/3333 episodes, total num timesteps 810000/100000000, FPS 214.
+
+average episode rewards is -0.4168854713439941
+
+Start evaluation...
+ Choose opponents [np.str_('25')] for evaluation
+ Load opponent 25 for evaluation (1/1)
+ eval ego elo: 1144.267198761467 | opponent average elo: 1144.267198761467
+ ego average episode rewards: -455.7807922363281
+ opponent average episode rewards: -76.81049346923828
+ elo gain: -16.0 | latest elo score: 1128.267198761467
+...End evaluation
+ Choose opponents [np.str_('3')] for training
+
+ Scenario 1v1/DodgeMissile/HierarchySelfplay Algo ppo Exp official_1v1_dodgemissile_selfplay updates 27/3333 episodes, total num timesteps 840000/100000000, FPS 215.
+
+average episode rewards is -0.37688775062561036
+
+Start evaluation...
+ Choose opponents [np.str_('4')] for evaluation
+ Load opponent 4 for evaluation (1/1)
+ eval ego elo: 1128.267198761467 | opponent average elo: 989.4314851797782
+ ego average episode rewards: -92.68836975097656
+ opponent average episode rewards: -339.64801025390625
+ elo gain: 9.926275645059626 | latest elo score: 1138.1934744065265
+...End evaluation
+ Choose opponents [np.str_('24')] for training
+
+ Scenario 1v1/DodgeMissile/HierarchySelfplay Algo ppo Exp official_1v1_dodgemissile_selfplay updates 28/3333 episodes, total num timesteps 870000/100000000, FPS 217.
+
+average episode rewards is -0.5527791023254395
+
+Start evaluation...
+ Choose opponents [np.str_('17')] for evaluation
+ Load opponent 17 for evaluation (1/1)
+ eval ego elo: 1138.1934744065265 | opponent average elo: 1081.9798570165478
+ ego average episode rewards: -165.39950561523438
+ opponent average episode rewards: -445.405517578125
+ elo gain: 13.433622375032318 | latest elo score: 1151.627096781559
+...End evaluation
+ Choose opponents [np.str_('11')] for training
+
+ Scenario 1v1/DodgeMissile/HierarchySelfplay Algo ppo Exp official_1v1_dodgemissile_selfplay updates 29/3333 episodes, total num timesteps 900000/100000000, FPS 218.
+
+average episode rewards is -0.36502485275268554
+
+Start evaluation...
+ Choose opponents [np.str_('12')] for evaluation
+ Load opponent 12 for evaluation (1/1)
+ eval ego elo: 1151.627096781559 | opponent average elo: 1093.153919883363
+ ego average episode rewards: -400.08428955078125
+ opponent average episode rewards: -0.6376695036888123
+ elo gain: -18.66764997775319 | latest elo score: 1132.9594468038058
+...End evaluation
+ Choose opponents [np.str_('26')] for training
+SubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterrupt
+SubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterrupt
+
+
+
+
+
+
+
+
+Traceback (most recent call last):
+  File "/root/autodl-tmp/SEU-SRTP/scripts/train/train_jsbsim.py", line 163, in main
+    runner.run()
+  File "/root/autodl-tmp/SEU-SRTP/runner/jsbsim_runner.py", line 49, in run
+    values, actions, action_log_probs, rnn_states_actor, rnn_states_critic = self.collect(step)
+                                                                             ^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/runner/selfplay_jsbsim_runner.py", line 77, in collect
+    = self.policy.get_actions(np.concatenate(self.buffer.obs[step]),
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/algorithms/ppo/ppo_policy.py", line 31, in get_actions
+    values, rnn_states_critic = self.critic(obs, rnn_states_critic, masks)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/algorithms/ppo/ppo_critic.py", line 43, in forward
+    critic_features, rnn_states = self.rnn(critic_features, rnn_states, masks)
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/algorithms/utils/gru.py", line 25, in forward
+    x, hxs = self.gru(x.unsqueeze(0), (hxs * masks.repeat(1, self._num_layers).unsqueeze(-1)).transpose(0, 1).contiguous())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/nn/modules/rnn.py", line 1391, in forward
+    result = _VF.gru(
+             ^^^^^^^^
+KeyboardInterrupt
+================================================================
+EXPERIMENT official_1v1_dodgemissile_selfplay exited with code 0 at 2026-10-04T09:19:10+08:00
+================================================================

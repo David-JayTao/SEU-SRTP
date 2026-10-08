@@ -1,0 +1,1 @@
+{"total_num_steps": 6000, "wall_time": 1791051517.4682522, "value_loss": 1.7408134251832963, "policy_loss": -0.010739144450053573, "policy_entropy_loss": -0.003169474401511252, "actor_grad_norm": 1.3231613874435424, "critic_grad_norm": 7.931237721443177, "ratio": 0.9995010793209076, "average_episode_rewards": -3.5340681076049805}

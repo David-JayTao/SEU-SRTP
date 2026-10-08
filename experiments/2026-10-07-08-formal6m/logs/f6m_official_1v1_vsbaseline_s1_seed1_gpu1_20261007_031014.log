@@ -1,0 +1,2700 @@
+================================================================
+EXPERIMENT : f6m_official_1v1_vsbaseline_s1
+git commit : ee51b298901808c575d572f0c1475d17a507b867  branch=exp/formal-6m-20261007
+env/scen   : SingleCombat / 1v1/NoWeapon/vsBaseline
+algo       : ppo   seed=1
+gpu        : 1
+threads    : 3   num_env_steps=6e6
+extra      : 
+log        : /root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/scripts/../logs/f6m_official_1v1_vsbaseline_s1_seed1_gpu1_20261007_031014.log
+start      : 2026-10-07T03:10:14+08:00
+================================================================
+choose to use gpu...
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 0/666 episodes, total num timesteps 9000/6000000, FPS 118.
+
+average episode rewards is -207.14051444575472
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 1/666 episodes, total num timesteps 18000/6000000, FPS 118.
+
+average episode rewards is -209.8209228515625
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 2/666 episodes, total num timesteps 27000/6000000, FPS 118.
+
+average episode rewards is -209.1394981971154
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 3/666 episodes, total num timesteps 36000/6000000, FPS 119.
+
+average episode rewards is -211.40770563089623
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 4/666 episodes, total num timesteps 45000/6000000, FPS 119.
+
+average episode rewards is -207.81157670454544
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 5/666 episodes, total num timesteps 54000/6000000, FPS 118.
+
+average episode rewards is -208.9754136029412
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 6/666 episodes, total num timesteps 63000/6000000, FPS 118.
+
+average episode rewards is -209.3255859375
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 7/666 episodes, total num timesteps 72000/6000000, FPS 118.
+
+average episode rewards is -208.29399956597223
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 8/666 episodes, total num timesteps 81000/6000000, FPS 118.
+
+average episode rewards is -209.34224076704547
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 9/666 episodes, total num timesteps 90000/6000000, FPS 118.
+
+average episode rewards is -209.29884588068182
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 10/666 episodes, total num timesteps 99000/6000000, FPS 118.
+
+average episode rewards is -208.46622242647058
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 11/666 episodes, total num timesteps 108000/6000000, FPS 118.
+
+average episode rewards is -210.902890625
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 12/666 episodes, total num timesteps 117000/6000000, FPS 119.
+
+average episode rewards is -210.1644140625
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 13/666 episodes, total num timesteps 126000/6000000, FPS 119.
+
+average episode rewards is -206.6035517939815
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 14/666 episodes, total num timesteps 135000/6000000, FPS 119.
+
+average episode rewards is -210.27125459558823
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 15/666 episodes, total num timesteps 144000/6000000, FPS 119.
+
+average episode rewards is -211.7233338647959
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 16/666 episodes, total num timesteps 153000/6000000, FPS 119.
+
+average episode rewards is -212.85944010416668
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 17/666 episodes, total num timesteps 162000/6000000, FPS 119.
+
+average episode rewards is -212.8270210597826
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 18/666 episodes, total num timesteps 171000/6000000, FPS 119.
+
+average episode rewards is -211.58470618206522
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 19/666 episodes, total num timesteps 180000/6000000, FPS 119.
+
+average episode rewards is -214.43623490767047
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 20/666 episodes, total num timesteps 189000/6000000, FPS 119.
+
+average episode rewards is -215.01607259114584
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 21/666 episodes, total num timesteps 198000/6000000, FPS 119.
+
+average episode rewards is -213.6266424005682
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 22/666 episodes, total num timesteps 207000/6000000, FPS 119.
+
+average episode rewards is -216.35225694444443
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 23/666 episodes, total num timesteps 216000/6000000, FPS 119.
+
+average episode rewards is -215.11697313262195
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 24/666 episodes, total num timesteps 225000/6000000, FPS 119.
+
+average episode rewards is -213.3377844769022
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 25/666 episodes, total num timesteps 234000/6000000, FPS 119.
+
+average episode rewards is -217.50967261904762
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 26/666 episodes, total num timesteps 243000/6000000, FPS 119.
+
+average episode rewards is -222.85878452034885
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 27/666 episodes, total num timesteps 252000/6000000, FPS 119.
+
+average episode rewards is -219.65146019345238
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 28/666 episodes, total num timesteps 261000/6000000, FPS 119.
+
+average episode rewards is -219.1684456758721
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 29/666 episodes, total num timesteps 270000/6000000, FPS 119.
+
+average episode rewards is -216.35996547965115
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 30/666 episodes, total num timesteps 279000/6000000, FPS 119.
+
+average episode rewards is -217.7500476371951
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 31/666 episodes, total num timesteps 288000/6000000, FPS 119.
+
+average episode rewards is -226.5912109375
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 32/666 episodes, total num timesteps 297000/6000000, FPS 119.
+
+average episode rewards is -218.920751953125
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 33/666 episodes, total num timesteps 306000/6000000, FPS 119.
+
+average episode rewards is -220.31021278782896
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 34/666 episodes, total num timesteps 315000/6000000, FPS 119.
+
+average episode rewards is -212.3380629595588
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 35/666 episodes, total num timesteps 324000/6000000, FPS 119.
+
+average episode rewards is -219.46088324652777
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 36/666 episodes, total num timesteps 333000/6000000, FPS 119.
+
+average episode rewards is -219.16748046875
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 37/666 episodes, total num timesteps 342000/6000000, FPS 119.
+
+average episode rewards is -226.12576998197116
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 38/666 episodes, total num timesteps 351000/6000000, FPS 119.
+
+average episode rewards is -238.40376420454547
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 39/666 episodes, total num timesteps 360000/6000000, FPS 119.
+
+average episode rewards is -227.07407924107142
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 40/666 episodes, total num timesteps 369000/6000000, FPS 119.
+
+average episode rewards is -232.58402193509616
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 41/666 episodes, total num timesteps 378000/6000000, FPS 119.
+
+average episode rewards is -201.1961669921875
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 42/666 episodes, total num timesteps 387000/6000000, FPS 119.
+
+average episode rewards is -227.67535041360293
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 43/666 episodes, total num timesteps 396000/6000000, FPS 119.
+
+average episode rewards is -153.58524263822116
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 44/666 episodes, total num timesteps 405000/6000000, FPS 119.
+
+average episode rewards is -203.93218122209822
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 45/666 episodes, total num timesteps 414000/6000000, FPS 119.
+
+average episode rewards is -173.251953125
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 46/666 episodes, total num timesteps 423000/6000000, FPS 119.
+
+average episode rewards is -168.15626220703126
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 47/666 episodes, total num timesteps 432000/6000000, FPS 119.
+
+average episode rewards is -34.791864013671876
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 48/666 episodes, total num timesteps 441000/6000000, FPS 119.
+
+average episode rewards is -7.355883280436198
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 49/666 episodes, total num timesteps 450000/6000000, FPS 119.
+
+average episode rewards is -7.925381130642361
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 50/666 episodes, total num timesteps 459000/6000000, FPS 119.
+
+average episode rewards is 7.620107014973958
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 51/666 episodes, total num timesteps 468000/6000000, FPS 119.
+
+average episode rewards is -25.924562242296005
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 52/666 episodes, total num timesteps 477000/6000000, FPS 120.
+
+average episode rewards is -18.898824055989582
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 53/666 episodes, total num timesteps 486000/6000000, FPS 120.
+
+average episode rewards is 0.6365937127007378
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 54/666 episodes, total num timesteps 495000/6000000, FPS 120.
+
+average episode rewards is -51.40147705078125
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 55/666 episodes, total num timesteps 504000/6000000, FPS 120.
+
+average episode rewards is 4.450833638509114
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 56/666 episodes, total num timesteps 513000/6000000, FPS 120.
+
+average episode rewards is 2.539587868584527
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 57/666 episodes, total num timesteps 522000/6000000, FPS 120.
+
+average episode rewards is 2.5765747494167752
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 58/666 episodes, total num timesteps 531000/6000000, FPS 120.
+
+average episode rewards is -46.540561252170136
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 59/666 episodes, total num timesteps 540000/6000000, FPS 120.
+
+average episode rewards is 4.366050296359592
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 60/666 episodes, total num timesteps 549000/6000000, FPS 120.
+
+average episode rewards is -60.971014404296874
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 61/666 episodes, total num timesteps 558000/6000000, FPS 120.
+
+average episode rewards is -5.781187269422743
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 62/666 episodes, total num timesteps 567000/6000000, FPS 120.
+
+average episode rewards is -16.196302795410155
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 63/666 episodes, total num timesteps 576000/6000000, FPS 120.
+
+average episode rewards is -83.6388427734375
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 64/666 episodes, total num timesteps 585000/6000000, FPS 120.
+
+average episode rewards is -72.9407470703125
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 65/666 episodes, total num timesteps 594000/6000000, FPS 120.
+
+average episode rewards is -28.665451049804688
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 66/666 episodes, total num timesteps 603000/6000000, FPS 120.
+
+average episode rewards is -16.54491424560547
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 67/666 episodes, total num timesteps 612000/6000000, FPS 120.
+
+average episode rewards is 7.046783871120876
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 68/666 episodes, total num timesteps 621000/6000000, FPS 120.
+
+average episode rewards is -0.2263887193467882
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 69/666 episodes, total num timesteps 630000/6000000, FPS 120.
+
+average episode rewards is -32.0346923828125
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 70/666 episodes, total num timesteps 639000/6000000, FPS 120.
+
+average episode rewards is -29.86341010199653
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 71/666 episodes, total num timesteps 648000/6000000, FPS 120.
+
+average episode rewards is -45.55547417534722
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 72/666 episodes, total num timesteps 657000/6000000, FPS 120.
+
+average episode rewards is 11.026772393120659
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 73/666 episodes, total num timesteps 666000/6000000, FPS 120.
+
+average episode rewards is 9.060629950629341
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 74/666 episodes, total num timesteps 675000/6000000, FPS 120.
+
+average episode rewards is -5.870438045925564
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 75/666 episodes, total num timesteps 684000/6000000, FPS 120.
+
+average episode rewards is -23.70114305284288
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 76/666 episodes, total num timesteps 693000/6000000, FPS 120.
+
+average episode rewards is -18.168711344401043
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 77/666 episodes, total num timesteps 702000/6000000, FPS 120.
+
+average episode rewards is 8.036875406901041
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 78/666 episodes, total num timesteps 711000/6000000, FPS 120.
+
+average episode rewards is 4.764465755886501
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 79/666 episodes, total num timesteps 720000/6000000, FPS 120.
+
+average episode rewards is 9.308263142903646
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 80/666 episodes, total num timesteps 729000/6000000, FPS 120.
+
+average episode rewards is 5.187909444173177
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 81/666 episodes, total num timesteps 738000/6000000, FPS 120.
+
+average episode rewards is 7.011015150282118
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 82/666 episodes, total num timesteps 747000/6000000, FPS 120.
+
+average episode rewards is 2.8476698133680554
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 83/666 episodes, total num timesteps 756000/6000000, FPS 120.
+
+average episode rewards is -13.561109924316407
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 84/666 episodes, total num timesteps 765000/6000000, FPS 120.
+
+average episode rewards is -19.529156155056423
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 85/666 episodes, total num timesteps 774000/6000000, FPS 120.
+
+average episode rewards is 5.039503309461805
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 86/666 episodes, total num timesteps 783000/6000000, FPS 120.
+
+average episode rewards is -13.797171020507813
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 87/666 episodes, total num timesteps 792000/6000000, FPS 120.
+
+average episode rewards is 5.608307732476129
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 88/666 episodes, total num timesteps 801000/6000000, FPS 120.
+
+average episode rewards is 11.860555860731337
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 89/666 episodes, total num timesteps 810000/6000000, FPS 120.
+
+average episode rewards is 3.306187311808268
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 90/666 episodes, total num timesteps 819000/6000000, FPS 120.
+
+average episode rewards is 12.829872979058159
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 91/666 episodes, total num timesteps 828000/6000000, FPS 120.
+
+average episode rewards is -32.70989312065972
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 92/666 episodes, total num timesteps 837000/6000000, FPS 120.
+
+average episode rewards is -31.207297585227273
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 93/666 episodes, total num timesteps 846000/6000000, FPS 120.
+
+average episode rewards is -19.29824490017361
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 94/666 episodes, total num timesteps 855000/6000000, FPS 120.
+
+average episode rewards is 6.051377190483941
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 95/666 episodes, total num timesteps 864000/6000000, FPS 120.
+
+average episode rewards is -16.821597629123264
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 96/666 episodes, total num timesteps 873000/6000000, FPS 120.
+
+average episode rewards is 5.769726223415798
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 97/666 episodes, total num timesteps 882000/6000000, FPS 120.
+
+average episode rewards is -17.54879421657986
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 98/666 episodes, total num timesteps 891000/6000000, FPS 120.
+
+average episode rewards is -26.423358493381077
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 99/666 episodes, total num timesteps 900000/6000000, FPS 120.
+
+average episode rewards is -22.33941650390625
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 100/666 episodes, total num timesteps 909000/6000000, FPS 120.
+
+average episode rewards is -20.629400634765624
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 101/666 episodes, total num timesteps 918000/6000000, FPS 120.
+
+average episode rewards is -15.17257080078125
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 102/666 episodes, total num timesteps 927000/6000000, FPS 120.
+
+average episode rewards is -13.098853217230904
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 103/666 episodes, total num timesteps 936000/6000000, FPS 120.
+
+average episode rewards is 9.308929443359375
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 104/666 episodes, total num timesteps 945000/6000000, FPS 120.
+
+average episode rewards is -15.082208251953125
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 105/666 episodes, total num timesteps 954000/6000000, FPS 120.
+
+average episode rewards is -17.979400634765625
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 106/666 episodes, total num timesteps 963000/6000000, FPS 120.
+
+average episode rewards is 7.992045084635417
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 107/666 episodes, total num timesteps 972000/6000000, FPS 120.
+
+average episode rewards is 12.617323133680555
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 108/666 episodes, total num timesteps 981000/6000000, FPS 120.
+
+average episode rewards is -16.362326049804686
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 109/666 episodes, total num timesteps 990000/6000000, FPS 120.
+
+average episode rewards is 10.978608873155382
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 110/666 episodes, total num timesteps 999000/6000000, FPS 120.
+
+average episode rewards is 11.94026099310981
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 111/666 episodes, total num timesteps 1008000/6000000, FPS 120.
+
+average episode rewards is 6.131273057725695
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 112/666 episodes, total num timesteps 1017000/6000000, FPS 120.
+
+average episode rewards is -15.141532050238716
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 113/666 episodes, total num timesteps 1026000/6000000, FPS 120.
+
+average episode rewards is 6.74014409383138
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 114/666 episodes, total num timesteps 1035000/6000000, FPS 120.
+
+average episode rewards is 7.35316636827257
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 115/666 episodes, total num timesteps 1044000/6000000, FPS 120.
+
+average episode rewards is 8.302866617838541
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 116/666 episodes, total num timesteps 1053000/6000000, FPS 120.
+
+average episode rewards is 9.37791019015842
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 117/666 episodes, total num timesteps 1062000/6000000, FPS 120.
+
+average episode rewards is -19.00918409559462
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 118/666 episodes, total num timesteps 1071000/6000000, FPS 120.
+
+average episode rewards is 4.727339850531684
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 119/666 episodes, total num timesteps 1080000/6000000, FPS 120.
+
+average episode rewards is 2.5239664713541665
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 120/666 episodes, total num timesteps 1089000/6000000, FPS 120.
+
+average episode rewards is 9.060334099663628
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 121/666 episodes, total num timesteps 1098000/6000000, FPS 120.
+
+average episode rewards is -14.674171447753906
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 122/666 episodes, total num timesteps 1107000/6000000, FPS 120.
+
+average episode rewards is 7.006046719021267
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 123/666 episodes, total num timesteps 1116000/6000000, FPS 120.
+
+average episode rewards is 10.026939392089844
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 124/666 episodes, total num timesteps 1125000/6000000, FPS 120.
+
+average episode rewards is 12.260670979817709
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 125/666 episodes, total num timesteps 1134000/6000000, FPS 120.
+
+average episode rewards is 8.573529561360678
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 126/666 episodes, total num timesteps 1143000/6000000, FPS 120.
+
+average episode rewards is 0.9567743937174479
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 127/666 episodes, total num timesteps 1152000/6000000, FPS 120.
+
+average episode rewards is 15.377677069769966
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 128/666 episodes, total num timesteps 1161000/6000000, FPS 120.
+
+average episode rewards is 8.170116848415798
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 129/666 episodes, total num timesteps 1170000/6000000, FPS 120.
+
+average episode rewards is 10.355965508355034
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 130/666 episodes, total num timesteps 1179000/6000000, FPS 120.
+
+average episode rewards is 7.042710198296441
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 131/666 episodes, total num timesteps 1188000/6000000, FPS 120.
+
+average episode rewards is 2.532314724392361
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 132/666 episodes, total num timesteps 1197000/6000000, FPS 120.
+
+average episode rewards is 10.306143866644966
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 133/666 episodes, total num timesteps 1206000/6000000, FPS 120.
+
+average episode rewards is 4.423597971598308
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 134/666 episodes, total num timesteps 1215000/6000000, FPS 120.
+
+average episode rewards is -13.742984008789062
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 135/666 episodes, total num timesteps 1224000/6000000, FPS 120.
+
+average episode rewards is 7.756215413411458
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 136/666 episodes, total num timesteps 1233000/6000000, FPS 120.
+
+average episode rewards is 8.717755635579428
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 137/666 episodes, total num timesteps 1242000/6000000, FPS 120.
+
+average episode rewards is 5.881953769259983
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 138/666 episodes, total num timesteps 1251000/6000000, FPS 120.
+
+average episode rewards is 4.2842356363932295
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 139/666 episodes, total num timesteps 1260000/6000000, FPS 120.
+
+average episode rewards is -12.237643432617187
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 140/666 episodes, total num timesteps 1269000/6000000, FPS 120.
+
+average episode rewards is 6.592517428927952
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 141/666 episodes, total num timesteps 1278000/6000000, FPS 121.
+
+average episode rewards is 10.156934950086805
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 142/666 episodes, total num timesteps 1287000/6000000, FPS 121.
+
+average episode rewards is 7.503124660915798
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 143/666 episodes, total num timesteps 1296000/6000000, FPS 121.
+
+average episode rewards is 7.036415100097656
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 144/666 episodes, total num timesteps 1305000/6000000, FPS 121.
+
+average episode rewards is 10.689224243164062
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 145/666 episodes, total num timesteps 1314000/6000000, FPS 121.
+
+average episode rewards is 5.689307742648655
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 146/666 episodes, total num timesteps 1323000/6000000, FPS 121.
+
+average episode rewards is 9.507142808702257
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 147/666 episodes, total num timesteps 1332000/6000000, FPS 121.
+
+average episode rewards is 7.561331854926215
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 148/666 episodes, total num timesteps 1341000/6000000, FPS 121.
+
+average episode rewards is 5.620555029975043
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 149/666 episodes, total num timesteps 1350000/6000000, FPS 121.
+
+average episode rewards is 11.505727132161459
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 150/666 episodes, total num timesteps 1359000/6000000, FPS 121.
+
+average episode rewards is -19.084248860677082
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 151/666 episodes, total num timesteps 1368000/6000000, FPS 121.
+
+average episode rewards is 7.924984402126736
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 152/666 episodes, total num timesteps 1377000/6000000, FPS 121.
+
+average episode rewards is 11.805880228678385
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 153/666 episodes, total num timesteps 1386000/6000000, FPS 121.
+
+average episode rewards is 8.190633985731337
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 154/666 episodes, total num timesteps 1395000/6000000, FPS 121.
+
+average episode rewards is 12.479766845703125
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 155/666 episodes, total num timesteps 1404000/6000000, FPS 121.
+
+average episode rewards is 15.487657335069445
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 156/666 episodes, total num timesteps 1413000/6000000, FPS 121.
+
+average episode rewards is 7.043905470106337
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 157/666 episodes, total num timesteps 1422000/6000000, FPS 121.
+
+average episode rewards is 1.347506629096137
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 158/666 episodes, total num timesteps 1431000/6000000, FPS 121.
+
+average episode rewards is 16.620981852213543
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 159/666 episodes, total num timesteps 1440000/6000000, FPS 121.
+
+average episode rewards is 12.824261135525173
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 160/666 episodes, total num timesteps 1449000/6000000, FPS 121.
+
+average episode rewards is 14.725831773546007
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 161/666 episodes, total num timesteps 1458000/6000000, FPS 121.
+
+average episode rewards is 14.875512017144096
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 162/666 episodes, total num timesteps 1467000/6000000, FPS 121.
+
+average episode rewards is 15.189393785264757
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 163/666 episodes, total num timesteps 1476000/6000000, FPS 121.
+
+average episode rewards is 8.975066290961372
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 164/666 episodes, total num timesteps 1485000/6000000, FPS 121.
+
+average episode rewards is 10.630332099066841
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 165/666 episodes, total num timesteps 1494000/6000000, FPS 121.
+
+average episode rewards is 13.44099595811632
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 166/666 episodes, total num timesteps 1503000/6000000, FPS 121.
+
+average episode rewards is -39.572062174479164
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 167/666 episodes, total num timesteps 1512000/6000000, FPS 121.
+
+average episode rewards is -15.765794542100695
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 168/666 episodes, total num timesteps 1521000/6000000, FPS 121.
+
+average episode rewards is 14.238772922092014
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 169/666 episodes, total num timesteps 1530000/6000000, FPS 121.
+
+average episode rewards is 15.41745334201389
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 170/666 episodes, total num timesteps 1539000/6000000, FPS 121.
+
+average episode rewards is 13.285652160644531
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 171/666 episodes, total num timesteps 1548000/6000000, FPS 121.
+
+average episode rewards is 14.902086046006945
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 172/666 episodes, total num timesteps 1557000/6000000, FPS 121.
+
+average episode rewards is 17.141377766927082
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 173/666 episodes, total num timesteps 1566000/6000000, FPS 121.
+
+average episode rewards is 12.851294623480904
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 174/666 episodes, total num timesteps 1575000/6000000, FPS 121.
+
+average episode rewards is 12.319398668077257
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 175/666 episodes, total num timesteps 1584000/6000000, FPS 121.
+
+average episode rewards is 20.007124159071182
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 176/666 episodes, total num timesteps 1593000/6000000, FPS 121.
+
+average episode rewards is 8.77028316921658
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 177/666 episodes, total num timesteps 1602000/6000000, FPS 121.
+
+average episode rewards is 12.602925618489584
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 178/666 episodes, total num timesteps 1611000/6000000, FPS 121.
+
+average episode rewards is 8.609018113878038
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 179/666 episodes, total num timesteps 1620000/6000000, FPS 121.
+
+average episode rewards is 0.3418201870388455
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 180/666 episodes, total num timesteps 1629000/6000000, FPS 121.
+
+average episode rewards is -0.5136447482638888
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 181/666 episodes, total num timesteps 1638000/6000000, FPS 121.
+
+average episode rewards is 14.595815022786459
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 182/666 episodes, total num timesteps 1647000/6000000, FPS 121.
+
+average episode rewards is 15.763559977213541
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 183/666 episodes, total num timesteps 1656000/6000000, FPS 121.
+
+average episode rewards is 14.314300537109375
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 184/666 episodes, total num timesteps 1665000/6000000, FPS 121.
+
+average episode rewards is 15.46623060438368
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 185/666 episodes, total num timesteps 1674000/6000000, FPS 121.
+
+average episode rewards is 16.19705539279514
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 186/666 episodes, total num timesteps 1683000/6000000, FPS 121.
+
+average episode rewards is -33.70783025568182
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 187/666 episodes, total num timesteps 1692000/6000000, FPS 121.
+
+average episode rewards is 19.517859564887154
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 188/666 episodes, total num timesteps 1701000/6000000, FPS 121.
+
+average episode rewards is 8.642638312445747
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 189/666 episodes, total num timesteps 1710000/6000000, FPS 121.
+
+average episode rewards is 12.153806898328993
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 190/666 episodes, total num timesteps 1719000/6000000, FPS 121.
+
+average episode rewards is 18.45101759168837
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 191/666 episodes, total num timesteps 1728000/6000000, FPS 121.
+
+average episode rewards is 13.15086195203993
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 192/666 episodes, total num timesteps 1737000/6000000, FPS 121.
+
+average episode rewards is 6.501400417751736
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 193/666 episodes, total num timesteps 1746000/6000000, FPS 121.
+
+average episode rewards is 25.629289415147568
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 194/666 episodes, total num timesteps 1755000/6000000, FPS 121.
+
+average episode rewards is 9.755041334364149
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 195/666 episodes, total num timesteps 1764000/6000000, FPS 121.
+
+average episode rewards is 9.79807620578342
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 196/666 episodes, total num timesteps 1773000/6000000, FPS 121.
+
+average episode rewards is 10.792528788248697
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 197/666 episodes, total num timesteps 1782000/6000000, FPS 121.
+
+average episode rewards is 16.32265896267361
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 198/666 episodes, total num timesteps 1791000/6000000, FPS 121.
+
+average episode rewards is 15.034506903754341
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 199/666 episodes, total num timesteps 1800000/6000000, FPS 121.
+
+average episode rewards is 17.529915703667534
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 200/666 episodes, total num timesteps 1809000/6000000, FPS 121.
+
+average episode rewards is 7.483743455674913
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 201/666 episodes, total num timesteps 1818000/6000000, FPS 121.
+
+average episode rewards is 21.682118733723957
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 202/666 episodes, total num timesteps 1827000/6000000, FPS 121.
+
+average episode rewards is 23.060379028320312
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 203/666 episodes, total num timesteps 1836000/6000000, FPS 121.
+
+average episode rewards is 17.119286431206596
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 204/666 episodes, total num timesteps 1845000/6000000, FPS 121.
+
+average episode rewards is 14.291290283203125
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 205/666 episodes, total num timesteps 1854000/6000000, FPS 121.
+
+average episode rewards is -0.07586881849500868
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 206/666 episodes, total num timesteps 1863000/6000000, FPS 121.
+
+average episode rewards is 9.633367750379774
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 207/666 episodes, total num timesteps 1872000/6000000, FPS 121.
+
+average episode rewards is 14.855726453993055
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 208/666 episodes, total num timesteps 1881000/6000000, FPS 121.
+
+average episode rewards is 20.273181491427952
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 209/666 episodes, total num timesteps 1890000/6000000, FPS 121.
+
+average episode rewards is 12.93326144748264
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 210/666 episodes, total num timesteps 1899000/6000000, FPS 121.
+
+average episode rewards is 21.378373887803818
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 211/666 episodes, total num timesteps 1908000/6000000, FPS 121.
+
+average episode rewards is 13.325286865234375
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 212/666 episodes, total num timesteps 1917000/6000000, FPS 121.
+
+average episode rewards is 15.224789089626736
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 213/666 episodes, total num timesteps 1926000/6000000, FPS 121.
+
+average episode rewards is 15.8529052734375
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 214/666 episodes, total num timesteps 1935000/6000000, FPS 121.
+
+average episode rewards is 18.515943739149307
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 215/666 episodes, total num timesteps 1944000/6000000, FPS 121.
+
+average episode rewards is 15.201282077365452
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 216/666 episodes, total num timesteps 1953000/6000000, FPS 121.
+
+average episode rewards is 20.677954779730904
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 217/666 episodes, total num timesteps 1962000/6000000, FPS 121.
+
+average episode rewards is 15.832992553710938
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 218/666 episodes, total num timesteps 1971000/6000000, FPS 121.
+
+average episode rewards is 19.43859185112847
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 219/666 episodes, total num timesteps 1980000/6000000, FPS 121.
+
+average episode rewards is 21.644795735677082
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 220/666 episodes, total num timesteps 1989000/6000000, FPS 121.
+
+average episode rewards is 12.89987521701389
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 221/666 episodes, total num timesteps 1998000/6000000, FPS 121.
+
+average episode rewards is 12.302744547526041
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 222/666 episodes, total num timesteps 2007000/6000000, FPS 121.
+
+average episode rewards is 11.25496334499783
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 223/666 episodes, total num timesteps 2016000/6000000, FPS 121.
+
+average episode rewards is 15.619988335503471
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 224/666 episodes, total num timesteps 2025000/6000000, FPS 121.
+
+average episode rewards is 12.934939914279514
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 225/666 episodes, total num timesteps 2034000/6000000, FPS 121.
+
+average episode rewards is 14.348751491970486
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 226/666 episodes, total num timesteps 2043000/6000000, FPS 121.
+
+average episode rewards is 7.985955132378472
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 227/666 episodes, total num timesteps 2052000/6000000, FPS 121.
+
+average episode rewards is 13.537450154622396
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 228/666 episodes, total num timesteps 2061000/6000000, FPS 121.
+
+average episode rewards is 16.625198364257812
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 229/666 episodes, total num timesteps 2070000/6000000, FPS 121.
+
+average episode rewards is 13.557479858398438
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 230/666 episodes, total num timesteps 2079000/6000000, FPS 121.
+
+average episode rewards is 19.572479248046875
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 231/666 episodes, total num timesteps 2088000/6000000, FPS 121.
+
+average episode rewards is 13.600353664822048
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 232/666 episodes, total num timesteps 2097000/6000000, FPS 121.
+
+average episode rewards is 17.3802490234375
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 233/666 episodes, total num timesteps 2106000/6000000, FPS 121.
+
+average episode rewards is 19.679656982421875
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 234/666 episodes, total num timesteps 2115000/6000000, FPS 121.
+
+average episode rewards is 15.072767469618055
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 235/666 episodes, total num timesteps 2124000/6000000, FPS 121.
+
+average episode rewards is 12.163489447699654
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 236/666 episodes, total num timesteps 2133000/6000000, FPS 121.
+
+average episode rewards is 17.792321099175346
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 237/666 episodes, total num timesteps 2142000/6000000, FPS 121.
+
+average episode rewards is 12.915313720703125
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 238/666 episodes, total num timesteps 2151000/6000000, FPS 121.
+
+average episode rewards is 16.481123182508682
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 239/666 episodes, total num timesteps 2160000/6000000, FPS 121.
+
+average episode rewards is 16.078840467664932
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 240/666 episodes, total num timesteps 2169000/6000000, FPS 121.
+
+average episode rewards is 14.449083116319445
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 241/666 episodes, total num timesteps 2178000/6000000, FPS 121.
+
+average episode rewards is 18.377770317925346
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 242/666 episodes, total num timesteps 2187000/6000000, FPS 121.
+
+average episode rewards is 13.142950269911024
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 243/666 episodes, total num timesteps 2196000/6000000, FPS 121.
+
+average episode rewards is 15.740741305881077
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 244/666 episodes, total num timesteps 2205000/6000000, FPS 121.
+
+average episode rewards is 19.937299940321182
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 245/666 episodes, total num timesteps 2214000/6000000, FPS 121.
+
+average episode rewards is 16.102101643880207
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 246/666 episodes, total num timesteps 2223000/6000000, FPS 121.
+
+average episode rewards is 16.294209798177082
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 247/666 episodes, total num timesteps 2232000/6000000, FPS 121.
+
+average episode rewards is 17.15356953938802
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 248/666 episodes, total num timesteps 2241000/6000000, FPS 121.
+
+average episode rewards is 19.66421847873264
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 249/666 episodes, total num timesteps 2250000/6000000, FPS 121.
+
+average episode rewards is 17.642813788519966
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 250/666 episodes, total num timesteps 2259000/6000000, FPS 121.
+
+average episode rewards is 14.401731703016493
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 251/666 episodes, total num timesteps 2268000/6000000, FPS 121.
+
+average episode rewards is 21.174597846137154
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 252/666 episodes, total num timesteps 2277000/6000000, FPS 121.
+
+average episode rewards is 19.776353624131943
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 253/666 episodes, total num timesteps 2286000/6000000, FPS 121.
+
+average episode rewards is 23.672056410047745
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 254/666 episodes, total num timesteps 2295000/6000000, FPS 121.
+
+average episode rewards is 12.92220730251736
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 255/666 episodes, total num timesteps 2304000/6000000, FPS 121.
+
+average episode rewards is 12.535107930501303
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 256/666 episodes, total num timesteps 2313000/6000000, FPS 121.
+
+average episode rewards is 14.161876254611546
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 257/666 episodes, total num timesteps 2322000/6000000, FPS 121.
+
+average episode rewards is 16.32733154296875
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 258/666 episodes, total num timesteps 2331000/6000000, FPS 121.
+
+average episode rewards is 16.658121744791668
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 259/666 episodes, total num timesteps 2340000/6000000, FPS 121.
+
+average episode rewards is 13.743495517306858
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 260/666 episodes, total num timesteps 2349000/6000000, FPS 121.
+
+average episode rewards is 17.205391777886284
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 261/666 episodes, total num timesteps 2358000/6000000, FPS 121.
+
+average episode rewards is 15.246922810872396
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 262/666 episodes, total num timesteps 2367000/6000000, FPS 121.
+
+average episode rewards is 14.065778096516928
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 263/666 episodes, total num timesteps 2376000/6000000, FPS 121.
+
+average episode rewards is 18.038865831163193
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 264/666 episodes, total num timesteps 2385000/6000000, FPS 121.
+
+average episode rewards is 21.289684719509548
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 265/666 episodes, total num timesteps 2394000/6000000, FPS 121.
+
+average episode rewards is 14.69717068142361
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 266/666 episodes, total num timesteps 2403000/6000000, FPS 121.
+
+average episode rewards is 16.403272840711807
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 267/666 episodes, total num timesteps 2412000/6000000, FPS 121.
+
+average episode rewards is 21.979882134331596
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 268/666 episodes, total num timesteps 2421000/6000000, FPS 121.
+
+average episode rewards is 13.324647691514757
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 269/666 episodes, total num timesteps 2430000/6000000, FPS 121.
+
+average episode rewards is 18.26348876953125
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 270/666 episodes, total num timesteps 2439000/6000000, FPS 121.
+
+average episode rewards is 18.595621744791668
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 271/666 episodes, total num timesteps 2448000/6000000, FPS 121.
+
+average episode rewards is 16.079305013020832
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 272/666 episodes, total num timesteps 2457000/6000000, FPS 121.
+
+average episode rewards is 21.113805135091145
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 273/666 episodes, total num timesteps 2466000/6000000, FPS 121.
+
+average episode rewards is 16.58673604329427
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 274/666 episodes, total num timesteps 2475000/6000000, FPS 121.
+
+average episode rewards is 15.870608859592014
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 275/666 episodes, total num timesteps 2484000/6000000, FPS 121.
+
+average episode rewards is 22.012537638346355
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 276/666 episodes, total num timesteps 2493000/6000000, FPS 121.
+
+average episode rewards is 15.417338053385416
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 277/666 episodes, total num timesteps 2502000/6000000, FPS 121.
+
+average episode rewards is 13.97233412000868
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 278/666 episodes, total num timesteps 2511000/6000000, FPS 121.
+
+average episode rewards is 22.90589057074653
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 279/666 episodes, total num timesteps 2520000/6000000, FPS 121.
+
+average episode rewards is 18.15404595269097
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 280/666 episodes, total num timesteps 2529000/6000000, FPS 121.
+
+average episode rewards is 20.518717447916668
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 281/666 episodes, total num timesteps 2538000/6000000, FPS 121.
+
+average episode rewards is 18.521284315321182
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 282/666 episodes, total num timesteps 2547000/6000000, FPS 121.
+
+average episode rewards is 13.064675225151909
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 283/666 episodes, total num timesteps 2556000/6000000, FPS 121.
+
+average episode rewards is 17.207107543945312
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 284/666 episodes, total num timesteps 2565000/6000000, FPS 121.
+
+average episode rewards is 14.443903605143229
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 285/666 episodes, total num timesteps 2574000/6000000, FPS 121.
+
+average episode rewards is 13.622717115614149
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 286/666 episodes, total num timesteps 2583000/6000000, FPS 121.
+
+average episode rewards is 15.345141940646702
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 287/666 episodes, total num timesteps 2592000/6000000, FPS 121.
+
+average episode rewards is 9.32566409640842
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 288/666 episodes, total num timesteps 2601000/6000000, FPS 121.
+
+average episode rewards is 17.86734347873264
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 289/666 episodes, total num timesteps 2610000/6000000, FPS 121.
+
+average episode rewards is 19.823411729600693
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 290/666 episodes, total num timesteps 2619000/6000000, FPS 121.
+
+average episode rewards is 21.211812337239582
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 291/666 episodes, total num timesteps 2628000/6000000, FPS 121.
+
+average episode rewards is 13.459034389919704
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 292/666 episodes, total num timesteps 2637000/6000000, FPS 121.
+
+average episode rewards is 7.5003611246744795
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 293/666 episodes, total num timesteps 2646000/6000000, FPS 121.
+
+average episode rewards is 25.972310384114582
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 294/666 episodes, total num timesteps 2655000/6000000, FPS 121.
+
+average episode rewards is 18.226648966471355
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 295/666 episodes, total num timesteps 2664000/6000000, FPS 121.
+
+average episode rewards is 21.772447374131943
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 296/666 episodes, total num timesteps 2673000/6000000, FPS 121.
+
+average episode rewards is 16.626234266493057
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 297/666 episodes, total num timesteps 2682000/6000000, FPS 121.
+
+average episode rewards is 22.52282036675347
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 298/666 episodes, total num timesteps 2691000/6000000, FPS 121.
+
+average episode rewards is 20.271915011935764
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 299/666 episodes, total num timesteps 2700000/6000000, FPS 121.
+
+average episode rewards is 22.154524061414932
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 300/666 episodes, total num timesteps 2709000/6000000, FPS 121.
+
+average episode rewards is 20.718156602647568
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 301/666 episodes, total num timesteps 2718000/6000000, FPS 121.
+
+average episode rewards is 15.894249810112846
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 302/666 episodes, total num timesteps 2727000/6000000, FPS 121.
+
+average episode rewards is 22.023108588324654
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 303/666 episodes, total num timesteps 2736000/6000000, FPS 121.
+
+average episode rewards is 15.710828993055555
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 304/666 episodes, total num timesteps 2745000/6000000, FPS 121.
+
+average episode rewards is 17.188269721137154
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 305/666 episodes, total num timesteps 2754000/6000000, FPS 121.
+
+average episode rewards is 19.601009792751736
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 306/666 episodes, total num timesteps 2763000/6000000, FPS 121.
+
+average episode rewards is 21.44140625
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 307/666 episodes, total num timesteps 2772000/6000000, FPS 121.
+
+average episode rewards is 20.2227783203125
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 308/666 episodes, total num timesteps 2781000/6000000, FPS 121.
+
+average episode rewards is 19.92941623263889
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 309/666 episodes, total num timesteps 2790000/6000000, FPS 121.
+
+average episode rewards is 12.123163011338976
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 310/666 episodes, total num timesteps 2799000/6000000, FPS 121.
+
+average episode rewards is 21.04892815483941
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 311/666 episodes, total num timesteps 2808000/6000000, FPS 121.
+
+average episode rewards is 19.018985324435764
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 312/666 episodes, total num timesteps 2817000/6000000, FPS 121.
+
+average episode rewards is 24.52587890625
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 313/666 episodes, total num timesteps 2826000/6000000, FPS 121.
+
+average episode rewards is 16.459409925672745
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 314/666 episodes, total num timesteps 2835000/6000000, FPS 121.
+
+average episode rewards is 15.0931396484375
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 315/666 episodes, total num timesteps 2844000/6000000, FPS 121.
+
+average episode rewards is 20.385114881727432
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 316/666 episodes, total num timesteps 2853000/6000000, FPS 121.
+
+average episode rewards is 15.381267971462673
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 317/666 episodes, total num timesteps 2862000/6000000, FPS 121.
+
+average episode rewards is 21.560387505425346
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 318/666 episodes, total num timesteps 2871000/6000000, FPS 121.
+
+average episode rewards is 20.25957573784722
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 319/666 episodes, total num timesteps 2880000/6000000, FPS 121.
+
+average episode rewards is 15.847900390625
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 320/666 episodes, total num timesteps 2889000/6000000, FPS 121.
+
+average episode rewards is 21.453399658203125
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 321/666 episodes, total num timesteps 2898000/6000000, FPS 121.
+
+average episode rewards is 22.331069946289062
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 322/666 episodes, total num timesteps 2907000/6000000, FPS 121.
+
+average episode rewards is 17.88372802734375
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 323/666 episodes, total num timesteps 2916000/6000000, FPS 121.
+
+average episode rewards is 19.130265977647568
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 324/666 episodes, total num timesteps 2925000/6000000, FPS 122.
+
+average episode rewards is 17.941172281901043
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 325/666 episodes, total num timesteps 2934000/6000000, FPS 122.
+
+average episode rewards is 16.647186279296875
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 326/666 episodes, total num timesteps 2943000/6000000, FPS 122.
+
+average episode rewards is 24.46292283799913
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 327/666 episodes, total num timesteps 2952000/6000000, FPS 122.
+
+average episode rewards is 14.819290161132812
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 328/666 episodes, total num timesteps 2961000/6000000, FPS 122.
+
+average episode rewards is 19.677527533637154
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 329/666 episodes, total num timesteps 2970000/6000000, FPS 122.
+
+average episode rewards is 17.317949083116318
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 330/666 episodes, total num timesteps 2979000/6000000, FPS 122.
+
+average episode rewards is 18.613749186197918
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 331/666 episodes, total num timesteps 2988000/6000000, FPS 122.
+
+average episode rewards is 21.795637342664932
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 332/666 episodes, total num timesteps 2997000/6000000, FPS 122.
+
+average episode rewards is 26.342814127604168
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 333/666 episodes, total num timesteps 3006000/6000000, FPS 122.
+
+average episode rewards is 17.872584025065105
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 334/666 episodes, total num timesteps 3015000/6000000, FPS 122.
+
+average episode rewards is 20.448682996961807
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 335/666 episodes, total num timesteps 3024000/6000000, FPS 122.
+
+average episode rewards is 17.47659640842014
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 336/666 episodes, total num timesteps 3033000/6000000, FPS 122.
+
+average episode rewards is 20.60930887858073
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 337/666 episodes, total num timesteps 3042000/6000000, FPS 122.
+
+average episode rewards is 19.55794440375434
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 338/666 episodes, total num timesteps 3051000/6000000, FPS 122.
+
+average episode rewards is 17.27808125813802
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 339/666 episodes, total num timesteps 3060000/6000000, FPS 122.
+
+average episode rewards is 19.12390814887153
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 340/666 episodes, total num timesteps 3069000/6000000, FPS 122.
+
+average episode rewards is 18.547563340928818
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 341/666 episodes, total num timesteps 3078000/6000000, FPS 122.
+
+average episode rewards is 19.7916259765625
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 342/666 episodes, total num timesteps 3087000/6000000, FPS 122.
+
+average episode rewards is 14.133377075195312
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 343/666 episodes, total num timesteps 3096000/6000000, FPS 122.
+
+average episode rewards is 21.76464335123698
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 344/666 episodes, total num timesteps 3105000/6000000, FPS 122.
+
+average episode rewards is 18.329527113172745
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 345/666 episodes, total num timesteps 3114000/6000000, FPS 122.
+
+average episode rewards is 19.081461588541668
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 346/666 episodes, total num timesteps 3123000/6000000, FPS 122.
+
+average episode rewards is 20.273976643880207
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 347/666 episodes, total num timesteps 3132000/6000000, FPS 122.
+
+average episode rewards is 16.934656778971355
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 348/666 episodes, total num timesteps 3141000/6000000, FPS 122.
+
+average episode rewards is 19.720238579644096
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 349/666 episodes, total num timesteps 3150000/6000000, FPS 122.
+
+average episode rewards is 22.682269626193577
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 350/666 episodes, total num timesteps 3159000/6000000, FPS 122.
+
+average episode rewards is 13.83591037326389
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 351/666 episodes, total num timesteps 3168000/6000000, FPS 122.
+
+average episode rewards is 17.560536702473957
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 352/666 episodes, total num timesteps 3177000/6000000, FPS 122.
+
+average episode rewards is 16.67803955078125
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 353/666 episodes, total num timesteps 3186000/6000000, FPS 122.
+
+average episode rewards is 19.494556003146702
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 354/666 episodes, total num timesteps 3195000/6000000, FPS 122.
+
+average episode rewards is 17.993221706814236
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 355/666 episodes, total num timesteps 3204000/6000000, FPS 122.
+
+average episode rewards is 18.50214131673177
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 356/666 episodes, total num timesteps 3213000/6000000, FPS 122.
+
+average episode rewards is 18.247272067599827
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 357/666 episodes, total num timesteps 3222000/6000000, FPS 122.
+
+average episode rewards is 15.125556098090279
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 358/666 episodes, total num timesteps 3231000/6000000, FPS 122.
+
+average episode rewards is 21.057695176866318
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 359/666 episodes, total num timesteps 3240000/6000000, FPS 122.
+
+average episode rewards is 21.073077731662327
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 360/666 episodes, total num timesteps 3249000/6000000, FPS 122.
+
+average episode rewards is 21.482250637478298
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 361/666 episodes, total num timesteps 3258000/6000000, FPS 122.
+
+average episode rewards is 22.20336405436198
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 362/666 episodes, total num timesteps 3267000/6000000, FPS 122.
+
+average episode rewards is 19.11193169487847
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 363/666 episodes, total num timesteps 3276000/6000000, FPS 122.
+
+average episode rewards is 25.065833197699654
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 364/666 episodes, total num timesteps 3285000/6000000, FPS 122.
+
+average episode rewards is 22.042129516601562
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 365/666 episodes, total num timesteps 3294000/6000000, FPS 122.
+
+average episode rewards is 16.163848876953125
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 366/666 episodes, total num timesteps 3303000/6000000, FPS 122.
+
+average episode rewards is 21.292483859592014
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 367/666 episodes, total num timesteps 3312000/6000000, FPS 122.
+
+average episode rewards is 24.416005452473957
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 368/666 episodes, total num timesteps 3321000/6000000, FPS 122.
+
+average episode rewards is 19.35418023003472
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 369/666 episodes, total num timesteps 3330000/6000000, FPS 122.
+
+average episode rewards is 18.27014838324653
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 370/666 episodes, total num timesteps 3339000/6000000, FPS 122.
+
+average episode rewards is 19.307788425021702
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 371/666 episodes, total num timesteps 3348000/6000000, FPS 122.
+
+average episode rewards is 19.866512722439236
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 372/666 episodes, total num timesteps 3357000/6000000, FPS 122.
+
+average episode rewards is 22.192818535698784
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 373/666 episodes, total num timesteps 3366000/6000000, FPS 122.
+
+average episode rewards is 20.777496337890625
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 374/666 episodes, total num timesteps 3375000/6000000, FPS 122.
+
+average episode rewards is 25.151185777452255
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 375/666 episodes, total num timesteps 3384000/6000000, FPS 122.
+
+average episode rewards is 23.36905754937066
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 376/666 episodes, total num timesteps 3393000/6000000, FPS 122.
+
+average episode rewards is 22.512488471137154
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 377/666 episodes, total num timesteps 3402000/6000000, FPS 122.
+
+average episode rewards is 25.00393507215712
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 378/666 episodes, total num timesteps 3411000/6000000, FPS 122.
+
+average episode rewards is 25.453148735894096
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 379/666 episodes, total num timesteps 3420000/6000000, FPS 122.
+
+average episode rewards is 23.073872884114582
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 380/666 episodes, total num timesteps 3429000/6000000, FPS 122.
+
+average episode rewards is 25.37206353081597
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 381/666 episodes, total num timesteps 3438000/6000000, FPS 122.
+
+average episode rewards is 22.455373128255207
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 382/666 episodes, total num timesteps 3447000/6000000, FPS 122.
+
+average episode rewards is 24.140394422743057
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 383/666 episodes, total num timesteps 3456000/6000000, FPS 122.
+
+average episode rewards is 24.842049492730034
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 384/666 episodes, total num timesteps 3465000/6000000, FPS 122.
+
+average episode rewards is 25.275583902994793
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 385/666 episodes, total num timesteps 3474000/6000000, FPS 122.
+
+average episode rewards is 23.10369194878472
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 386/666 episodes, total num timesteps 3483000/6000000, FPS 122.
+
+average episode rewards is 27.36667039659288
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 387/666 episodes, total num timesteps 3492000/6000000, FPS 122.
+
+average episode rewards is 22.433547973632812
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 388/666 episodes, total num timesteps 3501000/6000000, FPS 122.
+
+average episode rewards is 21.163942125108505
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 389/666 episodes, total num timesteps 3510000/6000000, FPS 122.
+
+average episode rewards is 26.08975558810764
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 390/666 episodes, total num timesteps 3519000/6000000, FPS 122.
+
+average episode rewards is 22.201905992296005
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 391/666 episodes, total num timesteps 3528000/6000000, FPS 122.
+
+average episode rewards is 25.86593458387587
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 392/666 episodes, total num timesteps 3537000/6000000, FPS 122.
+
+average episode rewards is 17.43326653374566
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 393/666 episodes, total num timesteps 3546000/6000000, FPS 122.
+
+average episode rewards is 24.05669487847222
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 394/666 episodes, total num timesteps 3555000/6000000, FPS 122.
+
+average episode rewards is 27.021175808376736
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 395/666 episodes, total num timesteps 3564000/6000000, FPS 122.
+
+average episode rewards is 17.2513427734375
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 396/666 episodes, total num timesteps 3573000/6000000, FPS 122.
+
+average episode rewards is 21.499364217122395
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 397/666 episodes, total num timesteps 3582000/6000000, FPS 122.
+
+average episode rewards is 23.17830573187934
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 398/666 episodes, total num timesteps 3591000/6000000, FPS 122.
+
+average episode rewards is 27.1324462890625
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 399/666 episodes, total num timesteps 3600000/6000000, FPS 122.
+
+average episode rewards is 20.626061333550346
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 400/666 episodes, total num timesteps 3609000/6000000, FPS 122.
+
+average episode rewards is 21.127526177300346
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 401/666 episodes, total num timesteps 3618000/6000000, FPS 122.
+
+average episode rewards is 18.41986592610677
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 402/666 episodes, total num timesteps 3627000/6000000, FPS 122.
+
+average episode rewards is 23.708297729492188
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 403/666 episodes, total num timesteps 3636000/6000000, FPS 122.
+
+average episode rewards is 19.93142869737413
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 404/666 episodes, total num timesteps 3645000/6000000, FPS 122.
+
+average episode rewards is 18.85146755642361
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 405/666 episodes, total num timesteps 3654000/6000000, FPS 122.
+
+average episode rewards is 22.95062934027778
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 406/666 episodes, total num timesteps 3663000/6000000, FPS 122.
+
+average episode rewards is 26.67464870876736
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 407/666 episodes, total num timesteps 3672000/6000000, FPS 122.
+
+average episode rewards is 26.630950927734375
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 408/666 episodes, total num timesteps 3681000/6000000, FPS 122.
+
+average episode rewards is 25.20062934027778
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 409/666 episodes, total num timesteps 3690000/6000000, FPS 122.
+
+average episode rewards is 24.231245252821182
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 410/666 episodes, total num timesteps 3699000/6000000, FPS 122.
+
+average episode rewards is 22.899193657769096
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 411/666 episodes, total num timesteps 3708000/6000000, FPS 122.
+
+average episode rewards is 23.737158881293404
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 412/666 episodes, total num timesteps 3717000/6000000, FPS 122.
+
+average episode rewards is 25.629048665364582
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 413/666 episodes, total num timesteps 3726000/6000000, FPS 122.
+
+average episode rewards is 21.35604519314236
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 414/666 episodes, total num timesteps 3735000/6000000, FPS 122.
+
+average episode rewards is 24.570615980360245
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 415/666 episodes, total num timesteps 3744000/6000000, FPS 122.
+
+average episode rewards is 27.805464002821182
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 416/666 episodes, total num timesteps 3753000/6000000, FPS 122.
+
+average episode rewards is 18.600467258029514
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 417/666 episodes, total num timesteps 3762000/6000000, FPS 122.
+
+average episode rewards is 19.745912339952255
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 418/666 episodes, total num timesteps 3771000/6000000, FPS 122.
+
+average episode rewards is 25.555704752604168
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 419/666 episodes, total num timesteps 3780000/6000000, FPS 122.
+
+average episode rewards is 21.94850836859809
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 420/666 episodes, total num timesteps 3789000/6000000, FPS 122.
+
+average episode rewards is 17.246907552083332
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 421/666 episodes, total num timesteps 3798000/6000000, FPS 122.
+
+average episode rewards is 18.37908426920573
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 422/666 episodes, total num timesteps 3807000/6000000, FPS 122.
+
+average episode rewards is 23.784525553385418
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 423/666 episodes, total num timesteps 3816000/6000000, FPS 122.
+
+average episode rewards is 21.431989881727432
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 424/666 episodes, total num timesteps 3825000/6000000, FPS 122.
+
+average episode rewards is 21.546871609157986
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 425/666 episodes, total num timesteps 3834000/6000000, FPS 122.
+
+average episode rewards is 30.66558159722222
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 426/666 episodes, total num timesteps 3843000/6000000, FPS 122.
+
+average episode rewards is 23.68752204047309
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 427/666 episodes, total num timesteps 3852000/6000000, FPS 122.
+
+average episode rewards is 26.305909898546005
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 428/666 episodes, total num timesteps 3861000/6000000, FPS 122.
+
+average episode rewards is 22.291446261935764
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 429/666 episodes, total num timesteps 3870000/6000000, FPS 122.
+
+average episode rewards is 25.264868842230904
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 430/666 episodes, total num timesteps 3879000/6000000, FPS 122.
+
+average episode rewards is 22.113915337456596
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 431/666 episodes, total num timesteps 3888000/6000000, FPS 122.
+
+average episode rewards is 20.905403984917534
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 432/666 episodes, total num timesteps 3897000/6000000, FPS 122.
+
+average episode rewards is 24.94100613064236
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 433/666 episodes, total num timesteps 3906000/6000000, FPS 122.
+
+average episode rewards is 25.791059705946182
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 434/666 episodes, total num timesteps 3915000/6000000, FPS 122.
+
+average episode rewards is 26.252621120876736
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 435/666 episodes, total num timesteps 3924000/6000000, FPS 122.
+
+average episode rewards is 27.160880194769966
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 436/666 episodes, total num timesteps 3933000/6000000, FPS 122.
+
+average episode rewards is 25.077102661132812
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 437/666 episodes, total num timesteps 3942000/6000000, FPS 122.
+
+average episode rewards is 26.585791693793404
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 438/666 episodes, total num timesteps 3951000/6000000, FPS 122.
+
+average episode rewards is 27.386369493272568
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 439/666 episodes, total num timesteps 3960000/6000000, FPS 122.
+
+average episode rewards is 31.00265842013889
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 440/666 episodes, total num timesteps 3969000/6000000, FPS 122.
+
+average episode rewards is 29.128553602430557
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 441/666 episodes, total num timesteps 3978000/6000000, FPS 122.
+
+average episode rewards is 28.220228407118057
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 442/666 episodes, total num timesteps 3987000/6000000, FPS 122.
+
+average episode rewards is 27.658045450846355
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 443/666 episodes, total num timesteps 3996000/6000000, FPS 122.
+
+average episode rewards is 25.468658447265625
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 444/666 episodes, total num timesteps 4005000/6000000, FPS 122.
+
+average episode rewards is 27.67916531032986
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 445/666 episodes, total num timesteps 4014000/6000000, FPS 122.
+
+average episode rewards is 26.50381300184462
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 446/666 episodes, total num timesteps 4023000/6000000, FPS 122.
+
+average episode rewards is 28.511186387803818
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 447/666 episodes, total num timesteps 4032000/6000000, FPS 122.
+
+average episode rewards is 29.123189290364582
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 448/666 episodes, total num timesteps 4041000/6000000, FPS 122.
+
+average episode rewards is 28.115753173828125
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 449/666 episodes, total num timesteps 4050000/6000000, FPS 122.
+
+average episode rewards is 26.65038384331597
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 450/666 episodes, total num timesteps 4059000/6000000, FPS 122.
+
+average episode rewards is 23.905687120225693
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 451/666 episodes, total num timesteps 4068000/6000000, FPS 122.
+
+average episode rewards is 28.000016954210068
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 452/666 episodes, total num timesteps 4077000/6000000, FPS 122.
+
+average episode rewards is 25.311964246961807
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 453/666 episodes, total num timesteps 4086000/6000000, FPS 122.
+
+average episode rewards is 27.238940768771702
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 454/666 episodes, total num timesteps 4095000/6000000, FPS 122.
+
+average episode rewards is 25.647298177083332
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 455/666 episodes, total num timesteps 4104000/6000000, FPS 122.
+
+average episode rewards is 22.713165283203125
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 456/666 episodes, total num timesteps 4113000/6000000, FPS 122.
+
+average episode rewards is 27.408172607421875
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 457/666 episodes, total num timesteps 4122000/6000000, FPS 122.
+
+average episode rewards is 25.83849419487847
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 458/666 episodes, total num timesteps 4131000/6000000, FPS 122.
+
+average episode rewards is 21.696244981553818
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 459/666 episodes, total num timesteps 4140000/6000000, FPS 122.
+
+average episode rewards is 25.400497436523438
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 460/666 episodes, total num timesteps 4149000/6000000, FPS 122.
+
+average episode rewards is 29.55313449435764
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 461/666 episodes, total num timesteps 4158000/6000000, FPS 122.
+
+average episode rewards is 28.122877332899307
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 462/666 episodes, total num timesteps 4167000/6000000, FPS 122.
+
+average episode rewards is 29.098622639973957
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 463/666 episodes, total num timesteps 4176000/6000000, FPS 122.
+
+average episode rewards is 31.670301649305557
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 464/666 episodes, total num timesteps 4185000/6000000, FPS 122.
+
+average episode rewards is 28.828358968098957
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 465/666 episodes, total num timesteps 4194000/6000000, FPS 122.
+
+average episode rewards is 28.85888671875
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 466/666 episodes, total num timesteps 4203000/6000000, FPS 122.
+
+average episode rewards is 29.14763726128472
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 467/666 episodes, total num timesteps 4212000/6000000, FPS 122.
+
+average episode rewards is 28.658504909939236
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 468/666 episodes, total num timesteps 4221000/6000000, FPS 122.
+
+average episode rewards is 28.873521592881943
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 469/666 episodes, total num timesteps 4230000/6000000, FPS 122.
+
+average episode rewards is 28.28301323784722
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 470/666 episodes, total num timesteps 4239000/6000000, FPS 122.
+
+average episode rewards is 25.61688741048177
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 471/666 episodes, total num timesteps 4248000/6000000, FPS 122.
+
+average episode rewards is 23.751749674479168
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 472/666 episodes, total num timesteps 4257000/6000000, FPS 122.
+
+average episode rewards is 27.91413031684028
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 473/666 episodes, total num timesteps 4266000/6000000, FPS 122.
+
+average episode rewards is 30.688761393229168
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 474/666 episodes, total num timesteps 4275000/6000000, FPS 122.
+
+average episode rewards is 26.86307610405816
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 475/666 episodes, total num timesteps 4284000/6000000, FPS 122.
+
+average episode rewards is 28.495880126953125
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 476/666 episodes, total num timesteps 4293000/6000000, FPS 122.
+
+average episode rewards is 23.833314683702255
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 477/666 episodes, total num timesteps 4302000/6000000, FPS 122.
+
+average episode rewards is 35.469628228081596
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 478/666 episodes, total num timesteps 4311000/6000000, FPS 122.
+
+average episode rewards is 23.70050726996528
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 479/666 episodes, total num timesteps 4320000/6000000, FPS 122.
+
+average episode rewards is 29.23431396484375
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 480/666 episodes, total num timesteps 4329000/6000000, FPS 122.
+
+average episode rewards is 30.261769612630207
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 481/666 episodes, total num timesteps 4338000/6000000, FPS 122.
+
+average episode rewards is 31.075819227430557
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 482/666 episodes, total num timesteps 4347000/6000000, FPS 122.
+
+average episode rewards is 30.75345187717014
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 483/666 episodes, total num timesteps 4356000/6000000, FPS 122.
+
+average episode rewards is 30.053476969401043
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 484/666 episodes, total num timesteps 4365000/6000000, FPS 122.
+
+average episode rewards is 31.292510986328125
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 485/666 episodes, total num timesteps 4374000/6000000, FPS 122.
+
+average episode rewards is 28.98900689019097
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 486/666 episodes, total num timesteps 4383000/6000000, FPS 122.
+
+average episode rewards is 31.45813666449653
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 487/666 episodes, total num timesteps 4392000/6000000, FPS 122.
+
+average episode rewards is 29.958116319444443
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 488/666 episodes, total num timesteps 4401000/6000000, FPS 122.
+
+average episode rewards is 32.440585666232636
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 489/666 episodes, total num timesteps 4410000/6000000, FPS 122.
+
+average episode rewards is 26.90981886121962
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 490/666 episodes, total num timesteps 4419000/6000000, FPS 122.
+
+average episode rewards is 31.693267822265625
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 491/666 episodes, total num timesteps 4428000/6000000, FPS 122.
+
+average episode rewards is 29.741573757595486
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 492/666 episodes, total num timesteps 4437000/6000000, FPS 122.
+
+average episode rewards is 29.708960639105904
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 493/666 episodes, total num timesteps 4446000/6000000, FPS 122.
+
+average episode rewards is 29.24103461371528
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 494/666 episodes, total num timesteps 4455000/6000000, FPS 122.
+
+average episode rewards is 30.188212076822918
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 495/666 episodes, total num timesteps 4464000/6000000, FPS 122.
+
+average episode rewards is 30.644551595052082
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 496/666 episodes, total num timesteps 4473000/6000000, FPS 122.
+
+average episode rewards is 27.005818684895832
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 497/666 episodes, total num timesteps 4482000/6000000, FPS 122.
+
+average episode rewards is 29.401370578342014
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 498/666 episodes, total num timesteps 4491000/6000000, FPS 122.
+
+average episode rewards is 32.17620849609375
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 499/666 episodes, total num timesteps 4500000/6000000, FPS 122.
+
+average episode rewards is 31.039082845052082
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 500/666 episodes, total num timesteps 4509000/6000000, FPS 122.
+
+average episode rewards is 30.142964680989582
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 501/666 episodes, total num timesteps 4518000/6000000, FPS 122.
+
+average episode rewards is 30.819318983289932
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 502/666 episodes, total num timesteps 4527000/6000000, FPS 122.
+
+average episode rewards is 28.715528700086807
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 503/666 episodes, total num timesteps 4536000/6000000, FPS 122.
+
+average episode rewards is 31.221561008029514
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 504/666 episodes, total num timesteps 4545000/6000000, FPS 122.
+
+average episode rewards is 26.419843885633682
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 505/666 episodes, total num timesteps 4554000/6000000, FPS 122.
+
+average episode rewards is 29.55242241753472
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 506/666 episodes, total num timesteps 4563000/6000000, FPS 122.
+
+average episode rewards is 30.477518717447918
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 507/666 episodes, total num timesteps 4572000/6000000, FPS 122.
+
+average episode rewards is 26.532229953342014
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 508/666 episodes, total num timesteps 4581000/6000000, FPS 122.
+
+average episode rewards is 31.080518934461807
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 509/666 episodes, total num timesteps 4590000/6000000, FPS 122.
+
+average episode rewards is 29.913062201605904
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 510/666 episodes, total num timesteps 4599000/6000000, FPS 122.
+
+average episode rewards is 30.906619601779514
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 511/666 episodes, total num timesteps 4608000/6000000, FPS 122.
+
+average episode rewards is 29.196848551432293
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 512/666 episodes, total num timesteps 4617000/6000000, FPS 122.
+
+average episode rewards is 29.21094428168403
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 513/666 episodes, total num timesteps 4626000/6000000, FPS 122.
+
+average episode rewards is 30.708404541015625
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 514/666 episodes, total num timesteps 4635000/6000000, FPS 122.
+
+average episode rewards is 28.685228135850693
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 515/666 episodes, total num timesteps 4644000/6000000, FPS 122.
+
+average episode rewards is 30.161356608072918
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 516/666 episodes, total num timesteps 4653000/6000000, FPS 122.
+
+average episode rewards is 29.62405056423611
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 517/666 episodes, total num timesteps 4662000/6000000, FPS 122.
+
+average episode rewards is 31.525746663411457
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 518/666 episodes, total num timesteps 4671000/6000000, FPS 122.
+
+average episode rewards is 29.680389404296875
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 519/666 episodes, total num timesteps 4680000/6000000, FPS 122.
+
+average episode rewards is 34.843594021267364
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 520/666 episodes, total num timesteps 4689000/6000000, FPS 122.
+
+average episode rewards is 27.48157416449653
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 521/666 episodes, total num timesteps 4698000/6000000, FPS 122.
+
+average episode rewards is 31.374681260850693
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 522/666 episodes, total num timesteps 4707000/6000000, FPS 122.
+
+average episode rewards is 30.950968424479168
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 523/666 episodes, total num timesteps 4716000/6000000, FPS 122.
+
+average episode rewards is 29.408342149522568
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 524/666 episodes, total num timesteps 4725000/6000000, FPS 122.
+
+average episode rewards is 29.004275851779514
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 525/666 episodes, total num timesteps 4734000/6000000, FPS 122.
+
+average episode rewards is 31.848036024305557
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 526/666 episodes, total num timesteps 4743000/6000000, FPS 122.
+
+average episode rewards is 30.44580756293403
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 527/666 episodes, total num timesteps 4752000/6000000, FPS 122.
+
+average episode rewards is 28.51654052734375
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 528/666 episodes, total num timesteps 4761000/6000000, FPS 122.
+
+average episode rewards is 31.88827853732639
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 529/666 episodes, total num timesteps 4770000/6000000, FPS 122.
+
+average episode rewards is 29.38894314236111
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 530/666 episodes, total num timesteps 4779000/6000000, FPS 122.
+
+average episode rewards is 28.017049153645832
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 531/666 episodes, total num timesteps 4788000/6000000, FPS 122.
+
+average episode rewards is 33.75769382052951
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 532/666 episodes, total num timesteps 4797000/6000000, FPS 122.
+
+average episode rewards is 28.078508165147568
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 533/666 episodes, total num timesteps 4806000/6000000, FPS 122.
+
+average episode rewards is 28.266186184353298
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 534/666 episodes, total num timesteps 4815000/6000000, FPS 122.
+
+average episode rewards is 29.376386854383682
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 535/666 episodes, total num timesteps 4824000/6000000, FPS 122.
+
+average episode rewards is 30.780398898654514
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 536/666 episodes, total num timesteps 4833000/6000000, FPS 122.
+
+average episode rewards is 32.49354044596354
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 537/666 episodes, total num timesteps 4842000/6000000, FPS 122.
+
+average episode rewards is 29.18448215060764
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 538/666 episodes, total num timesteps 4851000/6000000, FPS 122.
+
+average episode rewards is 31.088436550564236
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 539/666 episodes, total num timesteps 4860000/6000000, FPS 122.
+
+average episode rewards is 28.667948404947918
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 540/666 episodes, total num timesteps 4869000/6000000, FPS 122.
+
+average episode rewards is 30.94366455078125
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 541/666 episodes, total num timesteps 4878000/6000000, FPS 122.
+
+average episode rewards is 30.299604627821182
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 542/666 episodes, total num timesteps 4887000/6000000, FPS 122.
+
+average episode rewards is 29.464090983072918
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 543/666 episodes, total num timesteps 4896000/6000000, FPS 122.
+
+average episode rewards is 32.183922661675346
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 544/666 episodes, total num timesteps 4905000/6000000, FPS 122.
+
+average episode rewards is 32.05237494574653
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 545/666 episodes, total num timesteps 4914000/6000000, FPS 122.
+
+average episode rewards is 25.801347520616318
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 546/666 episodes, total num timesteps 4923000/6000000, FPS 122.
+
+average episode rewards is 27.880652533637154
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 547/666 episodes, total num timesteps 4932000/6000000, FPS 122.
+
+average episode rewards is 26.17971462673611
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 548/666 episodes, total num timesteps 4941000/6000000, FPS 122.
+
+average episode rewards is 20.188179863823784
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 549/666 episodes, total num timesteps 4950000/6000000, FPS 122.
+
+average episode rewards is 21.122606065538193
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 550/666 episodes, total num timesteps 4959000/6000000, FPS 122.
+
+average episode rewards is 30.6856689453125
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 551/666 episodes, total num timesteps 4968000/6000000, FPS 122.
+
+average episode rewards is 30.572418212890625
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 552/666 episodes, total num timesteps 4977000/6000000, FPS 122.
+
+average episode rewards is 31.127444797092014
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 553/666 episodes, total num timesteps 4986000/6000000, FPS 122.
+
+average episode rewards is 26.554907904730904
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 554/666 episodes, total num timesteps 4995000/6000000, FPS 122.
+
+average episode rewards is 31.777818467881943
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 555/666 episodes, total num timesteps 5004000/6000000, FPS 122.
+
+average episode rewards is 28.259538438585068
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 556/666 episodes, total num timesteps 5013000/6000000, FPS 122.
+
+average episode rewards is 30.27359347873264
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 557/666 episodes, total num timesteps 5022000/6000000, FPS 122.
+
+average episode rewards is 32.286041259765625
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 558/666 episodes, total num timesteps 5031000/6000000, FPS 122.
+
+average episode rewards is 31.720740424262154
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 559/666 episodes, total num timesteps 5040000/6000000, FPS 122.
+
+average episode rewards is 31.185546875
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 560/666 episodes, total num timesteps 5049000/6000000, FPS 122.
+
+average episode rewards is 33.98479885525174
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 561/666 episodes, total num timesteps 5058000/6000000, FPS 122.
+
+average episode rewards is 27.34056939019097
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 562/666 episodes, total num timesteps 5067000/6000000, FPS 122.
+
+average episode rewards is 13.592046949598524
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 563/666 episodes, total num timesteps 5076000/6000000, FPS 122.
+
+average episode rewards is 32.74919297960069
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 564/666 episodes, total num timesteps 5085000/6000000, FPS 122.
+
+average episode rewards is 20.712805853949654
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 565/666 episodes, total num timesteps 5094000/6000000, FPS 122.
+
+average episode rewards is 28.868486192491318
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 566/666 episodes, total num timesteps 5103000/6000000, FPS 122.
+
+average episode rewards is 27.398366292317707
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 567/666 episodes, total num timesteps 5112000/6000000, FPS 122.
+
+average episode rewards is 22.1846923828125
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 568/666 episodes, total num timesteps 5121000/6000000, FPS 122.
+
+average episode rewards is 22.73757595486111
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 569/666 episodes, total num timesteps 5130000/6000000, FPS 122.
+
+average episode rewards is 20.838394165039062
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 570/666 episodes, total num timesteps 5139000/6000000, FPS 122.
+
+average episode rewards is 22.27929009331597
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 571/666 episodes, total num timesteps 5148000/6000000, FPS 122.
+
+average episode rewards is 17.952465481228298
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 572/666 episodes, total num timesteps 5157000/6000000, FPS 122.
+
+average episode rewards is 17.049996270073784
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 573/666 episodes, total num timesteps 5166000/6000000, FPS 122.
+
+average episode rewards is 27.950659857855904
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 574/666 episodes, total num timesteps 5175000/6000000, FPS 122.
+
+average episode rewards is 25.81496853298611
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 575/666 episodes, total num timesteps 5184000/6000000, FPS 122.
+
+average episode rewards is 27.406053331163193
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 576/666 episodes, total num timesteps 5193000/6000000, FPS 122.
+
+average episode rewards is 32.718546549479164
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 577/666 episodes, total num timesteps 5202000/6000000, FPS 122.
+
+average episode rewards is 27.62847222222222
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 578/666 episodes, total num timesteps 5211000/6000000, FPS 122.
+
+average episode rewards is 32.533287896050346
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 579/666 episodes, total num timesteps 5220000/6000000, FPS 122.
+
+average episode rewards is 29.472524007161457
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 580/666 episodes, total num timesteps 5229000/6000000, FPS 122.
+
+average episode rewards is 30.634952121310764
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 581/666 episodes, total num timesteps 5238000/6000000, FPS 122.
+
+average episode rewards is 29.888916015625
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 582/666 episodes, total num timesteps 5247000/6000000, FPS 122.
+
+average episode rewards is 30.99755181206597
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 583/666 episodes, total num timesteps 5256000/6000000, FPS 122.
+
+average episode rewards is 31.200469970703125
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 584/666 episodes, total num timesteps 5265000/6000000, FPS 122.
+
+average episode rewards is 32.174530029296875
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 585/666 episodes, total num timesteps 5274000/6000000, FPS 122.
+
+average episode rewards is 31.910474989149307
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 586/666 episodes, total num timesteps 5283000/6000000, FPS 122.
+
+average episode rewards is 31.943400065104168
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 587/666 episodes, total num timesteps 5292000/6000000, FPS 122.
+
+average episode rewards is 28.53124321831597
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 588/666 episodes, total num timesteps 5301000/6000000, FPS 122.
+
+average episode rewards is 33.4112548828125
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 589/666 episodes, total num timesteps 5310000/6000000, FPS 122.
+
+average episode rewards is 32.255472819010414
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 590/666 episodes, total num timesteps 5319000/6000000, FPS 122.
+
+average episode rewards is 30.02393256293403
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 591/666 episodes, total num timesteps 5328000/6000000, FPS 122.
+
+average episode rewards is 29.726026746961807
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 592/666 episodes, total num timesteps 5337000/6000000, FPS 122.
+
+average episode rewards is 31.350877549913193
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 593/666 episodes, total num timesteps 5346000/6000000, FPS 122.
+
+average episode rewards is 30.021982828776043
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 594/666 episodes, total num timesteps 5355000/6000000, FPS 122.
+
+average episode rewards is 33.216640896267364
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 595/666 episodes, total num timesteps 5364000/6000000, FPS 122.
+
+average episode rewards is 31.19885932074653
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 596/666 episodes, total num timesteps 5373000/6000000, FPS 122.
+
+average episode rewards is 31.822275797526043
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 597/666 episodes, total num timesteps 5382000/6000000, FPS 122.
+
+average episode rewards is 32.91100396050347
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 598/666 episodes, total num timesteps 5391000/6000000, FPS 122.
+
+average episode rewards is 32.906494140625
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 599/666 episodes, total num timesteps 5400000/6000000, FPS 122.
+
+average episode rewards is 31.821980794270832
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 600/666 episodes, total num timesteps 5409000/6000000, FPS 122.
+
+average episode rewards is 33.76764933268229
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 601/666 episodes, total num timesteps 5418000/6000000, FPS 122.
+
+average episode rewards is 33.328392876519096
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 602/666 episodes, total num timesteps 5427000/6000000, FPS 122.
+
+average episode rewards is 30.333716498480904
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 603/666 episodes, total num timesteps 5436000/6000000, FPS 122.
+
+average episode rewards is 32.98353746202257
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 604/666 episodes, total num timesteps 5445000/6000000, FPS 122.
+
+average episode rewards is 31.50696478949653
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 605/666 episodes, total num timesteps 5454000/6000000, FPS 122.
+
+average episode rewards is 31.091796875
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 606/666 episodes, total num timesteps 5463000/6000000, FPS 122.
+
+average episode rewards is 32.05473497178819
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 607/666 episodes, total num timesteps 5472000/6000000, FPS 122.
+
+average episode rewards is 31.529551188151043
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 608/666 episodes, total num timesteps 5481000/6000000, FPS 122.
+
+average episode rewards is 28.27627224392361
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 609/666 episodes, total num timesteps 5490000/6000000, FPS 122.
+
+average episode rewards is 28.45566134982639
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 610/666 episodes, total num timesteps 5499000/6000000, FPS 122.
+
+average episode rewards is 31.82196723090278
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 611/666 episodes, total num timesteps 5508000/6000000, FPS 122.
+
+average episode rewards is 32.09132554796007
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 612/666 episodes, total num timesteps 5517000/6000000, FPS 122.
+
+average episode rewards is 32.511630588107636
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 613/666 episodes, total num timesteps 5526000/6000000, FPS 122.
+
+average episode rewards is 31.845682779947918
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 614/666 episodes, total num timesteps 5535000/6000000, FPS 122.
+
+average episode rewards is 28.26685078938802
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 615/666 episodes, total num timesteps 5544000/6000000, FPS 122.
+
+average episode rewards is 30.63811577690972
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 616/666 episodes, total num timesteps 5553000/6000000, FPS 122.
+
+average episode rewards is 31.333272298177082
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 617/666 episodes, total num timesteps 5562000/6000000, FPS 122.
+
+average episode rewards is 32.354037814670136
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 618/666 episodes, total num timesteps 5571000/6000000, FPS 122.
+
+average episode rewards is 30.392686631944443
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 619/666 episodes, total num timesteps 5580000/6000000, FPS 122.
+
+average episode rewards is 31.97832573784722
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 620/666 episodes, total num timesteps 5589000/6000000, FPS 122.
+
+average episode rewards is 33.60687594943576
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 621/666 episodes, total num timesteps 5598000/6000000, FPS 122.
+
+average episode rewards is 26.448506673177082
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 622/666 episodes, total num timesteps 5607000/6000000, FPS 122.
+
+average episode rewards is 28.69858127170139
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 623/666 episodes, total num timesteps 5616000/6000000, FPS 122.
+
+average episode rewards is 31.51700168185764
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 624/666 episodes, total num timesteps 5625000/6000000, FPS 122.
+
+average episode rewards is 25.641815185546875
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 625/666 episodes, total num timesteps 5634000/6000000, FPS 122.
+
+average episode rewards is 19.823750813802082
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 626/666 episodes, total num timesteps 5643000/6000000, FPS 122.
+
+average episode rewards is 22.35968695746528
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 627/666 episodes, total num timesteps 5652000/6000000, FPS 122.
+
+average episode rewards is 23.034223768446182
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 628/666 episodes, total num timesteps 5661000/6000000, FPS 122.
+
+average episode rewards is 21.983278062608505
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 629/666 episodes, total num timesteps 5670000/6000000, FPS 122.
+
+average episode rewards is 25.044787936740452
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 630/666 episodes, total num timesteps 5679000/6000000, FPS 122.
+
+average episode rewards is 19.495893690321182
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 631/666 episodes, total num timesteps 5688000/6000000, FPS 122.
+
+average episode rewards is 25.578755696614582
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 632/666 episodes, total num timesteps 5697000/6000000, FPS 122.
+
+average episode rewards is 22.509287516276043
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 633/666 episodes, total num timesteps 5706000/6000000, FPS 122.
+
+average episode rewards is 26.903849283854168
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 634/666 episodes, total num timesteps 5715000/6000000, FPS 122.
+
+average episode rewards is 31.356302897135418
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 635/666 episodes, total num timesteps 5724000/6000000, FPS 122.
+
+average episode rewards is 27.94011773003472
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 636/666 episodes, total num timesteps 5733000/6000000, FPS 122.
+
+average episode rewards is 27.003495958116318
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 637/666 episodes, total num timesteps 5742000/6000000, FPS 122.
+
+average episode rewards is 26.438588460286457
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 638/666 episodes, total num timesteps 5751000/6000000, FPS 122.
+
+average episode rewards is 31.58645968967014
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 639/666 episodes, total num timesteps 5760000/6000000, FPS 122.
+
+average episode rewards is 30.43487548828125
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 640/666 episodes, total num timesteps 5769000/6000000, FPS 122.
+
+average episode rewards is 26.387010362413193
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 641/666 episodes, total num timesteps 5778000/6000000, FPS 122.
+
+average episode rewards is 22.38064405653212
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 642/666 episodes, total num timesteps 5787000/6000000, FPS 122.
+
+average episode rewards is 22.530880398220486
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 643/666 episodes, total num timesteps 5796000/6000000, FPS 122.
+
+average episode rewards is 29.326646592881943
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 644/666 episodes, total num timesteps 5805000/6000000, FPS 122.
+
+average episode rewards is 17.673758612738716
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 645/666 episodes, total num timesteps 5814000/6000000, FPS 122.
+
+average episode rewards is 18.86465115017361
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 646/666 episodes, total num timesteps 5823000/6000000, FPS 122.
+
+average episode rewards is 18.021435207790798
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 647/666 episodes, total num timesteps 5832000/6000000, FPS 122.
+
+average episode rewards is 11.28279028998481
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 648/666 episodes, total num timesteps 5841000/6000000, FPS 122.
+
+average episode rewards is 21.958055284288193
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 649/666 episodes, total num timesteps 5850000/6000000, FPS 122.
+
+average episode rewards is 9.975692749023438
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 650/666 episodes, total num timesteps 5859000/6000000, FPS 122.
+
+average episode rewards is 28.13409932454427
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 651/666 episodes, total num timesteps 5868000/6000000, FPS 122.
+
+average episode rewards is 28.227984958224827
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 652/666 episodes, total num timesteps 5877000/6000000, FPS 122.
+
+average episode rewards is 27.410164727105034
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 653/666 episodes, total num timesteps 5886000/6000000, FPS 122.
+
+average episode rewards is 24.669267442491318
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 654/666 episodes, total num timesteps 5895000/6000000, FPS 122.
+
+average episode rewards is 25.398142496744793
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 655/666 episodes, total num timesteps 5904000/6000000, FPS 122.
+
+average episode rewards is 29.0838623046875
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 656/666 episodes, total num timesteps 5913000/6000000, FPS 122.
+
+average episode rewards is 31.25954861111111
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 657/666 episodes, total num timesteps 5922000/6000000, FPS 122.
+
+average episode rewards is 22.321407741970486
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 658/666 episodes, total num timesteps 5931000/6000000, FPS 122.
+
+average episode rewards is 25.93765597873264
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 659/666 episodes, total num timesteps 5940000/6000000, FPS 122.
+
+average episode rewards is 29.68017578125
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 660/666 episodes, total num timesteps 5949000/6000000, FPS 122.
+
+average episode rewards is 29.446004231770832
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 661/666 episodes, total num timesteps 5958000/6000000, FPS 122.
+
+average episode rewards is 22.659040662977432
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 662/666 episodes, total num timesteps 5967000/6000000, FPS 122.
+
+average episode rewards is 27.784100002712673
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 663/666 episodes, total num timesteps 5976000/6000000, FPS 122.
+
+average episode rewards is 29.937795003255207
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 664/666 episodes, total num timesteps 5985000/6000000, FPS 122.
+
+average episode rewards is 26.04455057779948
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp f6m_official_1v1_vsbaseline_s1 updates 665/666 episodes, total num timesteps 5994000/6000000, FPS 122.
+
+average episode rewards is 27.784508599175346
+================================================================
+EXPERIMENT f6m_official_1v1_vsbaseline_s1 exited with code 0 at 2026-10-07T16:45:49+08:00
+================================================================

@@ -1,0 +1,423 @@
+================================================================
+EXPERIMENT : official_2v2_noweapon_s1b
+git commit : c144989547212074d8017ef25857bfbc7413c9d7  branch=exp/repro-scaling-20261004
+env/scen   : MultipleCombat / 2v2/NoWeapon/HierarchySelfplay
+algo       : mappo   seed=1
+gpu        : 1
+threads    : 12   num_env_steps=1e8
+extra      : --use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 2 --eval-episodes 1
+log        : /root/autodl-tmp/SEU-SRTP/experiments/2026-10-04-night/scripts/../logs/official_2v2_noweapon_s1b_seed1_gpu1_20261004_072632.log
+start      : 2026-10-04T07:26:32+08:00
+================================================================
+choose to use gpu...
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+ Load selfplay opponents: Algo fsp, num_opponents 1.
+
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon_s1b updates 0/2777 episodes, total num timesteps 36000/100000000, FPS 232.
+
+average episode rewards is -3.510819753011068
+
+Start evaluation...
+ Choose opponents [np.str_('0')] for evaluation
+ Load opponent 0 for evaluation (1/1)
+ eval average episode rewards: -4.716448
+ Choose opponents [np.str_('0')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon_s1b updates 1/2777 episodes, total num timesteps 72000/100000000, FPS 222.
+
+average episode rewards is -3.5327669779459634
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon_s1b updates 2/2777 episodes, total num timesteps 108000/100000000, FPS 225.
+
+average episode rewards is -3.5352198282877603
+
+Start evaluation...
+ Choose opponents [np.str_('latest')] for evaluation
+ Load opponent latest for evaluation (1/1)
+ eval average episode rewards: -123.53351
+ Choose opponents [np.str_('latest')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon_s1b updates 3/2777 episodes, total num timesteps 144000/100000000, FPS 221.
+
+average episode rewards is -3.532463709513346
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon_s1b updates 4/2777 episodes, total num timesteps 180000/100000000, FPS 222.
+
+average episode rewards is -3.492893854777018
+
+Start evaluation...
+ Choose opponents [np.str_('0')] for evaluation
+ Load opponent 0 for evaluation (1/1)
+ eval average episode rewards: -138.37541
+ Choose opponents [np.str_('2')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon_s1b updates 5/2777 episodes, total num timesteps 216000/100000000, FPS 219.
+
+average episode rewards is -3.5217746098836265
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon_s1b updates 6/2777 episodes, total num timesteps 252000/100000000, FPS 220.
+
+average episode rewards is -3.4883413314819336
+
+Start evaluation...
+ Choose opponents [np.str_('4')] for evaluation
+ Load opponent 4 for evaluation (1/1)
+ eval average episode rewards: -49.255272
+ Choose opponents [np.str_('6')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon_s1b updates 7/2777 episodes, total num timesteps 288000/100000000, FPS 219.
+
+average episode rewards is -2.8043492635091147
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon_s1b updates 8/2777 episodes, total num timesteps 324000/100000000, FPS 220.
+
+average episode rewards is -3.091623306274414
+
+Start evaluation...
+ Choose opponents [np.str_('latest')] for evaluation
+ Load opponent latest for evaluation (1/1)
+ eval average episode rewards: -2.6419742
+ Choose opponents [np.str_('latest')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon_s1b updates 9/2777 episodes, total num timesteps 360000/100000000, FPS 219.
+
+average episode rewards is -3.108440399169922
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon_s1b updates 10/2777 episodes, total num timesteps 396000/100000000, FPS 220.
+
+average episode rewards is -2.884979565938314
+
+Start evaluation...
+ Choose opponents [np.str_('0')] for evaluation
+ Load opponent 0 for evaluation (1/1)
+ eval average episode rewards: -4.629929
+ Choose opponents [np.str_('6')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon_s1b updates 11/2777 episodes, total num timesteps 432000/100000000, FPS 219.
+
+average episode rewards is -2.8256301879882812
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon_s1b updates 12/2777 episodes, total num timesteps 468000/100000000, FPS 220.
+
+average episode rewards is -3.0810960133870444
+
+Start evaluation...
+ Choose opponents [np.str_('12')] for evaluation
+ Load opponent 12 for evaluation (1/1)
+ eval average episode rewards: -4.6460385
+ Choose opponents [np.str_('11')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon_s1b updates 13/2777 episodes, total num timesteps 504000/100000000, FPS 219.
+
+average episode rewards is -2.9475479125976562
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon_s1b updates 14/2777 episodes, total num timesteps 540000/100000000, FPS 219.
+
+average episode rewards is -0.9950563907623291
+
+Start evaluation...
+ Choose opponents [np.str_('5')] for evaluation
+ Load opponent 5 for evaluation (1/1)
+ eval average episode rewards: -4.2257032
+ Choose opponents [np.str_('8')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon_s1b updates 15/2777 episodes, total num timesteps 576000/100000000, FPS 218.
+
+average episode rewards is 0.3342752456665039
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon_s1b updates 16/2777 episodes, total num timesteps 612000/100000000, FPS 219.
+
+average episode rewards is -0.6090317567189535
+
+Start evaluation...
+ Choose opponents [np.str_('4')] for evaluation
+ Load opponent 4 for evaluation (1/1)
+ eval average episode rewards: -2.1551573
+ Choose opponents [np.str_('10')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon_s1b updates 17/2777 episodes, total num timesteps 648000/100000000, FPS 218.
+
+average episode rewards is -0.43173782030741376
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon_s1b updates 18/2777 episodes, total num timesteps 684000/100000000, FPS 219.
+
+average episode rewards is 0.7841437657674154
+
+Start evaluation...
+ Choose opponents [np.str_('9')] for evaluation
+ Load opponent 9 for evaluation (1/1)
+ eval average episode rewards: -294.10703
+ Choose opponents [np.str_('13')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon_s1b updates 19/2777 episodes, total num timesteps 720000/100000000, FPS 218.
+
+average episode rewards is 0.05500300725301107
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon_s1b updates 20/2777 episodes, total num timesteps 756000/100000000, FPS 218.
+
+average episode rewards is 0.5323477586110433
+
+Start evaluation...
+ Choose opponents [np.str_('17')] for evaluation
+ Load opponent 17 for evaluation (1/1)
+ eval average episode rewards: -64.00731
+ Choose opponents [np.str_('3')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon_s1b updates 21/2777 episodes, total num timesteps 792000/100000000, FPS 218.
+
+average episode rewards is -1.302674134572347
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon_s1b updates 22/2777 episodes, total num timesteps 828000/100000000, FPS 219.
+
+average episode rewards is -0.71553635597229
+
+Start evaluation...
+ Choose opponents [np.str_('22')] for evaluation
+ Load opponent 22 for evaluation (1/1)
+ eval average episode rewards: -49.613605
+ Choose opponents [np.str_('22')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon_s1b updates 23/2777 episodes, total num timesteps 864000/100000000, FPS 218.
+
+average episode rewards is 4.724027951558431
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon_s1b updates 24/2777 episodes, total num timesteps 900000/100000000, FPS 219.
+
+average episode rewards is 6.327248255411784
+
+Start evaluation...
+ Choose opponents [np.str_('8')] for evaluation
+ Load opponent 8 for evaluation (1/1)
+ eval average episode rewards: -55.72501
+ Choose opponents [np.str_('16')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon_s1b updates 25/2777 episodes, total num timesteps 936000/100000000, FPS 219.
+
+average episode rewards is 4.009702682495117
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon_s1b updates 26/2777 episodes, total num timesteps 972000/100000000, FPS 220.
+
+average episode rewards is 4.681356430053711
+
+Start evaluation...
+ Choose opponents [np.str_('22')] for evaluation
+ Load opponent 22 for evaluation (1/1)
+ eval average episode rewards: -7.380636
+ Choose opponents [np.str_('latest')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon_s1b updates 27/2777 episodes, total num timesteps 1008000/100000000, FPS 220.
+
+average episode rewards is 9.641860961914062
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon_s1b updates 28/2777 episodes, total num timesteps 1044000/100000000, FPS 220.
+
+average episode rewards is 7.660498301188151
+
+Start evaluation...
+ Choose opponents [np.str_('21')] for evaluation
+ Load opponent 21 for evaluation (1/1)
+ eval average episode rewards: -178.21774
+ Choose opponents [np.str_('12')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon_s1b updates 29/2777 episodes, total num timesteps 1080000/100000000, FPS 220.
+
+average episode rewards is 0.5015053749084473
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon_s1b updates 30/2777 episodes, total num timesteps 1116000/100000000, FPS 220.
+
+average episode rewards is 0.9658244450887045
+
+Start evaluation...
+ Choose opponents [np.str_('8')] for evaluation
+ Load opponent 8 for evaluation (1/1)
+ eval average episode rewards: -162.50797
+ Choose opponents [np.str_('8')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon_s1b updates 31/2777 episodes, total num timesteps 1152000/100000000, FPS 219.
+
+average episode rewards is 8.633499145507812
+SubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterrupt
+SubprocVecEnv worker: got KeyboardInterrupt
+
+
+
+
+
+
+
+
+
+
+Traceback (most recent call last):
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/distributions/utils.py", line 170, in __get__
+    value = self.wrapped(instance)
+            ^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/distributions/categorical.py", line 111, in probs
+    return logits_to_probs(self.logits)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/distributions/utils.py", line 98, in logits_to_probs
+    return F.softmax(logits, dim=-1)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/nn/functional.py", line 2137, in softmax
+    ret = input.softmax(dim)
+          ^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/root/autodl-tmp/SEU-SRTP/scripts/train/train_jsbsim.py", line 163, in main
+    runner.run()
+  File "/root/autodl-tmp/SEU-SRTP/runner/share_jsbsim_runner.py", line 78, in run
+    values, actions, action_log_probs, rnn_states_actor, rnn_states_critic = self.collect(step)
+                                                                             ^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/runner/share_jsbsim_runner.py", line 154, in collect
+    = policy.act(np.concatenate(self.opponent_obs[env_idx]),
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/algorithms/mappo/ppo_policy.py", line 57, in act
+    actions, _, rnn_states_actor = self.actor(obs, rnn_states_actor, masks, deterministic)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/algorithms/mappo/ppo_actor.py", line 45, in forward
+    actions, action_log_probs = self.act(actor_features, deterministic)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/algorithms/utils/act.py", line 77, in forward
+    action = action_dist.mode() if deterministic else action_dist.sample()
+                                                      ^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/algorithms/utils/distributions.py", line 16, in sample
+    return super().sample().unsqueeze(-1)
+           ^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/distributions/categorical.py", line 142, in sample
+    probs_2d = self.probs.reshape(-1, self._num_events)
+               ^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/distributions/utils.py", line 169, in __get__
+    with torch.enable_grad():
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/autograd/grad_mode.py", line 139, in __exit__
+    def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
+    
+KeyboardInterrupt
+================================================================
+EXPERIMENT official_2v2_noweapon_s1b exited with code 0 at 2026-10-04T08:56:33+08:00
+================================================================

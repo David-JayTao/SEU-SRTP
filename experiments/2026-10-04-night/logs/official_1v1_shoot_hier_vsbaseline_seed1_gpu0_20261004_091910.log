@@ -1,0 +1,321 @@
+================================================================
+EXPERIMENT : official_1v1_shoot_hier_vsbaseline
+git commit : c144989547212074d8017ef25857bfbc7413c9d7  branch=exp/repro-scaling-20261004
+env/scen   : SingleCombat / 1v1/ShootMissile/HierarchyVsBaseline
+algo       : ppo   seed=1
+gpu        : 0
+threads    : 10   num_env_steps=1e8
+extra      : --use-eval --n-eval-rollout-threads 1 --eval-interval 1 --eval-episodes 1 --use-prior
+log        : /root/autodl-tmp/SEU-SRTP/experiments/2026-10-04-night/scripts/../logs/official_1v1_shoot_hier_vsbaseline_seed1_gpu0_20261004_091910.log
+start      : 2026-10-04T09:19:10+08:00
+================================================================
+choose to use gpu...
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+Process Process-6:
+Process Process-1:
+Process Process-3:
+Traceback (most recent call last):
+Traceback (most recent call last):
+Process Process-4:
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 212, in worker
+    remote.send([step_env(env, action) for env, action in zip(envs, data)])
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 212, in worker
+    remote.send([step_env(env, action) for env, action in zip(envs, data)])
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 192, in step_env
+    obs, reward, done, info = env.step(action)
+                              ^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 192, in step_env
+    obs, reward, done, info = env.step(action)
+                              ^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/JSBSim/envs/env_base.py", line 131, in step
+    a_action = self.task.normalize_action(self, agent_id, action[agent_id])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/JSBSim/envs/env_base.py", line 131, in step
+    a_action = self.task.normalize_action(self, agent_id, action[agent_id])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/JSBSim/tasks/singlecombat_with_missle_task.py", line 226, in normalize_action
+    self._shoot_action[agent_id] = action[-1]
+                                   ~~~~~~^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/JSBSim/tasks/singlecombat_with_missle_task.py", line 226, in normalize_action
+    self._shoot_action[agent_id] = action[-1]
+                                   ~~~~~~^^^^
+TypeError: 'NoneType' object is not subscriptable
+TypeError: 'NoneType' object is not subscriptable
+Process Process-10:
+Traceback (most recent call last):
+Process Process-5:
+Process Process-2:
+Process Process-8:
+Process Process-7:
+Traceback (most recent call last):
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+Process Process-9:
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 212, in worker
+    remote.send([step_env(env, action) for env, action in zip(envs, data)])
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 192, in step_env
+    obs, reward, done, info = env.step(action)
+                              ^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/JSBSim/envs/env_base.py", line 131, in step
+    a_action = self.task.normalize_action(self, agent_id, action[agent_id])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/JSBSim/tasks/singlecombat_with_missle_task.py", line 226, in normalize_action
+    self._shoot_action[agent_id] = action[-1]
+                                   ~~~~~~^^^^
+TypeError: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 212, in worker
+    remote.send([step_env(env, action) for env, action in zip(envs, data)])
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 192, in step_env
+    obs, reward, done, info = env.step(action)
+                              ^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/JSBSim/envs/env_base.py", line 131, in step
+    a_action = self.task.normalize_action(self, agent_id, action[agent_id])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/JSBSim/tasks/singlecombat_with_missle_task.py", line 226, in normalize_action
+    self._shoot_action[agent_id] = action[-1]
+                                   ~~~~~~^^^^
+TypeError: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+Traceback (most recent call last):
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 212, in worker
+    remote.send([step_env(env, action) for env, action in zip(envs, data)])
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 192, in step_env
+    obs, reward, done, info = env.step(action)
+                              ^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/JSBSim/envs/env_base.py", line 131, in step
+    a_action = self.task.normalize_action(self, agent_id, action[agent_id])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/JSBSim/tasks/singlecombat_with_missle_task.py", line 226, in normalize_action
+    self._shoot_action[agent_id] = action[-1]
+                                   ~~~~~~^^^^
+TypeError: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 212, in worker
+    remote.send([step_env(env, action) for env, action in zip(envs, data)])
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 192, in step_env
+    obs, reward, done, info = env.step(action)
+                              ^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 212, in worker
+    remote.send([step_env(env, action) for env, action in zip(envs, data)])
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 212, in worker
+    remote.send([step_env(env, action) for env, action in zip(envs, data)])
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/JSBSim/envs/env_base.py", line 131, in step
+    a_action = self.task.normalize_action(self, agent_id, action[agent_id])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 192, in step_env
+    obs, reward, done, info = env.step(action)
+                              ^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/JSBSim/tasks/singlecombat_with_missle_task.py", line 226, in normalize_action
+    self._shoot_action[agent_id] = action[-1]
+                                   ~~~~~~^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 192, in step_env
+    obs, reward, done, info = env.step(action)
+                              ^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/JSBSim/envs/env_base.py", line 131, in step
+    a_action = self.task.normalize_action(self, agent_id, action[agent_id])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/JSBSim/envs/env_base.py", line 131, in step
+    a_action = self.task.normalize_action(self, agent_id, action[agent_id])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/JSBSim/tasks/singlecombat_with_missle_task.py", line 226, in normalize_action
+    self._shoot_action[agent_id] = action[-1]
+                                   ~~~~~~^^^^
+TypeError: 'NoneType' object is not subscriptable
+  File "/root/autodl-tmp/SEU-SRTP/envs/JSBSim/tasks/singlecombat_with_missle_task.py", line 226, in normalize_action
+    self._shoot_action[agent_id] = action[-1]
+                                   ~~~~~~^^^^
+TypeError: 'NoneType' object is not subscriptable
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+TypeError: 'NoneType' object is not subscriptable
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 212, in worker
+    remote.send([step_env(env, action) for env, action in zip(envs, data)])
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 192, in step_env
+    obs, reward, done, info = env.step(action)
+                              ^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/root/autodl-tmp/SEU-SRTP/envs/JSBSim/envs/env_base.py", line 131, in step
+    a_action = self.task.normalize_action(self, agent_id, action[agent_id])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 212, in worker
+    remote.send([step_env(env, action) for env, action in zip(envs, data)])
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/JSBSim/tasks/singlecombat_with_missle_task.py", line 226, in normalize_action
+    self._shoot_action[agent_id] = action[-1]
+                                   ~~~~~~^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 192, in step_env
+    obs, reward, done, info = env.step(action)
+                              ^^^^^^^^^^^^^^^^
+TypeError: 'NoneType' object is not subscriptable
+  File "/root/autodl-tmp/SEU-SRTP/envs/JSBSim/envs/env_base.py", line 131, in step
+    a_action = self.task.normalize_action(self, agent_id, action[agent_id])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/JSBSim/tasks/singlecombat_with_missle_task.py", line 226, in normalize_action
+    self._shoot_action[agent_id] = action[-1]
+                                   ~~~~~~^^^^
+TypeError: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/root/autodl-tmp/SEU-SRTP/scripts/train/train_jsbsim.py", line 163, in main
+    runner.run()
+  File "/root/autodl-tmp/SEU-SRTP/runner/jsbsim_runner.py", line 52, in run
+    obs, rewards, dones, infos = self.envs.step(actions)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 120, in step
+    return self.step_wait()
+           ^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 278, in step_wait
+    results = [remote.recv() for remote in self.remotes]
+               ^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+          ^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 430, in _recv_bytes
+    buf = self._recv(4)
+          ^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 399, in _recv
+    raise EOFError
+EOFError
+Traceback (most recent call last):
+  File "/root/autodl-tmp/SEU-SRTP/scripts/train/train_jsbsim.py", line 176, in <module>
+    main(sys.argv[1:])
+  File "/root/autodl-tmp/SEU-SRTP/scripts/train/train_jsbsim.py", line 168, in main
+    envs.close()
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 110, in close
+    self.close_extras()
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 295, in close_extras
+    remote.recv()
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+          ^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 430, in _recv_bytes
+    buf = self._recv(4)
+          ^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 399, in _recv
+    raise EOFError
+EOFError
+================================================================
+EXPERIMENT official_1v1_shoot_hier_vsbaseline exited with code 0 at 2026-10-04T09:19:15+08:00
+================================================================

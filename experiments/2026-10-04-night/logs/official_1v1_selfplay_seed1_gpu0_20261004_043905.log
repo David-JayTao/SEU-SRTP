@@ -1,0 +1,773 @@
+================================================================
+EXPERIMENT : official_1v1_selfplay
+git commit : f9d8dfa558a0dd7b628ed08e0ea06588bebc0b6e  branch=exp/repro-scaling-20261004
+env/scen   : SingleCombat / 1v1/NoWeapon/Selfplay
+algo       : ppo   seed=1
+gpu        : 0
+threads    : 10   num_env_steps=1e8
+extra      : --use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 1 --eval-episodes 1
+log        : /root/autodl-tmp/SEU-SRTP/experiments/2026-10-04-night/scripts/../logs/official_1v1_selfplay_seed1_gpu0_20261004_043905.log
+start      : 2026-10-04T04:39:05+08:00
+================================================================
+choose to use gpu...
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+ Load selfplay opponents: Algo fsp, num_opponents 1.
+
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 0/3333 episodes, total num timesteps 30000/100000000, FPS 321.
+
+average episode rewards is -156.52791940789473
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 1/3333 episodes, total num timesteps 60000/100000000, FPS 323.
+
+average episode rewards is -159.0979266826923
+
+Start evaluation...
+ Choose opponents [np.str_('0')] for evaluation
+ Load opponent 0 for evaluation (1/1)
+ eval ego elo: 1000.0 | opponent average elo: 1000.0
+ ego average episode rewards: -303.98828125
+ opponent average episode rewards: -40.52845001220703
+ elo gain: -16.0 | latest elo score: 984.0
+...End evaluation
+ Choose opponents [np.str_('0')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 2/3333 episodes, total num timesteps 90000/100000000, FPS 319.
+
+average episode rewards is -151.62648273887436
+
+Start evaluation...
+ Choose opponents [np.str_('1')] for evaluation
+ Load opponent 1 for evaluation (1/1)
+ eval ego elo: 984.0 | opponent average elo: 984.0
+ ego average episode rewards: -195.1556854248047
+ opponent average episode rewards: 30.73151969909668
+ elo gain: -16.0 | latest elo score: 968.0
+...End evaluation
+ Choose opponents [np.str_('1')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 3/3333 episodes, total num timesteps 120000/100000000, FPS 320.
+
+average episode rewards is -155.48038779145077
+
+Start evaluation...
+ Choose opponents [np.str_('0')] for evaluation
+ Load opponent 0 for evaluation (1/1)
+ eval ego elo: 968.0 | opponent average elo: 1016.0
+ ego average episode rewards: -204.0850372314453
+ opponent average episode rewards: 30.29551124572754
+ elo gain: -13.803475459722636 | latest elo score: 954.1965245402773
+...End evaluation
+ Choose opponents [np.str_('0')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 4/3333 episodes, total num timesteps 150000/100000000, FPS 321.
+
+average episode rewards is -158.6940240510471
+
+Start evaluation...
+ Choose opponents [np.str_('3')] for evaluation
+ Load opponent 3 for evaluation (1/1)
+ eval ego elo: 954.1965245402773 | opponent average elo: 954.1965245402773
+ ego average episode rewards: 31.1938533782959
+ opponent average episode rewards: -194.84930419921875
+ elo gain: 16.0 | latest elo score: 970.1965245402773
+...End evaluation
+ Choose opponents [np.str_('1')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 5/3333 episodes, total num timesteps 180000/100000000, FPS 319.
+
+average episode rewards is -154.44834607712767
+
+Start evaluation...
+ Choose opponents [np.str_('3')] for evaluation
+ Load opponent 3 for evaluation (1/1)
+ eval ego elo: 970.1965245402773 | opponent average elo: 938.1965245402773
+ ego average episode rewards: 30.207853317260742
+ opponent average episode rewards: -190.41336059570312
+ elo gain: 14.530498471024522 | latest elo score: 984.7270230113019
+...End evaluation
+ Choose opponents [np.str_('0')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 6/3333 episodes, total num timesteps 210000/100000000, FPS 318.
+
+average episode rewards is -142.14918304771504
+
+Start evaluation...
+ Choose opponents [np.str_('0')] for evaluation
+ Load opponent 0 for evaluation (1/1)
+ eval ego elo: 984.7270230113019 | opponent average elo: 1029.8034754597227
+ ego average episode rewards: -79.58628845214844
+ opponent average episode rewards: -307.15167236328125
+ elo gain: 18.064277946455128 | latest elo score: 1002.791300957757
+...End evaluation
+ Choose opponents [np.str_('1')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 7/3333 episodes, total num timesteps 240000/100000000, FPS 318.
+
+average episode rewards is -157.832731032754
+
+Start evaluation...
+ Choose opponents [np.str_('4')] for evaluation
+ Load opponent 4 for evaluation (1/1)
+ eval ego elo: 1002.791300957757 | opponent average elo: 970.1965245402773
+ ego average episode rewards: -90.21406555175781
+ opponent average episode rewards: -312.2557373046875
+ elo gain: 14.50334334742244 | latest elo score: 1017.2946443051794
+...End evaluation
+ Choose opponents [np.str_('5')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 8/3333 episodes, total num timesteps 270000/100000000, FPS 317.
+
+average episode rewards is -146.09208822513813
+
+Start evaluation...
+ Choose opponents [np.str_('4')] for evaluation
+ Load opponent 4 for evaluation (1/1)
+ eval ego elo: 1017.2946443051794 | opponent average elo: 955.6931811928549
+ ego average episode rewards: -79.40929412841797
+ opponent average episode rewards: -309.10418701171875
+ elo gain: 13.192505532114794 | latest elo score: 1030.4871498372943
+...End evaluation
+ Choose opponents [np.str_('6')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 9/3333 episodes, total num timesteps 300000/100000000, FPS 316.
+
+average episode rewards is -150.1154730902778
+
+Start evaluation...
+ Choose opponents [np.str_('2')] for evaluation
+ Load opponent 2 for evaluation (1/1)
+ eval ego elo: 1030.4871498372943 | opponent average elo: 968.0
+ ego average episode rewards: 31.99860191345215
+ opponent average episode rewards: -193.3622283935547
+ elo gain: 13.15299172071073 | latest elo score: 1043.640141558005
+...End evaluation
+ Choose opponents [np.str_('4')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 10/3333 episodes, total num timesteps 330000/100000000, FPS 316.
+
+average episode rewards is -153.78606267265192
+
+Start evaluation...
+ Choose opponents [np.str_('5')] for evaluation
+ Load opponent 5 for evaluation (1/1)
+ eval ego elo: 1043.640141558005 | opponent average elo: 984.7270230113019
+ ego average episode rewards: -56.799346923828125
+ opponent average episode rewards: -293.8723449707031
+ elo gain: 13.31265732327104 | latest elo score: 1056.952798881276
+...End evaluation
+ Choose opponents [np.str_('2')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 11/3333 episodes, total num timesteps 360000/100000000, FPS 316.
+
+average episode rewards is -136.8721283783784
+
+Start evaluation...
+ Choose opponents [np.str_('4')] for evaluation
+ Load opponent 4 for evaluation (1/1)
+ eval ego elo: 1056.952798881276 | opponent average elo: 942.5006756607402
+ ego average episode rewards: -73.70664978027344
+ opponent average episode rewards: -309.71282958984375
+ elo gain: 10.9120120467119 | latest elo score: 1067.864810927988
+...End evaluation
+ Choose opponents [np.str_('10')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 12/3333 episodes, total num timesteps 390000/100000000, FPS 316.
+
+average episode rewards is -162.71794642857142
+
+Start evaluation...
+ Choose opponents [np.str_('2')] for evaluation
+ Load opponent 2 for evaluation (1/1)
+ eval ego elo: 1067.864810927988 | opponent average elo: 954.8470082792893
+ ego average episode rewards: 31.636411666870117
+ opponent average episode rewards: -190.96444702148438
+ elo gain: 10.971463157469731 | latest elo score: 1078.8362740854577
+...End evaluation
+ Choose opponents [np.str_('4')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 13/3333 episodes, total num timesteps 420000/100000000, FPS 316.
+
+average episode rewards is -154.3978218410326
+
+Start evaluation...
+ Choose opponents [np.str_('7')] for evaluation
+ Load opponent 7 for evaluation (1/1)
+ eval ego elo: 1078.8362740854577 | opponent average elo: 1017.2946443051794
+ ego average episode rewards: -239.08920288085938
+ opponent average episode rewards: 23.796611785888672
+ elo gain: -18.804823797718328 | latest elo score: 1060.0314502877393
+...End evaluation
+ Choose opponents [np.str_('7')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 14/3333 episodes, total num timesteps 450000/100000000, FPS 317.
+
+average episode rewards is -148.19471571180554
+
+Start evaluation...
+ Choose opponents [np.str_('9')] for evaluation
+ Load opponent 9 for evaluation (1/1)
+ eval ego elo: 1060.0314502877393 | opponent average elo: 1043.640141558005
+ ego average episode rewards: -259.4897155761719
+ opponent average episode rewards: -10.566368103027344
+ elo gain: -16.75428812386536 | latest elo score: 1043.277162163874
+...End evaluation
+ Choose opponents [np.str_('1')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 15/3333 episodes, total num timesteps 480000/100000000, FPS 316.
+
+average episode rewards is -119.35364440247253
+
+Start evaluation...
+ Choose opponents [np.str_('7')] for evaluation
+ Load opponent 7 for evaluation (1/1)
+ eval ego elo: 1043.277162163874 | opponent average elo: 1036.0994681028978
+ ego average episode rewards: -194.7281036376953
+ opponent average episode rewards: 32.19142532348633
+ elo gain: -16.330498009762977 | latest elo score: 1026.946664154111
+...End evaluation
+ Choose opponents [np.str_('14')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 16/3333 episodes, total num timesteps 510000/100000000, FPS 316.
+
+average episode rewards is -164.0546197615607
+
+Start evaluation...
+ Choose opponents [np.str_('0')] for evaluation
+ Load opponent 0 for evaluation (1/1)
+ eval ego elo: 1026.946664154111 | opponent average elo: 1011.7391975132675
+ ego average episode rewards: -203.2811279296875
+ opponent average episode rewards: 32.615142822265625
+ elo gain: -16.699882816283058 | latest elo score: 1010.2467813378279
+...End evaluation
+ Choose opponents [np.str_('6')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 17/3333 episodes, total num timesteps 540000/100000000, FPS 317.
+
+average episode rewards is -155.88474304552022
+
+Start evaluation...
+ Choose opponents [np.str_('13')] for evaluation
+ Load opponent 13 for evaluation (1/1)
+ eval ego elo: 1010.2467813378279 | opponent average elo: 1060.0314502877393
+ ego average episode rewards: 29.417688369750977
+ opponent average episode rewards: -201.7325439453125
+ elo gain: 18.277105106974066 | latest elo score: 1028.523886444802
+...End evaluation
+ Choose opponents [np.str_('9')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 18/3333 episodes, total num timesteps 570000/100000000, FPS 317.
+
+average episode rewards is -156.8228125
+
+Start evaluation...
+ Choose opponents [np.str_('9')] for evaluation
+ Load opponent 9 for evaluation (1/1)
+ eval ego elo: 1028.523886444802 | opponent average elo: 1060.3944296818704
+ ego average episode rewards: -201.7581329345703
+ opponent average episode rewards: 32.67513656616211
+ elo gain: -14.536410088590339 | latest elo score: 1013.9874763562117
+...End evaluation
+ Choose opponents [np.str_('7')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 19/3333 episodes, total num timesteps 600000/100000000, FPS 317.
+
+average episode rewards is -139.63419642857144
+
+Start evaluation...
+ Choose opponents [np.str_('1')] for evaluation
+ Load opponent 1 for evaluation (1/1)
+ eval ego elo: 1013.9874763562117 | opponent average elo: 1000.0
+ ego average episode rewards: -188.53790283203125
+ opponent average episode rewards: 31.4043025970459
+ elo gain: -16.643799304636236 | latest elo score: 997.3436770515755
+...End evaluation
+ Choose opponents [np.str_('0')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 20/3333 episodes, total num timesteps 630000/100000000, FPS 317.
+
+average episode rewards is -125.05707707751397
+
+Start evaluation...
+ Choose opponents [np.str_('17')] for evaluation
+ Load opponent 17 for evaluation (1/1)
+ eval ego elo: 997.3436770515755 | opponent average elo: 1028.523886444802
+ ego average episode rewards: -189.69390869140625
+ opponent average episode rewards: 31.39521598815918
+ elo gain: -14.567940812783247 | latest elo score: 982.7757362387922
+...End evaluation
+ Choose opponents [np.str_('8')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 21/3333 episodes, total num timesteps 660000/100000000, FPS 317.
+
+average episode rewards is -155.7140694341716
+
+Start evaluation...
+ Choose opponents [np.str_('13')] for evaluation
+ Load opponent 13 for evaluation (1/1)
+ eval ego elo: 982.7757362387922 | opponent average elo: 1041.7543451807653
+ ego average episode rewards: -192.57546997070312
+ opponent average episode rewards: 31.49384307861328
+ elo gain: -13.309726552316878 | latest elo score: 969.4660096864753
+...End evaluation
+ Choose opponents [np.str_('19')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 22/3333 episodes, total num timesteps 690000/100000000, FPS 317.
+
+average episode rewards is -170.91745665015245
+
+Start evaluation...
+ Choose opponents [np.str_('15')] for evaluation
+ Load opponent 15 for evaluation (1/1)
+ eval ego elo: 969.4660096864753 | opponent average elo: 1026.946664154111
+ ego average episode rewards: -38.502410888671875
+ opponent average episode rewards: -281.64447021484375
+ elo gain: 18.623192161694853 | latest elo score: 988.0892018481702
+...End evaluation
+ Choose opponents [np.str_('10')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 23/3333 episodes, total num timesteps 720000/100000000, FPS 317.
+
+average episode rewards is -149.2496842252994
+
+Start evaluation...
+ Choose opponents [np.str_('8')] for evaluation
+ Load opponent 8 for evaluation (1/1)
+ eval ego elo: 988.0892018481702 | opponent average elo: 1030.4871498372943
+ ego average episode rewards: 32.99412155151367
+ opponent average episode rewards: -236.89102172851562
+ elo gain: 17.94286311395478 | latest elo score: 1006.032064962125
+...End evaluation
+ Choose opponents [np.str_('7')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 24/3333 episodes, total num timesteps 750000/100000000, FPS 317.
+
+average episode rewards is -129.99548760775863
+
+Start evaluation...
+ Choose opponents [np.str_('3')] for evaluation
+ Load opponent 3 for evaluation (1/1)
+ eval ego elo: 1006.032064962125 | opponent average elo: 923.6660260692528
+ ego average episode rewards: -200.1342010498047
+ opponent average episode rewards: 8.93568229675293
+ elo gain: -19.723598979593167 | latest elo score: 986.3084659825319
+...End evaluation
+ Choose opponents [np.str_('6')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 25/3333 episodes, total num timesteps 780000/100000000, FPS 317.
+
+average episode rewards is -138.04124012212642
+
+Start evaluation...
+ Choose opponents [np.str_('21')] for evaluation
+ Load opponent 21 for evaluation (1/1)
+ eval ego elo: 986.3084659825319 | opponent average elo: 969.4660096864753
+ ego average episode rewards: 33.49403762817383
+ opponent average episode rewards: -193.29971313476562
+ elo gain: 15.22498321762832 | latest elo score: 1001.5334492001601
+...End evaluation
+ Choose opponents [np.str_('17')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 26/3333 episodes, total num timesteps 810000/100000000, FPS 319.
+
+average episode rewards is -176.70587657232704
+
+Start evaluation...
+ Choose opponents [np.str_('25')] for evaluation
+ Load opponent 25 for evaluation (1/1)
+ eval ego elo: 1001.5334492001601 | opponent average elo: 1001.5334492001601
+ ego average episode rewards: -206.46255493164062
+ opponent average episode rewards: 6.600246906280518
+ elo gain: -16.0 | latest elo score: 985.5334492001601
+...End evaluation
+ Choose opponents [np.str_('3')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 27/3333 episodes, total num timesteps 840000/100000000, FPS 319.
+
+average episode rewards is -129.05984691112718
+
+Start evaluation...
+ Choose opponents [np.str_('4')] for evaluation
+ Load opponent 4 for evaluation (1/1)
+ eval ego elo: 985.5334492001601 | opponent average elo: 931.5886636140283
+ ego average episode rewards: 41.68702697753906
+ opponent average episode rewards: -217.51304626464844
+ elo gain: 13.535523104092313 | latest elo score: 999.0689723042525
+...End evaluation
+ Choose opponents [np.str_('24')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 28/3333 episodes, total num timesteps 870000/100000000, FPS 319.
+
+average episode rewards is -200.40701864919356
+
+Start evaluation...
+ Choose opponents [np.str_('17')] for evaluation
+ Load opponent 17 for evaluation (1/1)
+ eval ego elo: 999.0689723042525 | opponent average elo: 1043.0918272575852
+ ego average episode rewards: 49.45852279663086
+ opponent average episode rewards: -252.99270629882812
+ elo gain: 18.016547098686765 | latest elo score: 1017.0855194029392
+...End evaluation
+ Choose opponents [np.str_('11')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 29/3333 episodes, total num timesteps 900000/100000000, FPS 319.
+
+average episode rewards is -130.92227027529762
+
+Start evaluation...
+ Choose opponents [np.str_('12')] for evaluation
+ Load opponent 12 for evaluation (1/1)
+ eval ego elo: 1017.0855194029392 | opponent average elo: 1078.8362740854577
+ ego average episode rewards: 33.36997604370117
+ opponent average episode rewards: -199.91334533691406
+ elo gain: 18.81415741647199 | latest elo score: 1035.8996768194113
+...End evaluation
+ Choose opponents [np.str_('26')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 30/3333 episodes, total num timesteps 930000/100000000, FPS 319.
+
+average episode rewards is -195.21641607704402
+
+Start evaluation...
+ Choose opponents [np.str_('20')] for evaluation
+ Load opponent 20 for evaluation (1/1)
+ eval ego elo: 1035.8996768194113 | opponent average elo: 982.7757362387922
+ ego average episode rewards: 4.253815174102783
+ opponent average episode rewards: -221.06259155273438
+ elo gain: 13.572440936651368 | latest elo score: 1049.4721177560627
+...End evaluation
+ Choose opponents [np.str_('16')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 31/3333 episodes, total num timesteps 960000/100000000, FPS 319.
+
+average episode rewards is -157.66880580357142
+
+Start evaluation...
+ Choose opponents [np.str_('13')] for evaluation
+ Load opponent 13 for evaluation (1/1)
+ eval ego elo: 1049.4721177560627 | opponent average elo: 1055.0640717330823
+ ego average episode rewards: -208.58692932128906
+ opponent average episode rewards: -91.63638305664062
+ elo gain: -15.742503236840816 | latest elo score: 1033.729614519222
+...End evaluation
+ Choose opponents [np.str_('19')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 32/3333 episodes, total num timesteps 990000/100000000, FPS 320.
+
+average episode rewards is -167.92460690268987
+
+Start evaluation...
+ Choose opponents [np.str_('9')] for evaluation
+ Load opponent 9 for evaluation (1/1)
+ eval ego elo: 1033.729614519222 | opponent average elo: 1074.9308397704608
+ ego average episode rewards: -230.1004638671875
+ opponent average episode rewards: 13.485428810119629
+ elo gain: -14.111457897188707 | latest elo score: 1019.6181566220332
+...End evaluation
+ Choose opponents [np.str_('18')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 33/3333 episodes, total num timesteps 1020000/100000000, FPS 320.
+
+average episode rewards is -157.45834189967104
+
+Start evaluation...
+ Choose opponents [np.str_('15')] for evaluation
+ Load opponent 15 for evaluation (1/1)
+ eval ego elo: 1019.6181566220332 | opponent average elo: 1008.3234719924161
+ ego average episode rewards: 33.84239959716797
+ opponent average episode rewards: -221.38824462890625
+ elo gain: 15.480043704078145 | latest elo score: 1035.0982003261113
+...End evaluation
+ Choose opponents [np.str_('0')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 34/3333 episodes, total num timesteps 1050000/100000000, FPS 321.
+
+average episode rewards is -97.6720120614035
+
+Start evaluation...
+ Choose opponents [np.str_('4')] for evaluation
+ Load opponent 4 for evaluation (1/1)
+ eval ego elo: 1035.0982003261113 | opponent average elo: 918.0531405099359
+ ego average episode rewards: 16.697092056274414
+ opponent average episode rewards: -213.8226318359375
+ elo gain: 10.80493408753544 | latest elo score: 1045.9031344136467
+...End evaluation
+ Choose opponents [np.str_('25')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 35/3333 episodes, total num timesteps 1080000/100000000, FPS 322.
+
+average episode rewards is -160.7220635775862
+
+Start evaluation...
+ Choose opponents [np.str_('34')] for evaluation
+ Load opponent 34 for evaluation (1/1)
+ eval ego elo: 1045.9031344136467 | opponent average elo: 1045.9031344136467
+ ego average episode rewards: 39.854530334472656
+ opponent average episode rewards: 15.147329330444336
+ elo gain: 0.0 | latest elo score: 1045.9031344136467
+...End evaluation
+ Choose opponents [np.str_('23')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 36/3333 episodes, total num timesteps 1110000/100000000, FPS 322.
+
+average episode rewards is -163.0029430650685
+
+Start evaluation...
+ Choose opponents [np.str_('7')] for evaluation
+ Load opponent 7 for evaluation (1/1)
+ eval ego elo: 1045.9031344136467 | opponent average elo: 1052.4299661126608
+ ego average episode rewards: -90.32527160644531
+ opponent average episode rewards: -317.6913146972656
+ elo gain: 16.300536354858856 | latest elo score: 1062.2036707685056
+...End evaluation
+ Choose opponents [np.str_('26')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 37/3333 episodes, total num timesteps 1140000/100000000, FPS 322.
+
+average episode rewards is -188.56480034722222
+
+Start evaluation...
+ Choose opponents [np.str_('25')] for evaluation
+ Load opponent 25 for evaluation (1/1)
+ eval ego elo: 1062.2036707685056 | opponent average elo: 1017.5334492001601
+ ego average episode rewards: 28.35437774658203
+ opponent average episode rewards: -274.1187438964844
+ elo gain: 13.954121046622095 | latest elo score: 1076.1577918151277
+...End evaluation
+ Choose opponents [np.str_('22')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 38/3333 episodes, total num timesteps 1170000/100000000, FPS 323.
+
+average episode rewards is -140.15250538793103
+
+Start evaluation...
+ Choose opponents [np.str_('9')] for evaluation
+ Load opponent 9 for evaluation (1/1)
+ eval ego elo: 1076.1577918151277 | opponent average elo: 1089.0422976676496
+ ego average episode rewards: -294.59613037109375
+ opponent average episode rewards: -74.2242660522461
+ elo gain: -15.40691843472586 | latest elo score: 1060.7508733804018
+...End evaluation
+ Choose opponents [np.str_('3')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 39/3333 episodes, total num timesteps 1200000/100000000, FPS 323.
+
+average episode rewards is -95.91552734375
+
+Start evaluation...
+ Choose opponents [np.str_('23')] for evaluation
+ Load opponent 23 for evaluation (1/1)
+ eval ego elo: 1060.7508733804018 | opponent average elo: 1006.032064962125
+ ego average episode rewards: -77.49010467529297
+ opponent average episode rewards: -303.8096923828125
+ elo gain: 13.500735715955724 | latest elo score: 1074.2516090963575
+...End evaluation
+ Choose opponents [np.str_('36')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 40/3333 episodes, total num timesteps 1230000/100000000, FPS 323.
+
+average episode rewards is -200.06499474789916
+
+Start evaluation...
+ Choose opponents [np.str_('27')] for evaluation
+ Load opponent 27 for evaluation (1/1)
+ eval ego elo: 1074.2516090963575 | opponent average elo: 999.0689723042525
+ ego average episode rewards: -81.77803039550781
+ opponent average episode rewards: -322.6180114746094
+ elo gain: 12.590759869504453 | latest elo score: 1086.8423689658619
+...End evaluation
+ Choose opponents [np.str_('37')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 41/3333 episodes, total num timesteps 1260000/100000000, FPS 323.
+
+average episode rewards is -195.97541155133928
+
+Start evaluation...
+ Choose opponents [np.str_('19')] for evaluation
+ Load opponent 19 for evaluation (1/1)
+ eval ego elo: 1086.8423689658619 | opponent average elo: 997.3436770515755
+ ego average episode rewards: 31.906679153442383
+ opponent average episode rewards: -188.43238830566406
+ elo gain: 11.967240991479951 | latest elo score: 1098.8096099573418
+...End evaluation
+ Choose opponents [np.str_('38')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 42/3333 episodes, total num timesteps 1290000/100000000, FPS 324.
+
+average episode rewards is -188.35716261061947
+
+Start evaluation...
+ Choose opponents [np.str_('8')] for evaluation
+ Load opponent 8 for evaluation (1/1)
+ eval ego elo: 1098.8096099573418 | opponent average elo: 1012.5442867233395
+ ego average episode rewards: 29.106311798095703
+ opponent average episode rewards: -199.53546142578125
+ elo gain: 12.107007488963777 | latest elo score: 1110.9166174463055
+...End evaluation
+ Choose opponents [np.str_('32')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 43/3333 episodes, total num timesteps 1320000/100000000, FPS 324.
+
+average episode rewards is -128.17802204457365
+
+Start evaluation...
+ Choose opponents [np.str_('34')] for evaluation
+ Load opponent 34 for evaluation (1/1)
+ eval ego elo: 1110.9166174463055 | opponent average elo: 1045.9031344136467
+ ego average episode rewards: 23.320112228393555
+ opponent average episode rewards: -197.76177978515625
+ elo gain: 13.040480944362397 | latest elo score: 1123.9570983906679
+...End evaluation
+ Choose opponents [np.str_('10')] for training
+
+ Scenario 1v1/NoWeapon/Selfplay Algo ppo Exp official_1v1_selfplay updates 44/3333 episodes, total num timesteps 1350000/100000000, FPS 325.
+
+average episode rewards is -91.13390048238254
+
+Start evaluation...
+ Choose opponents [np.str_('23')] for evaluation
+ Load opponent 23 for evaluation (1/1)
+ eval ego elo: 1123.9570983906679 | opponent average elo: 992.5313292461693
+ ego average episode rewards: -34.16067886352539
+ opponent average episode rewards: -254.50645446777344
+ elo gain: 10.220681633179804 | latest elo score: 1134.1777800238476
+...End evaluation
+ Choose opponents [np.str_('15')] for training
+SubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterrupt
+SubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterrupt
+
+
+
+
+
+
+
+
+Traceback (most recent call last):
+  File "/root/autodl-tmp/SEU-SRTP/scripts/train/train_jsbsim.py", line 163, in main
+    runner.run()
+  File "/root/autodl-tmp/SEU-SRTP/runner/jsbsim_runner.py", line 49, in run
+    values, actions, action_log_probs, rnn_states_actor, rnn_states_critic = self.collect(step)
+                                                                             ^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/runner/selfplay_jsbsim_runner.py", line 77, in collect
+    = self.policy.get_actions(np.concatenate(self.buffer.obs[step]),
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/algorithms/ppo/ppo_policy.py", line 30, in get_actions
+    actions, action_log_probs, rnn_states_actor = self.actor(obs, rnn_states_actor, masks)
+                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/algorithms/ppo/ppo_actor.py", line 59, in forward
+    actions, action_log_probs = self.act(actor_features, deterministic)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/algorithms/utils/act.py", line 76, in forward
+    action_dist = action_out(x)
+                  ^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/algorithms/utils/distributions.py", line 72, in forward
+    return FixedCategorical(logits=x)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/distributions/categorical.py", line 81, in __init__
+    super().__init__(batch_shape, validate_args=validate_args)
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/distributions/distribution.py", line 76, in __init__
+    if not torch._is_all_true(valid):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+================================================================
+EXPERIMENT official_1v1_selfplay exited with code 0 at 2026-10-04T05:49:06+08:00
+================================================================

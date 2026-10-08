@@ -1,0 +1,543 @@
+choose to use gpu...
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 0/3333 episodes, total num timesteps 30000/100000000, FPS 579.
+
+average episode rewards is -13.98460105613426
+average heading turns is 1.0
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 1/3333 episodes, total num timesteps 60000/100000000, FPS 583.
+
+average episode rewards is -13.98354926783377
+average heading turns is 1.0
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 2/3333 episodes, total num timesteps 90000/100000000, FPS 582.
+
+average episode rewards is -12.265199080757473
+average heading turns is 1.018018018018018
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 3/3333 episodes, total num timesteps 120000/100000000, FPS 579.
+
+average episode rewards is -11.744827030840968
+average heading turns is 1.0232558139534884
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 4/3333 episodes, total num timesteps 150000/100000000, FPS 573.
+
+average episode rewards is -10.106003220016891
+average heading turns is 1.032
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 5/3333 episodes, total num timesteps 180000/100000000, FPS 567.
+
+average episode rewards is -11.32422568581321
+average heading turns is 1.0578512396694215
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 6/3333 episodes, total num timesteps 210000/100000000, FPS 562.
+
+average episode rewards is -7.895653719027367
+average heading turns is 1.1384615384615384
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 7/3333 episodes, total num timesteps 240000/100000000, FPS 560.
+
+average episode rewards is -4.335399720726944
+average heading turns is 1.1538461538461537
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 8/3333 episodes, total num timesteps 270000/100000000, FPS 561.
+
+average episode rewards is -1.8228172591969938
+average heading turns is 1.2432432432432432
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 9/3333 episodes, total num timesteps 300000/100000000, FPS 563.
+
+average episode rewards is -0.15490232755060065
+average heading turns is 1.3169014084507042
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 10/3333 episodes, total num timesteps 330000/100000000, FPS 562.
+
+average episode rewards is -0.051664963267207924
+average heading turns is 1.2913907284768211
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 11/3333 episodes, total num timesteps 360000/100000000, FPS 564.
+
+average episode rewards is 0.7851155255291913
+average heading turns is 1.3783783783783783
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 12/3333 episodes, total num timesteps 390000/100000000, FPS 566.
+
+average episode rewards is 0.5570973195847432
+average heading turns is 1.267515923566879
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 13/3333 episodes, total num timesteps 420000/100000000, FPS 568.
+
+average episode rewards is 1.0151736212114917
+average heading turns is 1.3900709219858156
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 14/3333 episodes, total num timesteps 450000/100000000, FPS 568.
+
+average episode rewards is 0.854435800716577
+average heading turns is 1.3443708609271523
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 15/3333 episodes, total num timesteps 480000/100000000, FPS 569.
+
+average episode rewards is 0.8232137362162272
+average heading turns is 1.3680555555555556
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 16/3333 episodes, total num timesteps 510000/100000000, FPS 569.
+
+average episode rewards is 0.9673970896047313
+average heading turns is 1.3846153846153846
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 17/3333 episodes, total num timesteps 540000/100000000, FPS 570.
+
+average episode rewards is 1.0838386643100792
+average heading turns is 1.408450704225352
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 18/3333 episodes, total num timesteps 570000/100000000, FPS 571.
+
+average episode rewards is 0.9184866578039461
+average heading turns is 1.4525547445255473
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 19/3333 episodes, total num timesteps 600000/100000000, FPS 571.
+
+average episode rewards is 0.6812930577237841
+average heading turns is 1.4154929577464788
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 20/3333 episodes, total num timesteps 630000/100000000, FPS 571.
+
+average episode rewards is 1.0801088828740157
+average heading turns is 1.5158730158730158
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 21/3333 episodes, total num timesteps 660000/100000000, FPS 571.
+
+average episode rewards is 0.8913045654296875
+average heading turns is 1.584
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 22/3333 episodes, total num timesteps 690000/100000000, FPS 572.
+
+average episode rewards is 0.9977855975811298
+average heading turns is 1.523076923076923
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 23/3333 episodes, total num timesteps 720000/100000000, FPS 571.
+
+average episode rewards is 0.617479033389334
+average heading turns is 1.7118644067796611
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 24/3333 episodes, total num timesteps 750000/100000000, FPS 571.
+
+average episode rewards is 1.287450439453125
+average heading turns is 1.564516129032258
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 25/3333 episodes, total num timesteps 780000/100000000, FPS 571.
+
+average episode rewards is 1.6357966030345243
+average heading turns is 1.5073529411764706
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 26/3333 episodes, total num timesteps 810000/100000000, FPS 572.
+
+average episode rewards is 1.68572802734375
+average heading turns is 1.568
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 27/3333 episodes, total num timesteps 840000/100000000, FPS 572.
+
+average episode rewards is 1.4467310629600336
+average heading turns is 1.6694214876033058
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 28/3333 episodes, total num timesteps 870000/100000000, FPS 572.
+
+average episode rewards is 1.6272186009229812
+average heading turns is 1.6814159292035398
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 29/3333 episodes, total num timesteps 900000/100000000, FPS 573.
+
+average episode rewards is 1.5198491162592822
+average heading turns is 1.99
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 30/3333 episodes, total num timesteps 930000/100000000, FPS 574.
+
+average episode rewards is 3.15411816846143
+average heading turns is 1.8198198198198199
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 31/3333 episodes, total num timesteps 960000/100000000, FPS 574.
+
+average episode rewards is 3.0002793774162373
+average heading turns is 2.0309278350515463
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 32/3333 episodes, total num timesteps 990000/100000000, FPS 575.
+
+average episode rewards is 3.7768236243206523
+average heading turns is 2.21978021978022
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 33/3333 episodes, total num timesteps 1020000/100000000, FPS 577.
+
+average episode rewards is 5.1942451201289535
+average heading turns is 2.3855421686746987
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 34/3333 episodes, total num timesteps 1050000/100000000, FPS 578.
+
+average episode rewards is 4.913260754243828
+average heading turns is 2.4444444444444446
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 35/3333 episodes, total num timesteps 1080000/100000000, FPS 579.
+
+average episode rewards is 6.011742314205894
+average heading turns is 2.4358974358974357
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 36/3333 episodes, total num timesteps 1110000/100000000, FPS 580.
+
+average episode rewards is 7.186085375049446
+average heading turns is 2.4683544303797467
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 37/3333 episodes, total num timesteps 1140000/100000000, FPS 581.
+
+average episode rewards is 8.258093079524254
+average heading turns is 2.9696969696969697
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 38/3333 episodes, total num timesteps 1170000/100000000, FPS 581.
+
+average episode rewards is 7.585162353515625
+average heading turns is 3.0307692307692307
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 39/3333 episodes, total num timesteps 1200000/100000000, FPS 582.
+
+average episode rewards is 5.953470284598215
+average heading turns is 2.8714285714285714
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 40/3333 episodes, total num timesteps 1230000/100000000, FPS 582.
+
+average episode rewards is 5.86669921875
+average heading turns is 2.77027027027027
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 41/3333 episodes, total num timesteps 1260000/100000000, FPS 582.
+
+average episode rewards is 7.919062614440918
+average heading turns is 3.09375
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 42/3333 episodes, total num timesteps 1290000/100000000, FPS 582.
+
+average episode rewards is 9.642755876507675
+average heading turns is 3.2363636363636363
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 43/3333 episodes, total num timesteps 1320000/100000000, FPS 582.
+
+average episode rewards is 11.547870635986328
+average heading turns is 3.2063492063492065
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 44/3333 episodes, total num timesteps 1350000/100000000, FPS 582.
+
+average episode rewards is 13.69518186334978
+average heading turns is 3.456140350877193
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 45/3333 episodes, total num timesteps 1380000/100000000, FPS 583.
+
+average episode rewards is 17.398529607599432
+average heading turns is 3.5925925925925926
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 46/3333 episodes, total num timesteps 1410000/100000000, FPS 583.
+
+average episode rewards is 25.26826424434267
+average heading turns is 3.4310344827586206
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 47/3333 episodes, total num timesteps 1440000/100000000, FPS 584.
+
+average episode rewards is 27.93761992872807
+average heading turns is 3.2777777777777777
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 48/3333 episodes, total num timesteps 1470000/100000000, FPS 584.
+
+average episode rewards is 19.353500366210938
+average heading turns is 4.045454545454546
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 49/3333 episodes, total num timesteps 1500000/100000000, FPS 585.
+
+average episode rewards is 29.20049370659722
+average heading turns is 3.880952380952381
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 50/3333 episodes, total num timesteps 1530000/100000000, FPS 585.
+
+average episode rewards is 26.2427294921875
+average heading turns is 4.021739130434782
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 51/3333 episodes, total num timesteps 1560000/100000000, FPS 586.
+
+average episode rewards is 44.96703582114362
+average heading turns is 4.023255813953488
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 52/3333 episodes, total num timesteps 1590000/100000000, FPS 586.
+
+average episode rewards is 51.41276749320652
+average heading turns is 3.769230769230769
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 53/3333 episodes, total num timesteps 1620000/100000000, FPS 586.
+
+average episode rewards is 44.55445353190104
+average heading turns is 4.136363636363637
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 54/3333 episodes, total num timesteps 1650000/100000000, FPS 586.
+
+average episode rewards is 54.028680710565474
+average heading turns is 4.083333333333333
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 55/3333 episodes, total num timesteps 1680000/100000000, FPS 587.
+
+average episode rewards is 53.48635194359756
+average heading turns is 4.451612903225806
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 56/3333 episodes, total num timesteps 1710000/100000000, FPS 586.
+
+average episode rewards is 56.866123744419646
+average heading turns is 4.411764705882353
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 57/3333 episodes, total num timesteps 1740000/100000000, FPS 586.
+
+average episode rewards is 60.010129238696805
+average heading turns is 4.048780487804878
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 58/3333 episodes, total num timesteps 1770000/100000000, FPS 586.
+
+average episode rewards is 67.77522583007813
+average heading turns is 4.393939393939394
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 59/3333 episodes, total num timesteps 1800000/100000000, FPS 587.
+
+average episode rewards is 67.75247802734376
+average heading turns is 4.454545454545454
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 60/3333 episodes, total num timesteps 1830000/100000000, FPS 587.
+
+average episode rewards is 79.50815301192434
+average heading turns is 4.666666666666667
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 61/3333 episodes, total num timesteps 1860000/100000000, FPS 587.
+
+average episode rewards is 74.87711374383224
+average heading turns is 4.821428571428571
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 62/3333 episodes, total num timesteps 1890000/100000000, FPS 587.
+
+average episode rewards is 77.53214304070724
+average heading turns is 4.703703703703703
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 63/3333 episodes, total num timesteps 1920000/100000000, FPS 587.
+
+average episode rewards is 72.90571408155488
+average heading turns is 4.571428571428571
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 64/3333 episodes, total num timesteps 1950000/100000000, FPS 587.
+
+average episode rewards is 73.95647698479729
+average heading turns is 4.541666666666667
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 65/3333 episodes, total num timesteps 1980000/100000000, FPS 587.
+
+average episode rewards is 61.78932020399306
+average heading turns is 4.666666666666667
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 66/3333 episodes, total num timesteps 2010000/100000000, FPS 587.
+
+average episode rewards is 68.34294499577703
+average heading turns is 4.75
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 67/3333 episodes, total num timesteps 2040000/100000000, FPS 587.
+
+average episode rewards is 75.92241467927632
+average heading turns is 4.44
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 68/3333 episodes, total num timesteps 2070000/100000000, FPS 587.
+
+average episode rewards is 58.96934291294643
+average heading turns is 5.055555555555555
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 69/3333 episodes, total num timesteps 2100000/100000000, FPS 587.
+
+average episode rewards is 43.6040283203125
+average heading turns is 4.666666666666667
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 70/3333 episodes, total num timesteps 2130000/100000000, FPS 587.
+
+average episode rewards is 64.46257866753473
+average heading turns is 4.833333333333333
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 71/3333 episodes, total num timesteps 2160000/100000000, FPS 587.
+
+average episode rewards is 58.92744445800781
+average heading turns is 4.7
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 72/3333 episodes, total num timesteps 2190000/100000000, FPS 588.
+
+average episode rewards is 80.4793472290039
+average heading turns is 5.3
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 73/3333 episodes, total num timesteps 2220000/100000000, FPS 587.
+
+average episode rewards is 67.24915986902573
+average heading turns is 4.866666666666666
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 74/3333 episodes, total num timesteps 2250000/100000000, FPS 588.
+
+average episode rewards is 71.1403449563419
+average heading turns is 4.5625
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 75/3333 episodes, total num timesteps 2280000/100000000, FPS 588.
+
+average episode rewards is 72.16575668797348
+average heading turns is 5.363636363636363
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 76/3333 episodes, total num timesteps 2310000/100000000, FPS 588.
+
+average episode rewards is 83.22705817945075
+average heading turns is 4.9
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 77/3333 episodes, total num timesteps 2340000/100000000, FPS 589.
+
+average episode rewards is 80.74936995967742
+average heading turns is 5.090909090909091
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 78/3333 episodes, total num timesteps 2370000/100000000, FPS 589.
+
+average episode rewards is 96.79258099724265
+average heading turns is 5.0
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 79/3333 episodes, total num timesteps 2400000/100000000, FPS 589.
+
+average episode rewards is 72.89157006048387
+average heading turns is 5.5
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 80/3333 episodes, total num timesteps 2430000/100000000, FPS 590.
+
+average episode rewards is 99.30977507560483
+average heading turns is 5.3
+
+ Scenario 1/heading Algo ppo Exp official_heading updates 81/3333 episodes, total num timesteps 2460000/100000000, FPS 590.
+
+average episode rewards is 100.61372375488281
+average heading turns is 4.571428571428571
+SubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterrupt
+
+
+
+
+
+
+
+
+
+Traceback (most recent call last):
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/runner/jsbsim_runner.py", line 110, in collect
+    = self.policy.get_actions(np.concatenate(self.buffer.obs[step]),
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/algorithms/ppo/ppo_policy.py", line 30, in get_actions
+    actions, action_log_probs, rnn_states_actor = self.actor(obs, rnn_states_actor, masks)
+                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/algorithms/ppo/ppo_actor.py", line 59, in forward
+    actions, action_log_probs = self.act(actor_features, deterministic)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/algorithms/utils/act.py", line 78, in forward
+    action_log_prob = action_dist.log_probs(action)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/algorithms/utils/distributions.py", line 23, in log_probs
+    .log_prob(actions.squeeze(-1))
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/distributions/categorical.py", line 148, in log_prob
+    self._validate_sample(value)
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/distributions/distribution.py", line 305, in _validate_sample
+    for i, j in zip(reversed(actual_shape), reversed(expected_shape)):
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/root/autodl-tmp/SEU-SRTP/scripts/train/train_jsbsim.py", line 163, in main
+    runner.run()
+  File "/root/autodl-tmp/SEU-SRTP/runner/jsbsim_runner.py", line 49, in run
+    values, actions, action_log_probs, rnn_states_actor, rnn_states_critic = self.collect(step)
+                                                                             ^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 119, in decorate_context
+    with ctx_factory():
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/autograd/grad_mode.py", line 84, in __exit__
+    def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
+    
+KeyboardInterrupt

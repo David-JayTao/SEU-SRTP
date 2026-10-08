@@ -1,36 +1,68 @@
-# ignore files
+# ==============================================================================
+# SEU-SRTP .gitignore（中文注释版提案 · 2026-10-08）
+# ==============================================================================
+# 阅读说明：gitignore 不支持「行内注释」——模式后面跟的 # 文字会被当作模式本身
+# 的一部分，规则静默失效（实测见 gitignore_proposal.md 验证记录 V0）。因此本文件
+# 所有中文注释一律独立成行、写在对应模式的上方。
+# 每条注释说明「该规则实际挡住仓库里的什么」；分档决策与理由汇总见文末
+# 「训练产出分档」一节；完整审计与验证记录见同目录 gitignore_proposal.md。
+# ==============================================================================
+
+# ---- 上游遗留的本地产物与数据文件 ----
+
+# 挡任意层级名为 test.py 的临时脚本；本仓库无此文件（test_env.py / tests/ 不受影响）
 test.py
-results
-runs
+
+# 挡所有 numpy 原始数组（离线回放、特征缓存等可重算的大体积产物）；仓库当前没有 .npy
 *.npy
+
+# 挡所有 ACMI 空战回放录像（Tacview 二进制轨迹，单个可达几十 MB）；仓库当前没有 .acmi
 *.acmi
 
-# vscode config
-.vscode
+# 注：原第 3、4 行的 results / runs 已移至下方「训练产出」节并锚定为
+# /results/、/runs/，避免整目录排除 scripts/results/（正式实验输出所在，约 3 GB）。
 
-# pycharm config
+# ---- VS Code / PyCharm 工程配置（个人偏好，不入库） ----
+
+.vscode
 .idea
 
-# Byte-compiled / optimized / DLL files
+# ---- Python 字节码与缓存 ----
+
+# 挡所有 __pycache__ 目录（仓库实测 16 处，含 experiments/**/scripts/__pycache__）
 __pycache__/
+
+# 挡 .pyc / .pyo / .pyd 编译产物
 *.py[cod]
+
+# 挡 Cython 编译产物
 *$py.class
 
-# C extensions
+# ---- C 扩展 ----
+
+# 挡编译出的 C 扩展；本仓库无（JSBSim C++ 由 envs/JSBSim/data 子模块自带的 .gitignore 管理）
 *.so
 
-# Distribution / packaging
+# ---- 打包 / 分发中间产物 ----
+
 .Python
+
+# 挡任意层级 build/ 目录（setuptools、Cython 中间产物）
 build/
 develop-eggs/
 dist/
 downloads/
 eggs/
 .eggs/
+
+# 注意：下面这条匹配任意层级名为 lib 的目录，偏宽；仓库当前无 lib/。
+# 若未来出现源码级 lib/（如 envs/xxx/lib/），应改为锚定的 /lib/ 或精确路径。
 lib/
 lib64/
 parts/
 sdist/
+
+# 同样匹配任意层级 var/ 目录（偏宽）；仓库当前无
 var/
 wheels/
 pip-wheel-metadata/
@@ -40,17 +72,18 @@ share/python-wheels/
 *.egg
 MANIFEST
 
-# PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+# ---- PyInstaller ----
+
 *.manifest
 *.spec
 
-# Installer logs
+# ---- pip 安装器日志 ----
+
 pip-log.txt
 pip-delete-this-directory.txt
 
-# Unit test / coverage reports
+# ---- 单测 / 覆盖率报告 ----
+
 htmlcov/
 .tox/
 .nox/
@@ -64,57 +97,61 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 
-# Translations
+# ---- 翻译中间文件 ----
+
 *.mo
 *.pot
 
-# Django stuff:
+# ---- 杂项日志与本地配置 ----
+# 【兜底规则】挡住所有 *.log。训练 stdout 已在文末「实验日志放行」中定向放行；
+# 其余散落的 .log（pip、各脚本临时输出等）继续排除。
 *.log
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
 
-# Flask stuff:
+# ---- Flask ----
+
 instance/
 .webassets-cache
 
-# Scrapy stuff:
+# ---- Scrapy ----
+
 .scrapy
 
-# Sphinx documentation
+# ---- Sphinx 构建产物 ----
+
+# 只挡 docs/_build/（Sphinx 输出）；docs/ 其余内容正常入库（含 PDF / PNG）
 docs/_build/
 
-# PyBuilder
+# ---- PyBuilder ----
+
 target/
 
-# Jupyter Notebook
-.ipynb_checkpoints
+# ---- Jupyter / IPython ----
 
-# IPython
+.ipynb_checkpoints
 profile_default/
 ipython_config.py
 
-# pyenv
+# ---- pyenv / pipenv / PEP 582 ----
+
 .python-version
-
-# pipenv
-#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
-#   However, in case of collaboration, if having platform-specific dependencies or dependencies
-#   having no cross-platform support, pipenv may install dependencies that don't work, or not
-#   install all needed dependencies.
 #Pipfile.lock
-
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow
 __pypackages__/
 
-# Celery stuff
+# ---- Celery ----
+
 celerybeat-schedule
 celerybeat.pid
 
-# SageMath parsed files
+# ---- SageMath ----
+
 *.sage.py
 
-# Environments
+# ---- 虚拟环境目录与凭据（红线：绝不入库） ----
+
+# 【重要】环境变量文件可能含凭据，必须排除
 .env
 .venv
 env/
@@ -123,51 +160,130 @@ ENV/
 env.bak/
 venv.bak/
 
-# Spyder project settings
+# ---- IDE 配置（Spyder / Rope） ----
+
 .spyderproject
 .spyproject
-
-# Rope project settings
 .ropeproject
 
-# mkdocs documentation
+# ---- mkdocs 站点输出 ----
+
+# 只挡仓库根目录 site/
 /site
 
-# mypy
+# ---- 类型检查缓存 ----
+
 .mypy_cache/
 .dmypy.json
 dmypy.json
-
-# Pyre type checker
 .pyre/
-# Local environment temporary files
+
+# ---- 本地环境临时文件与凭据 ----
+
 condaenv.*.requirements.txt
+
+# 与上方重复，保留原样（无副作用）
 .env
+
+# 挡 .env.local 等变体
 .env.*
+
+# 挡证书私钥
 *.pem
+
+# 挡私钥
 *.key
 
-# Python cache
+# ---- 原「Python cache」重复段（保留原样，无副作用） ----
+
 __pycache__/
 *.py[cod]
 
-# Training outputs
-results/
-runs/
-logs/
-wandb/
-scripts/results/
-*.pt
-*.pth
-*.ckpt
-*.acmi
+# ==============================================================================
+# 训练产出分档（2026-10-08 修订）
+# ==============================================================================
+# 分档依据 = 体积 × 价值 × 可重建性：
+#   A 档 逐 episode 策略池快照 actor_<数字>.pt（4809 个 / 2.95 GB）→ 排除，服务器留档
+#        （runner/selfplay_jsbsim_runner.py:280 每个 episode 落一个，供 selfplay 对手池取样，
+#          属可重建的大体积中间产物）
+#   B 档 最终滚动权重 actor_latest.pt / critic_latest.pt（94 个 / 66.4 MB，单个 ≤ 0.71 MB）→ 放行
+#   C 档 曲线数据 metrics.jsonl（44 个 / 2.66 MB，单个约 62 KB）→ 放行（论文绘图的一手数据）
+#   D 档 stdout / TensorBoard / 回放录像等运行日志 → 排除（服务器留档；实验日志见文末定向放行）
 
-# Editors
+# 只挡仓库根目录 results/（上游原版代码的默认输出位置）；锚定 / 后不波及 scripts/results/
+/results/
+
+# 只挡根目录 runs/；仓库当前无此目录，属预防性规则
+/runs/
+
+# 只挡根目录 logs/；锚定后才能放行 experiments/**/logs/（见文末放行规则）
+/logs/
+
+# 任意层级 wandb 目录（本地 run 缓存，含大量二进制 event 文件）
+wandb/
+
+# 原先整目录排除的 scripts/results/ 改为下列精确规则
+# （正式输出根 = scripts/results，由 scripts/train/train_jsbsim.py:107 以绝对路径写死）：
+
+# ── scripts/results/ 整体排除（2026-10-08 决定）──────────────────────────────
+# 原始训练输出根 = scripts/results/。**本目录整体不入库**，理由是它与
+# experiments/_archive/ 的内容完全重复，两份各约 69 MB：
+#   scripts/results/**/metrics.jsonl      44 个  vs  _archive/curves/
+#   scripts/results/**/*_latest.pt        94 个  vs  _archive/checkpoints/
+# 本仓库既有约定是「原始输出留在服务器，experiments/ 存整理后的记录」
+# （见本文件下方 2026-10-04 那段说明），故沿用该约定，只提交整理后的归档树。
+# 归档树带 ARCHIVE_MANIFEST.csv（逐文件 sha256）与 README，可核对、可还原。
+scripts/results/
+# 说明：下列精确规则保留作防御，避免将来误放开整个目录
+# A 档：逐 episode 策略池快照（actor_0.pt … actor_665.pt）→ 排除
+actor_[0-9]*.pt
+
+# 同类 critic 数字快照；当前仓库没有，防御未来命名变体
+critic_[0-9]*.pt
+
+# 其它框架权重后缀（Lightning 等）；仓库无
+*.pth
+
+# 同上；仓库无
+*.ckpt
+
+# 防御性规则：TensorBoard event 文件（当前仓库无；若未来启用 TB 会落到 run 目录里，
+# 曲线数据已由 metrics.jsonl 完整覆盖，event 文件可重建，不进 Git）
+events.out.tfevents.*
+
+# 已删除原来的 *.pt 一刀切：它会连 B 档最终权重和 envs/JSBSim/model/*.pt 基线模型一起挡掉。
+# 现规则下允许入库的 .pt = *_latest.pt（94 个）+ envs/JSBSim/model/*.pt（2 个，各 ≤ 0.71 MB）。
+# 提交前自查：git status --porcelain | grep '\.pt$'，逐个确认体积 ≤ 1 MB 再 add。
+
+# ---- 编辑器重复段（原样保留） ----
+
 .vscode/
 .idea/
 
-# --- SRTP overnight experiment infrastructure (2026-10-04) ---
-# Raw training outputs (checkpoints, per-run logs) stay out of git; the
-# experiments/ tree keeps the manifests, metrics extracts and figures.
-experiments/**/logs/
+# ==============================================================================
+# SRTP 实验基础设施（2026-10-04 引入；2026-10-08 修订）
+# ==============================================================================
+# experiments/ 是实验归档主目录：manifest.csv（清单）、metrics/（指标提取）、
+# figures/（图表）、configs/（队列配置）、scripts/（采集脚本）、status/*.md（过程文档）、
+# status/freeze_logs/*.txt（冻结快照）等中小体量文件不被本文件任何模式匹配，
+# 天然可入库（已验证），无需额外放行。
+
+# 挡 status/queue_*.status（15 个 / 9 KB）：队列「正在跑什么」的运行时状态。
+# 同一信息已由 freeze_logs/*.txt（40 个快照）与 final_state_history.md 入库成功；
+# 保留排除以防实时状态抖动污染 diff。如需单个文件可 git add -f。
 experiments/**/status/*.status
+
+# 实验日志放行（替代原先的 experiments/**/logs/ 整目录排除）：
+# 现存 54 个 .log = 训练 stdout 49 个（2026-10-04-night/logs 35 个 + formal6m/logs 14 个，
+# 每个 60 KB ~ 430 KB）+ status 下 4 个（auto_finalize.log、events_watch.log、2 个 0 字节
+# .tb_* 标记）+ system/events.log 1 个。
+# 理由：纯文本、小体积、append-only，是复现 / 排障 / 写论文的第一手材料。
+# 注意：若保留整目录排除 logs/，本条 ! 放行会失效（git 不进入已排除的目录），
+#      故本提案已把 /logs/ 锚定到仓库根，并删除 experiments/**/logs/ 规则。
+!experiments/**/*.log
+
+# ---- 看门狗内部标记（2026-10-08 补充） ----
+# 挡 experiments/**/status/.tb_*：os_watchdog.sh 用来「同一 traceback 只记一次」的
+# 空标记文件，无内容、无价值，只是运行时状态。
+experiments/**/status/.tb_*
+experiments/**/status/.down_*

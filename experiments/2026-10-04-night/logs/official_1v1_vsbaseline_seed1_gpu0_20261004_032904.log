@@ -1,0 +1,335 @@
+================================================================
+EXPERIMENT : official_1v1_vsbaseline
+git commit : 34851d374032280e89bc6c3e14cf874f99e51564  branch=exp/repro-scaling-20261004
+env/scen   : SingleCombat / 1v1/NoWeapon/vsBaseline
+algo       : ppo   seed=1
+gpu        : 0
+threads    : 10   num_env_steps=1e8
+extra      : 
+log        : /root/autodl-tmp/SEU-SRTP/experiments/2026-10-04-night/scripts/../logs/official_1v1_vsbaseline_seed1_gpu0_20261004_032904.log
+start      : 2026-10-04T03:29:04+08:00
+================================================================
+choose to use gpu...
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 0/3333 episodes, total num timesteps 30000/100000000, FPS 345.
+
+average episode rewards is -208.15832078313252
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 1/3333 episodes, total num timesteps 60000/100000000, FPS 345.
+
+average episode rewards is -210.70755525914635
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 2/3333 episodes, total num timesteps 90000/100000000, FPS 347.
+
+average episode rewards is -211.9367431640625
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 3/3333 episodes, total num timesteps 120000/100000000, FPS 347.
+
+average episode rewards is -211.28664772727274
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 4/3333 episodes, total num timesteps 150000/100000000, FPS 348.
+
+average episode rewards is -211.94630142405063
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 5/3333 episodes, total num timesteps 180000/100000000, FPS 347.
+
+average episode rewards is -212.53776041666666
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 6/3333 episodes, total num timesteps 210000/100000000, FPS 347.
+
+average episode rewards is -211.72310014204547
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 7/3333 episodes, total num timesteps 240000/100000000, FPS 346.
+
+average episode rewards is -210.61115506329114
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 8/3333 episodes, total num timesteps 270000/100000000, FPS 345.
+
+average episode rewards is -212.9009431537829
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 9/3333 episodes, total num timesteps 300000/100000000, FPS 346.
+
+average episode rewards is -214.91985452586206
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 10/3333 episodes, total num timesteps 330000/100000000, FPS 347.
+
+average episode rewards is -215.22484997735506
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 11/3333 episodes, total num timesteps 360000/100000000, FPS 347.
+
+average episode rewards is -220.6346240942029
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 12/3333 episodes, total num timesteps 390000/100000000, FPS 348.
+
+average episode rewards is -214.28214928057554
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 13/3333 episodes, total num timesteps 420000/100000000, FPS 347.
+
+average episode rewards is -221.01774553571428
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 14/3333 episodes, total num timesteps 450000/100000000, FPS 346.
+
+average episode rewards is -221.8784327651515
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 15/3333 episodes, total num timesteps 480000/100000000, FPS 347.
+
+average episode rewards is -225.6067918346774
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 16/3333 episodes, total num timesteps 510000/100000000, FPS 347.
+
+average episode rewards is -224.15643601190476
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 17/3333 episodes, total num timesteps 540000/100000000, FPS 347.
+
+average episode rewards is -222.27235412597656
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 18/3333 episodes, total num timesteps 570000/100000000, FPS 347.
+
+average episode rewards is -228.51791779891303
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 19/3333 episodes, total num timesteps 600000/100000000, FPS 347.
+
+average episode rewards is -234.4512996495327
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 20/3333 episodes, total num timesteps 630000/100000000, FPS 347.
+
+average episode rewards is -232.10668721330276
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 21/3333 episodes, total num timesteps 660000/100000000, FPS 348.
+
+average episode rewards is -231.02282072368422
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 22/3333 episodes, total num timesteps 690000/100000000, FPS 348.
+
+average episode rewards is -228.31956449468086
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 23/3333 episodes, total num timesteps 720000/100000000, FPS 349.
+
+average episode rewards is -221.5883514747191
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 24/3333 episodes, total num timesteps 750000/100000000, FPS 349.
+
+average episode rewards is -233.83544303797467
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 25/3333 episodes, total num timesteps 780000/100000000, FPS 350.
+
+average episode rewards is -224.25244140625
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 26/3333 episodes, total num timesteps 810000/100000000, FPS 350.
+
+average episode rewards is -240.84752383474577
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 27/3333 episodes, total num timesteps 840000/100000000, FPS 351.
+
+average episode rewards is -217.64881310096155
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 28/3333 episodes, total num timesteps 870000/100000000, FPS 351.
+
+average episode rewards is -173.15218098958334
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 29/3333 episodes, total num timesteps 900000/100000000, FPS 351.
+
+average episode rewards is -147.54644931891025
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 30/3333 episodes, total num timesteps 930000/100000000, FPS 351.
+
+average episode rewards is -124.9126708984375
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 31/3333 episodes, total num timesteps 960000/100000000, FPS 351.
+
+average episode rewards is -71.8375946969697
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 32/3333 episodes, total num timesteps 990000/100000000, FPS 352.
+
+average episode rewards is -90.85226440429688
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 33/3333 episodes, total num timesteps 1020000/100000000, FPS 352.
+
+average episode rewards is -38.752999970407195
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 34/3333 episodes, total num timesteps 1050000/100000000, FPS 352.
+
+average episode rewards is -58.48604699337121
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 35/3333 episodes, total num timesteps 1080000/100000000, FPS 352.
+
+average episode rewards is -18.693410237630207
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 36/3333 episodes, total num timesteps 1110000/100000000, FPS 353.
+
+average episode rewards is -4.908961142263105
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 37/3333 episodes, total num timesteps 1140000/100000000, FPS 353.
+
+average episode rewards is -23.533521247632574
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 38/3333 episodes, total num timesteps 1170000/100000000, FPS 353.
+
+average episode rewards is -13.114711507161458
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 39/3333 episodes, total num timesteps 1200000/100000000, FPS 354.
+
+average episode rewards is -16.544504473286292
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 40/3333 episodes, total num timesteps 1230000/100000000, FPS 355.
+
+average episode rewards is -18.160782877604166
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 41/3333 episodes, total num timesteps 1260000/100000000, FPS 355.
+
+average episode rewards is -16.193195343017578
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 42/3333 episodes, total num timesteps 1290000/100000000, FPS 355.
+
+average episode rewards is -14.527699788411459
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 43/3333 episodes, total num timesteps 1320000/100000000, FPS 355.
+
+average episode rewards is 5.407170104980469
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 44/3333 episodes, total num timesteps 1350000/100000000, FPS 356.
+
+average episode rewards is 5.280536905924479
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 45/3333 episodes, total num timesteps 1380000/100000000, FPS 356.
+
+average episode rewards is -5.746661376953125
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 46/3333 episodes, total num timesteps 1410000/100000000, FPS 356.
+
+average episode rewards is -6.597900390625
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 47/3333 episodes, total num timesteps 1440000/100000000, FPS 356.
+
+average episode rewards is -9.942816734313965
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 48/3333 episodes, total num timesteps 1470000/100000000, FPS 357.
+
+average episode rewards is -7.707151351436492
+
+ Scenario 1v1/NoWeapon/vsBaseline Algo ppo Exp official_1v1_vsbaseline updates 49/3333 episodes, total num timesteps 1500000/100000000, FPS 357.
+
+average episode rewards is -1.9254876413652975
+SubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterrupt
+
+
+
+
+
+
+
+
+
+Traceback (most recent call last):
+  File "/root/autodl-tmp/SEU-SRTP/scripts/train/train_jsbsim.py", line 163, in main
+    runner.run()
+  File "/root/autodl-tmp/SEU-SRTP/runner/jsbsim_runner.py", line 49, in run
+    values, actions, action_log_probs, rnn_states_actor, rnn_states_critic = self.collect(step)
+                                                                             ^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/runner/jsbsim_runner.py", line 110, in collect
+    = self.policy.get_actions(np.concatenate(self.buffer.obs[step]),
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/algorithms/ppo/ppo_policy.py", line 30, in get_actions
+    actions, action_log_probs, rnn_states_actor = self.actor(obs, rnn_states_actor, masks)
+                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/algorithms/ppo/ppo_actor.py", line 59, in forward
+    actions, action_log_probs = self.act(actor_features, deterministic)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/algorithms/utils/act.py", line 77, in forward
+    action = action_dist.mode() if deterministic else action_dist.sample()
+                                                      ^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/algorithms/utils/distributions.py", line 16, in sample
+    return super().sample().unsqueeze(-1)
+           ^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/distributions/categorical.py", line 143, in sample
+    samples_2d = torch.multinomial(probs_2d, sample_shape.numel(), True).T
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+================================================================
+EXPERIMENT official_1v1_vsbaseline exited with code 0 at 2026-10-04T04:39:05+08:00
+================================================================

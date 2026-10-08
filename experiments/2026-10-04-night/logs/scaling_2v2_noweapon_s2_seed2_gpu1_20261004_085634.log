@@ -1,0 +1,300 @@
+================================================================
+EXPERIMENT : scaling_2v2_noweapon_s2
+git commit : c144989547212074d8017ef25857bfbc7413c9d7  branch=exp/repro-scaling-20261004
+env/scen   : MultipleCombat / 2v2/scaling_noweapon/HierarchySelfplay
+algo       : mappo   seed=2
+gpu        : 1
+threads    : 12   num_env_steps=900000
+extra      : --use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 2 --eval-episodes 1
+log        : /root/autodl-tmp/SEU-SRTP/experiments/2026-10-04-night/scripts/../logs/scaling_2v2_noweapon_s2_seed2_gpu1_20261004_085634.log
+start      : 2026-10-04T08:56:34+08:00
+================================================================
+choose to use gpu...
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+ Load selfplay opponents: Algo fsp, num_opponents 1.
+
+
+ Scenario 2v2/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_2v2_noweapon_s2 updates 0/25 episodes, total num timesteps 36000/900000, FPS 234.
+
+average episode rewards is -3.533763567606608
+
+Start evaluation...
+ Choose opponents [np.str_('latest')] for evaluation
+ Load opponent latest for evaluation (1/1)
+ eval average episode rewards: -4.6907578
+ Choose opponents [np.str_('0')] for training
+...End evaluation
+
+ Scenario 2v2/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_2v2_noweapon_s2 updates 1/25 episodes, total num timesteps 72000/900000, FPS 222.
+
+average episode rewards is -3.529625574747721
+
+ Scenario 2v2/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_2v2_noweapon_s2 updates 2/25 episodes, total num timesteps 108000/900000, FPS 226.
+
+average episode rewards is -3.517714818318685
+
+Start evaluation...
+ Choose opponents [np.str_('0')] for evaluation
+ Load opponent 0 for evaluation (1/1)
+ eval average episode rewards: -115.9166
+ Choose opponents [np.str_('latest')] for training
+...End evaluation
+
+ Scenario 2v2/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_2v2_noweapon_s2 updates 3/25 episodes, total num timesteps 144000/900000, FPS 223.
+
+average episode rewards is -3.498279571533203
+
+ Scenario 2v2/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_2v2_noweapon_s2 updates 4/25 episodes, total num timesteps 180000/900000, FPS 225.
+
+average episode rewards is -3.5308103561401367
+
+Start evaluation...
+ Choose opponents [np.str_('2')] for evaluation
+ Load opponent 2 for evaluation (1/1)
+ eval average episode rewards: -4.7087746
+ Choose opponents [np.str_('1')] for training
+...End evaluation
+
+ Scenario 2v2/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_2v2_noweapon_s2 updates 5/25 episodes, total num timesteps 216000/900000, FPS 223.
+
+average episode rewards is -3.5352452596028647
+
+ Scenario 2v2/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_2v2_noweapon_s2 updates 6/25 episodes, total num timesteps 252000/900000, FPS 224.
+
+average episode rewards is -3.346529006958008
+
+Start evaluation...
+ Choose opponents [np.str_('2')] for evaluation
+ Load opponent 2 for evaluation (1/1)
+ eval average episode rewards: -4.6899567
+ Choose opponents [np.str_('latest')] for training
+...End evaluation
+
+ Scenario 2v2/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_2v2_noweapon_s2 updates 7/25 episodes, total num timesteps 288000/900000, FPS 222.
+
+average episode rewards is -3.5001443227132163
+
+ Scenario 2v2/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_2v2_noweapon_s2 updates 8/25 episodes, total num timesteps 324000/900000, FPS 223.
+
+average episode rewards is -3.5328381856282554
+
+Start evaluation...
+ Choose opponents [np.str_('6')] for evaluation
+ Load opponent 6 for evaluation (1/1)
+ eval average episode rewards: 5.891611
+ Choose opponents [np.str_('1')] for training
+...End evaluation
+
+ Scenario 2v2/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_2v2_noweapon_s2 updates 9/25 episodes, total num timesteps 360000/900000, FPS 222.
+
+average episode rewards is -3.522089640299479
+
+ Scenario 2v2/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_2v2_noweapon_s2 updates 10/25 episodes, total num timesteps 396000/900000, FPS 222.
+
+average episode rewards is -3.5309829711914062
+
+Start evaluation...
+ Choose opponents [np.str_('0')] for evaluation
+ Load opponent 0 for evaluation (1/1)
+ eval average episode rewards: -88.6671
+ Choose opponents [np.str_('10')] for training
+...End evaluation
+
+ Scenario 2v2/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_2v2_noweapon_s2 updates 11/25 episodes, total num timesteps 432000/900000, FPS 221.
+
+average episode rewards is -3.1197757720947266
+
+ Scenario 2v2/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_2v2_noweapon_s2 updates 12/25 episodes, total num timesteps 468000/900000, FPS 221.
+
+average episode rewards is -3.4891703923543296
+
+Start evaluation...
+ Choose opponents [np.str_('4')] for evaluation
+ Load opponent 4 for evaluation (1/1)
+ eval average episode rewards: -64.363144
+ Choose opponents [np.str_('9')] for training
+...End evaluation
+
+ Scenario 2v2/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_2v2_noweapon_s2 updates 13/25 episodes, total num timesteps 504000/900000, FPS 220.
+
+average episode rewards is -2.5188732147216797
+
+ Scenario 2v2/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_2v2_noweapon_s2 updates 14/25 episodes, total num timesteps 540000/900000, FPS 221.
+
+average episode rewards is -3.461468060811361
+
+Start evaluation...
+ Choose opponents [np.str_('3')] for evaluation
+ Load opponent 3 for evaluation (1/1)
+ eval average episode rewards: -48.577183
+ Choose opponents [np.str_('11')] for training
+...End evaluation
+
+ Scenario 2v2/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_2v2_noweapon_s2 updates 15/25 episodes, total num timesteps 576000/900000, FPS 221.
+
+average episode rewards is -3.2059958775838218
+
+ Scenario 2v2/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_2v2_noweapon_s2 updates 16/25 episodes, total num timesteps 612000/900000, FPS 221.
+
+average episode rewards is -2.489304860432943
+
+Start evaluation...
+ Choose opponents [np.str_('4')] for evaluation
+ Load opponent 4 for evaluation (1/1)
+ eval average episode rewards: -127.76338
+ Choose opponents [np.str_('6')] for training
+...End evaluation
+
+ Scenario 2v2/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_2v2_noweapon_s2 updates 17/25 episodes, total num timesteps 648000/900000, FPS 220.
+
+average episode rewards is -3.3874518076578775
+
+ Scenario 2v2/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_2v2_noweapon_s2 updates 18/25 episodes, total num timesteps 684000/900000, FPS 221.
+
+average episode rewards is -3.478982925415039
+
+Start evaluation...
+ Choose opponents [np.str_('2')] for evaluation
+ Load opponent 2 for evaluation (1/1)
+ eval average episode rewards: -227.6075
+ Choose opponents [np.str_('5')] for training
+...End evaluation
+
+ Scenario 2v2/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_2v2_noweapon_s2 updates 19/25 episodes, total num timesteps 720000/900000, FPS 219.
+
+average episode rewards is -3.4791253407796225
+
+ Scenario 2v2/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_2v2_noweapon_s2 updates 20/25 episodes, total num timesteps 756000/900000, FPS 220.
+
+average episode rewards is -3.4933465321858725
+
+Start evaluation...
+ Choose opponents [np.str_('3')] for evaluation
+ Load opponent 3 for evaluation (1/1)
+ eval average episode rewards: -4.5747304
+ Choose opponents [np.str_('9')] for training
+...End evaluation
+
+ Scenario 2v2/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_2v2_noweapon_s2 updates 21/25 episodes, total num timesteps 792000/900000, FPS 220.
+
+average episode rewards is -2.653779665629069
+
+ Scenario 2v2/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_2v2_noweapon_s2 updates 22/25 episodes, total num timesteps 828000/900000, FPS 220.
+
+average episode rewards is -2.8204399744669595
+
+Start evaluation...
+ Choose opponents [np.str_('10')] for evaluation
+ Load opponent 10 for evaluation (1/1)
+ eval average episode rewards: -3.4359472
+ Choose opponents [np.str_('18')] for training
+...End evaluation
+
+ Scenario 2v2/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_2v2_noweapon_s2 updates 23/25 episodes, total num timesteps 864000/900000, FPS 220.
+
+average episode rewards is -1.5131662686665852
+
+ Scenario 2v2/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_2v2_noweapon_s2 updates 24/25 episodes, total num timesteps 900000/900000, FPS 220.
+
+average episode rewards is -1.2398699124654133
+
+Start evaluation...
+ Choose opponents [np.str_('6')] for evaluation
+ Load opponent 6 for evaluation (1/1)
+ eval average episode rewards: -2.2117054
+ Choose opponents [np.str_('5')] for training
+...End evaluation
+================================================================
+EXPERIMENT scaling_2v2_noweapon_s2 exited with code 0 at 2026-10-04T10:05:00+08:00
+================================================================

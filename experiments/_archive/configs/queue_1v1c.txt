@@ -1,0 +1,2 @@
+# Wave 2 lane I (P1/L2): 1v1 NoWeapon HierarchySelfplay -- official YAML+task branch, no official .sh.
+f6m_official_1v1_hier_selfplay_s1|3|6e6|108000|SingleCombat|1v1/NoWeapon/HierarchySelfplay|ppo|1|--use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 1 --eval-episodes 1

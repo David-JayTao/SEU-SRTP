@@ -1,0 +1,410 @@
+================================================================
+EXPERIMENT : official_1v1_dodge_vsbaseline
+git commit : c144989547212074d8017ef25857bfbc7413c9d7  branch=exp/repro-scaling-20261004
+env/scen   : SingleCombat / 1v1/DodgeMissile/vsBaseline
+algo       : ppo   seed=1
+gpu        : 0
+threads    : 10   num_env_steps=1e8
+extra      : --use-eval --n-eval-rollout-threads 1 --eval-interval 1 --eval-episodes 1
+log        : /root/autodl-tmp/SEU-SRTP/experiments/2026-10-04-night/scripts/../logs/official_1v1_dodge_vsbaseline_seed1_gpu0_20261004_102916.log
+start      : 2026-10-04T10:29:16+08:00
+================================================================
+choose to use gpu...
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 0/3333 episodes, total num timesteps 30000/100000000, FPS 266.
+
+average episode rewards is -248.92865953947367
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 1/3333 episodes, total num timesteps 60000/100000000, FPS 261.
+
+average episode rewards is -248.11789772727272
+
+Start evaluation...
+ eval average episode rewards: -263.43594
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 2/3333 episodes, total num timesteps 90000/100000000, FPS 260.
+
+average episode rewards is -248.53163164511494
+
+Start evaluation...
+ eval average episode rewards: -236.66771
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 3/3333 episodes, total num timesteps 120000/100000000, FPS 261.
+
+average episode rewards is -246.2787341101695
+
+Start evaluation...
+ eval average episode rewards: -219.5883
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 4/3333 episodes, total num timesteps 150000/100000000, FPS 258.
+
+average episode rewards is -250.46292449421966
+
+Start evaluation...
+ eval average episode rewards: -222.70105
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 5/3333 episodes, total num timesteps 180000/100000000, FPS 257.
+
+average episode rewards is -249.68483664772728
+
+Start evaluation...
+ eval average episode rewards: -216.4712
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 6/3333 episodes, total num timesteps 210000/100000000, FPS 257.
+
+average episode rewards is -251.84151785714286
+
+Start evaluation...
+ eval average episode rewards: -217.65881
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 7/3333 episodes, total num timesteps 240000/100000000, FPS 256.
+
+average episode rewards is -252.3584449404762
+
+Start evaluation...
+ eval average episode rewards: -220.50735
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 8/3333 episodes, total num timesteps 270000/100000000, FPS 255.
+
+average episode rewards is -251.8307893786127
+
+Start evaluation...
+ eval average episode rewards: -245.9192
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 9/3333 episodes, total num timesteps 300000/100000000, FPS 254.
+
+average episode rewards is -251.1362897398844
+
+Start evaluation...
+ eval average episode rewards: -299.10193
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 10/3333 episodes, total num timesteps 330000/100000000, FPS 253.
+
+average episode rewards is -251.5303591008772
+
+Start evaluation...
+ eval average episode rewards: -219.81291
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 11/3333 episodes, total num timesteps 360000/100000000, FPS 253.
+
+average episode rewards is -252.5616268382353
+
+Start evaluation...
+ eval average episode rewards: -219.05092
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 12/3333 episodes, total num timesteps 390000/100000000, FPS 253.
+
+average episode rewards is -250.0948988970588
+
+Start evaluation...
+ eval average episode rewards: -236.86128
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 13/3333 episodes, total num timesteps 420000/100000000, FPS 252.
+
+average episode rewards is -253.10725715361446
+
+Start evaluation...
+ eval average episode rewards: -220.2775
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 14/3333 episodes, total num timesteps 450000/100000000, FPS 252.
+
+average episode rewards is -251.42311580882352
+
+Start evaluation...
+ eval average episode rewards: -219.76654
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 15/3333 episodes, total num timesteps 480000/100000000, FPS 252.
+
+average episode rewards is -252.60393823099415
+
+Start evaluation...
+ eval average episode rewards: -218.28973
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 16/3333 episodes, total num timesteps 510000/100000000, FPS 252.
+
+average episode rewards is -251.10055738304092
+
+Start evaluation...
+ eval average episode rewards: -256.30814
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 17/3333 episodes, total num timesteps 540000/100000000, FPS 252.
+
+average episode rewards is -252.86076183431953
+
+Start evaluation...
+ eval average episode rewards: -238.26555
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 18/3333 episodes, total num timesteps 570000/100000000, FPS 251.
+
+average episode rewards is -251.60546875
+
+Start evaluation...
+ eval average episode rewards: -204.48555
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 19/3333 episodes, total num timesteps 600000/100000000, FPS 251.
+
+average episode rewards is -253.50052083333333
+
+Start evaluation...
+ eval average episode rewards: -207.90114
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 20/3333 episodes, total num timesteps 630000/100000000, FPS 251.
+
+average episode rewards is -253.338271722561
+
+Start evaluation...
+ eval average episode rewards: -285.23102
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 21/3333 episodes, total num timesteps 660000/100000000, FPS 251.
+
+average episode rewards is -254.52866950757576
+
+Start evaluation...
+ eval average episode rewards: -270.94388
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 22/3333 episodes, total num timesteps 690000/100000000, FPS 251.
+
+average episode rewards is -255.10995729813664
+
+Start evaluation...
+ eval average episode rewards: -265.90573
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 23/3333 episodes, total num timesteps 720000/100000000, FPS 251.
+
+average episode rewards is -254.12233113354037
+
+Start evaluation...
+ eval average episode rewards: -231.58342
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 24/3333 episodes, total num timesteps 750000/100000000, FPS 251.
+
+average episode rewards is -253.93306327160494
+
+Start evaluation...
+ eval average episode rewards: -206.22466
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 25/3333 episodes, total num timesteps 780000/100000000, FPS 251.
+
+average episode rewards is -255.39457977484471
+
+Start evaluation...
+ eval average episode rewards: -221.28264
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 26/3333 episodes, total num timesteps 810000/100000000, FPS 251.
+
+average episode rewards is -256.73623167438274
+
+Start evaluation...
+ eval average episode rewards: 14.760936
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 27/3333 episodes, total num timesteps 840000/100000000, FPS 250.
+
+average episode rewards is -254.50390625
+
+Start evaluation...
+ eval average episode rewards: -207.87668
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 28/3333 episodes, total num timesteps 870000/100000000, FPS 250.
+
+average episode rewards is -255.416386471519
+
+Start evaluation...
+ eval average episode rewards: 15.151356
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 29/3333 episodes, total num timesteps 900000/100000000, FPS 250.
+
+average episode rewards is -250.7230587121212
+
+Start evaluation...
+ eval average episode rewards: -223.73161
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 30/3333 episodes, total num timesteps 930000/100000000, FPS 250.
+
+average episode rewards is -252.45863688650306
+
+Start evaluation...
+ eval average episode rewards: -209.27171
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 31/3333 episodes, total num timesteps 960000/100000000, FPS 249.
+
+average episode rewards is -253.810791015625
+
+Start evaluation...
+ eval average episode rewards: -207.87941
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 32/3333 episodes, total num timesteps 990000/100000000, FPS 249.
+
+average episode rewards is -251.87540740030676
+
+Start evaluation...
+ eval average episode rewards: 4.3642397
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/vsBaseline Algo ppo Exp official_1v1_dodge_vsbaseline updates 33/3333 episodes, total num timesteps 1020000/100000000, FPS 249.
+
+average episode rewards is -249.46162823932926
+
+Start evaluation...
+ eval average episode rewards: -230.68643
+...End evaluation
+SubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterrupt
+
+
+SubprocVecEnv worker: got KeyboardInterrupt
+
+
+
+
+
+
+Traceback (most recent call last):
+  File "/root/autodl-tmp/SEU-SRTP/scripts/train/train_jsbsim.py", line 163, in main
+    runner.run()
+  File "/root/autodl-tmp/SEU-SRTP/runner/jsbsim_runner.py", line 52, in run
+    obs, rewards, dones, infos = self.envs.step(actions)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 120, in step
+    return self.step_wait()
+           ^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 278, in step_wait
+    results = [remote.recv() for remote in self.remotes]
+               ^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+          ^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 430, in _recv_bytes
+    buf = self._recv(4)
+          ^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 395, in _recv
+    chunk = read(handle, remaining)
+            ^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/root/autodl-tmp/SEU-SRTP/scripts/train/train_jsbsim.py", line 176, in <module>
+    main(sys.argv[1:])
+  File "/root/autodl-tmp/SEU-SRTP/scripts/train/train_jsbsim.py", line 168, in main
+    envs.close()
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 110, in close
+    self.close_extras()
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 295, in close_extras
+    remote.recv()
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+          ^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 430, in _recv_bytes
+    buf = self._recv(4)
+          ^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 399, in _recv
+    raise EOFError
+EOFError
+================================================================
+EXPERIMENT official_1v1_dodge_vsbaseline exited with code 0 at 2026-10-04T11:39:17+08:00
+================================================================

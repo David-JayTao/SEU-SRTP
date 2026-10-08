@@ -1,0 +1,598 @@
+choose to use gpu...
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+ Load selfplay opponents: Algo fsp, num_opponents 1.
+
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 0/2777 episodes, total num timesteps 36000/100000000, FPS 239.
+
+average episode rewards is -3.5249760945638022
+
+Start evaluation...
+ Choose opponents [np.str_('latest')] for evaluation
+ Load opponent latest for evaluation (1/1)
+ eval average episode rewards: -28.286333
+ Choose opponents [np.str_('0')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 1/2777 episodes, total num timesteps 72000/100000000, FPS 222.
+
+average episode rewards is -3.3416884740193686
+
+Start evaluation...
+ Choose opponents [np.str_('0')] for evaluation
+ Load opponent 0 for evaluation (1/1)
+ eval average episode rewards: -126.63839
+ Choose opponents [np.str_('latest')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 2/2777 episodes, total num timesteps 108000/100000000, FPS 219.
+
+average episode rewards is -3.4849637349446616
+
+Start evaluation...
+ Choose opponents [np.str_('2')] for evaluation
+ Load opponent 2 for evaluation (1/1)
+ eval average episode rewards: -99.72075
+ Choose opponents [np.str_('2')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 3/2777 episodes, total num timesteps 144000/100000000, FPS 219.
+
+average episode rewards is -3.533177693684896
+
+Start evaluation...
+ Choose opponents [np.str_('2')] for evaluation
+ Load opponent 2 for evaluation (1/1)
+ eval average episode rewards: -50.675644
+ Choose opponents [np.str_('0')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 4/2777 episodes, total num timesteps 180000/100000000, FPS 218.
+
+average episode rewards is -3.4161545435587564
+
+Start evaluation...
+ Choose opponents [np.str_('2')] for evaluation
+ Load opponent 2 for evaluation (1/1)
+ eval average episode rewards: -99.25414
+ Choose opponents [np.str_('4')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 5/2777 episodes, total num timesteps 216000/100000000, FPS 217.
+
+average episode rewards is -3.338741938273112
+
+Start evaluation...
+ Choose opponents [np.str_('1')] for evaluation
+ Load opponent 1 for evaluation (1/1)
+ eval average episode rewards: -37.258453
+ Choose opponents [np.str_('3')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 6/2777 episodes, total num timesteps 252000/100000000, FPS 217.
+
+average episode rewards is -3.4729833602905273
+
+Start evaluation...
+ Choose opponents [np.str_('6')] for evaluation
+ Load opponent 6 for evaluation (1/1)
+ eval average episode rewards: -279.51077
+ Choose opponents [np.str_('5')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 7/2777 episodes, total num timesteps 288000/100000000, FPS 215.
+
+average episode rewards is -2.9480409622192383
+
+Start evaluation...
+ Choose opponents [np.str_('7')] for evaluation
+ Load opponent 7 for evaluation (1/1)
+ eval average episode rewards: -156.78336
+ Choose opponents [np.str_('7')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 8/2777 episodes, total num timesteps 324000/100000000, FPS 213.
+
+average episode rewards is -3.4880393346150718
+
+Start evaluation...
+ Choose opponents [np.str_('0')] for evaluation
+ Load opponent 0 for evaluation (1/1)
+ eval average episode rewards: -4.6506085
+ Choose opponents [np.str_('5')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 9/2777 episodes, total num timesteps 360000/100000000, FPS 213.
+
+average episode rewards is -3.2228285471598306
+
+Start evaluation...
+ Choose opponents [np.str_('6')] for evaluation
+ Load opponent 6 for evaluation (1/1)
+ eval average episode rewards: -33.96625
+ Choose opponents [np.str_('6')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 10/2777 episodes, total num timesteps 396000/100000000, FPS 213.
+
+average episode rewards is -3.4955666859944663
+
+Start evaluation...
+ Choose opponents [np.str_('7')] for evaluation
+ Load opponent 7 for evaluation (1/1)
+ eval average episode rewards: -260.923
+ Choose opponents [np.str_('0')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 11/2777 episodes, total num timesteps 432000/100000000, FPS 212.
+
+average episode rewards is -3.521298408508301
+
+Start evaluation...
+ Choose opponents [np.str_('4')] for evaluation
+ Load opponent 4 for evaluation (1/1)
+ eval average episode rewards: -205.54189
+ Choose opponents [np.str_('8')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 12/2777 episodes, total num timesteps 468000/100000000, FPS 211.
+
+average episode rewards is -3.4877020517985025
+
+Start evaluation...
+ Choose opponents [np.str_('12')] for evaluation
+ Load opponent 12 for evaluation (1/1)
+ eval average episode rewards: -212.16858
+ Choose opponents [np.str_('7')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 13/2777 episodes, total num timesteps 504000/100000000, FPS 211.
+
+average episode rewards is -3.489699045817057
+
+Start evaluation...
+ Choose opponents [np.str_('8')] for evaluation
+ Load opponent 8 for evaluation (1/1)
+ eval average episode rewards: -178.3469
+ Choose opponents [np.str_('3')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 14/2777 episodes, total num timesteps 540000/100000000, FPS 211.
+
+average episode rewards is -3.4978345235188804
+
+Start evaluation...
+ Choose opponents [np.str_('2')] for evaluation
+ Load opponent 2 for evaluation (1/1)
+ eval average episode rewards: -40.157967
+ Choose opponents [np.str_('latest')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 15/2777 episodes, total num timesteps 576000/100000000, FPS 210.
+
+average episode rewards is -3.470425605773926
+
+Start evaluation...
+ Choose opponents [np.str_('4')] for evaluation
+ Load opponent 4 for evaluation (1/1)
+ eval average episode rewards: -17.189753
+ Choose opponents [np.str_('14')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 16/2777 episodes, total num timesteps 612000/100000000, FPS 210.
+
+average episode rewards is -3.2019627888997397
+
+Start evaluation...
+ Choose opponents [np.str_('14')] for evaluation
+ Load opponent 14 for evaluation (1/1)
+ eval average episode rewards: -4.330355
+ Choose opponents [np.str_('latest')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 17/2777 episodes, total num timesteps 648000/100000000, FPS 210.
+
+average episode rewards is -3.0026868184407554
+
+Start evaluation...
+ Choose opponents [np.str_('17')] for evaluation
+ Load opponent 17 for evaluation (1/1)
+ eval average episode rewards: -72.51957
+ Choose opponents [np.str_('2')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 18/2777 episodes, total num timesteps 684000/100000000, FPS 209.
+
+average episode rewards is -3.4005263646443686
+
+Start evaluation...
+ Choose opponents [np.str_('16')] for evaluation
+ Load opponent 16 for evaluation (1/1)
+ eval average episode rewards: -132.172
+ Choose opponents [np.str_('18')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 19/2777 episodes, total num timesteps 720000/100000000, FPS 210.
+
+average episode rewards is 0.04547834396362305
+
+Start evaluation...
+ Choose opponents [np.str_('18')] for evaluation
+ Load opponent 18 for evaluation (1/1)
+ eval average episode rewards: -84.60453
+ Choose opponents [np.str_('18')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 20/2777 episodes, total num timesteps 756000/100000000, FPS 209.
+
+average episode rewards is 1.2196602821350098
+
+Start evaluation...
+ Choose opponents [np.str_('13')] for evaluation
+ Load opponent 13 for evaluation (1/1)
+ eval average episode rewards: -46.663002
+ Choose opponents [np.str_('6')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 21/2777 episodes, total num timesteps 792000/100000000, FPS 209.
+
+average episode rewards is -3.145907719930013
+
+Start evaluation...
+ Choose opponents [np.str_('latest')] for evaluation
+ Load opponent latest for evaluation (1/1)
+ eval average episode rewards: -89.88737
+ Choose opponents [np.str_('0')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 22/2777 episodes, total num timesteps 828000/100000000, FPS 209.
+
+average episode rewards is -3.073611577351888
+
+Start evaluation...
+ Choose opponents [np.str_('8')] for evaluation
+ Load opponent 8 for evaluation (1/1)
+ eval average episode rewards: -114.24301
+ Choose opponents [np.str_('latest')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 23/2777 episodes, total num timesteps 864000/100000000, FPS 209.
+
+average episode rewards is 7.082693735758464
+
+Start evaluation...
+ Choose opponents [np.str_('9')] for evaluation
+ Load opponent 9 for evaluation (1/1)
+ eval average episode rewards: -7.9159193
+ Choose opponents [np.str_('19')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 24/2777 episodes, total num timesteps 900000/100000000, FPS 209.
+
+average episode rewards is 6.667970021565755
+
+Start evaluation...
+ Choose opponents [np.str_('22')] for evaluation
+ Load opponent 22 for evaluation (1/1)
+ eval average episode rewards: -62.845524
+ Choose opponents [np.str_('2')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 25/2777 episodes, total num timesteps 936000/100000000, FPS 209.
+
+average episode rewards is -3.2389163970947266
+
+Start evaluation...
+ Choose opponents [np.str_('10')] for evaluation
+ Load opponent 10 for evaluation (1/1)
+ eval average episode rewards: -74.85097
+ Choose opponents [np.str_('17')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 26/2777 episodes, total num timesteps 972000/100000000, FPS 209.
+
+average episode rewards is -0.27233338356018066
+
+Start evaluation...
+ Choose opponents [np.str_('22')] for evaluation
+ Load opponent 22 for evaluation (1/1)
+ eval average episode rewards: -127.80173
+ Choose opponents [np.str_('1')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 27/2777 episodes, total num timesteps 1008000/100000000, FPS 209.
+
+average episode rewards is -2.9926106135050454
+
+Start evaluation...
+ Choose opponents [np.str_('latest')] for evaluation
+ Load opponent latest for evaluation (1/1)
+ eval average episode rewards: -119.02939
+ Choose opponents [np.str_('latest')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 28/2777 episodes, total num timesteps 1044000/100000000, FPS 209.
+
+average episode rewards is 3.971372604370117
+
+Start evaluation...
+ Choose opponents [np.str_('3')] for evaluation
+ Load opponent 3 for evaluation (1/1)
+ eval average episode rewards: -29.775795
+ Choose opponents [np.str_('20')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 29/2777 episodes, total num timesteps 1080000/100000000, FPS 209.
+
+average episode rewards is 8.815104166666666
+
+Start evaluation...
+ Choose opponents [np.str_('4')] for evaluation
+ Load opponent 4 for evaluation (1/1)
+ eval average episode rewards: -175.57419
+ Choose opponents [np.str_('5')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 30/2777 episodes, total num timesteps 1116000/100000000, FPS 209.
+
+average episode rewards is -2.7622756958007812
+
+Start evaluation...
+ Choose opponents [np.str_('7')] for evaluation
+ Load opponent 7 for evaluation (1/1)
+ eval average episode rewards: -91.46404
+ Choose opponents [np.str_('19')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 31/2777 episodes, total num timesteps 1152000/100000000, FPS 209.
+
+average episode rewards is 5.867520650227864
+
+Start evaluation...
+ Choose opponents [np.str_('16')] for evaluation
+ Load opponent 16 for evaluation (1/1)
+ eval average episode rewards: -119.176186
+ Choose opponents [np.str_('14')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 32/2777 episodes, total num timesteps 1188000/100000000, FPS 209.
+
+average episode rewards is 0.817857027053833
+
+Start evaluation...
+ Choose opponents [np.str_('3')] for evaluation
+ Load opponent 3 for evaluation (1/1)
+ eval average episode rewards: 1.9497193
+ Choose opponents [np.str_('30')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 33/2777 episodes, total num timesteps 1224000/100000000, FPS 209.
+
+average episode rewards is 3.5642967224121094
+
+Start evaluation...
+ Choose opponents [np.str_('0')] for evaluation
+ Load opponent 0 for evaluation (1/1)
+ eval average episode rewards: 11.958416
+ Choose opponents [np.str_('0')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 34/2777 episodes, total num timesteps 1260000/100000000, FPS 209.
+
+average episode rewards is -0.8433745702107748
+
+Start evaluation...
+ Choose opponents [np.str_('34')] for evaluation
+ Load opponent 34 for evaluation (1/1)
+ eval average episode rewards: -116.39617
+ Choose opponents [np.str_('10')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 35/2777 episodes, total num timesteps 1296000/100000000, FPS 209.
+
+average episode rewards is 0.3369251489639282
+
+Start evaluation...
+ Choose opponents [np.str_('17')] for evaluation
+ Load opponent 17 for evaluation (1/1)
+ eval average episode rewards: 7.5886984
+ Choose opponents [np.str_('26')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 36/2777 episodes, total num timesteps 1332000/100000000, FPS 209.
+
+average episode rewards is 4.217944145202637
+
+Start evaluation...
+ Choose opponents [np.str_('latest')] for evaluation
+ Load opponent latest for evaluation (1/1)
+ eval average episode rewards: -74.376434
+ Choose opponents [np.str_('13')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 37/2777 episodes, total num timesteps 1368000/100000000, FPS 209.
+
+average episode rewards is -0.337174654006958
+
+Start evaluation...
+ Choose opponents [np.str_('34')] for evaluation
+ Load opponent 34 for evaluation (1/1)
+ eval average episode rewards: 15.974285
+ Choose opponents [np.str_('11')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 38/2777 episodes, total num timesteps 1404000/100000000, FPS 209.
+
+average episode rewards is 0.6851489543914795
+
+Start evaluation...
+ Choose opponents [np.str_('19')] for evaluation
+ Load opponent 19 for evaluation (1/1)
+ eval average episode rewards: 8.529868
+ Choose opponents [np.str_('10')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 39/2777 episodes, total num timesteps 1440000/100000000, FPS 209.
+
+average episode rewards is 1.8434677124023438
+
+Start evaluation...
+ Choose opponents [np.str_('3')] for evaluation
+ Load opponent 3 for evaluation (1/1)
+ eval average episode rewards: -2.0263727
+ Choose opponents [np.str_('5')] for training
+...End evaluation
+
+ Scenario 2v2/NoWeapon/HierarchySelfplay Algo mappo Exp official_2v2_noweapon updates 40/2777 episodes, total num timesteps 1476000/100000000, FPS 208.
+
+average episode rewards is 1.2035396893819172
+
+Start evaluation...
+ Choose opponents [np.str_('3')] for evaluation
+ Load opponent 3 for evaluation (1/1)
+ eval average episode rewards: 7.953659
+ Choose opponents [np.str_('2')] for training
+...End evaluation
+SubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterrupt
+
+
+
+
+
+
+
+
+
+
+
+Traceback (most recent call last):
+  File "/root/autodl-tmp/SEU-SRTP/scripts/train/train_jsbsim.py", line 163, in main
+    runner.run()
+  File "/root/autodl-tmp/SEU-SRTP/runner/share_jsbsim_runner.py", line 81, in run
+    obs, share_obs, rewards, dones, infos = self.envs.step(actions)
+                                            ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 120, in step
+    return self.step_wait()
+           ^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 449, in step_wait
+    results = [remote.recv() for remote in self.remotes]
+               ^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+          ^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 430, in _recv_bytes
+    buf = self._recv(4)
+          ^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 395, in _recv
+    chunk = read(handle, remaining)
+            ^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/root/autodl-tmp/SEU-SRTP/scripts/train/train_jsbsim.py", line 176, in <module>
+    main(sys.argv[1:])
+  File "/root/autodl-tmp/SEU-SRTP/scripts/train/train_jsbsim.py", line 168, in main
+    envs.close()
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 110, in close
+    self.close_extras()
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 295, in close_extras
+    remote.recv()
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+          ^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 430, in _recv_bytes
+    buf = self._recv(4)
+          ^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 399, in _recv
+    raise EOFError
+EOFError

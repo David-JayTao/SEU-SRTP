@@ -1,0 +1,465 @@
+================================================================
+EXPERIMENT : f6m_10v10_noweapon_s1
+git commit : d127a4006021b32edfcc9ac0603b87aa9606b91e  branch=exp/formal-6m-20261007
+env/scen   : MultipleCombat / 10v10/scaling_noweapon/HierarchySelfplay
+algo       : mappo   seed=1
+gpu        : 1
+threads    : 20   num_env_steps=6e6
+extra      : --use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 2 --eval-episodes 1
+log        : /root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/scripts/../logs/f6m_10v10_noweapon_s1_seed1_gpu1_20261008_011321.log
+start      : 2026-10-08T01:13:21+08:00
+================================================================
+choose to use gpu...
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04JSBSim Flight Dynamics Model v
+1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04            [JSBSim-ML v2.0
+]
+
+JSBSim startup beginning ...
+
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+ Load selfplay opponents: Algo fsp, num_opponents 1.
+
+
+ Scenario 10v10/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_10v10_noweapon_s1 updates 0/100 episodes, total num timesteps 60000/6000000, FPS 60.
+
+average episode rewards is -17.611494140625
+
+Start evaluation...
+ Choose opponents [np.str_('0')] for evaluation
+ Load opponent 0 for evaluation (1/1)
+ eval average episode rewards: -138.42078
+ Choose opponents [np.str_('0')] for training
+...End evaluation
+
+ Scenario 10v10/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_10v10_noweapon_s1 updates 1/100 episodes, total num timesteps 120000/6000000, FPS 58.
+
+average episode rewards is -17.764249267578126
+
+ Scenario 10v10/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_10v10_noweapon_s1 updates 2/100 episodes, total num timesteps 180000/6000000, FPS 60.
+
+average episode rewards is -17.54581787109375
+
+Start evaluation...
+ Choose opponents [np.str_('latest')] for evaluation
+ Load opponent latest for evaluation (1/1)
+ eval average episode rewards: -391.362
+ Choose opponents [np.str_('latest')] for training
+...End evaluation
+
+ Scenario 10v10/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_10v10_noweapon_s1 updates 3/100 episodes, total num timesteps 240000/6000000, FPS 59.
+
+average episode rewards is -17.69279296875
+
+ Scenario 10v10/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_10v10_noweapon_s1 updates 4/100 episodes, total num timesteps 300000/6000000, FPS 60.
+
+average episode rewards is -17.737559814453125
+
+Start evaluation...
+ Choose opponents [np.str_('0')] for evaluation
+ Load opponent 0 for evaluation (1/1)
+ eval average episode rewards: -149.79909
+ Choose opponents [np.str_('2')] for training
+...End evaluation
+
+ Scenario 10v10/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_10v10_noweapon_s1 updates 5/100 episodes, total num timesteps 360000/6000000, FPS 59.
+
+average episode rewards is -17.541729736328126
+
+ Scenario 10v10/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_10v10_noweapon_s1 updates 6/100 episodes, total num timesteps 420000/6000000, FPS 59.
+
+average episode rewards is -17.460426025390625
+
+Start evaluation...
+ Choose opponents [np.str_('4')] for evaluation
+ Load opponent 4 for evaluation (1/1)
+ eval average episode rewards: -189.58006
+ Choose opponents [np.str_('6')] for training
+...End evaluation
+
+ Scenario 10v10/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_10v10_noweapon_s1 updates 7/100 episodes, total num timesteps 480000/6000000, FPS 58.
+
+average episode rewards is -17.52038330078125
+
+ Scenario 10v10/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_10v10_noweapon_s1 updates 8/100 episodes, total num timesteps 540000/6000000, FPS 59.
+
+average episode rewards is -17.1104345703125
+
+Start evaluation...
+ Choose opponents [np.str_('latest')] for evaluation
+ Load opponent latest for evaluation (1/1)
+ eval average episode rewards: -25.765491
+ Choose opponents [np.str_('latest')] for training
+...End evaluation
+
+ Scenario 10v10/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_10v10_noweapon_s1 updates 9/100 episodes, total num timesteps 600000/6000000, FPS 58.
+
+average episode rewards is -14.87517822265625
+
+ Scenario 10v10/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_10v10_noweapon_s1 updates 10/100 episodes, total num timesteps 660000/6000000, FPS 59.
+
+average episode rewards is -13.89675048828125
+
+Start evaluation...
+ Choose opponents [np.str_('0')] for evaluation
+ Load opponent 0 for evaluation (1/1)
+ eval average episode rewards: -95.147156
+ Choose opponents [np.str_('6')] for training
+...End evaluation
+
+ Scenario 10v10/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_10v10_noweapon_s1 updates 11/100 episodes, total num timesteps 720000/6000000, FPS 59.
+
+average episode rewards is -16.67223388671875
+
+ Scenario 10v10/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_10v10_noweapon_s1 updates 12/100 episodes, total num timesteps 780000/6000000, FPS 60.
+
+average episode rewards is -16.07883544921875
+
+Start evaluation...
+ Choose opponents [np.str_('12')] for evaluation
+ Load opponent 12 for evaluation (1/1)
+ eval average episode rewards: -29.874212
+ Choose opponents [np.str_('11')] for training
+...End evaluation
+
+ Scenario 10v10/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_10v10_noweapon_s1 updates 13/100 episodes, total num timesteps 840000/6000000, FPS 60.
+
+average episode rewards is -8.25287353515625
+
+ Scenario 10v10/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_10v10_noweapon_s1 updates 14/100 episodes, total num timesteps 900000/6000000, FPS 60.
+
+average episode rewards is -4.52143798828125
+
+Start evaluation...
+ Choose opponents [np.str_('5')] for evaluation
+ Load opponent 5 for evaluation (1/1)
+ eval average episode rewards: -194.82094
+ Choose opponents [np.str_('8')] for training
+...End evaluation
+
+ Scenario 10v10/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_10v10_noweapon_s1 updates 15/100 episodes, total num timesteps 960000/6000000, FPS 60.
+
+average episode rewards is -11.304365234375
+
+ Scenario 10v10/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_10v10_noweapon_s1 updates 16/100 episodes, total num timesteps 1020000/6000000, FPS 61.
+
+average episode rewards is -11.842933349609375
+
+Start evaluation...
+ Choose opponents [np.str_('4')] for evaluation
+ Load opponent 4 for evaluation (1/1)
+ eval average episode rewards: -218.31856
+ Choose opponents [np.str_('10')] for training
+...End evaluation
+
+ Scenario 10v10/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_10v10_noweapon_s1 updates 17/100 episodes, total num timesteps 1080000/6000000, FPS 60.
+
+average episode rewards is -6.072978515625
+
+ Scenario 10v10/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_10v10_noweapon_s1 updates 18/100 episodes, total num timesteps 1140000/6000000, FPS 61.
+
+average episode rewards is -5.101514282226563
+
+Start evaluation...
+ Choose opponents [np.str_('9')] for evaluation
+ Load opponent 9 for evaluation (1/1)
+ eval average episode rewards: -123.466324
+ Choose opponents [np.str_('13')] for training
+...End evaluation
+
+ Scenario 10v10/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_10v10_noweapon_s1 updates 19/100 episodes, total num timesteps 1200000/6000000, FPS 61.
+
+average episode rewards is 5.487958984375
+
+ Scenario 10v10/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_10v10_noweapon_s1 updates 20/100 episodes, total num timesteps 1260000/6000000, FPS 61.
+
+average episode rewards is 4.55084228515625
+
+Start evaluation...
+ Choose opponents [np.str_('17')] for evaluation
+ Load opponent 17 for evaluation (1/1)
+ eval average episode rewards: -106.77992
+ Choose opponents [np.str_('3')] for training
+...End evaluation
+
+ Scenario 10v10/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_10v10_noweapon_s1 updates 21/100 episodes, total num timesteps 1320000/6000000, FPS 61.
+
+average episode rewards is -15.393515625
+
+ Scenario 10v10/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_10v10_noweapon_s1 updates 22/100 episodes, total num timesteps 1380000/6000000, FPS 62.
+
+average episode rewards is -13.733077392578124
+
+Start evaluation...
+ Choose opponents [np.str_('22')] for evaluation
+ Load opponent 22 for evaluation (1/1)
+ eval average episode rewards: -38.360268
+ Choose opponents [np.str_('22')] for training
+...End evaluation
+
+ Scenario 10v10/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_10v10_noweapon_s1 updates 23/100 episodes, total num timesteps 1440000/6000000, FPS 62.
+
+average episode rewards is 3.2161685180664064
+
+ Scenario 10v10/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_10v10_noweapon_s1 updates 24/100 episodes, total num timesteps 1500000/6000000, FPS 62.
+
+average episode rewards is 8.456236572265626
+
+Start evaluation...
+ Choose opponents [np.str_('8')] for evaluation
+ Load opponent 8 for evaluation (1/1)
+ eval average episode rewards: -61.303333
+ Choose opponents [np.str_('16')] for training
+...End evaluation
+
+ Scenario 10v10/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_10v10_noweapon_s1 updates 25/100 episodes, total num timesteps 1560000/6000000, FPS 62.
+
+average episode rewards is 11.791552734375
+
+ Scenario 10v10/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_10v10_noweapon_s1 updates 26/100 episodes, total num timesteps 1620000/6000000, FPS 63.
+
+average episode rewards is 7.37849365234375
+
+Start evaluation...
+ Choose opponents [np.str_('22')] for evaluation
+ Load opponent 22 for evaluation (1/1)
+ eval average episode rewards: 0.60444534
+ Choose opponents [np.str_('latest')] for training
+...End evaluation
+
+ Scenario 10v10/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_10v10_noweapon_s1 updates 27/100 episodes, total num timesteps 1680000/6000000, FPS 63.
+
+average episode rewards is 15.61846923828125
+
+ Scenario 10v10/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_10v10_noweapon_s1 updates 28/100 episodes, total num timesteps 1740000/6000000, FPS 63.
+
+average episode rewards is 14.767093505859375
+
+Start evaluation...
+ Choose opponents [np.str_('21')] for evaluation
+ Load opponent 21 for evaluation (1/1)
+ eval average episode rewards: -10.621672
+ Choose opponents [np.str_('12')] for training
+...End evaluation
+
+ Scenario 10v10/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_10v10_noweapon_s1 updates 29/100 episodes, total num timesteps 1800000/6000000, FPS 63.
+
+average episode rewards is -0.997274169921875
+
+ Scenario 10v10/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_10v10_noweapon_s1 updates 30/100 episodes, total num timesteps 1860000/6000000, FPS 64.
+
+average episode rewards is 3.2868426513671873
+
+Start evaluation...
+ Choose opponents [np.str_('8')] for evaluation
+ Load opponent 8 for evaluation (1/1)
+ eval average episode rewards: -30.86301
+ Choose opponents [np.str_('8')] for training
+...End evaluation
+
+ Scenario 10v10/scaling_noweapon/HierarchySelfplay Algo mappo Exp f6m_10v10_noweapon_s1 updates 31/100 episodes, total num timesteps 1920000/6000000, FPS 64.
+
+average episode rewards is -7.797206420898437
+SubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterrupt
+SubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterrupt
+
+
+
+
+SubprocVecEnv worker: got KeyboardInterrupt
+SubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterrupt
+
+
+
+SubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterrupt
+
+
+
+
+
+
+
+
+Traceback (most recent call last):
+  File "/root/autodl-tmp/SEU-SRTP/scripts/train/train_jsbsim.py", line 163, in main
+    runner.run()
+  File "/root/autodl-tmp/SEU-SRTP/runner/share_jsbsim_runner.py", line 81, in run
+    obs, share_obs, rewards, dones, infos = self.envs.step(actions)
+                                            ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 120, in step
+    return self.step_wait()
+           ^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 449, in step_wait
+    results = [remote.recv() for remote in self.remotes]
+               ^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+          ^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 430, in _recv_bytes
+    buf = self._recv(4)
+          ^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 395, in _recv
+    chunk = read(handle, remaining)
+            ^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/root/autodl-tmp/SEU-SRTP/scripts/train/train_jsbsim.py", line 176, in <module>
+    main(sys.argv[1:])
+  File "/root/autodl-tmp/SEU-SRTP/scripts/train/train_jsbsim.py", line 168, in main
+    envs.close()
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 110, in close
+    self.close_extras()
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 295, in close_extras
+    remote.recv()
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+          ^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 430, in _recv_bytes
+    buf = self._recv(4)
+          ^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 399, in _recv
+    raise EOFError
+EOFError
+================================================================
+EXPERIMENT f6m_10v10_noweapon_s1 exited with code 0 at 2026-10-08T09:33:22+08:00
+================================================================

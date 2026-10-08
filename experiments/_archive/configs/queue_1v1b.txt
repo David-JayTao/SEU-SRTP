@@ -1,0 +1,1 @@
+f6m_official_1v1_vsbaseline_s1|3|6e6|108000|SingleCombat|1v1/NoWeapon/vsBaseline|ppo|1|

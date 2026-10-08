@@ -1,0 +1,271 @@
+================================================================
+EXPERIMENT : scaling_3v3_noweapon
+git commit : c144989547212074d8017ef25857bfbc7413c9d7  branch=exp/repro-scaling-20261004
+env/scen   : MultipleCombat / 3v3/scaling_noweapon/HierarchySelfplay
+algo       : mappo   seed=0
+gpu        : 2
+threads    : 18   num_env_steps=900000
+extra      : --use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 2 --eval-episodes 1
+log        : /root/autodl-tmp/SEU-SRTP/experiments/2026-10-04-night/scripts/../logs/scaling_3v3_noweapon_seed0_gpu2_20261004_065216.log
+start      : 2026-10-04T06:52:16+08:00
+================================================================
+choose to use gpu...
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+ Load selfplay opponents: Algo fsp, num_opponents 1.
+
+
+ Scenario 3v3/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_3v3_noweapon updates 0/16 episodes, total num timesteps 54000/900000, FPS 280.
+
+average episode rewards is -5.382120203088831
+
+Start evaluation...
+ Choose opponents [np.str_('latest')] for evaluation
+ Load opponent latest for evaluation (1/1)
+ eval average episode rewards: -131.8132
+ Choose opponents [np.str_('0')] for training
+...End evaluation
+
+ Scenario 3v3/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_3v3_noweapon updates 1/16 episodes, total num timesteps 108000/900000, FPS 263.
+
+average episode rewards is -5.29963853624132
+
+ Scenario 3v3/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_3v3_noweapon updates 2/16 episodes, total num timesteps 162000/900000, FPS 265.
+
+average episode rewards is -5.389285617404514
+
+Start evaluation...
+ Choose opponents [np.str_('0')] for evaluation
+ Load opponent 0 for evaluation (1/1)
+ eval average episode rewards: -126.475914
+ Choose opponents [np.str_('latest')] for training
+...End evaluation
+
+ Scenario 3v3/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_3v3_noweapon updates 3/16 episodes, total num timesteps 216000/900000, FPS 260.
+
+average episode rewards is -5.40550457989728
+
+ Scenario 3v3/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_3v3_noweapon updates 4/16 episodes, total num timesteps 270000/900000, FPS 262.
+
+average episode rewards is -5.312478524667245
+
+Start evaluation...
+ Choose opponents [np.str_('2')] for evaluation
+ Load opponent 2 for evaluation (1/1)
+ eval average episode rewards: -69.742935
+ Choose opponents [np.str_('2')] for training
+...End evaluation
+
+ Scenario 3v3/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_3v3_noweapon updates 5/16 episodes, total num timesteps 324000/900000, FPS 259.
+
+average episode rewards is -5.237111409505208
+
+ Scenario 3v3/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_3v3_noweapon updates 6/16 episodes, total num timesteps 378000/900000, FPS 261.
+
+average episode rewards is -5.222674899631077
+
+Start evaluation...
+ Choose opponents [np.str_('2')] for evaluation
+ Load opponent 2 for evaluation (1/1)
+ eval average episode rewards: -169.683
+ Choose opponents [np.str_('6')] for training
+...End evaluation
+
+ Scenario 3v3/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_3v3_noweapon updates 7/16 episodes, total num timesteps 432000/900000, FPS 257.
+
+average episode rewards is -5.221241703739873
+
+ Scenario 3v3/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_3v3_noweapon updates 8/16 episodes, total num timesteps 486000/900000, FPS 258.
+
+average episode rewards is -4.712891755280672
+
+Start evaluation...
+ Choose opponents [np.str_('8')] for evaluation
+ Load opponent 8 for evaluation (1/1)
+ eval average episode rewards: -51.464115
+ Choose opponents [np.str_('2')] for training
+...End evaluation
+
+ Scenario 3v3/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_3v3_noweapon updates 9/16 episodes, total num timesteps 540000/900000, FPS 256.
+
+average episode rewards is -4.66177424678096
+
+ Scenario 3v3/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_3v3_noweapon updates 10/16 episodes, total num timesteps 594000/900000, FPS 257.
+
+average episode rewards is -3.3264699865270546
+
+Start evaluation...
+ Choose opponents [np.str_('4')] for evaluation
+ Load opponent 4 for evaluation (1/1)
+ eval average episode rewards: -7.0530972
+ Choose opponents [np.str_('1')] for training
+...End evaluation
+
+ Scenario 3v3/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_3v3_noweapon updates 11/16 episodes, total num timesteps 648000/900000, FPS 256.
+
+average episode rewards is -3.83500643129702
+
+ Scenario 3v3/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_3v3_noweapon updates 12/16 episodes, total num timesteps 702000/900000, FPS 258.
+
+average episode rewards is -3.5788520530418113
+
+Start evaluation...
+ Choose opponents [np.str_('3')] for evaluation
+ Load opponent 3 for evaluation (1/1)
+ eval average episode rewards: -100.663536
+ Choose opponents [np.str_('6')] for training
+...End evaluation
+
+ Scenario 3v3/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_3v3_noweapon updates 13/16 episodes, total num timesteps 756000/900000, FPS 257.
+
+average episode rewards is -2.9181900024414062
+
+ Scenario 3v3/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_3v3_noweapon updates 14/16 episodes, total num timesteps 810000/900000, FPS 258.
+
+average episode rewards is -2.3419056645146124
+
+Start evaluation...
+ Choose opponents [np.str_('5')] for evaluation
+ Load opponent 5 for evaluation (1/1)
+ eval average episode rewards: -6.9778333
+ Choose opponents [np.str_('7')] for training
+...End evaluation
+
+ Scenario 3v3/scaling_noweapon/HierarchySelfplay Algo mappo Exp scaling_3v3_noweapon updates 15/16 episodes, total num timesteps 864000/900000, FPS 257.
+
+average episode rewards is -1.4961116932056568
+================================================================
+EXPERIMENT scaling_3v3_noweapon exited with code 0 at 2026-10-04T07:48:18+08:00
+================================================================

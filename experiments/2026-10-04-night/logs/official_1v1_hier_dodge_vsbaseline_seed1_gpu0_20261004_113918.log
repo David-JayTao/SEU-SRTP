@@ -1,0 +1,455 @@
+================================================================
+EXPERIMENT : official_1v1_hier_dodge_vsbaseline
+git commit : c144989547212074d8017ef25857bfbc7413c9d7  branch=exp/repro-scaling-20261004
+env/scen   : SingleCombat / 1v1/DodgeMissile/HierarchyVsBaseline
+algo       : ppo   seed=1
+gpu        : 0
+threads    : 10   num_env_steps=1e8
+extra      : --use-eval --n-eval-rollout-threads 1 --eval-interval 1 --eval-episodes 1
+log        : /root/autodl-tmp/SEU-SRTP/experiments/2026-10-04-night/scripts/../logs/official_1v1_hier_dodge_vsbaseline_seed1_gpu0_20261004_113918.log
+start      : 2026-10-04T11:39:18+08:00
+================================================================
+choose to use gpu...
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 0/3333 episodes, total num timesteps 30000/100000000, FPS 283.
+
+average episode rewards is -257.4583514178241
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 1/3333 episodes, total num timesteps 60000/100000000, FPS 282.
+
+average episode rewards is -255.82529810855263
+
+Start evaluation...
+ eval average episode rewards: 16.977596
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 2/3333 episodes, total num timesteps 90000/100000000, FPS 277.
+
+average episode rewards is -252.1485054347826
+
+Start evaluation...
+ eval average episode rewards: 12.615999
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 3/3333 episodes, total num timesteps 120000/100000000, FPS 272.
+
+average episode rewards is -253.6924762228261
+
+Start evaluation...
+ eval average episode rewards: 13.585085
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 4/3333 episodes, total num timesteps 150000/100000000, FPS 268.
+
+average episode rewards is -252.14256052927928
+
+Start evaluation...
+ eval average episode rewards: 2.369541
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 5/3333 episodes, total num timesteps 180000/100000000, FPS 267.
+
+average episode rewards is -230.55795036764707
+
+Start evaluation...
+ eval average episode rewards: 5.095149
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 6/3333 episodes, total num timesteps 210000/100000000, FPS 265.
+
+average episode rewards is -227.38262939453125
+
+Start evaluation...
+ eval average episode rewards: -213.52953
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 7/3333 episodes, total num timesteps 240000/100000000, FPS 264.
+
+average episode rewards is -222.28592891483515
+
+Start evaluation...
+ eval average episode rewards: 12.0817
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 8/3333 episodes, total num timesteps 270000/100000000, FPS 263.
+
+average episode rewards is -187.35264423076924
+
+Start evaluation...
+ eval average episode rewards: -204.78621
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 9/3333 episodes, total num timesteps 300000/100000000, FPS 264.
+
+average episode rewards is -190.63857559419014
+
+Start evaluation...
+ eval average episode rewards: 16.08321
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 10/3333 episodes, total num timesteps 330000/100000000, FPS 264.
+
+average episode rewards is -167.21073190789474
+
+Start evaluation...
+ eval average episode rewards: -199.7653
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 11/3333 episodes, total num timesteps 360000/100000000, FPS 264.
+
+average episode rewards is -132.37115704571758
+
+Start evaluation...
+ eval average episode rewards: 13.568689
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 12/3333 episodes, total num timesteps 390000/100000000, FPS 265.
+
+average episode rewards is -78.90341186523438
+
+Start evaluation...
+ eval average episode rewards: -248.82486
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 13/3333 episodes, total num timesteps 420000/100000000, FPS 266.
+
+average episode rewards is -48.18253102022059
+
+Start evaluation...
+ eval average episode rewards: -201.37952
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 14/3333 episodes, total num timesteps 450000/100000000, FPS 268.
+
+average episode rewards is -17.008883568548388
+
+Start evaluation...
+ eval average episode rewards: 14.083381
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 15/3333 episodes, total num timesteps 480000/100000000, FPS 269.
+
+average episode rewards is 0.660824712117513
+
+Start evaluation...
+ eval average episode rewards: 12.710022
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 16/3333 episodes, total num timesteps 510000/100000000, FPS 269.
+
+average episode rewards is 0.9695410410563151
+
+Start evaluation...
+ eval average episode rewards: -199.7608
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 17/3333 episodes, total num timesteps 540000/100000000, FPS 270.
+
+average episode rewards is -6.977938842773438
+
+Start evaluation...
+ eval average episode rewards: -200.62874
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 18/3333 episodes, total num timesteps 570000/100000000, FPS 273.
+
+average episode rewards is 0.5509068806966145
+
+Start evaluation...
+ eval average episode rewards: -199.69772
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 19/3333 episodes, total num timesteps 600000/100000000, FPS 274.
+
+average episode rewards is -6.569427490234375
+
+Start evaluation...
+ eval average episode rewards: -201.15414
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 20/3333 episodes, total num timesteps 630000/100000000, FPS 276.
+
+average episode rewards is 0.8480422973632813
+
+Start evaluation...
+ eval average episode rewards: -216.17926
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 21/3333 episodes, total num timesteps 660000/100000000, FPS 276.
+
+average episode rewards is -12.504292488098145
+
+Start evaluation...
+ eval average episode rewards: -198.82175
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 22/3333 episodes, total num timesteps 690000/100000000, FPS 276.
+
+average episode rewards is -12.44905533329133
+
+Start evaluation...
+ eval average episode rewards: -202.42043
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 23/3333 episodes, total num timesteps 720000/100000000, FPS 277.
+
+average episode rewards is 1.0319562276204428
+
+Start evaluation...
+ eval average episode rewards: -213.41902
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 24/3333 episodes, total num timesteps 750000/100000000, FPS 276.
+
+average episode rewards is 3.3085662841796877
+
+Start evaluation...
+ eval average episode rewards: -227.11928
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 25/3333 episodes, total num timesteps 780000/100000000, FPS 276.
+
+average episode rewards is 7.786289469401042
+
+Start evaluation...
+ eval average episode rewards: -244.94667
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 26/3333 episodes, total num timesteps 810000/100000000, FPS 277.
+
+average episode rewards is 8.8481201171875
+
+Start evaluation...
+ eval average episode rewards: -216.48518
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 27/3333 episodes, total num timesteps 840000/100000000, FPS 277.
+
+average episode rewards is -31.302950613839286
+
+Start evaluation...
+ eval average episode rewards: -213.88702
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 28/3333 episodes, total num timesteps 870000/100000000, FPS 277.
+
+average episode rewards is -38.428615993923614
+
+Start evaluation...
+ eval average episode rewards: -243.3051
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 29/3333 episodes, total num timesteps 900000/100000000, FPS 277.
+
+average episode rewards is -7.631743400327621
+
+Start evaluation...
+ eval average episode rewards: -231.3641
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 30/3333 episodes, total num timesteps 930000/100000000, FPS 277.
+
+average episode rewards is -4.765794323336694
+
+Start evaluation...
+ eval average episode rewards: -525.9184
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 31/3333 episodes, total num timesteps 960000/100000000, FPS 277.
+
+average episode rewards is -11.744184494018555
+
+Start evaluation...
+ eval average episode rewards: -235.28491
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 32/3333 episodes, total num timesteps 990000/100000000, FPS 277.
+
+average episode rewards is 9.316312662760417
+
+Start evaluation...
+ eval average episode rewards: -241.78297
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 33/3333 episodes, total num timesteps 1020000/100000000, FPS 277.
+
+average episode rewards is -13.48236083984375
+
+Start evaluation...
+ eval average episode rewards: -235.94748
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 34/3333 episodes, total num timesteps 1050000/100000000, FPS 277.
+
+average episode rewards is -1.0190582275390625
+
+Start evaluation...
+ eval average episode rewards: -248.605
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 35/3333 episodes, total num timesteps 1080000/100000000, FPS 277.
+
+average episode rewards is -38.957251654730904
+
+Start evaluation...
+ eval average episode rewards: -212.2537
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 36/3333 episodes, total num timesteps 1110000/100000000, FPS 277.
+
+average episode rewards is -66.78836307010135
+
+Start evaluation...
+ eval average episode rewards: -208.87262
+...End evaluation
+
+ Scenario 1v1/DodgeMissile/HierarchyVsBaseline Algo ppo Exp official_1v1_hier_dodge_vsbaseline updates 37/3333 episodes, total num timesteps 1140000/100000000, FPS 277.
+
+average episode rewards is -43.22066116333008
+
+Start evaluation...
+ eval average episode rewards: -218.88385
+...End evaluation
+SubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterrupt
+
+
+
+
+
+
+
+
+
+Traceback (most recent call last):
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/runner/jsbsim_runner.py", line 110, in collect
+    = self.policy.get_actions(np.concatenate(self.buffer.obs[step]),
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/algorithms/ppo/ppo_policy.py", line 30, in get_actions
+    actions, action_log_probs, rnn_states_actor = self.actor(obs, rnn_states_actor, masks)
+                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/algorithms/ppo/ppo_actor.py", line 59, in forward
+    actions, action_log_probs = self.act(actor_features, deterministic)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/algorithms/utils/act.py", line 78, in forward
+    action_log_prob = action_dist.log_probs(action)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/algorithms/utils/distributions.py", line 23, in log_probs
+    .log_prob(actions.squeeze(-1))
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/distributions/categorical.py", line 150, in log_prob
+    value, log_pmf = torch.broadcast_tensors(value, self.logits)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/functional.py", line 48, in broadcast_tensors
+    def broadcast_tensors(*tensors):
+    
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/root/autodl-tmp/SEU-SRTP/scripts/train/train_jsbsim.py", line 163, in main
+    runner.run()
+  File "/root/autodl-tmp/SEU-SRTP/runner/jsbsim_runner.py", line 49, in run
+    values, actions, action_log_probs, rnn_states_actor, rnn_states_critic = self.collect(step)
+                                                                             ^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 119, in decorate_context
+    with ctx_factory():
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/site-packages/torch/autograd/grad_mode.py", line 84, in __exit__
+    def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
+    
+KeyboardInterrupt
+================================================================
+EXPERIMENT official_1v1_hier_dodge_vsbaseline exited with code 0 at 2026-10-04T12:49:19+08:00
+================================================================

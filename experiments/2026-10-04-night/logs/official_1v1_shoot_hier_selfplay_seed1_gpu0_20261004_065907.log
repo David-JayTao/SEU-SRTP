@@ -1,0 +1,471 @@
+================================================================
+EXPERIMENT : official_1v1_shoot_hier_selfplay
+git commit : c144989547212074d8017ef25857bfbc7413c9d7  branch=exp/repro-scaling-20261004
+env/scen   : SingleCombat / 1v1/ShootMissile/HierarchySelfplay
+algo       : ppo   seed=1
+gpu        : 0
+threads    : 10   num_env_steps=1e8
+extra      : --use-selfplay --selfplay-algorithm fsp --n-choose-opponents 1 --use-eval --n-eval-rollout-threads 1 --eval-interval 1 --eval-episodes 1 --use-prior
+log        : /root/autodl-tmp/SEU-SRTP/experiments/2026-10-04-night/scripts/../logs/official_1v1_shoot_hier_selfplay_seed1_gpu0_20261004_065907.log
+start      : 2026-10-04T06:59:07+08:00
+================================================================
+choose to use gpu...
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+
+
+ Load selfplay opponents: Algo fsp, num_opponents 1.
+
+
+ Scenario 1v1/ShootMissile/HierarchySelfplay Algo ppo Exp official_1v1_shoot_hier_selfplay updates 0/3333 episodes, total num timesteps 30000/100000000, FPS 168.
+
+average episode rewards is -195.76332059352518
+
+ Scenario 1v1/ShootMissile/HierarchySelfplay Algo ppo Exp official_1v1_shoot_hier_selfplay updates 1/3333 episodes, total num timesteps 60000/100000000, FPS 168.
+
+average episode rewards is -201.04019325657896
+
+Start evaluation...
+ Choose opponents [np.str_('0')] for evaluation
+ Load opponent 0 for evaluation (1/1)
+ eval ego elo: 1000.0 | opponent average elo: 1000.0
+ ego average episode rewards: -0.3116387128829956
+ opponent average episode rewards: -0.30901437997817993
+ elo gain: 0.0 | latest elo score: 1000.0
+...End evaluation
+ Choose opponents [np.str_('0')] for training
+
+ Scenario 1v1/ShootMissile/HierarchySelfplay Algo ppo Exp official_1v1_shoot_hier_selfplay updates 2/3333 episodes, total num timesteps 90000/100000000, FPS 162.
+
+average episode rewards is -199.07194244604315
+
+Start evaluation...
+ Choose opponents [np.str_('1')] for evaluation
+ Load opponent 1 for evaluation (1/1)
+ eval ego elo: 1000.0 | opponent average elo: 1000.0
+ ego average episode rewards: -0.34561899304389954
+ opponent average episode rewards: -0.3455953896045685
+ elo gain: 0.0 | latest elo score: 1000.0
+...End evaluation
+ Choose opponents [np.str_('1')] for training
+
+ Scenario 1v1/ShootMissile/HierarchySelfplay Algo ppo Exp official_1v1_shoot_hier_selfplay updates 3/3333 episodes, total num timesteps 120000/100000000, FPS 162.
+
+average episode rewards is -193.97531960227272
+
+Start evaluation...
+ Choose opponents [np.str_('0')] for evaluation
+ Load opponent 0 for evaluation (1/1)
+ eval ego elo: 1000.0 | opponent average elo: 1000.0
+ ego average episode rewards: -1031.1383056640625
+ opponent average episode rewards: -0.06068827956914902
+ elo gain: -16.0 | latest elo score: 984.0
+...End evaluation
+ Choose opponents [np.str_('0')] for training
+
+ Scenario 1v1/ShootMissile/HierarchySelfplay Algo ppo Exp official_1v1_shoot_hier_selfplay updates 4/3333 episodes, total num timesteps 150000/100000000, FPS 161.
+
+average episode rewards is -211.95692274305554
+
+Start evaluation...
+ Choose opponents [np.str_('3')] for evaluation
+ Load opponent 3 for evaluation (1/1)
+ eval ego elo: 984.0 | opponent average elo: 984.0
+ ego average episode rewards: -63.6239128112793
+ opponent average episode rewards: -285.6586608886719
+ elo gain: 16.0 | latest elo score: 1000.0
+...End evaluation
+ Choose opponents [np.str_('1')] for training
+
+ Scenario 1v1/ShootMissile/HierarchySelfplay Algo ppo Exp official_1v1_shoot_hier_selfplay updates 5/3333 episodes, total num timesteps 180000/100000000, FPS 161.
+
+average episode rewards is -194.20865636927482
+
+Start evaluation...
+ Choose opponents [np.str_('3')] for evaluation
+ Load opponent 3 for evaluation (1/1)
+ eval ego elo: 1000.0 | opponent average elo: 968.0
+ ego average episode rewards: -272.20587158203125
+ opponent average episode rewards: -59.269065856933594
+ elo gain: -17.469501528975478 | latest elo score: 982.5304984710245
+...End evaluation
+ Choose opponents [np.str_('0')] for training
+
+ Scenario 1v1/ShootMissile/HierarchySelfplay Algo ppo Exp official_1v1_shoot_hier_selfplay updates 6/3333 episodes, total num timesteps 210000/100000000, FPS 161.
+
+average episode rewards is -204.02106097027973
+
+Start evaluation...
+ Choose opponents [np.str_('0')] for evaluation
+ Load opponent 0 for evaluation (1/1)
+ eval ego elo: 982.5304984710245 | opponent average elo: 1016.0
+ ego average episode rewards: -272.9530944824219
+ opponent average episode rewards: 0.1721949726343155
+ elo gain: -14.463422722825547 | latest elo score: 968.067075748199
+...End evaluation
+ Choose opponents [np.str_('1')] for training
+
+ Scenario 1v1/ShootMissile/HierarchySelfplay Algo ppo Exp official_1v1_shoot_hier_selfplay updates 7/3333 episodes, total num timesteps 240000/100000000, FPS 162.
+
+average episode rewards is -199.1198482789855
+
+Start evaluation...
+ Choose opponents [np.str_('4')] for evaluation
+ Load opponent 4 for evaluation (1/1)
+ eval ego elo: 968.067075748199 | opponent average elo: 1000.0
+ ego average episode rewards: -274.6344909667969
+ opponent average episode rewards: -38.71894073486328
+ elo gain: -14.533561421439726 | latest elo score: 953.5335143267594
+...End evaluation
+ Choose opponents [np.str_('5')] for training
+
+ Scenario 1v1/ShootMissile/HierarchySelfplay Algo ppo Exp official_1v1_shoot_hier_selfplay updates 8/3333 episodes, total num timesteps 270000/100000000, FPS 163.
+
+average episode rewards is -155.77575170693277
+
+Start evaluation...
+ Choose opponents [np.str_('4')] for evaluation
+ Load opponent 4 for evaluation (1/1)
+ eval ego elo: 953.5335143267594 | opponent average elo: 1014.5335614214397
+ ego average episode rewards: -272.197509765625
+ opponent average episode rewards: -43.2850227355957
+ elo gain: -13.219357148582597 | latest elo score: 940.3141571781767
+...End evaluation
+ Choose opponents [np.str_('6')] for training
+
+ Scenario 1v1/ShootMissile/HierarchySelfplay Algo ppo Exp official_1v1_shoot_hier_selfplay updates 9/3333 episodes, total num timesteps 300000/100000000, FPS 164.
+
+average episode rewards is -93.66297496448864
+
+Start evaluation...
+ Choose opponents [np.str_('2')] for evaluation
+ Load opponent 2 for evaluation (1/1)
+ eval ego elo: 940.3141571781767 | opponent average elo: 1000.0
+ ego average episode rewards: -273.85601806640625
+ opponent average episode rewards: -0.15548644959926605
+ elo gain: -13.278088892955445 | latest elo score: 927.0360682852213
+...End evaluation
+ Choose opponents [np.str_('4')] for training
+
+ Scenario 1v1/ShootMissile/HierarchySelfplay Algo ppo Exp official_1v1_shoot_hier_selfplay updates 10/3333 episodes, total num timesteps 330000/100000000, FPS 164.
+
+average episode rewards is -73.66860516151685
+
+Start evaluation...
+ Choose opponents [np.str_('5')] for evaluation
+ Load opponent 5 for evaluation (1/1)
+ eval ego elo: 927.0360682852213 | opponent average elo: 982.5304984710245
+ ego average episode rewards: -274.66009521484375
+ opponent average episode rewards: -70.92928314208984
+ elo gain: -13.465900744281054 | latest elo score: 913.5701675409402
+...End evaluation
+ Choose opponents [np.str_('2')] for training
+
+ Scenario 1v1/ShootMissile/HierarchySelfplay Algo ppo Exp official_1v1_shoot_hier_selfplay updates 11/3333 episodes, total num timesteps 360000/100000000, FPS 165.
+
+average episode rewards is -56.12842793367347
+
+Start evaluation...
+ Choose opponents [np.str_('4')] for evaluation
+ Load opponent 4 for evaluation (1/1)
+ eval ego elo: 913.5701675409402 | opponent average elo: 1027.7529185700223
+ ego average episode rewards: -276.912353515625
+ opponent average episode rewards: -45.77144241333008
+ elo gain: -10.923165400065091 | latest elo score: 902.6470021408752
+...End evaluation
+ Choose opponents [np.str_('10')] for training
+
+ Scenario 1v1/ShootMissile/HierarchySelfplay Algo ppo Exp official_1v1_shoot_hier_selfplay updates 12/3333 episodes, total num timesteps 390000/100000000, FPS 166.
+
+average episode rewards is -44.1516755756579
+
+Start evaluation...
+ Choose opponents [np.str_('2')] for evaluation
+ Load opponent 2 for evaluation (1/1)
+ eval ego elo: 902.6470021408752 | opponent average elo: 1013.2780888929555
+ ego average episode rewards: -275.1083068847656
+ opponent average episode rewards: -0.16053900122642517
+ elo gain: -11.070731746474603 | latest elo score: 891.5762703944006
+...End evaluation
+ Choose opponents [np.str_('4')] for training
+
+ Scenario 1v1/ShootMissile/HierarchySelfplay Algo ppo Exp official_1v1_shoot_hier_selfplay updates 13/3333 episodes, total num timesteps 420000/100000000, FPS 166.
+
+average episode rewards is -27.120200709292764
+
+Start evaluation...
+ Choose opponents [np.str_('7')] for evaluation
+ Load opponent 7 for evaluation (1/1)
+ eval ego elo: 891.5762703944006 | opponent average elo: 953.5335143267594
+ ego average episode rewards: -272.0621032714844
+ opponent average episode rewards: -274.6605224609375
+ elo gain: 2.8233714625341744 | latest elo score: 894.3996418569347
+...End evaluation
+ Choose opponents [np.str_('7')] for training
+
+ Scenario 1v1/ShootMissile/HierarchySelfplay Algo ppo Exp official_1v1_shoot_hier_selfplay updates 14/3333 episodes, total num timesteps 450000/100000000, FPS 166.
+
+average episode rewards is -22.86316622220553
+
+Start evaluation...
+ Choose opponents [np.str_('9')] for evaluation
+ Load opponent 9 for evaluation (1/1)
+ eval ego elo: 894.3996418569347 | opponent average elo: 927.0360682852213
+ ego average episode rewards: -272.1664123535156
+ opponent average episode rewards: -69.25298309326172
+ elo gain: -14.501442097701277 | latest elo score: 879.8981997592334
+...End evaluation
+ Choose opponents [np.str_('1')] for training
+
+ Scenario 1v1/ShootMissile/HierarchySelfplay Algo ppo Exp official_1v1_shoot_hier_selfplay updates 15/3333 episodes, total num timesteps 480000/100000000, FPS 167.
+
+average episode rewards is -21.771245978860293
+
+Start evaluation...
+ Choose opponents [np.str_('7')] for evaluation
+ Load opponent 7 for evaluation (1/1)
+ eval ego elo: 879.8981997592334 | opponent average elo: 950.7101428642252
+ ego average episode rewards: -64.27622985839844
+ opponent average episode rewards: -272.21624755859375
+ elo gain: 19.216594449182537 | latest elo score: 899.114794208416
+...End evaluation
+ Choose opponents [np.str_('14')] for training
+
+ Scenario 1v1/ShootMissile/HierarchySelfplay Algo ppo Exp official_1v1_shoot_hier_selfplay updates 16/3333 episodes, total num timesteps 510000/100000000, FPS 169.
+
+average episode rewards is -15.152578735351563
+
+Start evaluation...
+ Choose opponents [np.str_('0')] for evaluation
+ Load opponent 0 for evaluation (1/1)
+ eval ego elo: 899.114794208416 | opponent average elo: 1030.4634227228255
+ ego average episode rewards: -275.3097839355469
+ opponent average episode rewards: 0.16169250011444092
+ elo gain: -10.223770846287088 | latest elo score: 888.891023362129
+...End evaluation
+ Choose opponents [np.str_('6')] for training
+
+ Scenario 1v1/ShootMissile/HierarchySelfplay Algo ppo Exp official_1v1_shoot_hier_selfplay updates 17/3333 episodes, total num timesteps 540000/100000000, FPS 169.
+
+average episode rewards is -21.971236066120426
+
+Start evaluation...
+ Choose opponents [np.str_('13')] for evaluation
+ Load opponent 13 for evaluation (1/1)
+ eval ego elo: 888.891023362129 | opponent average elo: 894.3996418569347
+ ego average episode rewards: -62.59930419921875
+ opponent average episode rewards: -272.0500793457031
+ elo gain: 16.25366000162452 | latest elo score: 905.1446833637535
+...End evaluation
+ Choose opponents [np.str_('9')] for training
+
+ Scenario 1v1/ShootMissile/HierarchySelfplay Algo ppo Exp official_1v1_shoot_hier_selfplay updates 18/3333 episodes, total num timesteps 570000/100000000, FPS 169.
+
+average episode rewards is -20.46028332832532
+
+Start evaluation...
+ Choose opponents [np.str_('9')] for evaluation
+ Load opponent 9 for evaluation (1/1)
+ eval ego elo: 905.1446833637535 | opponent average elo: 941.5375103829226
+ ego average episode rewards: -70.34331512451172
+ opponent average episode rewards: -275.70343017578125
+ elo gain: 17.669848927571998 | latest elo score: 922.8145322913256
+...End evaluation
+ Choose opponents [np.str_('7')] for training
+
+ Scenario 1v1/ShootMissile/HierarchySelfplay Algo ppo Exp official_1v1_shoot_hier_selfplay updates 19/3333 episodes, total num timesteps 600000/100000000, FPS 169.
+
+average episode rewards is -25.88353729248047
+
+Start evaluation...
+ Choose opponents [np.str_('1')] for evaluation
+ Load opponent 1 for evaluation (1/1)
+ eval ego elo: 922.8145322913256 | opponent average elo: 1000.0
+ ego average episode rewards: -289.1570739746094
+ opponent average episode rewards: 0.11550888419151306
+ elo gain: -12.502822685340453 | latest elo score: 910.3117096059851
+...End evaluation
+ Choose opponents [np.str_('0')] for training
+
+ Scenario 1v1/ShootMissile/HierarchySelfplay Algo ppo Exp official_1v1_shoot_hier_selfplay updates 20/3333 episodes, total num timesteps 630000/100000000, FPS 170.
+
+average episode rewards is -21.881450834728422
+
+Start evaluation...
+ Choose opponents [np.str_('17')] for evaluation
+ Load opponent 17 for evaluation (1/1)
+ eval ego elo: 910.3117096059851 | opponent average elo: 905.1446833637535
+ ego average episode rewards: -274.9062194824219
+ opponent average episode rewards: -58.964717864990234
+ elo gain: -16.237932810804807 | latest elo score: 894.0737767951803
+...End evaluation
+ Choose opponents [np.str_('8')] for training
+
+ Scenario 1v1/ShootMissile/HierarchySelfplay Algo ppo Exp official_1v1_shoot_hier_selfplay updates 21/3333 episodes, total num timesteps 660000/100000000, FPS 170.
+
+average episode rewards is -21.430796068768167
+
+Start evaluation...
+ Choose opponents [np.str_('13')] for evaluation
+ Load opponent 13 for evaluation (1/1)
+ eval ego elo: 894.0737767951803 | opponent average elo: 878.1459818553102
+ ego average episode rewards: -274.6605224609375
+ opponent average episode rewards: -272.0621032714844
+ elo gain: -0.7329886378516584 | latest elo score: 893.3407881573286
+...End evaluation
+ Choose opponents [np.str_('19')] for training
+
+ Scenario 1v1/ShootMissile/HierarchySelfplay Algo ppo Exp official_1v1_shoot_hier_selfplay updates 22/3333 episodes, total num timesteps 690000/100000000, FPS 171.
+
+average episode rewards is -14.336300659179688
+
+Start evaluation...
+ Choose opponents [np.str_('15')] for evaluation
+ Load opponent 15 for evaluation (1/1)
+ eval ego elo: 893.3407881573286 | opponent average elo: 899.114794208416
+ ego average episode rewards: -274.65386962890625
+ opponent average episode rewards: -57.965572357177734
+ elo gain: -15.734121671875561 | latest elo score: 877.606666485453
+...End evaluation
+ Choose opponents [np.str_('10')] for training
+
+ Scenario 1v1/ShootMissile/HierarchySelfplay Algo ppo Exp official_1v1_shoot_hier_selfplay updates 23/3333 episodes, total num timesteps 720000/100000000, FPS 172.
+
+average episode rewards is -21.063981797960068
+
+Start evaluation...
+ Choose opponents [np.str_('8')] for evaluation
+ Load opponent 8 for evaluation (1/1)
+ eval ego elo: 877.606666485453 | opponent average elo: 940.3141571781767
+ ego average episode rewards: -272.2203369140625
+ opponent average episode rewards: -274.66009521484375
+ elo gain: 2.8568329647234503 | latest elo score: 880.4634994501765
+...End evaluation
+ Choose opponents [np.str_('7')] for training
+SubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterruptSubprocVecEnv worker: got KeyboardInterrupt
+
+
+
+
+
+
+
+
+
+Traceback (most recent call last):
+  File "/root/autodl-tmp/SEU-SRTP/scripts/train/train_jsbsim.py", line 163, in main
+    runner.run()
+  File "/root/autodl-tmp/SEU-SRTP/runner/jsbsim_runner.py", line 52, in run
+    obs, rewards, dones, infos = self.envs.step(actions)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 120, in step
+    return self.step_wait()
+           ^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 278, in step_wait
+    results = [remote.recv() for remote in self.remotes]
+               ^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+          ^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 430, in _recv_bytes
+    buf = self._recv(4)
+          ^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 395, in _recv
+    chunk = read(handle, remaining)
+            ^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/root/autodl-tmp/SEU-SRTP/scripts/train/train_jsbsim.py", line 176, in <module>
+    main(sys.argv[1:])
+  File "/root/autodl-tmp/SEU-SRTP/scripts/train/train_jsbsim.py", line 168, in main
+    envs.close()
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 110, in close
+    self.close_extras()
+  File "/root/autodl-tmp/SEU-SRTP/envs/env_wrappers.py", line 295, in close_extras
+    remote.recv()
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+          ^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 430, in _recv_bytes
+    buf = self._recv(4)
+          ^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/jsbsim/lib/python3.12/multiprocessing/connection.py", line 399, in _recv
+    raise EOFError
+EOFError
+================================================================
+EXPERIMENT official_1v1_shoot_hier_selfplay exited with code 0 at 2026-10-04T08:09:09+08:00
+================================================================
