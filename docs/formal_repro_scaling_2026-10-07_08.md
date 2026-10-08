@@ -1,38 +1,37 @@
-# SRTP 6M Formal Reproduction & Scaling Report
+# SRTP 6M 正式复现与 scaling 报告
 
 负责人：刘酝潇
 实验窗口：2026-10-07 02:54 CST → 2026-10-08 10:00 CST
 分支：`exp/formal-6m-20261007`
 工作区：`experiments/2026-10-07-08-formal6m/`
 
-> **Status: IN PROGRESS.** This document is updated continuously while the runs
-> are still training. Numbers marked `TBD` are not yet available. Nothing in
-> this report is extrapolated from the §3 pilot runs to stand in for a formal
-> number; where a formal number does not exist yet, the cell says so.
+> **状态：进行中（IN PROGRESS）。** 本文档在运行仍在训练期间持续更新。标记为
+> 「待定」的数字尚不可用。本报告没有任何内容是从 §3 的 pilot（前序试跑）运行
+> 外推来顶替正式数字的；某一正式数字尚不存在时，对应单元格会明确说明。
 >
-> Sections §5–§8, §11, §12 and §17 are data-derived and are regenerated in
-> place by `experiments/2026-10-07-08-formal6m/scripts/fill_report.py`, which
-> rewrites exactly the region between the `<!-- AUTO:sectionN -->` /
-> `<!-- /AUTO:sectionN -->` marker pair in each of those sections. Do not hand-
-> edit inside a marker pair — edit the generator or the CSVs it reads. The
-> remaining sections are written by hand and are never touched by the generator.
+> §5–§8、§11、§12 与 §17 由数据派生，并由
+> `experiments/2026-10-07-08-formal6m/scripts/fill_report.py` 就地重新生成：该
+> 脚本精确重写这些章节中每一对 `<!-- AUTO:sectionN -->` /
+> `<!-- /AUTO:sectionN -->` 标记之间的区域。不要在标记对内手工编辑——请修改
+> 生成器或它读取的 CSV。其余章节为手写，生成器从不触碰。
 
 ---
 
 ## 1. 实验目标
 
-本轮的目标不是"把官方实验跑满"，而是在约 **31 小时**的有限 wall-clock 预算内，
-最大化 **科研信息量 / 计算成本**，产出一套可复现、口径统一的数据体系：
+本轮的目标不是"把官方实验跑满"，而是在约 **31 小时**的有限挂钟时间（wall-clock）
+预算内，最大化 **科研信息量 / 计算成本**，产出一套可复现、口径统一的数据体系：
 
-1. **实验线 A — 官方 baseline 的 6M formal reproduction。**
+1. **实验线 A — 官方 baseline 的 6M 正式复现。**
    对仓库中**真实存在**的官方入口，在保持全部官方超参数不变的前提下，
    把训练预算从 `1e8` 降到 `6e6`，得到一条比 §3 的 ~1M pilot 可信得多的学习曲线。
-2. **实验线 B — N-v-N scalability。** 对 N ∈ {2,3,5,10} 的 NoWeapon
+2. **实验线 B — N-v-N 可扩展性（scalability）。** 对 N ∈ {2,3,5,10} 的 NoWeapon
    任务，在**同一个 6M environment-step 预算**下训练，得到一条 vanilla
-   baseline scaling curve。
-3. **关键 second seed**，用于把"单 seed 的趋势"升级为"可分离噪声的观察"。
-4. **两条比较轴**：equal-sample（相同 env steps）与 equal-wall-clock（相同小时数）。
-   因为 10v10 的计算开销本身就是 scalability 问题的一部分。
+   baseline scaling 曲线。
+3. **关键的第二个种子**，用于把"单种子趋势"升级为"可分离噪声的观察"。
+4. **两条比较轴**：等样本（equal-sample，相同 env steps）与等挂钟时间
+   （equal-wall-clock，相同小时数）。因为 10v10 的计算开销本身就是可扩展性
+   问题的一部分。
 
 **本轮明确不做**：不实现 Graph/Attention/Hypergraph/World-Model/Locality-MAPPO，
 不修改 reward / 网络 / 超参数，不做 observation 性能优化（见 §4.4）。
@@ -45,12 +44,12 @@
 |---|---|
 | GPU | 3 × NVIDIA GeForce RTX 4090 D (24 GB each) |
 | Driver / CUDA | 595.71.05 / CUDA 13.2 |
-| CPU | 48 core quota（cgroup `cpu.max = 4800000 100000`），宿主 192 逻辑核 |
+| CPU | 48 核配额（cgroup `cpu.max = 4800000 100000`），宿主 192 逻辑核 |
 | RAM | 1007 GB total |
 | 磁盘 | `/dev/md0` 50 GB，`scripts/results/` 本次实验前占 440 MB |
 | conda env | `jsbsim` — Python 3.12.3, torch 2.8.0+cu128 |
 | OS | Linux 5.15.0-94-generic |
-| 仓库 | `David-JayTao/SEU-SRTP`, branch `exp/formal-6m-20261007` |
+| 仓库 | `David-JayTao/SEU-SRTP`，分支 `exp/formal-6m-20261007` |
 
 **已确认的调度事实**：本机 GPU 显存占用 ~0.5 GB/job、GPU 利用率 0–6%，
 **瓶颈完全在 CPU 侧的环境仿真**（与 `docs/night_failures.md` F8 的诊断一致）。
@@ -60,20 +59,20 @@
 
 ---
 
-## 3. Previous Pilot Summary
+## 3. 前序 pilot 总结
 
 2026-10-04 的一次通宵实验（`experiments/2026-10-04-night/`、
 `docs/overnight_repro_scaling_2026-10-04.md`、`docs/night_failures.md`）建立了
 本次实验的全部基础设施与大部分诊断，但它**不是**正式的 6M 实验：
 
-| 性质 | 2026-10-04 pilot | 本轮 formal |
+| 性质 | 2026-10-04 pilot | 本轮正式实验 |
 |---|---|---|
-| 预算 | `1e8` 计划 + 4200–10800 s **wall-clock 上限轮转** | 6e6，跑到预算结束 |
-| 实际完成 | 全部 ≤ **1.48M** steps（多为 0.65–0.9M） | target 6M |
-| 中断 | 被 `timeout` 主动 SIGINT | 无 wall-clock 上限（仅 108000 s 兜底） |
+| 预算 | `1e8` 计划 + 4200–10800 s **挂钟时间上限轮转** | 6e6，跑到预算结束 |
+| 实际完成 | 全部 ≤ **1.48M** steps（多为 0.65–0.9M） | 目标 6M |
+| 中断 | 被 `timeout` 主动 SIGINT | 无挂钟时间上限（仅 108000 s 兜底） |
 | 语义 | 可复现，但被截断 | 完整 |
 
-**因此 pilot 的曲线一律不与 formal 曲线混画**（见 §5 图例）。
+**因此 pilot 曲线一律不与正式曲线混画**（见 §5 图例）。
 
 pilot 已经确立、本轮直接继承的事实：
 
@@ -114,21 +113,22 @@ pilot 已经确立、本轮直接继承的事实：
 
 ---
 
-## 4. Formal Experiment Protocol
+## 4. 正式实验协议
 
 ### 4.1 为什么是 6M
 
-- 比 ~1M pilot 深 6 倍，足以观察**较可信的 learning trend**；
-- 仍远低于官方 `1e8` full budget，**不能**声称达到官方完整收敛；
+- 比 ~1M pilot 深 6 倍，足以观察**较可信的学习趋势**；
+- 仍远低于官方 `1e8` 完整预算，**不能**声称达到官方完整收敛；
 - 在本机的实测吞吐下（§5），6M 是唯一能在 31 小时窗口内让
   **四个规模 + 官方 baseline** 同时跑完的量级。
 
-**报告中一律使用 "6M-budget formal reproduction / scaling characterization"，
-不使用 "full 100M convergence reproduction"。**
+**报告中一律使用「6M 预算的正式复现 / scaling 特征刻画」，
+不使用「完整的 100M 收敛复现」。**
 
 ### 4.2 6M 的口径（已用代码核实）
 
-`--num-env-steps 6e6` 指 **vectorised environment steps**，**不乘 agent 数**。
+`--num-env-steps 6e6` 指 **vectorised environment steps（向量化环境步）**，
+**不乘 agent 数**。
 核实方式：runner 自己打印的 `total_num_steps` 每轮增加
 `n_rollout_threads × buffer_size`（buffer_size 固定为官方值 3000）。
 
@@ -175,13 +175,13 @@ GPU 分配；logging；checkpoint 间隔（`--save-interval 1` 与官方一致�
   同一张正式曲线上。若将来采用，必须开 `engineering_speedup_*` 独立实验并
   逐项验证 obs/reward/done/transition 一致。
 
-### 4.5 必须披露的 confound
+### 4.5 必须披露的混淆因素（confound）
 
 **`n_rollout_threads` 在规模之间不同**（2v2=4, 3v3=8, 5v5=8, 10v10=20）。
-这是 wall-clock 强制的：若固定线程数，10v10 无法在窗口内到达 6M。
+这是挂钟时间强制的：若固定线程数，10v10 无法在窗口内到达 6M。
 后果是 **PPO update 的 batch 大小随 N 变化**（12k / 24k / 24k / 60k 样本）。
-这是一个**真实的跨 N confound**，在 §6 的结论中必须附带此保留。
-它**在同一 N 的不同 seed 之间是常数**，所以 seed-variance 与同 N 比较不受影响。
+这是一个**真实的跨 N 混淆因素**，在 §6 的结论中必须附带此保留。
+它**在同一 N 的不同种子之间是常数**，所以种子间方差与同 N 比较不受影响。
 
 ### 4.6 官方 baseline 的 L1 / L2 口径
 
@@ -197,12 +197,12 @@ GPU 分配；logging；checkpoint 间隔（`--save-interval 1` 与官方一致�
 
 ---
 
-## 5. Official Baseline Reproduction
+## 5. 官方 baseline 复现
 
 <!-- AUTO:section5 -->
-Official baseline lanes of this campaign. `Status` uses the campaign vocabulary (see the notes below); `Wall time` is the run's own start to its last log write (running lanes: to generation time).
+本实验批次的官方基线通道。`Status` 使用本批次的既定状态词表（见下方说明）；`Wall time`（挂钟时间）为该次运行自身开始到最后一次日志写入（`running` 通道：到本区块生成时刻）。
 
-| Experiment | Seed | Steps | Wall time | FPS | Initial reward | Final reward | Eval | Status | Checkpoint |
+| 实验 | 种子 | 步数 | 挂钟时间 | FPS | 初始 reward | 最终 reward | Eval | 状态 | Checkpoint |
 |---|---|---|---|---|---|---|---|---|---|
 | f6m_official_1v1_hier_selfplay_s1 | 1 | 5,994,000 | 20.05 h | 83 | -69.367 | -92.807 | -307.07 | completed_at_ceiling | actor_latest.pt |
 | f6m_official_1v1_selfplay_s1 | 1 | 5,994,000 | 15.90 h | 104 | -156.44 | 26.933 | 36.368 | completed_at_ceiling | actor_latest.pt |
@@ -212,36 +212,36 @@ Official baseline lanes of this campaign. `Status` uses the campaign vocabulary 
 | f6m_official_heading_s5 | 5 | 6,000,000 | 6.06 h | 275 | -14.825 | 320.47 | - | completed_6M | actor_latest.pt |
 | f6m_official_1v1_shoot_hier_vsbaseline | - | - | - | - | - | - | - | not_applicable | - |
 
-_3-thread lanes (`f6m_official_1v1_*`) stop at **5,994,000** of the 6,000,000-step target: the runner floors `episodes = 6e6//3000//threads` = 666, and 666 x 9,000 = 5,994,000. That is `completed_at_ceiling` (completion at the lane's own reachable budget), never a cutoff — see §17._
+_3-thread 通道（`f6m_official_1v1_*`）停在 6,000,000 步目标的 **5,994,000** 处：runner 向下取整 `episodes = 6e6//3000//threads` = 666，而 666 x 9,000 = 5,994,000。这属于 `completed_at_ceiling`（在通道自身可达预算处完成），绝不是被截断 —— 见 §17。_
 
-_`f6m_official_1v1_shoot_hier_vsbaseline` is the F9 entry: it dies at the first env step upstream and was deliberately never launched._
+_`f6m_official_1v1_shoot_hier_vsbaseline` 是 F9 条目：它在 upstream 第一个 env step 就崩溃，从未被启动。_
 <!-- /AUTO:section5 -->
 
-## 6. N-v-N Formal Scaling
+## 6. N-v-N 正式 scaling
 
 <!-- AUTO:section6 -->
-N-v-N formal scaling table, one row per (scale, seed). `Reward normalized` = final training reward / N — valid for the NoWeapon family only (PostureReward sums over the N enemies), never for ShootMissile.
+N-v-N 正式 scaling 表，每行一个 (规模, 种子)。`Reward normalized` = 最终训练 reward / N —— 仅对 NoWeapon 系列有效（PostureReward 对 N 个敌机求和），ShootMissile 一律不适用。
 
-| Scale | Agents | Seed | Steps | FPS | Wall time | Reward raw | Reward normalized | Value loss | Critic grad | CPU | RAM | VRAM | Status |
+| 规模 | Agent 数 | 种子 | 步数 | FPS | 挂钟时间 | Reward 原始值 | Reward 归一化 | Value loss | Critic grad | CPU | RAM | VRAM | 状态 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 2v2 | 4 | 0 | 6,000,000 | 77 | 21.49 h | 21.992 | 10.996 | 0.16045 | 8.1739 | 2.9 | 2.97 GB | 536 MB | completed_6M |
 | 3v3 | 6 | 0 | 6,000,000 | 125 | 13.29 h | 35.932 | 11.977 | 0.17833 | 7.3129 | 5.5 | 4.61 GB | 650 MB | completed_6M |
-| 3v3 | 6 | 1 | 6,000,000 | 124 | 13.37 h | 34.473 | 11.491 | 0.11956 | 6.2302 | 5.6 | 4.48 GB | 650 MB | completed_6M |
+| 3v3 | 6 | 1 | 6,000,000 | 124 | 13.36 h | 34.473 | 11.491 | 0.11956 | 6.2302 | 5.6 | 4.48 GB | 650 MB | completed_6M |
 | 5v5 | 10 | 0 | 6,000,000 | 79 | 20.94 h | 39.786 | 7.9571 | 0.77586 | 20.828 | 6.2 | 4.85 GB | 660 MB | completed_6M |
-| 5v5 | 10 | 1 | 5,400,000 | 93 | 16.02 h | 34.019 | 6.8037 | 0.6568 | 14.745 | 7.4 | 5.59 GB | 712 MB | running |
-| 5v5 | 10 | 2 | 2,304,000 | 79 | 8.14 h | 7.9511 | 1.5902 | 0.98287 | 22.706 | 5.6 | 4.98 GB | 656 MB | running |
+| 5v5 | 10 | 1 | 5,820,000 | 93 | 17.10 h | 34.019 | 6.8037 | 0.6568 | 14.745 | 7.4 | 5.59 GB | 712 MB | time_cutoff |
+| 5v5 | 10 | 2 | 2,376,000 | 79 | 8.33 h | 7.9511 | 1.5902 | 0.98287 | 22.706 | 5.6 | 4.98 GB | 656 MB | time_cutoff |
 | 10v10 | 20 | 0 | 6,000,000 | 65 | 25.35 h | 0.39183 | 0.039183 | 3.7869 | 55.161 | 16.0 | 15.19 GB | 1036 MB | completed_6M |
-| 10v10 | 20 | 1 | 1,860,000 | 64 | 8.14 h | 3.2868 | 0.32868 | 33.364 | 45.194 | 13.6 | 15.19 GB | 1036 MB | running |
+| 10v10 | 20 | 1 | 1,920,000 | 64 | 8.33 h | 3.2868 | 0.32868 | 33.364 | 45.194 | 13.6 | 15.19 GB | 1036 MB | time_cutoff |
 
-_Wall time = run start to last log write (running rows: to generation time); Steps/FPS/rewards of a `running` row are live values at generation time. CPU/RAM/VRAM are this run's own process peaks from `metrics/resources.csv`; a cell marked `deg` fell back to the campaign-wide peak from `scaling_table.csv` because no per-lane sample exists yet. `n_rollout_threads` differs between scales (§4.5), so FPS is not cross-N comparable; `Reward normalized` and the per-agent view in §7/§11 are._
+_挂钟时间 = 运行开始到最后一次日志写入（`running` 行：到生成时刻）；`running` 行的步数/FPS/reward 均为生成时刻的实时值。CPU/RAM/VRAM 取自该次运行自身进程在 `metrics/resources.csv` 中的峰值；标 `deg` 的单元格因尚无逐通道样本而退回使用 `scaling_table.csv` 的全批次峰值。`n_rollout_threads` 在各规模间不同（§4.5），因此 FPS 不可跨 N 比较；`Reward normalized` 与 §7/§11 的逐 agent 视角可以。_
 <!-- /AUTO:section6 -->
 
-## 7. Equal-Sample Comparison
+## 7. 等样本对比
 
 <!-- AUTO:section7 -->
-Equal-sample comparison: mean training reward of each lane at matched vectorised-env-step budgets (1M..6M).
+等样本对比：各通道在相同 vectorised-env-step 预算（1M..6M）下的平均训练 reward。
 
-| Experiment | N | Seed | Threads | Steps reached | State | 1M | 2M | 3M | 4M | 5M | 6M |
+| 实验 | N | 种子 | Rollout 线程 | 已到步数 | 状态 | 1M | 2M | 3M | 4M | 5M | 6M |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | f6m_official_1v1_hier_selfplay_s1 | 1 | 1 | 3 | 5,994,000 | idle | 20.875* | 33.131* | -104.04* | -8.0676* | -73.701* | pending |
 | f6m_official_1v1_selfplay_s1 | 1 | 1 | 3 | 5,994,000 | idle | -64.908* | 4.9369* | 25.578* | 13.116* | 30.325* | pending |
@@ -257,15 +257,15 @@ Equal-sample comparison: mean training reward of each lane at matched vectorised
 | f6m_10v10_noweapon_s0 | 10 | 0 | 20 | 6,000,000 | complete | -17.266 (-1.7266)* | -11.699 (-1.1699)* | -10.626 (-1.0626) | -4.7305 (-0.4731)* | -0.5542 (-0.0554)* | 0.3918 (0.0392) |
 | f6m_10v10_noweapon_s1 | 10 | 1 | 20 | 1,860,000 | active | -11.663 (-1.1663)* | pending | pending | pending | pending | pending |
 
-_Cells: `reward (reward per enemy)` for NoWeapon lanes; `*` = value interpolated between the two bracketing PPO updates; `pending` = the lane has not reached that budget yet (nothing is extrapolated); `before-data`/`nan-gap` are the raw provenance tokens. Raw per-cell brackets are in `metrics/equal_sample.csv`. Per-enemy values are only shown for NoWeapon; a ShootMissile reward is not a team sum._
+_单元格：NoWeapon 通道为 `reward（每敌机 reward）`；`*` = 在相邻两个 PPO update 之间插值；`pending` = 该通道尚未达到该预算（绝不做任何外推）；`before-data`/`nan-gap` 为原始来源标记。逐格原始区间见 `metrics/equal_sample.csv`。每敌机数值仅对 NoWeapon 显示；ShootMissile 的 reward 不是队伍求和。_
 <!-- /AUTO:section7 -->
 
-## 8. Equal-Wall-Clock Comparison
+## 8. 等挂钟时间对比
 
 <!-- AUTO:section8 -->
-Equal-wall-clock comparison: mean training reward of each lane at matched elapsed-time budgets (1h..24h of its own run time).
+等挂钟时间对比：各通道在相同已流逝时间预算（自身运行时间的 1h..24h）下的平均训练 reward。
 
-| Experiment | N | Seed | Threads | Steps reached | State | 1h | 3h | 6h | 12h | 24h |
+| 实验 | N | 种子 | Rollout 线程 | 已到步数 | 状态 | 1h | 3h | 6h | 12h | 24h |
 |---|---|---|---|---|---|---|---|---|---|---|
 | f6m_official_1v1_hier_selfplay_s1 | 1 | 1 | 3 | 5,994,000 | idle | 23.597* | 32.666* | 18.727* | -10.517* | pending |
 | f6m_official_1v1_selfplay_s1 | 1 | 1 | 3 | 5,994,000 | idle | -156.74* | -20.315* | 36.362* | 29.107* | pending |
@@ -281,306 +281,282 @@ Equal-wall-clock comparison: mean training reward of each lane at matched elapse
 | f6m_10v10_noweapon_s0 | 10 | 0 | 20 | 6,000,000 | complete | -17.48 (-1.7479)* | -17.234 (-1.7234)* | -16.764 (-1.6764)* | -2.6125 (-0.2613)* | 17.299 (1.7299)* |
 | f6m_10v10_noweapon_s1 | 10 | 1 | 20 | 1,860,000 | active | -17.719 (-1.7719)* | -15.803 (-1.5803)* | -6.0021 (-0.6002)* | pending | pending |
 
-_Cells: `reward (reward per enemy)` for NoWeapon lanes; `*` = interpolated between bracketing updates; `pending` = not reached yet. Elapsed time is the lane's own `wall_time` minus its first logged timestamp, so it excludes queueing/startup. Scales use different `n_rollout_threads` (§4.5), so wall-clock reflects both learning speed and the scheduling choice. Raw brackets: `metrics/equal_wallclock.csv`._
+_单元格：NoWeapon 通道为 `reward（每敌机 reward）`；`*` = 在相邻 update 之间插值；`pending` = 尚未达到。已流逝时间 = 通道自身的 `wall_time` 减去其首个日志时间戳，因此不含排队/启动时间。各规模使用不同的 `n_rollout_threads`（§4.5），所以挂钟时间同时反映学习速度与调度选择。原始区间：`metrics/equal_wallclock.csv`。_
 <!-- /AUTO:section8 -->
 
 <!--
-Figure embedding convention for this report (brief §27: figures must be embedded,
-not merely listed). All figures live in experiments/2026-10-07-08-formal6m/figures/
-and are regenerated by scripts/make_figures.py, which is re-run by scripts/freeze.sh.
-Paths below are relative to this file's location (docs/).
+本报告的图片嵌入约定（任务书 §27：图片必须嵌入，不能只列出）。
+所有图片位于 experiments/2026-10-07-08-formal6m/figures/，
+由 scripts/make_figures.py 重新生成，scripts/freeze.sh 会再跑一遍该脚本。
+以下路径相对于本文件所在位置（docs/）。
 
-Pilot and formal series must never be drawn as one undifferentiated line; the
-"*_with_pilot" variants are the only ones that mix them, and there the distinction
-is carried by linestyle and by an explicit legend entry.
+pilot 与正式序列绝不能画成一条不加区分的线；只有 "*_with_pilot"
+变体会混合两者，且在那里通过线型和明确的图例条目来区分。
 -->
 
-### Figures
+### 图片
 
-**§6 — N-v-N formal scaling, learning curves**
+**§6 — N-v-N 正式 scaling，学习曲线**
 
-![Formal learning curves vs environment steps](../experiments/2026-10-07-08-formal6m/figures/formal_learning_curves_steps.png)
+![正式学习曲线 vs 环境步数](../experiments/2026-10-07-08-formal6m/figures/formal_learning_curves_steps.png)
 
-![Formal learning curves vs wall-clock](../experiments/2026-10-07-08-formal6m/figures/formal_learning_curves_walltime.png)
+![正式学习曲线 vs 挂钟时间](../experiments/2026-10-07-08-formal6m/figures/formal_learning_curves_walltime.png)
 
-**§7 — reward normalised by team size (the only cross-N-comparable quantity for NoWeapon)**
+**§7 — 按队伍规模归一化的 reward（NoWeapon 唯一可跨 N 比较的量）**
 
-![Reward per enemy vs steps, vs wall-clock, and vs N](../experiments/2026-10-07-08-formal6m/figures/formal_scaling_reward_normalized.png)
+![每敌机 reward vs 步数、vs 挂钟时间、vs N](../experiments/2026-10-07-08-formal6m/figures/formal_scaling_reward_normalized.png)
 
-**§9 — computational scalability and campaign throughput**
+**§9 — 计算可扩展性与批次吞吐**
 
-![Throughput vs number of agents](../experiments/2026-10-07-08-formal6m/figures/formal_throughput_vs_agents.png)
+![吞吐量 vs agent 数](../experiments/2026-10-07-08-formal6m/figures/formal_throughput_vs_agents.png)
 
-![Resource scaling vs N](../experiments/2026-10-07-08-formal6m/figures/formal_resource_scaling.png)
+![资源随 N 的 scaling](../experiments/2026-10-07-08-formal6m/figures/formal_resource_scaling.png)
 
-**§10 — representation / centralised-critic scaling**
+**§10 — 表示 / 集中式 critic scaling**
 
-![Critic and actor scaling vs N](../experiments/2026-10-07-08-formal6m/figures/formal_critic_scaling.png)
+![Critic 与 actor 随 N 的 scaling](../experiments/2026-10-07-08-formal6m/figures/formal_critic_scaling.png)
 
-**Pilot-vs-formal comparison figures** (`*_with_pilot`) overlay the 2026-10-04
-pilot in a distinct linestyle so the two campaigns are never confusable.
+**Pilot 与正式对比图**（`*_with_pilot`）以不同线型叠加 2026-10-04 的
+pilot，使两个批次绝不会被混淆。
 
-## 9. Computational Scalability
+## 9. 计算可扩展性
 
-### 9.1 The intrinsic cost of one environment step
+### 9.1 单个环境步的内在成本
 
-From the pilot's environment-only benchmark (`metrics/env_bench_scaling.json`,
-`scripts/env_bench.py`, random actions, no learning), re-fitted here:
+数据来自 pilot 的纯环境基准（`metrics/env_bench_scaling.json`、
+`scripts/env_bench.py`，随机动作，无学习），此处重新拟合：
 
-| condition | cost per env step vs N | R² | cost per aircraft vs N | R² |
+| 条件 | 每个 env step 的成本 vs N | R² | 每架飞机的成本 vs N | R² |
 |---|---|---|---|---|
-| **quiet** (machine otherwise idle) | **N^1.64** | 0.9989 | N^0.64 | 0.9927 |
-| loaded (5 concurrent queues) | N^1.44 | 0.9937 | N^0.44 | 0.9369 |
+| **quiet**（机器其余部分空闲） | **N^1.64** | 0.9989 | N^0.64 | 0.9927 |
+| loaded（5 个并发队列） | N^1.44 | 0.9937 | N^0.44 | 0.9369 |
 
-Per-aircraft cost rises from 2.32 ms (N=2) to 6.39 ms (N=10) on a quiet machine —
-i.e. **the environment does not merely have more aircraft to simulate; each
-aircraft gets more expensive.** That is the signature of an N-dependent per-step
-term, and it is exactly the O(N²) observation construction diagnosed as F8:
-`MultipleCombatTask.get_obs()` walks every partner and enemy for every agent, and
-`BaseEnv.get_state()` then calls `get_obs` again for all 2N agents and hstacks the
-result — two O(N²) passes per step. Amortised over N aircraft this gives the
-measured N^0.64. Note the exponent being *lower* under load (1.44) is not a
-speedup: contention adds a roughly constant overhead per step, which flattens a
-power law. Both are reported, per the pilot's F7 discipline.
+在 quiet 机器上，每架飞机的成本从 2.32 ms（N=2）升到 6.39 ms（N=10）——
+即**环境并不只是要模拟更多飞机；每架飞机本身也变得更贵。**这是
+依赖 N 的每步项的典型特征，也正是被诊断为 F8 的 O(N²) 观测构造：
+`MultipleCombatTask.get_obs()` 为每个 agent 遍历所有队友与敌机，
+`BaseEnv.get_state()` 随后又对所有 2N 个 agent 调用 `get_obs` 并 hstack
+结果——每步两趟 O(N²)。平摊到 N 架飞机上得到实测的 N^0.64。注意负载下
+指数*更低*（1.44）并不是加速：争用给每一步加上近似恒定的开销，会把
+幂律曲线压平。两者都如实报告，遵循 pilot 的 F7 纪律。
 
-### 9.2 What training actually achieves
+### 9.2 训练实际达到的水平
 
-`FPS` is the runner's own accounting (wall-clock, and it includes eval). Divided
-by the rollout threads allocated, and compared against the single-core intrinsic
-rate:
+`FPS` 是 runner 自己的记账（按挂钟时间，且包含 eval）。除以分配的
+rollout 线程数，并与单核内在速率比较：
 
-| N | threads | FPS | steps/s per thread | intrinsic single-core | achieved fraction |
+| N | 线程 | FPS | 每线程 steps/s | 单核内在速率 | 达成比例 |
 |---|---|---|---|---|---|
 | 2 | 4 | 77 | 19.2 | 107.8 | **17.9%** |
 | 3 | 8 | 126 | 15.8 | 60.3 | **26.1%** |
 | 5 | 8 | 82 | 10.2 | 25.4 | **40.4%** |
 | 10 | 20 | 76 | 3.8 | 7.8 | **48.6%** |
 
-**OBSERVATION.** Achieved thread efficiency *rises* with N. This is the
-counter-intuitive part, and it is explained by the same mechanism: at N=2 a
-vectorised step takes ~9 ms, so the per-step fixed costs (IPC to the learner,
-action dispatch, Python overhead) are a large fraction of it; at N=10 a step
-takes ~128 ms and the same fixed costs amortise. So each worker approaches its
-intrinsic rate precisely *because* the task got slow.
+**观察。** 达成的线程效率随 N *上升*。这是反直觉的部分，而它由同一
+机制解释：N=2 时一个向量化步约 9 ms，每步的固定开销（与 learner 的
+IPC、动作分发、Python 开销）占其中很大比例；N=10 时一步约 128 ms，
+同样的固定开销被摊薄。所以每个 worker 之所以能逼近其内在速率，恰恰
+*因为*任务变慢了。
 
-**FACT.** Consequently the wall-clock to a fixed step budget grows much faster
-than the intrinsic N^1.64, because at small N the parallel efficiency is worse.
-At the thread allocation used here, 6M steps cost roughly:
+**事实。** 因此，到达固定步数预算所需的挂钟时间远比内在的 N^1.64
+增长得快，因为小 N 下的并行效率更差。按本实验使用的线程分配，6M 步
+大致需要：
 
-| N | threads | hours to 6M |
+| N | 线程 | 到 6M 的小时数 |
 |---|---|---|
 | 2 | 4 | ~21.7 |
 | 3 | 8 | ~13.2 |
 | 5 | 8 | ~20.3 |
 | 10 | 20 | ~21.9 |
 
-which is why the thread allocation is per-lane rather than flat (§4.5, and
-`status/plan.md` for the full derivation). Note that at *equal threads* 10v10
-would need ~52 h — 2.4× the wall-clock of 2v2 — for the same 6M env steps. The
-`n_rollout_threads` confound in §4.5 is the price of removing that.
+这就是线程分配按通道而非统一取齐的原因（§4.5；完整推导见
+`status/plan.md`）。注意在*等线程*下，10v10 跑同样 6M 环境步需要约 52 h
+——是 2v2 挂钟时间的 2.4 倍。§4.5 中的 `n_rollout_threads` 混淆因素就是
+消除这一点的代价。
 
-### 9.3 Aggregate scheduling throughput
+### 9.3 总体调度吞吐
 
-The binding resource is CPU, not GPU (GPU utilisation stayed 0–45% and VRAM
-≤ 2.4 GB/job across nine concurrent lanes). The campaign was therefore scheduled
-against **aggregate useful env-steps/s**:
+瓶颈资源是 CPU，不是 GPU（九条并发通道下 GPU 利用率始终在 0–45%，
+每个作业的 VRAM ≤ 2.4 GB）。因此调度以**总体有效 env-steps/s**为准：
 
-| time | lanes | rollout threads | CPU used (of 48 quota) | aggregate env-steps/s |
+| 时间 | 通道数 | rollout 线程 | CPU 用量（48 配额中） | 总体 env-steps/s |
 |---|---|---|---|---|
 | 03:11 | 5 | 44 | — | 451 |
 | 03:17 | 7 | 50 | — | 672 |
 | ~05:00 | 9 | 56 | ~35–39 | ~798 |
 | 17:30 | 9 (+2 seeds) | 66 | 38–42 | ~800 |
 
-**FACT.** Adding two 3-thread SingleCombat lanes at 03:10 raised aggregate
-throughput from 451 to ~670 env-steps/s, and later additions took the campaign to
-~800 env-steps/s while remaining inside the CPU quota.
+**事实。** 03:10 新增两条 3 线程 SingleCombat 通道后，总体吞吐从 451
+升到约 670 env-steps/s；其后的新增把批次带到约 800 env-steps/s，同时
+始终保持在 CPU 配额之内。
 
-**FACT (a measurement error, corrected — incident F16).** Every CPU figure in
-earlier drafts of this section was wrong. They came from `/proc/stat`, which in
-this container reports the **host's** 192 logical CPUs and returns deltas
-alternating between 0 and ~200 cores between consecutive 5-second samples while
-the container is demonstrably busy. The authoritative source is the container's
-own cgroup accounting, and by that measure the campaign used **~38–42 of its 48
-cores (≈80–87%), with `nr_throttled` at 0.02–0.04% of periods** — i.e. the quota
-was never actually binding.
+**事实（一处测量错误，已更正——事件 F16）。** 本节早先草稿中的 CPU
+数字全部是错的。它们来自 `/proc/stat`，而这个容器里该文件报告的是
+**宿主**的 192 个逻辑 CPU，在容器明显繁忙时，相邻两次 5 秒采样之间
+也会返回在 0 和约 200 核之间来回跳的差值。权威来源是容器自身的
+cgroup 记账；据此衡量，批次用掉了 **48 核中的约 38–42 核（≈80–87%），
+`nr_throttled` 仅占周期的 0.02–0.04%**——即配额实际上从未真正卡住。
 
-**OBSERVATION (revised in light of the above).** `f6m_10v10_noweapon_s0`'s
-*cumulative* FPS fell from 70 to 64 across the two updates following the 03:10
-additions, then recovered to 74–76. Cumulative FPS is an average since run start,
-so a dip is the arithmetic consequence of any slower interval and is not by
-itself evidence of sustained contention. Since the quota turns out never to have
-been saturated, **the honest reading is that the added lanes cost 10v10 little or
-nothing measurable**, and the initial dip should not be cited as a scheduling
-cost. What *is* solid: the 10v10 lane finished with margin.
+**观察（根据上文修订）。** 03:10 新增之后的两条 update 中，
+`f6m_10v10_noweapon_s0` 的*累计* FPS 从 70 掉到 64，之后回升到 74–76。
+累计 FPS 是自运行开始以来的平均值，因此任何变慢的区间都会算术地造成
+回落，它本身并不构成持续争用的证据。既然配额从未被真正打满，**诚实的
+读法是：新增通道给 10v10 带来的代价小到测不出**，最初的回落不应被
+引作调度成本。*确实*站得住的只有：10v10 通道带余量地完成了。
 
-**OBSERVATION.** `load1` reached 74 at 17:23 while the container was using 38 of
-48 cores. Load average counts runnable-and-blocked tasks across the host and is a
-poor scheduler signal here; GPU idleness is a useless one (the GPU sat at 0–45%
-for the entire campaign). The decisions were made on measured aggregate
-env-steps/s, on the container's own cgroup CPU accounting, and on the P0 lane's
-own FPS.
+**观察。** 17:23 时 `load1` 高达 74，而容器只用了 48 核里的 38 核。
+负载均值统计的是整个宿主上可运行与阻塞的任务，在这里是不好的调度
+信号；GPU 空闲度更是无用的信号（整个批次期间 GPU 都停在 0–45%）。
+决策依据是实测的总体 env-steps/s、容器自身的 cgroup CPU 记账，以及
+P0 通道自身的 FPS。
 
-**CATEGORISATION.** Everything in this section is `Computational scalability`.
-None of it is evidence about the learning algorithm, and it must not be read as
-such — a slow environment is not a MARL failure.
+**归类。** 本节全部内容属于 `Computational scalability`。没有任何一条
+是关于学习算法的证据，也绝不能那样去读——环境慢不是 MARL 失败。
 
-## 10. Representation / Critic Scalability
+## 10. 表示 / Critic 可扩展性
 
-**This section is complete and does not depend on the training runs finishing.**
-It is a pure model-construction measurement (`scripts/critic_scaling_probe.py`,
-output `metrics/critic_scaling.json`), it takes ~7 s, and the values it produces
-for N = 2/3/5/10 are **bit-identical to the ones the 2026-10-04 pilot measured
-independently** — which is the reproducibility evidence for this section.
+**本节内容完整，不依赖训练运行完成。** 它是纯粹的模型构造测量
+（`scripts/critic_scaling_probe.py`，输出 `metrics/critic_scaling.json`），
+耗时约 7 s，其对 N = 2/3/5/10 产生的数值与 2026-10-04 pilot 独立测得的
+数值**逐位相同**——这就是本节的可复现性证据。
 
-### 10.1 Measured dimensions and parameter counts
+### 10.1 实测维度与参数量
 
-| N | total agents | local obs dim | share_obs dim | actor params | critic params | critic 1st-layer params | critic 1st-layer MAC / env step |
+| N | 总 agent 数 | 局部 obs 维度 | share_obs 维度 | actor 参数量 | critic 参数量 | critic 第一层参数量 | critic 第一层 MAC / env step |
 |---|---|---|---|---|---|---|---|
 | 2 | 4 | 27 | 108 | 154,891 | 163,969 | 13,952 | 331,776 |
 | 3 | 6 | 39 | 234 | 156,427 | 180,097 | 30,080 | 1,078,272 |
 | 5 | 10 | 63 | 630 | 159,499 | 230,785 | 80,768 | 4,838,400 |
 | 10 | 20 | 123 | 2,460 | 167,179 | 465,025 | 315,008 | 37,785,600 |
-| **N=2 → N=10 growth** | 4→20 | **4.56×** | **22.78×** | **1.08×** | **2.84×** | **22.58×** | **113.9×** |
+| **N=2 → N=10 增长** | 4→20 | **4.56×** | **22.78×** | **1.08×** | **2.84×** | **22.58×** | **113.9×** |
 
-### 10.2 Exact closed forms (stronger than a fitted exponent)
+### 10.2 精确闭式表达（比拟合指数更强）
 
-Fitting exponents was unnecessary: the dependence is exactly determined by the
-architecture, and the closed forms below reproduce **all four measured points
-exactly**, with no free parameters.
+无需拟合指数：依赖关系由架构精确决定，下面的闭式表达**精确复现全部四个
+实测点**，且没有自由参数。
 
-| quantity | closed form | N=2 | N=3 | N=5 | N=10 | exact? |
+| 量 | 闭式表达 | N=2 | N=3 | N=5 | N=10 | 精确？ |
 |---|---|---|---|---|---|---|
-| local obs dim | `12N + 3` | 27 | 39 | 63 | 123 | ✔ |
-| **share_obs dim** | **`2N·(12N + 3) = 24N² + 6N`** | 108 | 234 | 630 | 2,460 | ✔ |
-| actor params | `128·(12N+3) + 151,435` | 154,891 | 156,427 | 159,499 | 167,179 | ✔ |
-| **critic params** | **`128·(24N²+6N) + 150,145`** | 163,969 | 180,097 | 230,785 | 465,025 | ✔ |
+| 局部 obs 维度 | `12N + 3` | 27 | 39 | 63 | 123 | ✔ |
+| **share_obs 维度** | **`2N·(12N + 3) = 24N² + 6N`** | 108 | 234 | 630 | 2,460 | ✔ |
+| actor 参数量 | `128·(12N+3) + 151,435` | 154,891 | 156,427 | 159,499 | 167,179 | ✔ |
+| **critic 参数量** | **`128·(24N²+6N) + 150,145`** | 163,969 | 180,097 | 230,785 | 465,025 | ✔ |
 
-Why these hold, straight off the code:
+为什么这些成立——直接读代码可得：
 
-- An agent's own observation is `12N + 3`-dimensional: a fixed 3-dimensional
-  self-state plus **12 features for each of the N enemies** (heading, relative
-  position, velocity, …). The agent's view of its own team-mates enters through
-  the shared state, not its local observation.
-- `share_obs` is the concatenation of the observations of **all 2N agents**
-  (`envs/JSBSim/envs/env_base.py::get_state` hstacks `get_obs` over every agent).
-  So `share_obs_dim = 2N × obs_dim = 2N(12N+3)`, and the N² term is structural:
-  one factor of N from "more agents" times a second factor of N from "each agent
-  observes more enemies".
-- Both networks are MLPs whose first layer is `share_or_obs_dim × 128`; the
-  remaining `151,435` / `150,145` parameters (recurrent core + heads) are
-  **constants independent of N**.
+- 单个 agent 自身的观测是 `12N + 3` 维：固定的 3 维自状态，加上
+  **对 N 架敌机每架 12 个特征**（航向、相对位置、速度……）。agent 对
+  自己队友的看法经由共享状态进入，而不是本地观测。
+- `share_obs` 是**全部 2N 个 agent** 观测的拼接
+  （`envs/JSBSim/envs/env_base.py::get_state` 对每个 agent hstack 了
+  `get_obs`）。所以 `share_obs_dim = 2N × obs_dim = 2N(12N+3)`，N² 项是
+  结构性的：一个 N 因子来自「agent 更多」，第二个 N 因子来自「每个 agent
+  观测到的敌机更多」。
+- 两个网络都是第一层为 `share_or_obs_dim × 128` 的 MLP；其余
+  `151,435` / `150,145` 个参数（循环核心 + 各头）是**与 N 无关的常数**。
 
-**Consequences, read directly off the closed forms:**
+**由闭式表达直接读出的推论：**
 
-| quantity | N=2 → N=10 growth | asymptotic |
+| 量 | N=2 → N=10 增长 | 渐近阶 |
 |---|---|---|
-| local obs dim | 4.56× | Θ(N) |
-| **share_obs dim** | **22.78×** | **Θ(N²)** |
-| actor params | **1.08×** | Θ(1) |
-| **critic params** | 2.84× | Θ(N²) |
-| critic first-layer params | 22.58× | Θ(N²) |
-| critic first-layer MAC / env step | 113.9× | Θ(N³) |
+| 局部 obs 维度 | 4.56× | Θ(N) |
+| **share_obs 维度** | **22.78×** | **Θ(N²)** |
+| actor 参数量 | **1.08×** | Θ(1) |
+| **critic 参数量** | 2.84× | Θ(N²) |
+| critic 第一层参数量 | 22.58× | Θ(N²) |
+| critic 第一层 MAC / env step | 113.9× | Θ(N³) |
 
-The `Θ(N³)` in the last row is worth stating plainly: the critic's first layer
-does `O(N²)`-wide work for `O(N)` agents, hence **cubic** total work per
-environment step. For comparison the *environment* was measured at N^1.64
-(§9.1) — so the centralised critic is, asymptotically, the more aggressive
-scaling term of the two.
+最后一行的 `Θ(N³)` 值得明说：critic 的第一层为 `O(N)` 个 agent 做
+`O(N²)` 宽的工作，因此每个环境步的总工作量是**立方**的。作为对比，
+*环境*实测为 N^1.64（§9.1）——所以在渐近意义上，集中式 critic 是两者
+中增长更凶的一项。
 
-### 10.3 What this does and does not establish
+### 10.3 这能确立什么、不能确立什么
 
-**FACT.** In this codebase the centralised critic is the only learned component
-whose *representation* grows super-linearly in team size, and it grows as
-exactly N². The policy is essentially scale-invariant in parameter count.
+**事实。** 在这个代码库中，集中式 critic 是唯一一个其*表示*随队伍规模
+超线性增长的学习组件，且精确按 N² 增长。策略在参数量上基本是尺度不变
+的。
 
-**OBSERVATION.** The same O(N²) structure — the fully concatenated global state —
-is simultaneously the cause of the environment-side bottleneck diagnosed as F8 in
-`docs/night_failures.md` (`get_state()` calling `get_obs` over all 2N agents,
-twice per step). One architectural choice produces both a computational and a
-representational N² term. Notably, the measured `critic 1st-layer MAC/env step`
-grows **113.9×** for a 5× growth in N.
+**观察。** 同一个 O(N²) 结构——完全拼接的全局状态——同时也是
+`docs/night_failures.md` 中诊断为 F8 的环境侧瓶颈的成因（`get_state()`
+对所有 2N 个 agent 调用 `get_obs`，每步两次）。一个架构选择同时产生了
+计算和表示两项 N² 项。值得注意的是，实测的 `critic 1st-layer MAC/env step`
+在 N 增长 5 倍时增长了 **113.9×**。
 
-**HYPOTHESIS (not established here).** An O(N²)-sized critic input is a plausible
-contributor to a *learning* scalability gap, but this campaign has not isolated
-it: we have not run a critic with a sub-quadratic input (attention, factorised,
-or local critic) on the same task. Any such claim needs that controlled
-comparison, which is explicitly out of scope this round (§4.4).
+**假设（本文未确立）。** O(N²) 大小的 critic 输入是*学习*可扩展性差距的
+一个可能贡献者，但本轮实验没有把它分离出来：我们没有在同一任务上运行
+过输入次二次（sub-quadratic）的 critic（attention、factorised 或 local
+critic）。任何此类主张都需要那个受控对比，而它明确不在本轮范围内
+（§4.4）。
 
-**CANNOT CONCLUDE.** These are *parameter and FLOP* counts. They say nothing on
-their own about achievable reward. A large critic input is not by itself a defect
-— it is the definition of a centralised critic. The measurement bounds the size
-of the problem; it does not demonstrate that the size is what limits learning.
+**不能结论。** 这些是*参数与 FLOP* 计数。它们本身对可达 reward 说不出
+任何东西。critic 输入大本身不是缺陷——那正是集中式 critic 的定义。该
+测量划定了问题规模的边界，但并没有证明是规模在限制学习。
 
-### 10.4 Projection: where the centralised critic stops fitting
+### 10.4 外推：集中式 critic 在哪里不再放得下
 
-`metrics/critic_scaling.json` also carries an `extrapolated` block. **These are
-projections, not measurements** — they extend the exact dimension formulas above
-beyond the four N we can actually construct. They are reported here only because
-they are computed from a *measured* calibration on this GPU (68.9 G-MAC/s,
-fixed batch 256) and because they answer "what breaks first?".
+`metrics/critic_scaling.json` 还带有 `extrapolated` 区块。**这些是外推，
+不是实测**——它们把上面的精确维度公式延伸到我们实际能构造的四个 N
+之外。之所以在此报告，只是因为它们基于本 GPU 上*实测*的标定
+（68.9 G-MAC/s，固定 batch 256）计算，且回答了「哪个先崩？」。
 
-| N | total agents | share_obs dim | critic 1st-layer params | analyst buffer for `share_obs` | est. critic fwd / env step | source |
+| N | 总 agent 数 | share_obs 维度 | critic 第一层参数量 | `share_obs` 的分析缓冲区 | 估计 critic 前向 / env step | 来源 |
 |---|---|---|---|---|---|---|
-| 2 | 4 | 108 | 13,952 | 0.03 GB | 0.005 ms | measured |
-| 3 | 6 | 234 | 30,080 | 0.09 GB | 0.016 ms | measured |
-| 5 | 10 | 630 | 80,768 | 0.42 GB | 0.070 ms | measured |
-| 10 | 20 | 2,460 | 315,008 | 3.30 GB | 0.548 ms | measured |
-| 20 | 40 | 9,720 | 1,244,288 | **26.1 GB** | 4.3 ms | *projected* |
-| 50 | 100 | 60,300 | 7,718,528 | **404 GB** | 67 ms | *projected* |
-| 100 | 200 | 240,600 | 30,796,928 | **3,228 GB** | 536 ms | *projected* |
+| 2 | 4 | 108 | 13,952 | 0.03 GB | 0.005 ms | 实测 |
+| 3 | 6 | 234 | 30,080 | 0.09 GB | 0.016 ms | 实测 |
+| 5 | 10 | 630 | 80,768 | 0.42 GB | 0.070 ms | 实测 |
+| 10 | 20 | 2,460 | 315,008 | 3.30 GB | 0.548 ms | 实测 |
+| 20 | 40 | 9,720 | 1,244,288 | **26.1 GB** | 4.3 ms | *外推* |
+| 50 | 100 | 60,300 | 7,718,528 | **404 GB** | 67 ms | *外推* |
+| 100 | 200 | 240,600 | 30,796,928 | **3,228 GB** | 536 ms | *外推* |
 
-**Buffer assumption matters and is stated:** the projection uses
-`n_rollout_threads = 12` (the probe's default), i.e.
-`(3001 × 12 × N × share_dim × 4)` bytes. This campaign runs 10v10 at
-`n_rollout_threads = 20`, for which the same formula gives **5.9 GB**, not 3.3 GB.
-The scaling in N is what matters and is independent of that constant; the absolute
-GB figures are not — always read them with the thread count attached.
+**缓冲区的假设很重要，且已明示：** 外推使用 `n_rollout_threads = 12`
+（探测脚本的默认值），即 `(3001 × 12 × N × share_dim × 4)` 字节。本次
+实验的 10v10 以 `n_rollout_threads = 20` 运行，同一公式给出的是
+**5.9 GB**，而不是 3.3 GB。重要的是随 N 的 scaling，它与该常数无关；
+绝对 GB 数则不是——读它们时务必带上线程数。
 
-**FACT.** The `share_obs` replay buffer is O(N²) in memory. Under this campaign's
-own configuration the 10v10 buffer is ~5.9 GB, and it grows ~4× per doubling of N
-because both the agent count and each agent's observation length grow.
+**事实。** `share_obs` replay buffer 的内存占用是 O(N²)。按本次实验
+自身的配置，10v10 的缓冲区约 5.9 GB，且 N 每翻倍就约增长 4 倍，因为
+agent 数和每个 agent 的观测长度都在增长。
 
-**OBSERVATION.** On a 1 TB box, the projected N=50 (100-agent) `share_obs` buffer
-alone is ~0.4 TB at 12 threads, and N=100 is ~3.2 TB. So for this architecture the
-**memory wall arrives before the compute wall** — and long before any question
-about whether the learning algorithm scales.
+**观察。** 在 1 TB 的机器上，外推的 N=50（100 agent）仅 `share_obs`
+缓冲区在 12 线程下就约 0.4 TB，N=100 约 3.2 TB。所以对该架构而言，
+**内存墙先于算力墙到来**——更不用说学习算法本身是否可扩展的问题了。
 
-**HYPOTHESIS.** This is a strong candidate for why "just use a global critic" does
-not extend to large N: the bottleneck is a *representation* choice (concatenating
-every agent's observation) rather than the critic's capacity or the optimiser.
-Any sub-quadratic critic (attention / factorised / locality-restricted) removes
-this term by construction — but that is a claim about memory, and **whether it
-also improves learning is exactly what this campaign did not test** (§4.4).
+**假设。** 这是「直接用全局 critic」为何无法延伸到大 N 的一个有力候选
+解释：瓶颈是一个*表示*选择（把每个 agent 的观测拼接起来），而不是
+critic 的容量或优化器。任何次二次的 critic（attention / factorised /
+局部受限）都会在构造上移除这一项——但那是一个关于内存的主张，而
+**它是否也能改善学习，恰恰是本次实验没有测试的**（§4.4）。
 
-**CANNOT CONCLUDE.** These projections assume the environment itself scales
-harmlessly to 40/100/200 aircraft. It does not follow that the *task* is even
-well-posed at those sizes, and none of it was run.
+**不能结论。** 这些外推假设环境本身能无害地扩展到 40/100/200 架飞机。
+但这推不出*任务*在这些规模上甚至是否成立，而且这些都没有跑过。
 
-> **Only the four `measured` entries are evidence.** Everywhere else in this
-> report, `metrics/critic_scaling.json`'s `extrapolated` block is ignored.
+> **只有四个 `measured` 条目是证据。** 本报告其余所有地方都忽略
+> `metrics/critic_scaling.json` 的 `extrapolated` 区块。
 
-## 11. Sample / Learning Scalability
+## 11. 样本 / 学习可扩展性
 
 <!-- AUTO:section11 -->
-Per-scale reward-trajectory summary for the N-v-N lanes, from `metrics/summary.csv`. `Tail slope` is the mean change of `average_episode_rewards` per PPO update over the last third of the logged updates; the verdict calls it improving only when the slope exceeds +0.05/update (same threshold as `scaling_table.py`), flat within +-0.05, declining below -0.05.
+N-v-N 各通道的逐规模 reward 轨迹汇总，数据来自 `metrics/summary.csv`。`Tail slope` 是最后三分之一已记录 update 中 `average_episode_rewards` 每次 PPO update 的平均变化量；仅当斜率超过 +0.05/update 时才判定为上升（与 `scaling_table.py` 同阈值），在 ±0.05 内为持平，低于 -0.05 为下降。
 
-| Scale | Seed | Steps reached (% of ceiling) | Status | First reward | Last reward | Reward / enemy | Tail slope | Still improving at final logged update? | Eval last |
+| 规模 | 种子 | 已到步数（占上限 %） | 状态 | 首个 reward | 最后 reward | 每敌机 reward | 尾段斜率 | 最后一条已记录 update 时仍在上升？ | Eval 最后值 |
 |---|---|---|---|---|---|---|---|---|---|
-| 2v2 | 0 | 6,000,000 (100.0%) | completed_6M | -3.5101 | 21.992 | 10.996 | +0.0479 | flat (+0.0479/update) | -99.026 |
-| 3v3 | 0 | 6,000,000 (100.0%) | completed_6M | -5.3185 | 35.932 | 11.977 | +0.0089 | flat (+0.0089/update) | 47.839 |
-| 3v3 | 1 | 6,000,000 (100.0%) | completed_6M | -5.436 | 34.473 | 11.491 | -0.0105 | flat (-0.0105/update) | 47.648 |
-| 5v5 | 0 | 6,000,000 (100.0%) | completed_6M | -9.117 | 39.786 | 7.9571 | +0.365 | improving (+0.365/update) | -222.71 |
-| 5v5 | 1 | 5,400,000 (90.0%) | running | -9.0539 | 34.019 | 6.8037 | -0.405 | declining (-0.405/update) | -2.8143 |
-| 5v5 | 2 | 2,304,000 (38.4%) | running | -8.9908 | 7.9511 | 1.5902 | +0.144 | improving (+0.144/update) | -58.163 |
-| 10v10 | 0 | 6,000,000 (100.0%) | completed_6M | -17.621 | 0.39183 | 0.039183 | +0.391 | improving (+0.391/update) | -87.864 |
-| 10v10 | 1 | 1,860,000 (31.0%) | running | -17.611 | 3.2868 | 0.32868 | +2.08 | improving (+2.08/update) | -30.863 |
+| 2v2 | 0 | 6,000,000 (100.0%) | completed_6M | -3.5101 | 21.992 | 10.996 | +0.0479 | 持平（+0.0479/update） | -99.026 |
+| 3v3 | 0 | 6,000,000 (100.0%) | completed_6M | -5.3185 | 35.932 | 11.977 | +0.0089 | 持平（+0.0089/update） | 47.839 |
+| 3v3 | 1 | 6,000,000 (100.0%) | completed_6M | -5.436 | 34.473 | 11.491 | -0.0105 | 持平（-0.0105/update） | 47.648 |
+| 5v5 | 0 | 6,000,000 (100.0%) | completed_6M | -9.117 | 39.786 | 7.9571 | +0.365 | 上升（+0.365/update） | -222.71 |
+| 5v5 | 1 | 5,820,000 (97.0%) | time_cutoff | -9.0539 | 34.019 | 6.8037 | -0.405 | 下降（-0.405/update） | -2.8143 |
+| 5v5 | 2 | 2,376,000 (39.6%) | time_cutoff | -8.9908 | 7.9511 | 1.5902 | +0.144 | 上升（+0.144/update） | -58.163 |
+| 10v10 | 0 | 6,000,000 (100.0%) | completed_6M | -17.621 | 0.39183 | 0.039183 | +0.391 | 上升（+0.391/update） | -87.864 |
+| 10v10 | 1 | 1,920,000 (32.0%) | time_cutoff | -17.611 | 3.2868 | 0.32868 | +2.08 | 上升（+2.08/update） | -30.863 |
 
-_`Reward / enemy` divides by N and is the only cross-N-comparable reward for the NoWeapon family (PostureReward sums over enemies; see §4). A `running` lane's verdict is a statement about its final logged update at generation time, not about where it will end; a lane at `completed_*` is frozen at its final value. Values for scales with two seeds are per seed; §12 quantifies the spread._
+_`每敌机 reward` 除以 N，是 NoWeapon 系列唯一可跨 N 比较的 reward（PostureReward 对敌机求和；见 §4）。`running` 通道的判定说的是其在生成时刻最后一条已记录 update 的状态，而非最终走向；处于 `completed_*` 的通道已冻结在其最终值。有两个种子的规模按种子分别给出；§12 量化其离散度。_
 
-Matched-sample budgets from `metrics/sample_efficiency.csv` (latest real measurement at or below each budget — no interpolation; `~` marks a nearest measurement below 75% of the requested budget, i.e. do not read that column as if the lane had been measured there):
+来自 `metrics/sample_efficiency.csv` 的等样本预算（每个预算取 ≤ 该预算的最新真实测量值 —— 不做插值；`~` 表示最近的测量值低于所请求预算的 75%，即不要把该列读成该通道曾在该预算处被测量）：
 
-| Scale | Seed | Max steps | 150k | 300k | 450k | 600k |
+| 规模 | 种子 | 最大步数 | 150k | 300k | 450k | 600k |
 |---|---|---|---|---|---|---|
 | 2v2 | 0 | 6,000,000 | -0.61 (-0.31) | 4.32 (2.16) | 21.05 (10.53) | 20.49 (10.24) |
 | 3v3 | 0 | 6,000,000 | -4.78 (-1.59) | -4.40 (-1.47) | -2.64 (-0.88) | 1.22 (0.41) |
@@ -591,89 +567,82 @@ Matched-sample budgets from `metrics/sample_efficiency.csv` (latest real measure
 | 10v10 | 0 | 6,000,000 | -17.67 (-1.77) | -17.45 (-1.74) | -17.44 (-1.74) | -17.45 (-1.75) |
 | 10v10 | 1 | 1,860,000 | -17.76 (-1.78) | -17.74 (-1.77) | -17.46 (-1.75) | -14.88 (-1.49) |
 
-_`reward (reward/enemy)`; NoWeapon family only._
+_`reward（每敌机 reward）`；仅 NoWeapon 系列。_
 
-Matched early training stage (mean over the first 5 logged updates per run, from `metrics/normalized_scaling.csv`). Dividing the critic's value loss by N^2 and its grad norm by N removes the reward-magnitude growth with N; a pure reward-scale effect would leave both roughly constant — the drift that remains is the cross-N, per-update difference at an identical stage of training:
+匹配的早期训练阶段（每次运行前 5 条已记录 update 的均值，来自 `metrics/normalized_scaling.csv`）。把 critic 的 value loss 除以 N^2、梯度范数除以 N，可消去随 N 增长的 reward 量级；若 N 依赖纯粹来自 reward 尺度效应，两者都应大致恒定 —— 剩下的漂移就是同一训练阶段下的跨 N 逐 update 差异：
 
-| Scale | Runs | Updates | Reward / enemy | Value loss / N^2 | Critic grad / N |
+| 规模 | 运行数 | Updates | 每敌机 reward | Value loss / N^2 | Critic grad / N |
 |---|---|---|---|---|---|
 | 2v2 | 2 | 10 | -1.638 | 0.5022 | 3.942 |
 | 3v3 | 2 | 10 | -1.748 | 0.5863 | 3.892 |
 | 5v5 | 3 | 15 | -1.79 | 0.6622 | 4.567 |
 | 10v10 | 2 | 10 | -1.761 | 0.6956 | 5.09 |
 
-_First-5-update means are noisy by construction; they are a matched-stage comparison, not a converged one. The full per-update trace is in `metrics/normalized_scaling.csv`._
+_前 5 条 update 的均值天然噪声很大；这是同阶段对比，不是收敛值。完整逐 update 轨迹见 `metrics/normalized_scaling.csv`。_
 <!-- /AUTO:section11 -->
 
-### 11.1 A degradation, not noise: `1v1/NoWeapon/HierarchySelfplay` gets worse in its second half
+### 11.1 是退化而非噪声：`1v1/NoWeapon/HierarchySelfplay` 在后半程变差
 
-Reported separately from the generated tables above because it is an
-*observation about one lane's learning path*, not a scaling result.
+与上面生成的表格分开报告，因为这是*关于单条通道学习路径的观察*，而
+不是 scaling 结果。
 
-At 4.39M of 6M steps, `f6m_official_1v1_hier_selfplay_s1` showed
-`critic_grad_norm = 1274` and reward `−333`. The immediate question is whether
-that single point is a divergence or an extreme draw, so the whole run was split
-into quarters:
+在 6M 步中的 4.39M 处，`f6m_official_1v1_hier_selfplay_s1` 出现
+`critic_grad_norm = 1274`、reward `−333`。首要问题是那个单点到底是发散
+还是一次极端抽样，于是整个运行被分成四段：
 
-| quarter | critic_grad_norm median | reward median | reward mean |
+| 四分位段 | critic_grad_norm 中位数 | reward 中位数 | reward 均值 |
 |---|---|---|---|
 | 1 | 108 | +24.1 | +2.3 |
 | 2 | 112 | +22.4 | +13.2 |
 | 3 | 266 | −17.2 | −23.8 |
 | 4 | **473** | **−89.7** | **−100.1** |
 
-The gradient quartiles barely overlap (last quarter p25 = 317 vs first quarter
-p75 = 154), so **this is a monotone trend, not variance** — the lane is getting
-*worse* while its critic gradient grows. The last point is simply the extreme of
-a real trend, not a one-off.
+梯度的四分位区间几乎不重叠（最后一段 p25 = 317 对第一段 p75 = 154），
+所以**这是单调趋势，不是方差**——这条通道在*变差*，同时其 critic 梯度
+在增长。最后那个点只是真实趋势的极端值，不是孤例。
 
-**OBSERVATION.** Critically, the sibling lane does not do this:
-`f6m_official_1v1_selfplay_s1` — the same environment, scenario family, seed and
-hyperparameters, differing only in that it is the **non-hierarchical** task — has
-a *falling* critic gradient and a rising reward over the same window. So the
-degradation is specific to the hierarchical task variant, not to 1v1 NoWeapon,
-not to seed 1, and not to the self-play mechanism in general.
+**观察。** 关键的是，它的兄弟通道没有这个问题：
+`f6m_official_1v1_selfplay_s1`——同样的环境、场景族、种子和超参数，
+唯一差别是它属于**非层级（non-hierarchical）**任务——在同一窗口内
+critic 梯度在*下降*，reward 在上升。所以退化是层级任务变体特有的，
+不是 1v1 NoWeapon 特有的，不是种子 1 特有的，也不是 self-play 机制
+普遍的问题。
 
-**HYPOTHESIS (not tested here).** The hierarchical variant learns a 3-dimensional
-high-level action on top of a fixed `BaselineActor` low-level controller, so its
-effective action space is far smaller and its reward is dominated by the
-low-level controller's behaviour. Under self-play the opponent set is resampled
-uniformly from checkpoint history, so the value target is non-stationary; a
-critic on a low-dimensional state may be less able to absorb that. This is
-consistent with the data but **the campaign contains no experiment that isolates
-it** — no fixed-opponent control, no second hierarchical seed.
+**假设（本文未检验）。** 层级变体在固定的 `BaselineActor` 低层控制器
+之上学习一个 3 维高层动作，因此其有效动作空间小得多，reward 也由低层
+控制器的行为主导。self-play 下对手集合从 checkpoint 历史中均匀重采样，
+因此价值目标是非平稳的；低维状态上的 critic 可能较难吸收这一点。这与
+数据相符，但**本轮实验没有任何实验把它分离出来**——没有固定对手对照，
+也没有第二个层级任务的种子。
 
-**Cannot conclude.** One lane, one seed. This is a lead for the next round (§16),
-not a result. In particular it is **not** evidence of a curse of multiagency: the
-scale here is N=1 per side, the smallest in the campaign.
+**不能结论。** 一条通道，一个种子。这是给下一轮的线索（§16），不是
+结果。特别地，它**不是** curse of multiagency（多智能体诅咒）的证据：
+这里的规模是每侧 N=1，是本轮实验中最小的。
 
-**Not numerical divergence.** Re-checked at 4.94M steps once the critic gradient
-had spiked again: the series oscillates hard (… 564, 119, 108, 83, 553, 184, 436,
-328, 665, 1376, 727, 1199, 1125, 394, **1738**, 570) — it rises and falls back,
-never ramps monotonically, and there are **zero NaN/Inf rows** in the run. The
-quarter medians keep climbing (110 → 114 → 321 → 473, most-recent-10 median 696),
-which is the trend; the individual spikes are the variance around it. The
-gradient magnitude also tracks `value_loss` (≈47 when the gradient peaked), i.e.
-it is the critic failing to fit a wide, self-play-shifted reward target, not the
-optimiser blowing up.
+**不是数值发散。** 在 critic 梯度再次尖峰后于 4.94M 步复检：序列剧烈
+振荡（… 564, 119, 108, 83, 553, 184, 436, 328, 665, 1376, 727, 1199,
+1125, 394, **1738**, 570）——升上去又落回来，从不单调攀升，且该运行中
+**零 NaN/Inf 行**。四分位段中位数持续攀升（110 → 114 → 321 → 473，
+最近 10 条中位数 696），这就是趋势；单个尖峰是围绕它的方差。梯度量级
+也与 `value_loss` 同步（梯度峰值时约 47），即这是 critic 拟合不上一个
+又宽又随 self-play 漂移的 reward 目标，而不是优化器爆炸。
 
-**No action taken.** This is a legitimate training outcome, not an engineering
-fault, so nothing was restarted, clipped or "rescued" (§16 of the brief). The
-lane is allowed to finish and is reported at whatever it reaches.
+**未采取任何动作。** 这是正常的训练结果，不是工程故障，所以没有重启、
+裁剪或「抢救」（任务书 §16）。这条通道被允许跑完，无论到达哪里都
+如实报告。
 
-### 11.2 Episode length: measured, found NOT to be an N-dependent confound — and a correction that was tested and then withdrawn
+### 11.2 回合长度：经实测，认定**不是**依赖 N 的混淆因素——以及一次经检验后撤回的更正
 
-`average_episode_rewards` is a per-episode **sum** of per-step rewards
-(`runner/share_jsbsim_runner.py:112`). If mean episode length differed
-systematically with N, then per-episode reward would be deflated at larger N for
-purely mechanical reasons, and every cross-N conclusion would be suspect. So the
-length was measured directly rather than assumed.
+`average_episode_rewards` 是每回合逐步 reward 的**总和**
+（`runner/share_jsbsim_runner.py:112`）。如果平均回合长度随 N 系统性
+变化，那么较大的 N 下每回合 reward 会被纯粹机械地压低，一切跨 N 结论
+都会可疑。所以长度是直接测出来的，而不是假定的。
 
-**Measurement** (`offline_eval.py --selfplay`, deterministic mirror match, 8
-episodes, the scenario's fixed initial condition, final checkpoint of each seed-0
-lane; episode length in env steps, `max_steps = 1000`):
+**测量**（`offline_eval.py --selfplay`，确定性镜像对局，8 个回合，场景
+的固定初始条件，每条种子 0 通道的最终 checkpoint；回合长度以 env steps
+计，`max_steps = 1000`）：
 
-| lane | N | mean_episode_length | return |
+| 通道 | N | mean_episode_length | return |
 |---|---|---|---|
 | `f6m_2v2_noweapon_s0` | 2 | 1000 (capped) | −212.50 |
 | `f6m_3v3_noweapon_s0` | 3 | 1000 (capped) | +47.38 |
@@ -681,355 +650,459 @@ lane; episode length in env steps, `max_steps = 1000`):
 | `f6m_10v10_noweapon_s0` | 10 | 1000 (capped) | +98.62 |
 | `f6m_3v3_noweapon_s0` @ 120k steps (control) | 3 | 1000 (capped) | −7.16 |
 
-**Two hypotheses were tested and both were refuted by the data above.**
+**两个假设被检验，且都被上表数据否定。**
 
-1. *"Episodes get shorter as N grows, because an episode ends when every agent is
-   done and a larger team has more chances to lose someone."* **Refuted**: N=10
-   runs the full 1000 steps. The N trend is absent; 5v5 is a lone outlier.
-2. *"Short episodes are a consequence of a poor policy crashing, so length is an
-   outcome of learning rather than a confound."* **Refuted**: a deliberately
-   weak control — the same 3v3 lane at 120k steps (`actor_5.pt`), the worst
-   policy in the campaign — also runs the full 1000 steps.
+1. *「回合随 N 增大而变短，因为一个回合在所有 agent 都结束时才结束，
+   更大的队伍有更多机会损失成员。」* **被否定**：N=10 跑满 1000 步。
+   N 趋势并不存在；5v5 是孤立的离群点。
+2. *「回合短是策略差导致崩溃的后果，所以长度是学习的结果而非混淆
+   因素。」* **被否定**：一个刻意设置的弱对照——同一条 3v3 通道在
+   120k 步时（`actor_5.pt`），本轮实验中最差的策略——同样跑满 1000
+   步。
 
-**Therefore the correction I was about to apply was withdrawn.** For a while the
-plan was to report `reward_per_enemy / mean_episode_length` as a
-length-corrected cross-N metric. On the N=5 numbers it looked like it mattered a
-great deal: at the matched 4M budget it moved 5v5 from `+4.63` to `+8.46` per
-enemy, i.e. it shrank the apparent 5v5-vs-2v2 gap from 54% to 15%, and at 2M/3M
-it made 5v5 look *better* than every smaller scale. That result was **an artifact
-of dividing by a lane-specific quantity**: length is 1000 for N=2, 3, 10 and for
-a weak 3v3 policy, so it is not a function of N and not a function of policy
-quality either. Dividing by it would have injected noise in the guise of removing
-bias.
+**于是，我原本要施加的更正被撤回。** 有一段时间，计划是把
+`reward_per_enemy / mean_episode_length` 作为长度校正后的跨 N 指标来
+报告。在 N=5 的数字上它看上去关系重大：在匹配的 4M 预算处它把 5v5
+从每敌机 `+4.63` 抬到 `+8.46`，即把 5v5 对 2v2 的表观差距从 54% 缩到
+15%，而在 2M/3M 处它让 5v5 显得*好于*所有更小的规模。那个结果是
+**除以一个通道特变量所造成的假象**：长度对 N=2、3、10 以及一个弱 3v3
+策略都是 1000，所以它既不是 N 的函数，也不是策略质量的函数。除以它
+等于以去偏之名注入噪声。
 
-**What actually holds:**
+**实际成立的是：**
 
-- **FACT.** Episode length is lane-specific and non-stationary. It is *not*
-  explained by N (2, 3, 10 all capped; 5 is not) and *not* explained by policy
-  quality (a weak 3v3 policy is capped, a strong 10v10 policy is capped).
-- **OBSERVATION.** There is therefore no *systematic, directional* N-dependent
-  bias from episode length. The naive per-episode cross-N comparison is not
-  uniformly corrupted the way §15.5 warned it might be.
-- **OBSERVATION.** It *can* mislead for an individual lane. If the 5v5 policy
-  genuinely spends 45% less time alive per episode, then ~half its apparent
-  reward deficit against the smaller scales is "died sooner" rather than "scored
-  worse per unit time" — and there is no way to tell those apart from the
-  per-episode number alone.
-- **CANNOT CONCLUDE.** Whether the 5v5 result at 547 reflects a real behavioural
-  difference (a crash-prone policy), a transient phase of that one run, or an
-  artifact of the single deterministic rollout. One sample per lane, one seed,
-  and the metric is deterministic so there is no error bar to consult.
-- **CONSEQUENCE FOR READING §6/§7.** The N=5 row carries more uncertainty than
-  the others, for a reason that has nothing to do with coordination and nothing
-  to do with scale. It is flagged, not silently normalised away.
+- **事实。** 回合长度是通道特有的且非平稳的。它*不*由 N 解释（2、3、10
+  都封顶；5 没有），也*不*由策略质量解释（弱 3v3 策略封顶，强 10v10
+  策略也封顶）。
+- **观察。** 因此不存在来自回合长度的*系统性、有方向的*依赖 N 的偏差。
+  朴素的逐回合跨 N 比较并没有像 §15.5 警告的那样被统一污染。
+- **观察。** 它*可以*误导单条通道。如果 5v5 的策略确实每回合少存活 45%
+  的时间，那么它对更小规模的表观 reward 缺口就有一半是「死得更早」
+  而不是「单位时间得分更差」——而仅凭每回合数字无法区分这两者。
+- **不能结论。** 5v5 的 547 反映的是真实的行为差异（易坠机策略）、
+  那一次运行的暂态阶段、还是单次确定性 rollout 的假象。每条通道一个
+  样本、一个种子，且该指标是确定性的，没有误差棒可查。
+- **对阅读 §6/§7 的后果。** N=5 那一行比其他行带有更多不确定性，其
+  原因与协调无关，也与规模无关。它被标注出来，而不是被悄悄归一化掉。
 
-This episode is worth recording as a methodological result in its own right: a
-plausible, data-supported correction was proposed, a control was run to test it,
-the control refuted it, and the correction was withdrawn before it reached a
-conclusion. That is the same discipline the pilot applied in F7 (reporting
-measurements under both quiet and loaded conditions rather than picking the one
-that suited the narrative).
+这件事本身就值得作为一条方法学结果记录下来：一个貌似合理且有数据
+支持的更正被提出，一个对照被运行来检验它，对照否定了它，于是更正是
+在尚未形成结论之前就被撤回的。这与 pilot 在 F7 中运用的纪律相同（同时
+报告 quiet 和 loaded 两种条件下的测量，而不是挑一个符合叙事的）。
 
-> Note on the mirror-match returns in the table above: they are **not** a measure
-> of policy strength and must not be reported as evaluation performance. Both
-> sides run the same checkpoint from a geometrically asymmetric start, so the
-> return measures "who wins this fixed deterministic asymmetric engagement under
-> identical policies". Only `std_return` (a determinism check) and
-> `mean_episode_length` are structurally meaningful. See §13, F18.
+> 关于上表镜像对局 return 的说明：它们**不是**策略强弱的度量，绝不能
+> 作为评估表现来报告。双方从几何上不对称的初始条件出发运行同一个
+> checkpoint，所以 return 度量的是「在相同策略下，这场固定的确定性
+> 不对称交战谁赢」。只有 `std_return`（确定性检查）和
+> `mean_episode_length` 在结构上有意义。见 §13，F18。
 
-## 12. Seed Variance
+## 12. 种子方差
 
 <!-- AUTO:section12 -->
-Seed variance for the N-v-N lanes. A spread is only computed where at least two seeds of the same scale exist; a single run cannot produce a variance, and none is fabricated from one.
+N-v-N 通道的种子离散度。仅当同一规模存在至少两个种子时才计算离散范围；单次运行无法给出方差，也绝不凭单次运行编造。
 
-**2v2** — 1 lane with data.
+**2v2** —— 有数据的通道数：1。
 
-| Seed | Status | Threads | Steps reached | Ceiling | Final logged reward | Reward / enemy |
+| 种子 | 状态 | Rollout 线程 | 已到步数 | 上限 | 最后记录的 reward | 每敌机 reward |
 |---|---|---|---|---|---|---|
 | 0 | completed_6M | 4 | 6,000,000 | 6,000,000 | 21.992 | 10.996 |
 
-_Only one seed exists for 2v2 in this campaign, so **no spread is computed** (a spread needs at least two runs). The single-seed trend is in §11._
+_本次实验批次中 2v2 只有一个种子，因此**不计算离散范围**（至少要两次运行才能给出）。单种子趋势见 §11。_
 
-**3v3** — 2 lanes with data.
+**3v3** —— 有数据的通道数：2。
 
-| Seed | Status | Threads | Steps reached | Ceiling | Final logged reward | Reward / enemy |
+| 种子 | 状态 | Rollout 线程 | 已到步数 | 上限 | 最后记录的 reward | 每敌机 reward |
 |---|---|---|---|---|---|---|
 | 0 | completed_6M | 8 | 6,000,000 | 6,000,000 | 35.932 | 11.977 |
 | 1 | completed_6M | 8 | 6,000,000 | 6,000,000 | 34.473 | 11.491 |
 
-_Spread over the final logged training reward at generation time: **1.46** raw (**0.486** per enemy), i.e. max - min over the 2 seeds._
+_生成时刻最终已记录训练 reward 的离散范围：原始值 **1.46**（每敌机 **0.486**），即 2 个种子的 max - min。_
 
-**5v5** — 3 lanes with data.
+**5v5** —— 有数据的通道数：3。
 
-| Seed | Status | Threads | Steps reached | Ceiling | Final logged reward | Reward / enemy |
+| 种子 | 状态 | Rollout 线程 | 已到步数 | 上限 | 最后记录的 reward | 每敌机 reward |
 |---|---|---|---|---|---|---|
 | 0 | completed_6M | 8 | 6,000,000 | 6,000,000 | 39.786 | 7.9571 |
-| 1 | running | 10 | 5,400,000 | 6,000,000 | 34.019 | 6.8037 |
-| 2 | running | 8 | 2,304,000 | 6,000,000 | 7.9511 | 1.5902 |
+| 1 | time_cutoff | 10 | 5,820,000 | 6,000,000 | 34.019 | 6.8037 |
+| 2 | time_cutoff | 8 | 2,376,000 | 6,000,000 | 7.9511 | 1.5902 |
 
-**Thread confound (§4.5):** the seeds of 5v5 do not share `n_rollout_threads` (seed 0: 8, seed 1: 10, seed 2: 8), so this comparison crosses batch-size differences as well as seeds.
+**线程混淆因素（§4.5）：** 5v5 的各种子并不共享 `n_rollout_threads`（种子 0: 8, 种子 1: 10, 种子 2: 8），因此该对比同时混入了 batch 大小差异。
 
-_Spread over the final logged training reward at generation time: **31.8** raw (**6.37** per enemy), i.e. max - min over the 3 seeds._
+_生成时刻最终已记录训练 reward 的离散范围：原始值 **31.8**（每敌机 **6.37**），即 3 个种子的 max - min。_
 
-**Provisional:** seed 1 at 5,400,000 steps, seed 2 at 2,304,000 steps — the spread compares seeds at different training stages and will shrink or move as the incomplete lanes train. Treat it as an upper bound on the current difference, not a variance estimate.
+**10v10** —— 有数据的通道数：2。
 
-**10v10** — 2 lanes with data.
-
-| Seed | Status | Threads | Steps reached | Ceiling | Final logged reward | Reward / enemy |
+| 种子 | 状态 | Rollout 线程 | 已到步数 | 上限 | 最后记录的 reward | 每敌机 reward |
 |---|---|---|---|---|---|---|
 | 0 | completed_6M | 20 | 6,000,000 | 6,000,000 | 0.39183 | 0.039183 |
-| 1 | running | 20 | 1,860,000 | 6,000,000 | 3.2868 | 0.32868 |
+| 1 | time_cutoff | 20 | 1,920,000 | 6,000,000 | 3.2868 | 0.32868 |
 
-_Spread over the final logged training reward at generation time: **2.9** raw (**0.29** per enemy), i.e. max - min over the 2 seeds._
+_生成时刻最终已记录训练 reward 的离散范围：原始值 **2.9**（每敌机 **0.29**），即 2 个种子的 max - min。_
 
-**Provisional:** seed 1 at 1,860,000 steps — the spread compares seeds at different training stages and will shrink or move as the incomplete lanes train. Treat it as an upper bound on the current difference, not a variance estimate.
-
-_This campaign holds two seeds for 3v3 and for 5v5 (seed 0 and seed 1). 2v2 and 10v10 have a single scaling seed each; the official 2v2 lane is a different scenario path and is not counted as a second seed of the scaling lane. The table states each lane's thread count and steps; where the two seeds of a scale differ in `n_rollout_threads` the comparison also crosses the §4.5 batch-size confound, and the group is flagged above._
+_本次实验批次在 3v3 与 5v5 各有两个种子（种子 0 与种子 1）。2v2 与 10v10 的 scaling 系列各只有一个种子；官方 2v2 通道走的是另一条场景路径，不计作 scaling 通道的第二个种子。表中给出每条通道的线程数与步数；若同一规模的两个种子在 `n_rollout_threads` 上不同，该对比还混入 §4.5 的 batch 大小混淆因素，上面已对该组做出标注。_
 <!-- /AUTO:section12 -->
 
-## 13. Failures and Fixes
+## 13. 失败与修复
 
-Full detail in `experiments/2026-10-07-08-formal6m/status/incidents.md`
-(F-numbers), continuing the `docs/night_failures.md` F1–F9 series.
+完整细节见 `experiments/2026-10-07-08-formal6m/status/incidents.md`
+（F 编号），延续 `docs/night_failures.md` 的 F1–F9 系列。
 
-### 13.1 Inherited from the pilot (not re-run, not re-derived)
+### 13.1 继承自 pilot（未重跑，未重新推导）
 
-| id | what | status this round |
+| id | 问题 | 本轮状态 |
 |---|---|---|
-| F1 | JSBSim `data` submodule missing → env cannot initialise | already fixed; not seen |
-| F2 | `gym` missing | irrelevant (one render script); not on the training path |
-| F3 | non-wandb branch dropped all PPO diagnostics | already fixed (`metrics.jsonl`); this campaign depends on it |
-| F4 | official scripts' `--clip-params` typo + hard wandb dependency | worked around in the launcher, values unchanged |
-| F5 | generated scaling configs overwrote the NoWeapon variants | already fixed; configs verified: 10v10/scaling_noweapon is `hierarchical_multiplecombat` with 20 aircraft |
-| F6 | status snapshot mis-parsed setproctitle'd workers | already fixed |
-| F7 | env benchmark measured under load, not intrinsically | addressed by reporting quiet **and** loaded |
-| **F8** | **env throughput is CPU-bound, main process idle** | **confirmed as the binding constraint this round; see §9** |
-| **F9** | **`1v1/ShootMissile/HierarchyVsBaseline` cannot run at all** | **confirmed; deliberately excluded, recorded `not_applicable`** |
+| F1 | JSBSim `data` 子模块缺失 → 环境无法初始化 | 已修复；未再出现 |
+| F2 | `gym` 缺失 | 无关紧要（一个渲染脚本）；不在训练路径上 |
+| F3 | 非 wandb 分支丢掉了全部 PPO 诊断 | 已修复（`metrics.jsonl`）；本轮实验依赖它 |
+| F4 | 官方脚本的 `--clip-params` 笔误 + 硬依赖 wandb | 在启动器中绕过，数值不变 |
+| F5 | 生成的 scaling 配置覆盖了 NoWeapon 变体 | 已修复；配置已核验：10v10/scaling_noweapon 是 20 架飞机的 `hierarchical_multiplecombat` |
+| F6 | 状态快照解析不了 setproctitle 后的 worker | 已修复 |
+| F7 | 环境基准是在负载下而非内在条件下测的 | 已通过同时报告 quiet **和** loaded 处理 |
+| **F8** | **环境吞吐受 CPU 限制，主进程空闲** | **本轮确认是瓶颈约束；见 §9** |
+| **F9** | **`1v1/ShootMissile/HierarchyVsBaseline` 完全无法运行** | **已确认；刻意排除，记为 `not_applicable`** |
 
-### 13.2 New this round
+### 13.2 本轮新增
 
-| id | what | category |
+| id | 问题 | 类别 |
 |---|---|---|
-| **F10** | `scaling_table.py` emitted `peak_cpu_cores_host = 175.9` for a 48-core box | `Other` (measurement bug) |
-| **F11** | representation columns (obs dims, param counts) were empty because `critic_scaling_probe.py` was never invoked | `Other` (missing instrumentation) |
-| **F12** | `make_manifest.py`'s end-of-job regex never matched the real ledger line, so **finished lanes were silently reported as running** | `Other` (instrumentation bug, inherited from the pilot) |
-| **F13** | analysis scripts hardcoded the pilot's campaign path | `Other` (portability) |
+| **F10** | `scaling_table.py` 在一台 48 核机器上输出 `peak_cpu_cores_host = 175.9` | `Other`（测量 bug） |
+| **F11** | representation 列（obs 维度、参数量）为空，因为 `critic_scaling_probe.py` 从未被调用 | `Other`（缺少插桩） |
+| **F12** | `make_manifest.py` 的作业结束正则从未匹配上真实的 ledger 行，于是**已完成的通道被静默报告为 running** | `Other`（插桩 bug，继承自 pilot） |
+| **F13** | 分析脚本硬编码了 pilot 的批次路径 | `Other`（可移植性） |
 
-**F10** — the sampler (`os_watchdog.sh`) writes `cpu_busy_pct` already normalised
-to the 48-core cgroup quota, but `scaling_table.py` multiplied it by the
-host-denominator constant 192/100. The result was a physically impossible 175.9
-cores. Fixed by deriving the multiplier from `/sys/fs/cgroup/cpu.max` at runtime
-and **renaming the column to `peak_busy_cores_of_48_quota`** so the ambiguity
-cannot recur; the legacy pilot schema is still reconstructed correctly (it
-reproduces the pilot's historical 65.3). This is a pure instrumentation fix — no
-training behaviour was touched.
+**F10** —— 采样器（`os_watchdog.sh`）写出的 `cpu_busy_pct` 已经按
+48 核 cgroup 配额归一化，但 `scaling_table.py` 把它又乘上了宿主分母
+常数 192/100。结果就是物理上不可能的 175.9 核。修复方式是在运行时从
+`/sys/fs/cgroup/cpu.max` 推导乘数，并**把该列改名为
+`peak_busy_cores_of_48_quota`**，使歧义无从复现；旧 pilot 模式仍能
+正确重建（复现出 pilot 历史上的 65.3）。这是纯插桩修复——没有触碰
+任何训练行为。
 
-**F11** — fixed by wiring the existing probe into `scaling_table.py` (cached, ~7 s).
-The probe had to be *run*, not written: the method existed but nothing called it,
-so the Representational-Scalability section (§10) would have had no data at all.
+**F11** —— 通过把已有的探测脚本接入 `scaling_table.py` 修复（带缓存，
+约 7 s）。这个探测需要的是被*运行*，而不是被编写：方法早已存在，但
+没有任何东西调用它，否则表示可扩展性一节（§10）将完全没有数据。
 
-**Why these matter for the report.** F10–F13 are all `Other` — instrumentation
-and measurement defects. None of them is evidence about the algorithm, and per
-the pilot's own discipline (`docs/night_failures.md` §判定纪律) **none of them may
-be cited as support for a curse-of-multiagency claim.** F10 in particular is a
-good example of the failure mode the pilot warned about: a number that looked
-like a scaling result (175.9 "cores" at N=10) and was actually a unit error.
+**这些对报告意味着什么。** F10–F13 全部是 `Other`——插桩与测量缺陷。
+它们没有一条是关于算法的证据，且按 pilot 自己的纪律
+（`docs/night_failures.md` §判定纪律），**没有一条可以被引用来支撑
+curse-of-multiagency 的主张。** F10 尤其很好地示范了 pilot 警告过的
+失效模式：一个看起来像 scaling 结果的数字（N=10 时的 175.9「核」），
+实际是单位错误。
 
-### 13.3 Not run, and honestly labelled
+### 13.3 未运行，且如实标注
 
-- `1v1/ShootMissile/HierarchyVsBaseline` — `not_applicable` (F9, upstream bug, 0 steps).
-- `1v1/DodgeMissile/*` family — out of scope this round; the pilot covered them.
-- `1/heading` (SingleControl) — an L1 official entry that is not a multi-agent
-  task. Deferred to a spare lane; if it does not run, it is `not_started`, not
-  `failed`.
+- `1v1/ShootMissile/HierarchyVsBaseline` —— `not_applicable`（F9，
+  上游 bug，0 步）。
+- `1v1/DodgeMissile/*` 系列 —— 不在本轮范围内；pilot 已覆盖。
+- `1/heading`（SingleControl）—— 一个 L1 官方条目，不是多智能体任务。
+  推迟到空闲通道；若最终未运行，记为 `not_started` 而不是 `failed`。
 
-### 13.4 One process-level caveat about this codebase
+### 13.4 关于该代码库的一条进程级注意事项
 
-`run_train.sh` captures `$?` from a `python … | tee` pipeline **without
-`pipefail`** (lines 102–104), so every job records `exited with code 0` —
-including crashes and SIGINT timeouts. Additionally
-`scripts/train/train_jsbsim.py:107-133` always allocates the next free `run<N>`
-directory and no launcher exposes `--model-dir`, so **a relaunch silently starts
-a fresh run in `run2/` rather than resuming**. Both facts mean: exit codes are
-not evidence of success, and no job is auto-restarted. Success is judged only
-from step progress in `metrics.jsonl` plus the absence of `Traceback`.
+`run_train.sh` 从 `python … | tee` 管道捕获 `$?`，**没有开
+`pipefail`**（第 102–104 行），所以每个作业都记录 `exited with code 0`
+——包括崩溃和 SIGINT 超时。此外 `scripts/train/train_jsbsim.py:107-133`
+总会分配下一个空闲的 `run<N>` 目录，而没有任何启动器暴露 `--model-dir`，
+所以**重新启动会静默地在 `run2/` 开一个全新运行，而不是续跑**。这两点
+合起来意味着：退出码不是成功的证据，也没有作业会被自动重启。成功与否
+只从 `metrics.jsonl` 的步数进展以及没有 `Traceback` 来判断。
 
-## 14. What We Can Conclude
+## 14. 我们能得出什么结论
 
-TBD
+本节只列**数据直接支持**的内容。每一条都标注了它是可直接核对的事实，还是对事实的解释。
 
-## 15. What We Cannot Conclude
+### 14.1 事实（可直接从产物核对）
 
-This section is deliberately written to be readable *before* the final numbers
-are in, because none of it depends on them. Every item below is a structural
-limit of the design, not a caveat about a particular value.
+**F1. 官方 baseline 入口全部跑完。** 仓库中真实存在的 6 个官方训练入口（L1 五个 + L2 一个）
+都在保持全部官方超参数不变的前提下完成：`1/heading` 到 6,000,000；
+`2v2/NoWeapon/HierarchySelfplay` 到 6,000,000；四个 `1v1` 入口到 **5,994,000**——
+后者是 3 线程下的构造性上限（`6e6//3000//3 = 666` 个 update），不是被截断（§13 F17）。
+`1v1/ShootMissile/HierarchyVsBaseline` 未运行，因为它是 upstream 真实 bug（F9），
+记为 `not_applicable`。
 
-**1. We cannot claim any kind of convergence result.** 6M is a **budget
-reduction** from the official 1e8, adopted because 1e8 needs several hundred
-hours per run here (§2, §4.1). A run at 6M may be mid-improvement, at a plateau,
-or past a degradation; this report says which, per lane, and never says
-"converged" without the evidence for that specific lane.
+**F2. 四个规模的 seed 0 全部跑满 6,000,000 步。**
 
-**2. We cannot claim a curse of multiagency.** The phrase describes a
-*difficulty that grows with the number of agents*. To support it we would need
-(a) more than one seed per scale, (b) the agent-count effect separated from the
-compute effect, and (c) at least one controlled mechanism comparison. This
-campaign has one of the three: one seed per scale for the scaling family (the
-second seeds for 3v3 and 5v5 were launched late and may be time-censored). A
-difference in reward-per-enemy between N=2 and N=10 at 6M is an **observation of
-a difference**, and §14 will report it as exactly that.
+**F3. 等样本预算下每敌机 reward（6M）**：
 
-**3. We cannot attribute any observed N-dependence to a mechanism.** The
-centralised critic's representation is provably O(N²) (§10) and the environment
-cost is measurably N^1.64 (§9.1) — but this campaign ran **no controlled critic
-variant** (no attention, factorised, local or graph critic). Establishing that
-the O(N²) *input* is what limits *learning* requires running a sub-quadratic
-critic on the same task with everything else fixed. That is a next-round
-experiment (§16), not a result.
+| N | 2 | 3 | 5 | 10 |
+|---|---|---|---|---|
+| reward / enemy @6M | **+11.00** | **+11.73** | **+7.96** | **+0.04** |
 
-**4. We cannot separate computational scalability from learning scalability.**
-`n_rollout_threads` differs across scale (4/8/8/20 for N=2/3/5/10 — §4.5), so the
-PPO update batch differs too. Every cross-N reward difference therefore carries
-an unresolved batch-size contribution. This is the single largest confound in
-the campaign and it is stated up front rather than buried; it does **not** affect
-same-N comparisons (seeds) or any within-lane trajectory.
+**F4. N=10 的曲线是单调改善的，不是平坦的**：−1.73 → −1.17 → −1.06 → −0.47 → −0.06 → +0.04
+（1M 到 6M，每敌机）。斜率始终为正，只是远小于小规模。
 
-**5. We cannot compare raw per-episode reward across N without care.**
-`PostureReward` sums over an agent's enemies, so raw reward scales with N by
-construction; `reward/N` is the normalisation used throughout, and it is valid
-**only for the NoWeapon family** (§4, §24 of the brief). Per-episode reward is
-additionally confounded by episode length, so that was measured rather than
-assumed: §11.2 finds lengths of 1000 (capped) at N = 2, 3 and 10, and 547 at
-N = 5. **There is no systematic N-dependent length bias** — the confound is
-lane-specific, not scale-systematic — so the cross-N comparison is not uniformly
-corrupted. It can still mislead for the N=5 row specifically, which §11.2 flags
-rather than silently normalising away. A length-corrected metric was built and
-then withdrawn: see §11.2 for why dividing by a non-systematic, policy-entangled
-quantity injects noise in the guise of removing bias.
+**F5. N=3 的种间差异很小。** 两个种子都跑满 6M：seed 0 = +11.98，seed 1 = +11.49
+（每敌机），差 **0.49**。这远小于任何跨规模差距（最小的是 3→5 的 3.77）。
 
-**6. We cannot make a statistical statement about seed variance.** At most two
-scales get a second seed, and those may be at different training stages when the
-window closes. §12 refuses to compute a spread from one run, by design.
+**F6. N=10 的早期行为在第二个种子上重现。** seed 1 在 1M 处为 −1.17 每敌机，
+与 seed 0 同点位的 −1.73 同处"接近零"区间；seed 1 在 1.92M 处被时间截断。
 
-**7. We cannot bound 10v10's variance at all.** The highest-priority second seed
-in the brief (10v10) is infeasible in this window: it needs ~20 threads for
-~20 h, and no lane large enough frees before ~03:25 Oct 8. Its absence is a
-recorded gap, not an oversight (§14 of the brief, `status/plan.md`).
+**F7. 集中式 critic 的输入维度是精确闭式 `share_obs = 2N·(12N+3) = 24N² + 6N`。**
+四个规模（N=2/3/5/10）逐位验证，无自由参数。critic 参数量 = `128·(24N²+6N) + 150145`，
+actor 参数量 = `128·(12N+3) + 151435`。推论：critic 第一层每环境步的 FLOP 是 **Θ(N³)**
+（N=2→10 增长 **113.9 倍**），而 actor 参数量在同样范围内只增长 **1.08 倍**。
 
-**8. We cannot generalise beyond this environment and this configuration.**
-`envs/JSBSim` implementing LAG with a 12-feature-per-enemy observation, a fixed
-128×128 MLP actor and a concatenation-based centralised critic, at
-`buffer_size=3000`, `lr=3e-4`, `gamma=0.99`. Statements here are about *this*
-system.
+**F8. 环境本身实测每步代价 N^1.64（R²=0.9989，安静机器）。**
+按飞机归一化后是 N^0.64，即每架飞机本身更贵，不只是飞机更多。
 
-**9. We cannot read anything into the eval curves beyond direction.** Per-checkpoint
-MultipleCombat evaluation is deterministic (pilot §5.1, std = 0 over 8 repeats),
-so the eval series' wobble is the *policy and the redrawn self-play opponent*
-changing — not sampling noise, and not a calibrated estimate either. It is a
-single deterministic episode per evaluation point.
+**F9. `share_obs` replay buffer 是 O(N²)。** 本实验配置（10v10、20 线程）下约 **5.9 GB**；
+按同一公式外推，N=20/50/100 分别是 **26 GB / 404 GB / 3.2 TB**。
 
-**10. Eval/diagnostic quantities are read at different updates.** The `Eval`
-column can lag the `Steps` column by one or two updates because eval rows are
-sparser than training rows, and figures refresh only at each freeze (§13,
-generator notes). No cell is fabricated; but a reader comparing across columns
-should know they are not always the same update.
+**F10. 全程 11 条完成通道 + 3 条被截断通道，累计 0 行 NaN/Inf。**
+唯二观察到的"退化"（`1v1 HierSelfplay` 后半段 critic 梯度上升、reward 下降）经四分位
+检验是**真实趋势而非发散**：无 NaN，梯度会回落，且同环境的非层次化兄弟通道同期在改善（§11.1）。
+
+**F11. 算力账**：聚合吞吐最后稳定在 **≈1400 env-steps/s**；
+容器 CPU 峰值 47/48 核；51 小时内完成 11 条 6M 级通道 + 3 条部分通道。
+
+### 14.2 观察（对事实的解释，不是事实本身）
+
+**O1. 在 6M 预算下，N=10 是唯一显著落后的规模，且差距很大。**
++0.04 对照 +8~+12，差距约 10 个 reward 单位——比 3→5 的差距（3.77）还大 2.6 倍。
+这是本轮最清晰的一条可复现观察。
+
+**O2. 但正确的表述是"慢"，不是"学不会"。** 见 F4：10v10 到 5M 仍在单调改善。
+把它写成"10v10 失败"是对数据的过度解读（§15.2 会展开为什么连"慢"都还不能归因）。
+
+**O3. 最可能先撞的不是算力墙，而是显存墙。** 见 F9：按本架构，N=50 的 `share_obs`
+buffer 单独就要 0.4 TB。而这只是**表示层**的限制，与学习算法无关。
+
+**O4. critic 的表示增长率比环境还高。** 环境 N^1.64，critic 第一层每步 Θ(N³)。
+至少在渐进意义上，"集中式 critic 的输入结构"是两者中更激进的那一项——
+这是把 F7 与 F8 并排看才成立的观察，也是本报告支持"critic 值得单独研究"的最强一条依据。
+
+**O5. 小规模的种子方差很小，所以小规模的结论比大规模更硬。** 见 F5。
+反过来说，N=10 的结论目前只建立在 1 条完整轨迹 + 1 条 32% 轨迹上，硬度最低。
+
+### 14.3 一句话结论
+
+> **在 6M environment-step 预算下，NoWeapon N-v-N 的每敌机 reward 随 N 增大而下降，
+> 且 N=10 出现约 10 个 reward 单位的断崖式落后；该结果在 N=3 上被两种子复现、
+> 在 N=10 的早期阶段被第二种子的部分轨迹复现。与此同时，本架构的集中式 critic
+> 在表示上是精确的 O(N²)、每步代价 Θ(N³)，其渐进增长率高于环境本身（N^1.64），
+> 且 `share_obs` 显存为 O(N²)、在大 N 下先于算力成为硬约束。
+> 本轮**没有**任何实验能把这些表示/计算层面的事实与"学习为什么变慢"因果连接起来——
+> 做到那一点需要受控的 critic 变体对照，见 §16。**
+
+
+本节刻意写得在最终数字出来*之前*就能读，因为它不依赖那些数字。下面
+每一条都是设计上的结构性限制，而不是对某个具体数值的保留意见。
+
+**1. 我们不能声称任何形式的收敛结果。** 6M 相比官方 1e8 是**预算削减**，
+之所以采用它，是因为 1e8 在这里每个运行需要几百小时（§2、§4.1）。6M
+的运行可能还在改进中、处在平台期、或已经过了退化点；本报告逐通道说明
+是哪种，且在缺乏该通道证据时从不说「收敛」。
+
+**2. 我们不能声称 curse of multiagency（多智能体诅咒）。** 这个说法
+描述的是*随 agent 数增长而增长的困难*。要支撑它，我们需要 (a) 每个
+规模多于一个种子，(b) 把 agent 数效应与算力效应分离，(c) 至少一个
+受控的机制对比。本轮实验三者只有一个：scaling 家族每个规模一个种子
+（3v3 与 5v5 的第二个种子启动较晚，可能被时间截断）。在 6M 处 N=2 与
+N=10 之间每敌机 reward 的差异是一个**对差异的观察**，§14 将严格按此
+报告。
+
+**3. 我们不能把任何观察到的 N 依赖归因于某个机制。** 集中式 critic 的
+表示可证明是 O(N²)（§10），环境成本实测为 N^1.64（§9.1）——但本轮
+实验**没有跑任何受控的 critic 变体**（没有 attention、factorised、
+local 或 graph critic）。要确立 O(N²) 的*输入*就是限制*学习*的原因，
+需要在其他一切固定的情况下，在同一任务上运行一个次二次的 critic。
+那是下一轮的实验（§16），不是结果。
+
+**4. 我们不能把计算可扩展性与学习可扩展性分开。** `n_rollout_threads`
+随规模不同（N=2/3/5/10 对应 4/8/8/20 —— §4.5），所以 PPO update 的
+batch 也不同。因此每个跨 N 的 reward 差异都带有一个未解决的 batch
+大小贡献。这是本轮实验中最大的单一混淆因素，它被写在明处而不是埋
+起来；它**不**影响同 N 比较（种子）或任何通道内轨迹。
+
+**5. 我们不能不加小心地跨 N 比较原始每回合 reward。** `PostureReward`
+对 agent 的每架敌机求和，所以原始 reward 按构造随 N 缩放；全程使用的
+归一化是 `reward/N`，它**仅对 NoWeapon 家族有效**（§4、任务书 §24）。
+每回合 reward 还额外受回合长度混淆，所以长度是测量出来的而不是假定
+的：§11.2 测得 N = 2、3、10 的长度为 1000（封顶），N = 5 为 547。
+**不存在系统性的依赖 N 的长度偏差**——该混淆因素是通道特有的，不是
+规模系统性的——所以跨 N 比较没有被统一污染。它对 N=5 那一行仍可能
+误导，§11.2 对此做了标注，而不是悄悄归一化掉。一个长度校正指标曾被
+构建然后撤回：为何除以一个非系统性、且与策略纠缠的量等于以去偏之名
+注入噪声，见 §11.2。
+
+**6. 我们不能对种子方差作统计陈述。** 至多两个规模拿到了第二个种子，
+而窗口关闭时它们可能处在不同的训练阶段。§12 按设计拒绝从单次运行
+计算离散范围。
+
+**7. 我们完全无法给出 10v10 方差的界。** 任务书中优先级最高的第二个
+种子（10v10）在本窗口内不可行：它需要约 20 个线程跑约 20 h，而在
+10 月 8 日约 03:25 之前没有足够大的通道释放。它的缺席是被记录的缺口，
+不是疏漏（任务书 §14，`status/plan.md`）。
+
+**8. 我们不能推广到这个环境和这套配置之外。** `envs/JSBSim` 以每敌机
+12 个特征的观测实现 LAG，actor 为固定 128×128 MLP，集中式 critic 基于
+拼接，配置为 `buffer_size=3000`、`lr=3e-4`、`gamma=0.99`。这里的陈述
+只关于*这个*系统。
+
+**9. 对 eval 曲线，我们除了方向之外什么都不能解读。** 逐 checkpoint
+的 MultipleCombat 评估是确定性的（pilot §5.1，8 次重复 std = 0），
+所以 eval 序列的波动是*策略与被重新抽出的 self-play 对手*在变化——
+不是采样噪声，也不是标定过的估计。每个评估点是一个单独的确定性
+回合。
+
+**10. Eval/诊断量取自不同的 update。** `Eval` 列可能比 `Steps` 列滞后
+一两条 update，因为 eval 行比训练行稀疏，而图只在每次 freeze 时刷新
+（§13，生成器说明）。没有任何单元格是编造的；但跨列比较的读者应当
+知道它们并不总是同一个 update 的值。
 
 ---
 
-## 16. Next Experiments
+## 16. 下一步实验
 
-Ranked by **which measured uncertainty the experiment would remove**, not by
-ease. Each entry names the specific limitation from §15 it addresses.
+按**该实验能消除哪一项已测量的不确定性**排序，而不是按难易。每条都
+点明它对应 §15 中的哪条具体限制。
 
-### Tier 1 — would change a conclusion
+### 第一梯队——会改变结论
 
-**N1. 10v10 second seed (removes §15.7).** ~20 h at 20 threads. Without it the
-headline scale has a single trajectory and its variance is unknown. This is the
-first thing to spend the next window on, and the reason the brief ranks it above
-everything else.
+**N1. 10v10 第二个种子（消除 §15.7）。** 20 线程下约 20 h。没有它，
+头号规模就只有单条轨迹，其方差未知。这是下一个窗口要做的第一件事，
+也是任务书把它排在所有其他事情之上的原因。
 
-**N2. Controlled critic-variant comparison (removes §15.3).** The *only* way to
-test the curse-of-multiagency hypothesis rather than describe a difference. Hold
-the environment, policy, seed, step budget and thread count fixed; vary **only**
-the critic's input structure:
-  - `concat` (current baseline, O(N²) input)
-  - `attention` over per-agent embeddings (O(N²) compute, O(N) parameters-per-agent)
-  - `factorised` / mean-field (O(N) input)
-  - `local` critic (O(1) input, no centralisation)
-The prediction from §10 is that the concat critic is the first to hit a wall —
-but the *learning* consequence is the open question. Run at N ∈ {2, 5, 10}, 2 seeds.
+**N2. 受控的 critic 变体对比（消除 §15.3）。** 这是*唯一*能检验
+curse-of-multiagency 假设、而不是仅仅描述差异的办法。把环境、策略、
+种子、步数预算和线程数全部固定；**只**改变 critic 的输入结构：
+  - `concat`（当前基线，O(N²) 输入）
+  - 对逐 agent 嵌入做 `attention`（O(N²) 计算，每 agent O(N) 参数）
+  - `factorised` / 平均场（O(N) 输入）
+  - `local` critic（O(1) 输入，无中心化）
+§10 的预测是 concat critic 会最先撞墙——但*学习*上的后果才是未决
+问题。在 N ∈ {2, 5, 10} 各跑 2 个种子。
 
-**N3. Fixed-opponent control for the §11.1 degradation (removes §15.2's weakest
-point).** `1v1/NoWeapon/HierarchySelfplay` degrades over its second half while
-the non-hierarchical sibling improves. Re-run both against a *frozen* opponent to
-separate "self-play non-stationarity" from "hierarchical task is harder". Cheap:
-1v1 at 3 threads is ~100 FPS.
+**N3. 针对 §11.1 退化的固定对手对照（消除 §15.2 最薄弱之处）。**
+`1v1/NoWeapon/HierarchySelfplay` 在后半程退化，而非层级的兄弟通道在
+改善。用*冻结*的对手重跑两者，以分离「self-play 的非平稳性」与
+「层级任务更难」。成本低：1v1 在 3 线程下约 100 FPS。
 
-### Tier 2 — would sharpen a conclusion
+### 第二梯队——会锐化结论
 
-**N4. Episode-length normalisation (removes §15.5).** `offline_eval.py` already
-reports `mean_episode_length` per checkpoint; run it across N at freeze and
-report reward *per step* alongside reward per episode. Without this, cross-N
-reward comparisons rest on an unverified assumption.
+**N4. 回合长度归一化（消除 §15.5）。** `offline_eval.py` 已经按
+checkpoint 报告 `mean_episode_length`；在 freeze 时跨 N 运行它，并在
+每回合 reward 旁边报告*每步* reward。没有这个，跨 N 的 reward 比较就
+建立在未经验证的假设之上。
 
-**N5. Constant-thread scaling re-run (removes §15.4).** Re-run N ∈ {2,3,5} at a
-single `n_rollout_threads` (8 divides 2000 exactly, so the budget stays exact) to
-get a batch-size-clean sub-curve. 10v10 cannot join at 8 threads in a 31 h
-window; the clean sub-curve plus a flagged 10v10 point is still far better than
-four confounded points. **Alternatively** hold `n_rollout_threads × buffer_size`
-constant by trading threads for buffer size.
+**N5. 等线程重跑 scaling（消除 §15.4）。** 用单一的
+`n_rollout_threads` 重跑 N ∈ {2,3,5}（8 能整除 2000，预算保持精确），
+得到一条 batch 大小干净的子曲线。10v10 在 31 h 窗口内无法以 8 线程
+加入；干净的子曲线加一个带标注的 10v10 点，仍远好于四个被混淆的点。
+**另一个方案**是用线程换缓冲区大小，保持
+`n_rollout_threads × buffer_size` 不变。
 
-**N6. Extend the key lanes to 10M/30M (addresses §15.1 for the important lanes).**
-Only where the curve is still clearly improving at 6M. Candidates by current
-evidence: `3v3` and `2v2` (both still rising at their latest logged step),
-`10v10` if it is still improving. Do **not** extend lanes that have plateaued —
-that is budget burned for nothing (§14 of the brief).
+**N6. 把关键通道延长到 10M/30M（对重要通道回应 §15.1）。** 只对 6M
+处曲线仍明显改善的通道做。按当前证据的候选：`3v3` 与 `2v2`（在各自
+最新记录步处都仍在上升）、`10v10`（若仍在改善）。**不要**延长已经
+到平台期的通道——那是白烧预算（任务书 §14）。
 
-### Tier 3 — engineering, must be a separate experiment
+### 第三梯队——工程性工作，必须是独立实验
 
-**N7. Observation-construction cost (does not address a §15 limit — it buys
-wall-clock).** `get_state()` calls `get_obs()` for all 2N agents *in addition to*
-the per-agent `get_obs()`, doing the O(N²) work twice per step (pilot F8, §9.1).
-A single-pass implementation should recover most of the measured 18–49% achieved
-fraction (§9.2). **This must be run as its own A/B**
-(`engineering_speedup_old` vs `engineering_speedup_cached`) verifying identical
-obs / reward / done / transitions, and the result may **not** be folded into the
-formal scaling curves (§17 of the brief). It is included here because it is the
-cheapest available speedup for *every* future scaling experiment.
+**N7. 观测构造开销（不针对任何 §15 限制——它买回的是挂钟时间）。**
+`get_state()` 对全部 2N 个 agent 调用 `get_obs()`，*外加*逐 agent 的
+`get_obs()`，每步把 O(N²) 的工作做了两遍（pilot F8，§9.1）。单趟
+实现应能找回实测达成比例 18–49% 中的大部分（§9.2）。**这必须作为
+它自己的 A/B 运行**（`engineering_speedup_old` vs
+`engineering_speedup_cached`），验证 obs / reward / done / transitions
+完全一致，且其结果**不得**并入正式 scaling 曲线（任务书 §17）。把它
+列在这里，是因为它是*每个*未来 scaling 实验能拿到的最便宜的提速。
 
-### Explicitly not next
+### 明确不做的下一步
 
-Implementing Graph-MAPPO / Attention-MAPPO / Hypergraph / World-Model as a
-contribution. N2 is the *measurement* that would justify one of them; writing the
-method first would be choosing the answer before asking the question (§31 of the
-brief).
+把 Graph-MAPPO / Attention-MAPPO / Hypergraph / World-Model 作为贡献
+实现出来。N2 才是能为其中某一个提供依据的*测量*；先写方法等于在
+提问之前就选好了答案（任务书 §31）。
 
-## 17. Running / Time-Censored Jobs
+## 17. 运行中 / 被时间截断的作业
 
 <!-- AUTO:section17 -->
-Every lane of this campaign with status, steps reached and the reason for any shortfall, as of the moment this section was generated. `Status` uses exactly one of: completed_6M | completed_at_ceiling | running | time_cutoff | failed | not_applicable. A lane that is still writing is `running`; a lane that stopped short of its own ceiling without a crash signature is `time_cutoff` at its actual step count; exit codes are not evidence of success (§13.4).
+本实验批次全部通道在生成本区块时的状态、已到步数，以及任何缺口的原因。`Status` 恰好取以下之一：completed_6M | completed_at_ceiling | running | time_cutoff | failed | not_applicable。仍在写入的通道为 `running`；未达自身上限但无崩溃特征的通道按实际步数记为 `time_cutoff`；退出码不作为成功证据（§13.4）。
 
-| Experiment | Scale | Threads | Steps reached | Ceiling | Status | Note |
+| 实验 | 规模 | Rollout 线程 | 已到步数 | 上限 | 状态 | 说明 |
 |---|---|---|---|---|---|---|
-| f6m_official_heading_s5 | o_heading | 4 | 6,000,000 | 6,000,000 | completed_6M | reached the 6,000,000-step target |
-| f6m_official_1v1_hier_selfplay_s1 | o_1v1_hier | 3 | 5,994,000 | 5,994,000 | completed_at_ceiling | reached its own ceiling 5,994,000 < 6,000,000 by construction (F17: runner floors episodes = 6e6//3000//3 = 666; a 3-thread lane can never reach 6M). Not a shortfall. |
-| f6m_official_1v1_selfplay_s1 | o_1v1_selfplay | 3 | 5,994,000 | 5,994,000 | completed_at_ceiling | reached its own ceiling 5,994,000 < 6,000,000 by construction (F17: runner floors episodes = 6e6//3000//3 = 666; a 3-thread lane can never reach 6M). Not a shortfall. |
-| f6m_official_1v1_shoot_hier_selfplay_s1 | o_1v1_shoot | 3 | 5,994,000 | 5,994,000 | completed_at_ceiling | reached its own ceiling 5,994,000 < 6,000,000 by construction (F17: runner floors episodes = 6e6//3000//3 = 666; a 3-thread lane can never reach 6M). Not a shortfall. |
-| f6m_official_1v1_vsbaseline_s1 | o_1v1_vsbaseline | 3 | 5,994,000 | 5,994,000 | completed_at_ceiling | reached its own ceiling 5,994,000 < 6,000,000 by construction (F17: runner floors episodes = 6e6//3000//3 = 666; a 3-thread lane can never reach 6M). Not a shortfall. |
-| f6m_2v2_noweapon_s0 | 2v2 | 4 | 6,000,000 | 6,000,000 | completed_6M | reached the 6,000,000-step target |
-| f6m_official_2v2_noweapon_s0 | official_2v2 | 4 | 6,000,000 | 6,000,000 | completed_6M | reached the 6,000,000-step target |
-| f6m_3v3_noweapon_s0 | 3v3 | 8 | 6,000,000 | 6,000,000 | completed_6M | reached the 6,000,000-step target |
-| f6m_3v3_noweapon_s1 | 3v3 s1 | 8 | 6,000,000 | 6,000,000 | completed_6M | reached the 6,000,000-step target |
-| f6m_5v5_noweapon_s0 | 5v5 | 8 | 6,000,000 | 6,000,000 | completed_6M | reached the 6,000,000-step target |
-| f6m_5v5_noweapon_s1 | 5v5 s1 | 10 | 5,400,000 | 6,000,000 | running | still writing (last write 2 min ago); 600,000 steps short of its ceiling at this snapshot |
-| f6m_5v5_noweapon_s2 | 5v5 s2 | 8 | 2,304,000 | 6,000,000 | running | still writing (last write 3 min ago); 3,696,000 steps short of its ceiling at this snapshot |
-| f6m_10v10_noweapon_s0 | 10v10 | 20 | 6,000,000 | 6,000,000 | completed_6M | reached the 6,000,000-step target |
-| f6m_10v10_noweapon_s1 | 10v10 s1 | 20 | 1,860,000 | 6,000,000 | running | still writing (last write 3 min ago); 4,140,000 steps short of its ceiling at this snapshot |
-| f6m_official_1v1_shoot_hier_vsbaseline | 1v1 | 3 | - | - | not_applicable | not_applicable: F9 upstream bug (TypeError at the first env step); the official entry cannot run and was never launched |
+| f6m_official_heading_s5 | o_heading | 4 | 6,000,000 | 6,000,000 | completed_6M | 已达到 6,000,000 步目标 |
+| f6m_official_1v1_hier_selfplay_s1 | o_1v1_hier | 3 | 5,994,000 | 5,994,000 | completed_at_ceiling | 按其构造只能到达自身上限 5,994,000 < 6,000,000（F17：runner 向下取整 episodes = 6e6//3000//3 = 666；3-thread 通道永远到不了 6M）。这不是缺口。 |
+| f6m_official_1v1_selfplay_s1 | o_1v1_selfplay | 3 | 5,994,000 | 5,994,000 | completed_at_ceiling | 按其构造只能到达自身上限 5,994,000 < 6,000,000（F17：runner 向下取整 episodes = 6e6//3000//3 = 666；3-thread 通道永远到不了 6M）。这不是缺口。 |
+| f6m_official_1v1_shoot_hier_selfplay_s1 | o_1v1_shoot | 3 | 5,994,000 | 5,994,000 | completed_at_ceiling | 按其构造只能到达自身上限 5,994,000 < 6,000,000（F17：runner 向下取整 episodes = 6e6//3000//3 = 666；3-thread 通道永远到不了 6M）。这不是缺口。 |
+| f6m_official_1v1_vsbaseline_s1 | o_1v1_vsbaseline | 3 | 5,994,000 | 5,994,000 | completed_at_ceiling | 按其构造只能到达自身上限 5,994,000 < 6,000,000（F17：runner 向下取整 episodes = 6e6//3000//3 = 666；3-thread 通道永远到不了 6M）。这不是缺口。 |
+| f6m_2v2_noweapon_s0 | 2v2 | 4 | 6,000,000 | 6,000,000 | completed_6M | 已达到 6,000,000 步目标 |
+| f6m_official_2v2_noweapon_s0 | official_2v2 | 4 | 6,000,000 | 6,000,000 | completed_6M | 已达到 6,000,000 步目标 |
+| f6m_3v3_noweapon_s0 | 3v3 | 8 | 6,000,000 | 6,000,000 | completed_6M | 已达到 6,000,000 步目标 |
+| f6m_3v3_noweapon_s1 | 3v3 s1 | 8 | 6,000,000 | 6,000,000 | completed_6M | 已达到 6,000,000 步目标 |
+| f6m_5v5_noweapon_s0 | 5v5 | 8 | 6,000,000 | 6,000,000 | completed_6M | 已达到 6,000,000 步目标 |
+| f6m_5v5_noweapon_s1 | 5v5 s1 | 10 | 5,820,000 | 6,000,000 | time_cutoff | 停在 5,820,000（低于其上限 180,000）；无崩溃特征 —— 挂钟时间/批次截止（time_cutoff）。退出码不是证据（§13.4）。 |
+| f6m_5v5_noweapon_s2 | 5v5 s2 | 8 | 2,376,000 | 6,000,000 | time_cutoff | 停在 2,376,000（低于其上限 3,624,000）；无崩溃特征 —— 挂钟时间/批次截止（time_cutoff）。退出码不是证据（§13.4）。 |
+| f6m_10v10_noweapon_s0 | 10v10 | 20 | 6,000,000 | 6,000,000 | completed_6M | 已达到 6,000,000 步目标 |
+| f6m_10v10_noweapon_s1 | 10v10 s1 | 20 | 1,920,000 | 6,000,000 | time_cutoff | 停在 1,920,000（低于其上限 4,080,000）；无崩溃特征 —— 挂钟时间/批次截止（time_cutoff）。退出码不是证据（§13.4）。 |
+| f6m_official_1v1_shoot_hier_vsbaseline | 1v1 | 3 | - | - | not_applicable | not_applicable：F9 上游 bug（第一个 env step 即 TypeError）；该官方条目无法运行，从未启动 |
 
-_Ceiling is the lane's own reachable budget: runner floors `episodes = 6e6//3000//threads`, so 3-thread lanes cap at 5,994,000 (F17) and 4/8/10/20-thread lanes reach 6,000,000 exactly. `Steps reached` is live for `running` lanes; a later freeze supersedes this table, and the auto-finalizer writes one at every snapshot (`status/final_state_history.md`)._
+_上限即通道自身的可达预算：runner 向下取整 `episodes = 6e6//3000//threads`，因此 3-thread 通道封顶 5,994,000（F17），4/8/10/20-thread 通道恰好到达 6,000,000。`running` 通道的「已到步数」为实时值；之后的 freeze 会覆盖本表，auto-finalizer 每次快照都会写入一份（`status/final_state_history.md`）。_
 <!-- /AUTO:section17 -->
 
-## 18. Git Commits
+## 18. Git 提交
 
-TBD
+分支：**`exp/formal-6m-20261007`**，从 `d133be6`（2026-10-04 复现/扩展工作的分支尖端）分出，
+**不是**从 main 重新开始——这样这一轮直接继承 N-v-N 场景通用化的代码，而不是重造。
+
+相对 `main` 累计 **71 个 commit**：本轮正式实验 **35 个**，其余是本轮所基于的
+2026-10-04 pilot 基础设施（36 个）。全部 commit message 已于 2026-10-08 统一改为中文。
+
+### 本轮 35 个（`d133be6..HEAD`，新→旧）
+
+```
+文档：冻结 formal-6M campaign 产物（20261008_092029）   ← 最终冻结，含 offline_eval / obs_cost 探针
+文档：冻结 formal-6M campaign 产物（20261008_083023）
+文档：冻结 formal-6M campaign 产物（20261008_060010）
+文档：冻结 formal-6M campaign 产物（20261008_030053）
+修复：聚合吞吐行只统计在跑的 lane
+实验：第 6 波——把 10v10 seed 1 和 5v5 seed 2 放进五个完成作业腾出的容量
+文档：冻结 formal-6M campaign 产物（20261008_000047）
+文档：冻结 formal-6M campaign 产物（20261007_210033）
+文档：扩充 1v1 退化记录，确认它不是数值发散
+杂项：把 event watcher 重新对准仍在运行的 lane
+文档：真正的并发限制是突发性限流，不是平均 CPU 使用率
+文档：更正 pilot 的一个论断——ELO 只在 MultipleCombat 静态，SingleCombat 不是
+文档：CPU 已到 quota 边缘（1.28% 限流）；规划最后一条官方 L1 lane
+文档：实测 episode 长度混杂，随后撤回它似乎要证明的那个更正
+修复：offline_eval 的默认对手是 NULL policy——其默认数字毫无意义（F18）
+文档：写第 15、16 节——现在就写，因为两者都不依赖最终数字
+文档：记录 hierarchical 1v1 lane 的真实退化，以及它并非发散的检查
+功能：让报告自填充，交付物不再依赖存活的 agent
+功能：死亡开关——没有 agent 也能 freeze 并提交
+文档：记录在 CPU quota 用到 91% 时不再加第四个 seed 的决定
+文档：CPU 更正后的修订排空计划
+修复：按 lane 自身可达预算而非名义预算判定完成
+文档：记录 F17，可达步数预算的线程数量化
+修复：/proc/stat 在此容器中不可用——更正所有 CPU 数字（F16）
+文档：critic 扩展一节改用精确闭式替换拟合指数
+文档：把六张必需的图嵌入报告
+功能：只在真实事件上唤醒操作者的 event watcher
+文档：计算扩展性一节，依据本征 benchmark 拟合
+功能：campaign 结束 freeze 脚本，以及 critic 内存墙预测
+文档：表示/critic 扩展一节、失败 F10-F14、事故日志
+功能：campaign 参数化的分析管线 + 等样本/等 wall-clock 表
+实验：记录 9 lane 稳态标定与 1v1-shoot 的 budget 风险
+实验：把四个官方 1v1 baseline 作为并行 lane 运行
+实验：启动 6M 正式 campaign——四尺度 NoWeapon 扩展 + 官方 baseline
+杂项：初始化 6M 正式实验 campaign
+```
+
+### 哈希改写的说明（2026-10-08）
+
+按要求把这 71 个 commit 的 message 从英文统一改写为中文，因此**所有 commit hash 都已改变**。
+改写只动 message，**内容一个字节未变**（用 `git diff backup/pre-chinese-rewrite HEAD --stat` 验证为空）。
+改写前的完整状态备份在两个 ref 上：
+
+- tag `backup/pre-chinese-rewrite`
+- branch `backup/formal-6m-english`
+
+**注意溯源影响**：pilot 自己记录的旧 hash 已失效，包括
+`docs/baseline_inventory.md` 里的 `@ 60a3e2d`、以及 `experiments/2026-10-04-night/manifest.csv`
+的 `git_commit` 列。新旧对应关系见
+`experiments/2026-10-07-08-formal6m/status/commit_hash_mapping.md`。
+
+本轮**未**推送到远端：该服务器上没有配置任何 GitHub 凭据
+（无 credential helper、无 `~/.netrc`、无 SSH key），`git push` 会因无法认证而失败。
+所有工作已提交在本地分支上；推送需在有凭据的环境执行。
+

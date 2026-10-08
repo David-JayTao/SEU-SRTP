@@ -99,8 +99,8 @@ STATUS_VOCAB = ("completed_6M", "completed_at_ceiling", "running",
 NOT_APPLICABLE = [{
     "exp": "f6m_official_1v1_shoot_hier_vsbaseline",
     "scenario": "1v1/ShootMissile/HierarchyVsBaseline",
-    "note": "not_applicable: F9 upstream bug (TypeError at the first env step); "
-            "the official entry cannot run and was never launched",
+    "note": "not_applicable：F9 上游 bug（第一个 env step 即 TypeError）；"
+            "该官方条目无法运行，从未启动",
 }]
 
 # Marker pair.  `(?P=sid)` keeps opener and closer bound to each other, so a
@@ -198,9 +198,9 @@ def epoch(dt):
 
 def age_min_str(seconds):
     if seconds is None:
-        return "age unknown"
+        return "写入时间未知"
     m = seconds / 60.0
-    return f"last write {m:.0f} min ago" if m >= 2 else "last write <2 min ago"
+    return f"最近写入 {m:.0f} 分钟前" if m >= 2 else "最近写入 <2 分钟前"
 
 
 def ceiling_steps(threads):
@@ -561,26 +561,26 @@ def lane_status_note(lane, status, now):
     """Human-readable reason/state line for §17."""
     s, c, t = lane["steps"], lane["ceiling"], lane["threads"]
     if status == "completed_6M":
-        return "reached the 6,000,000-step target"
+        return "已达到 6,000,000 步目标"
     if status == "completed_at_ceiling":
         eps = (TARGET_STEPS // BUFFER_SIZE // t) if t else None
-        return (f"reached its own ceiling {fmt_int(c)} < 6,000,000 by construction "
-                f"(F17: runner floors episodes = 6e6//3000//{t} = {eps}; a {t}-thread "
-                f"lane can never reach 6M). Not a shortfall.")
+        return (f"按其构造只能到达自身上限 {fmt_int(c)} < 6,000,000"
+                f"（F17：runner 向下取整 episodes = 6e6//3000//{t} = {eps}；"
+                f"{t}-thread 通道永远到不了 6M）。这不是缺口。")
     if status == "running":
         rem = (c - s) if (c is not None and s is not None) else None
-        rem_txt = f"{fmt_int(rem)} steps short of its ceiling at this snapshot" if rem is not None else "below its ceiling"
-        return f"still writing ({age_min_str(now - lane['last_write'] if lane['last_write'] else None)}); {rem_txt}"
+        rem_txt = f"本快照时距其上限还差 {fmt_int(rem)} 步" if rem is not None else "低于其上限"
+        return f"仍在写入（{age_min_str(now - lane['last_write'] if lane['last_write'] else None)}）；{rem_txt}"
     if status == "time_cutoff":
         short = (c - s) if (c is not None and s is not None) else None
-        short_txt = f"{fmt_int(short)} below its ceiling" if short is not None else "short of its ceiling"
-        return (f"stopped at {fmt_int(s)} ({short_txt}); no crash signature -- "
-                f"wall-clock/campaign cutoff (time_cutoff). Exit codes are not evidence (§13.4).")
+        short_txt = f"低于其上限 {fmt_int(short)}" if short is not None else "未达其上限"
+        return (f"停在 {fmt_int(s)}（{short_txt}）；无崩溃特征 —— "
+                f"挂钟时间/批次截止（time_cutoff）。退出码不是证据（§13.4）。")
     if status == "failed":
-        return "crash signature (traceback that is not a clean KeyboardInterrupt); see its log"
+        return "崩溃特征（不是干净 KeyboardInterrupt 的 traceback）；见其日志"
     if status == "not_applicable":
         return next((na["note"] for na in NOT_APPLICABLE if na["exp"] == lane["exp"]),
-                    "not applicable")
+                    "不适用")
     return "-"
 
 
@@ -607,26 +607,26 @@ def render_section5(lanes, now):
             rows.append([na["exp"], "-", "-", "-", "-", "-", "-", "-",
                          "not_applicable", "-"])
     body = [
-        "Official baseline lanes of this campaign. `Status` uses the campaign "
-        "vocabulary (see the notes below); `Wall time` is the run's own start to "
-        "its last log write (running lanes: to generation time).",
+        "本实验批次的官方基线通道。`Status` 使用本批次的既定状态词表"
+        "（见下方说明）；`Wall time`（挂钟时间）为该次运行自身开始到"
+        "最后一次日志写入（`running` 通道：到本区块生成时刻）。",
         "",
-        md_table(["Experiment", "Seed", "Steps", "Wall time", "FPS",
-                  "Initial reward", "Final reward", "Eval", "Status", "Checkpoint"],
+        md_table(["实验", "种子", "步数", "挂钟时间", "FPS",
+                  "初始 reward", "最终 reward", "Eval", "状态", "Checkpoint"],
                  rows),
         "",
-        "_3-thread lanes (`f6m_official_1v1_*`) stop at **5,994,000** of the "
-        "6,000,000-step target: the runner floors `episodes = 6e6//3000//threads` "
-        "= 666, and 666 x 9,000 = 5,994,000. That is `completed_at_ceiling` "
-        "(completion at the lane's own reachable budget), never a cutoff — see §17._",
+        "_3-thread 通道（`f6m_official_1v1_*`）停在 6,000,000 步目标的 "
+        "**5,994,000** 处：runner 向下取整 `episodes = 6e6//3000//threads` "
+        "= 666，而 666 x 9,000 = 5,994,000。这属于 `completed_at_ceiling`"
+        "（在通道自身可达预算处完成），绝不是被截断 —— 见 §17。_",
         "",
-        "_`f6m_official_1v1_shoot_hier_vsbaseline` is the F9 entry: it dies at "
-        "the first env step upstream and was deliberately never launched._",
+        "_`f6m_official_1v1_shoot_hier_vsbaseline` 是 F9 条目：它在 upstream "
+        "第一个 env step 就崩溃，从未被启动。_",
     ]
     if not official:
         body.append("")
-        body.append("_No official baseline lane has artefacts yet "
-                    "(summary.csv empty). The table will fill on the next freeze._")
+        body.append("_尚无官方基线通道留下产物（summary.csv 为空）。"
+                    "下一次 freeze 时该表会被填充。_")
     return "\n".join(body)
 
 
@@ -659,26 +659,25 @@ def render_section6(lanes, camp_peaks, now):
                      fmt(raw), fmt(norm), fmt(l["value_loss"]), fmt(l["critic_grad"]),
                      cpu, ram, vram, l["status"]])
     body = [
-        "N-v-N formal scaling table, one row per (scale, seed). `Reward normalized` "
-        "= final training reward / N — valid for the NoWeapon family only "
-        "(PostureReward sums over the N enemies), never for ShootMissile.",
+        "N-v-N 正式 scaling 表，每行一个 (规模, 种子)。`Reward normalized` "
+        "= 最终训练 reward / N —— 仅对 NoWeapon 系列有效"
+        "（PostureReward 对 N 个敌机求和），ShootMissile 一律不适用。",
         "",
-        md_table(["Scale", "Agents", "Seed", "Steps", "FPS", "Wall time",
-                  "Reward raw", "Reward normalized", "Value loss", "Critic grad",
-                  "CPU", "RAM", "VRAM", "Status"], rows),
+        md_table(["规模", "Agent 数", "种子", "步数", "FPS", "挂钟时间",
+                  "Reward 原始值", "Reward 归一化", "Value loss", "Critic grad",
+                  "CPU", "RAM", "VRAM", "状态"], rows),
         "",
-        "_Wall time = run start to last log write (running rows: to generation "
-        "time); Steps/FPS/rewards of a `running` row are live values at "
-        "generation time. CPU/RAM/VRAM are this run's own process peaks from "
-        "`metrics/resources.csv`; a cell marked `deg` fell back to the "
-        "campaign-wide peak from `scaling_table.csv` because no per-lane sample "
-        "exists yet. `n_rollout_threads` differs between scales (§4.5), so FPS "
-        "is not cross-N comparable; `Reward normalized` and the per-agent view "
-        "in §7/§11 are._",
+        "_挂钟时间 = 运行开始到最后一次日志写入（`running` 行：到生成时刻）；"
+        "`running` 行的步数/FPS/reward 均为生成时刻的实时值。"
+        "CPU/RAM/VRAM 取自该次运行自身进程在 `metrics/resources.csv` 中的峰值；"
+        "标 `deg` 的单元格因尚无逐通道样本而退回使用 `scaling_table.csv` 的"
+        "全批次峰值。`n_rollout_threads` 在各规模间不同（§4.5），"
+        "因此 FPS 不可跨 N 比较；`Reward normalized` 与 §7/§11 的"
+        "逐 agent 视角可以。_",
     ]
     if not scaling:
         body.append("")
-        body.append("_No N-v-N scaling lane has artefacts yet._")
+        body.append("_尚无 N-v-N scaling 通道留下产物。_")
     return "\n".join(body)
 
 
@@ -688,8 +687,8 @@ def render_equal_section(rows, budgets, labels, kind):
     budgets: list of raw ints; labels: display strings.
     """
     if not rows:
-        return (f"_`metrics/{kind}.csv` is empty or missing — nothing to "
-                f"render yet (its freeze step must run first)._")
+        return (f"_`metrics/{kind}.csv` 为空或缺失 —— 暂无可渲染内容"
+                f"（需先运行其 freeze 步骤）。_")
     rrows = []
     for r in sorted(rows, key=lambda r: (fint(r.get("team_size")) or 0,
                                          fint(r.get("seed")) or 0, r.get("experiment", ""))):
@@ -703,28 +702,26 @@ def render_equal_section(rows, budgets, labels, kind):
         rrows.append([r.get("experiment", "-"), str(r.get("team_size", "-")),
                       str(r.get("seed", "-")), str(r.get("n_rollout_threads", "-")),
                       fmt_int(r.get("max_steps")), r.get("run_state", "-")] + cells)
-    header = (["Experiment", "N", "Seed", "Threads", "Steps reached", "State"]
+    header = (["实验", "N", "种子", "Rollout 线程", "已到步数", "状态"]
               + labels)
     if kind == "equal_sample":
-        lead = ("Equal-sample comparison: mean training reward of each lane at "
-                "matched vectorised-env-step budgets (1M..6M).")
-        foot = ("_Cells: `reward (reward per enemy)` for NoWeapon lanes; "
-                "`*` = value interpolated between the two bracketing PPO "
-                "updates; `pending` = the lane has not reached that budget yet "
-                "(nothing is extrapolated); `before-data`/`nan-gap` are the raw "
-                "provenance tokens. Raw per-cell brackets are in "
-                "`metrics/equal_sample.csv`. Per-enemy values are only shown "
-                "for NoWeapon; a ShootMissile reward is not a team sum._")
+        lead = ("等样本对比：各通道在相同 vectorised-env-step 预算（1M..6M）"
+                "下的平均训练 reward。")
+        foot = ("_单元格：NoWeapon 通道为 `reward（每敌机 reward）`；"
+                "`*` = 在相邻两个 PPO update 之间插值；`pending` = 该通道尚未"
+                "达到该预算（绝不做任何外推）；`before-data`/`nan-gap` 为原始"
+                "来源标记。逐格原始区间见 `metrics/equal_sample.csv`。"
+                "每敌机数值仅对 NoWeapon 显示；ShootMissile 的 reward 不是"
+                "队伍求和。_")
     else:
-        lead = ("Equal-wall-clock comparison: mean training reward of each lane "
-                "at matched elapsed-time budgets (1h..24h of its own run time).")
-        foot = ("_Cells: `reward (reward per enemy)` for NoWeapon lanes; "
-                "`*` = interpolated between bracketing updates; `pending` = not "
-                "reached yet. Elapsed time is the lane's own `wall_time` minus "
-                "its first logged timestamp, so it excludes queueing/startup. "
-                "Scales use different `n_rollout_threads` (§4.5), so wall-clock "
-                "reflects both learning speed and the scheduling choice. Raw "
-                "brackets: `metrics/equal_wallclock.csv`._")
+        lead = ("等挂钟时间对比：各通道在相同已流逝时间预算（自身运行时间的 "
+                "1h..24h）下的平均训练 reward。")
+        foot = ("_单元格：NoWeapon 通道为 `reward（每敌机 reward）`；"
+                "`*` = 在相邻 update 之间插值；`pending` = 尚未达到。"
+                "已流逝时间 = 通道自身的 `wall_time` 减去其首个日志时间戳，"
+                "因此不含排队/启动时间。各规模使用不同的 `n_rollout_threads`"
+                "（§4.5），所以挂钟时间同时反映学习速度与调度选择。"
+                "原始区间：`metrics/equal_wallclock.csv`。_")
     return "\n".join([lead, "", md_table(header, rrows), "", foot])
 
 
@@ -733,10 +730,10 @@ def improving_verdict(slope):
     if x is None:
         return "-"
     if x > 0.05:
-        return f"improving ({x:+.3g}/update)"
+        return f"上升（{x:+.3g}/update）"
     if x < -0.05:
-        return f"declining ({x:+.3g}/update)"
-    return f"flat ({x:+.3g}/update)"
+        return f"下降（{x:+.3g}/update）"
+    return f"持平（{x:+.3g}/update）"
 
 
 def matched_stage_rows(norm_rows, first_k=5):
@@ -797,24 +794,22 @@ def render_section11(lanes, sample_rows, norm_rows):
                      fmt_slope(l["slope"]), improving_verdict(l["slope"]),
                      fmt(l["eval"])])
     body = [
-        "Per-scale reward-trajectory summary for the N-v-N lanes, from "
-        "`metrics/summary.csv`. `Tail slope` is the mean change of "
-        "`average_episode_rewards` per PPO update over the last third of the "
-        "logged updates; the verdict calls it improving only when the slope "
-        "exceeds +0.05/update (same threshold as `scaling_table.py`), flat "
-        "within +-0.05, declining below -0.05.",
+        "N-v-N 各通道的逐规模 reward 轨迹汇总，数据来自 "
+        "`metrics/summary.csv`。`Tail slope` 是最后三分之一已记录 update 中 "
+        "`average_episode_rewards` 每次 PPO update 的平均变化量；仅当斜率超过 "
+        "+0.05/update 时才判定为上升（与 `scaling_table.py` 同阈值），"
+        "在 ±0.05 内为持平，低于 -0.05 为下降。",
         "",
-        md_table(["Scale", "Seed", "Steps reached (% of ceiling)", "Status",
-                  "First reward", "Last reward", "Reward / enemy",
-                  "Tail slope", "Still improving at final logged update?",
-                  "Eval last"], rows),
+        md_table(["规模", "种子", "已到步数（占上限 %）", "状态",
+                  "首个 reward", "最后 reward", "每敌机 reward",
+                  "尾段斜率", "最后一条已记录 update 时仍在上升？",
+                  "Eval 最后值"], rows),
         "",
-        "_`Reward / enemy` divides by N and is the only cross-N-comparable "
-        "reward for the NoWeapon family (PostureReward sums over enemies; see "
-        "§4). A `running` lane's verdict is a statement about its final logged "
-        "update at generation time, not about where it will end; a lane at "
-        "`completed_*` is frozen at its final value. Values for scales with two "
-        "seeds are per seed; §12 quantifies the spread._",
+        "_`每敌机 reward` 除以 N，是 NoWeapon 系列唯一可跨 N 比较的 reward"
+        "（PostureReward 对敌机求和；见 §4）。`running` 通道的判定说的是其"
+        "在生成时刻最后一条已记录 update 的状态，而非最终走向；处于 "
+        "`completed_*` 的通道已冻结在其最终值。有两个种子的规模按种子分别"
+        "给出；§12 量化其离散度。_",
     ]
     # matched-sample table from sample_efficiency.csv (never interpolated)
     if sample_rows:
@@ -829,7 +824,7 @@ def render_section11(lanes, sample_rows, norm_rows):
                     rw, pe = fnum(r.get(f"reward@{k}")), fnum(r.get(f"reward_per_enemy@{k}"))
                     actual = fint(r.get(f"actual_step@{k}"))
                     if rw is None:
-                        cells.append("not reached")
+                        cells.append("未达到")
                         continue
                     txt = f"{rw:.2f}" + (f" ({pe:.2f})" if pe is not None else "")
                     if actual is not None and actual < 0.75 * int(k):
@@ -839,34 +834,31 @@ def render_section11(lanes, sample_rows, norm_rows):
                               str(r.get("seed", "-")), fmt_int(r.get("max_steps"))] + cells)
             body += [
                 "",
-                "Matched-sample budgets from `metrics/sample_efficiency.csv` "
-                "(latest real measurement at or below each budget — no "
-                "interpolation; `~` marks a nearest measurement below 75% of "
-                "the requested budget, i.e. do not read that column as if the "
-                "lane had been measured there):",
+                "来自 `metrics/sample_efficiency.csv` 的等样本预算"
+                "（每个预算取 ≤ 该预算的最新真实测量值 —— 不做插值；"
+                "`~` 表示最近的测量值低于所请求预算的 75%，即不要把该列"
+                "读成该通道曾在该预算处被测量）：",
                 "",
-                md_table(["Scale", "Seed", "Max steps", "150k", "300k", "450k", "600k"], rows2),
+                md_table(["规模", "种子", "最大步数", "150k", "300k", "450k", "600k"], rows2),
                 "",
-                "_`reward (reward/enemy)`; NoWeapon family only._",
+                "_`reward（每敌机 reward）`；仅 NoWeapon 系列。_",
             ]
     # matched early-training stage from normalized_scaling.csv
     ms_rows = matched_stage_rows(norm_rows) if norm_rows else []
     if ms_rows:
         body += [
             "",
-            "Matched early training stage (mean over the first 5 logged updates "
-            "per run, from `metrics/normalized_scaling.csv`). Dividing the "
-            "critic's value loss by N^2 and its grad norm by N removes the "
-            "reward-magnitude growth with N; a pure reward-scale effect would "
-            "leave both roughly constant — the drift that remains is the "
-            "cross-N, per-update difference at an identical stage of training:",
+            "匹配的早期训练阶段（每次运行前 5 条已记录 update 的均值，"
+            "来自 `metrics/normalized_scaling.csv`）。把 critic 的 value loss "
+            "除以 N^2、梯度范数除以 N，可消去随 N 增长的 reward 量级；"
+            "若 N 依赖纯粹来自 reward 尺度效应，两者都应大致恒定 —— "
+            "剩下的漂移就是同一训练阶段下的跨 N 逐 update 差异：",
             "",
-            md_table(["Scale", "Runs", "Updates", "Reward / enemy",
+            md_table(["规模", "运行数", "Updates", "每敌机 reward",
                       "Value loss / N^2", "Critic grad / N"], ms_rows),
             "",
-            "_First-5-update means are noisy by construction; they are a "
-            "matched-stage comparison, not a converged one. The full per-update "
-            "trace is in `metrics/normalized_scaling.csv`._",
+            "_前 5 条 update 的均值天然噪声很大；这是同阶段对比，不是收敛值。"
+            "完整逐 update 轨迹见 `metrics/normalized_scaling.csv`。_",
         ]
     return "\n".join(body)
 
@@ -879,18 +871,16 @@ def render_section12(lanes):
     for l in scaling:
         by_n.setdefault(l["n"], []).append(l)
     out = [
-        "Seed variance for the N-v-N lanes. A spread is only computed where at "
-        "least two seeds of the same scale exist; a single run cannot produce a "
-        "variance, and none is fabricated from one.",
+        "N-v-N 通道的种子离散度。仅当同一规模存在至少两个种子时才计算离散"
+        "范围；单次运行无法给出方差，也绝不凭单次运行编造。",
         "",
     ]
     if not by_n:
-        out.append("_No scaling lane has logged data yet._")
+        out.append("_尚无任何 scaling 通道记录数据。_")
         return "\n".join(out)
     for n in sorted(by_n):
         group = sorted(by_n[n], key=lambda l: (l["seed"] if l["seed"] is not None else -1))
-        out.append(f"**{n}v{n}** — {len(group)} lane"
-                   f"{'s' if len(group) != 1 else ''} with data.")
+        out.append(f"**{n}v{n}** —— 有数据的通道数：{len(group)}。")
         out.append("")
         rows = []
         for l in group:
@@ -900,51 +890,46 @@ def render_section12(lanes):
             rows.append([fmt_int(l["seed"]), l["status"], fmt_int(l["threads"]),
                          fmt_int(l["steps"]), fmt_int(l["ceiling"]),
                          fmt(l["rew_last"]), fmt(pe)])
-        out.append(md_table(["Seed", "Status", "Threads", "Steps reached", "Ceiling",
-                             "Final logged reward", "Reward / enemy"], rows))
+        out.append(md_table(["种子", "状态", "Rollout 线程", "已到步数", "上限",
+                             "最后记录的 reward", "每敌机 reward"], rows))
         out.append("")
         thr = sorted({l["threads"] for l in group if l["threads"] is not None})
         if len(group) >= 2 and len(thr) > 1:
-            detail = ", ".join(f"seed {l['seed']}: {l['threads']}" for l in group)
-            out.append(f"**Thread confound (§4.5):** the seeds of {n}v{n} do not "
-                       f"share `n_rollout_threads` ({detail}), so this comparison "
-                       f"crosses batch-size differences as well as seeds.")
+            detail = ", ".join(f"种子 {l['seed']}: {l['threads']}" for l in group)
+            out.append(f"**线程混淆因素（§4.5）：** {n}v{n} 的各种子并不共享 "
+                       f"`n_rollout_threads`（{detail}），因此该对比同时混入"
+                       f"了 batch 大小差异。")
             out.append("")
         if len(group) < 2:
-            out.append(f"_Only one seed exists for {n}v{n} in this campaign, so "
-                       f"**no spread is computed** (a spread needs at least two "
-                       f"runs). The single-seed trend is in §11._")
+            out.append(f"_本次实验批次中 {n}v{n} 只有一个种子，因此**不计算"
+                       f"离散范围**（至少要两次运行才能给出）。"
+                       f"单种子趋势见 §11。_")
         else:
             raws = [l["rew_last"] for l in group if l["rew_last"] is not None]
             pes = [l["rew_last"] / n for l in group if l["rew_last"] is not None]
             if len(raws) >= 2:
                 spread_raw = max(raws) - min(raws)
                 spread_pe = max(pes) - min(pes)
-                out.append(f"_Spread over the final logged training reward at "
-                           f"generation time: **{spread_raw:.3g}** raw "
-                           f"(**{spread_pe:.3g}** per enemy), i.e. max - min over "
-                           f"the {len(raws)} seeds._")
+                out.append(f"_生成时刻最终已记录训练 reward 的离散范围：原始值 "
+                           f"**{spread_raw:.3g}**（每敌机 **{spread_pe:.3g}**），"
+                           f"即 {len(raws)} 个种子的 max - min。_")
             else:
-                out.append("_Fewer than two seeds have logged a reward — no "
-                           "spread computed yet._")
+                out.append("_记录到 reward 的种子不足两个 —— 暂不计算离散范围。_")
             incomplete = [l for l in group if l["status"] == "running"]
             if incomplete:
-                names = ", ".join(f"seed {l['seed']} at {fmt_int(l['steps'])} steps"
+                names = ", ".join(f"种子 {l['seed']} 处于 {fmt_int(l['steps'])} 步"
                                   for l in incomplete)
                 out.append("")
-                out.append(f"**Provisional:** {names} — the spread compares seeds "
-                           f"at different training stages and will shrink or move "
-                           f"as the incomplete lanes train. Treat it as an upper "
-                           f"bound on the current difference, not a variance "
-                           f"estimate.")
+                out.append(f"**暂定：** {names} —— 该离散范围比较的是不同训练"
+                           f"阶段的种子，会随未完成通道继续训练而收缩或移动。"
+                           f"请把它当作当前差异的上界，而不是方差估计。")
         out.append("")
-    out.append("_This campaign holds two seeds for 3v3 and for 5v5 (seed 0 and "
-               "seed 1). 2v2 and 10v10 have a single scaling seed each; the "
-               "official 2v2 lane is a different scenario path and is not "
-               "counted as a second seed of the scaling lane. The table states "
-               "each lane's thread count and steps; where the two seeds of a "
-               "scale differ in `n_rollout_threads` the comparison also crosses "
-               "the §4.5 batch-size confound, and the group is flagged above._")
+    out.append("_本次实验批次在 3v3 与 5v5 各有两个种子（种子 0 与种子 1）。"
+               "2v2 与 10v10 的 scaling 系列各只有一个种子；官方 2v2 通道"
+               "走的是另一条场景路径，不计作 scaling 通道的第二个种子。"
+               "表中给出每条通道的线程数与步数；若同一规模的两个种子在 "
+               "`n_rollout_threads` 上不同，该对比还混入 §4.5 的 batch 大小混淆"
+               "因素，上面已对该组做出标注。_")
     return "\n".join(out)
 
 
@@ -964,28 +949,25 @@ def render_section17(lanes, now):
         if na["exp"] not in lanes:
             rows.append([na["exp"], "1v1", "3", "-", "-", "not_applicable", na["note"]])
     body = [
-        "Every lane of this campaign with status, steps reached and the reason "
-        "for any shortfall, as of the moment this section was generated. "
-        "`Status` uses exactly one of: completed_6M | completed_at_ceiling | "
-        "running | time_cutoff | failed | not_applicable. A lane that is still "
-        "writing is `running`; a lane that stopped short of its own ceiling "
-        "without a crash signature is `time_cutoff` at its actual step count; "
-        "exit codes are not evidence of success (§13.4).",
+        "本实验批次全部通道在生成本区块时的状态、已到步数，以及任何缺口的"
+        "原因。`Status` 恰好取以下之一：completed_6M | completed_at_ceiling | "
+        "running | time_cutoff | failed | not_applicable。仍在写入的通道为 "
+        "`running`；未达自身上限但无崩溃特征的通道按实际步数记为 "
+        "`time_cutoff`；退出码不作为成功证据（§13.4）。",
         "",
-        md_table(["Experiment", "Scale", "Threads", "Steps reached", "Ceiling",
-                  "Status", "Note"], rows),
+        md_table(["实验", "规模", "Rollout 线程", "已到步数", "上限",
+                  "状态", "说明"], rows),
         "",
-        "_Ceiling is the lane's own reachable budget: runner floors "
-        "`episodes = 6e6//3000//threads`, so 3-thread lanes cap at 5,994,000 "
-        "(F17) and 4/8/10/20-thread lanes reach 6,000,000 exactly. `Steps "
-        "reached` is live for `running` lanes; a later freeze supersedes this "
-        "table, and the auto-finalizer writes one at every snapshot "
-        "(`status/final_state_history.md`)._",
+        "_上限即通道自身的可达预算：runner 向下取整 "
+        "`episodes = 6e6//3000//threads`，因此 3-thread 通道封顶 5,994,000"
+        "（F17），4/8/10/20-thread 通道恰好到达 6,000,000。`running` 通道的"
+        "「已到步数」为实时值；之后的 freeze 会覆盖本表，auto-finalizer 每次"
+        "快照都会写入一份（`status/final_state_history.md`）。_",
     ]
     if len(items) == 0:
         body.append("")
-        body.append("_No lane artefacts found at all — status.json, summary.csv "
-                    "and the queue ledger are all empty for this campaign._")
+        body.append("_完全没有找到通道产物 —— 本实验批次的 status.json、"
+                    "summary.csv 与队列台账均为空。_")
     return "\n".join(body)
 
 

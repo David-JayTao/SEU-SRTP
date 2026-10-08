@@ -54,6 +54,36 @@ TARGET = 6_000_000          # nominal vectorised env-step budget (--num-env-step
 BUFFER = 3000               # runner buffer_size, fixed (runner/share_jsbsim_runner.py)
 STALL_MIN = 30.0            # watch_f6m.py stall threshold, minutes
 
+# 收尾型回溯（不是崩溃）。run_train.sh 用 `timeout -k 60 -s INT` 包住训练进程，
+# 到点发 SIGINT，于是日志里必然留下 KeyboardInterrupt 回溯；主进程随后在
+# envs.close() 里再抛 EOFError（与 F9 同型的连带异常）。
+# 这两者都是**正常收尾**的签名，必须与真正的崩溃区分，否则一个跑到预算上限
+# 才被时间上限停掉的通道会被误标成 `failed`。
+TEARDOWN_EXC = ("KeyboardInterrupt", "EOFError")
+# 出现其中任何一个都说明是真崩溃，而非收尾
+REAL_CRASH_HINTS = ("TypeError", "AttributeError", "ValueError", "RuntimeError",
+                    "KeyError", "IndexError", "AssertionError", "MemoryError",
+                    "CUDA error", "out of memory", "NotImplementedError")
+
+
+def teardown_only_traceback(log_path):
+    """日志里的回溯是否**全部**是 SIGINT 收尾签名（无真崩溃迹象）。
+
+    返回 True 表示"有回溯，但那是被时间上限停掉的正常收尾"，调用方应记为
+    time_cutoff；返回 False 表示无法排除真崩溃，调用方应记为 failed。
+    """
+    if not log_path or not os.path.exists(log_path):
+        return False
+    try:
+        txt = read_text(log_path)
+    except OSError:
+        return False
+    if "Traceback (most recent call last)" not in txt:
+        return False
+    if any(h in txt for h in REAL_CRASH_HINTS):
+        return False
+    return any(e in txt for e in TEARDOWN_EXC)
+
 STATUS_VOCAB = ["completed_6M", "completed_at_ceiling", "running",
                 "time_cutoff", "failed", "not_applicable"]
 ENV_PREFIXES = ("SingleCombat/", "MultipleCombat/", "SingleControl/")
@@ -138,7 +168,7 @@ def mtime_str(path):
     try:
         return datetime.fromtimestamp(os.path.getmtime(path)).strftime("%Y-%m-%d %H:%M:%S")
     except OSError:
-        return "missing"
+        return "缺失"
 
 
 def g(row, *keys, default=""):
@@ -310,13 +340,19 @@ def build_inventory(camp, now):
             trace = trace or str(g(s, "crashed")).strip().lower() == "true"
 
         if steps is None and not run_dir and s is None and m is None:
-            status, flags = "not_applicable", ["no data found for this lane"]
+            status, flags = "not_applicable", ["该通道未找到任何数据"]
+        elif trace and not nan and not inf and teardown_only_traceback(g(s, "log_path")):
+            # 有回溯，但只是 `timeout -s INT` 的收尾签名：按 time_cutoff 记，
+            # 不按 failed 记（否则被时间上限停掉的通道会被误报成崩溃）。
+            status = "time_cutoff" if not done else (
+                "completed_6M" if (steps is not None and steps >= TARGET) else "completed_at_ceiling")
+            flags = ["被时间上限停掉（SIGINT 收尾回溯，非崩溃）"]
         elif trace or nan or inf:
             if done:
                 status = "completed_6M" if (steps is not None and steps >= TARGET) else "completed_at_ceiling"
-                flags = ["health flag raised"]
+                flags = ["健康标志被触发"]
             else:
-                status, flags = "failed", ["crash/health evidence in log or metrics"]
+                status, flags = "failed", ["日志或指标中有崩溃/健康证据"]
         elif done:
             if steps is not None and steps >= TARGET:
                 status, flags = "completed_6M", []
@@ -324,11 +360,11 @@ def build_inventory(camp, now):
                 status, flags = "completed_at_ceiling", []
         elif stalled:
             status = "time_cutoff"
-            flags = [f"no log write for {age:.0f} min" if isinstance(age, (int, float)) else "stopped short"]
+            flags = [f"{age:.0f} 分钟无日志写入" if isinstance(age, (int, float)) else "中途停止"]
         else:
             status, flags = "running", []
         if isinstance(age, (int, float)) and age > STALL_MIN and status == "running":
-            flags.append(f"quiet {age:.0f} min")
+            flags.append(f"静默 {age:.0f} 分钟")
         if nan:
             flags.append("NaN")
         if inf:
@@ -338,7 +374,7 @@ def build_inventory(camp, now):
         if ceil is not None and (j or {}).get("achievable") is not None:
             try:
                 if int((j or {}).get("achievable")) != ceil:
-                    flags.append("ceilings disagree (computed vs watcher)")
+                    flags.append("上限不一致（计算值 vs watcher）")
             except (TypeError, ValueError):
                 pass
 
@@ -363,7 +399,7 @@ def build_inventory(camp, now):
             fps = g(m, "FPS") or g(s, "fps_last")
 
         # ---- checkpoint
-        ckpt, ckpt_state = g(m, "checkpoint_path"), "manifest"
+        ckpt, ckpt_state = g(m, "checkpoint_path"), "manifest 记录"
         if run_dir:
             found = None
             for cand in ("actor_latest.pt", "actor_0.pt"):
@@ -372,12 +408,12 @@ def build_inventory(camp, now):
                     found = p
                     break
             if found is not None:
-                ckpt, ckpt_state = str(found), "on disk"
+                ckpt, ckpt_state = str(found), "已在磁盘上"
             elif ckpt:
-                ckpt_state = "manifest path (file not seen on disk)"
+                ckpt_state = "manifest 路径（磁盘上未见该文件）"
             else:
                 ckpt = str(Path(run_dir) / "actor_latest.pt")
-                ckpt_state = "not yet written"
+                ckpt_state = "尚未写入"
 
         lanes.append(dict(
             exp=name, scenario=scenario or "?", algo=algo, seed=seed,
@@ -408,32 +444,30 @@ def wall_str(l):
 # ------------------------------------------------------------------ sections
 
 def sec_conventions(lanes):
-    out = ["## Status vocabulary and budget rule", "",
-           "Status is exactly one of six values, derived by this script from the "
-           "watcher's own flags (`metrics/status.json`) under the rules below "
-           "(the same rules the monitor uses):", "",
-           "| status | meaning |", "|---|---|",
-           "| `completed_6M` | reached the full 6,000,000 budget. |",
-           "| `completed_at_ceiling` | reached its own reachable ceiling, which is below 6,000,000 (3-thread lanes only). |",
-           "| `running` | still writing: log updated within the watcher's 30 min stall threshold. |",
-           "| `time_cutoff` | stopped short of its ceiling without crash evidence (wall-clock cap, or log quiet > 30 min). |",
-           "| `failed` | Traceback / NaN / Inf observed. |",
-           "| `not_applicable` | no data found for the lane. |", "",
-           "The runner floors `episodes = num_env_steps // 3000 // n_rollout_threads` "
-           "(incident F17), so a lane's ACHIEVABLE ceiling is "
-           "`(6e6 // 3000 // threads) * 3000 * threads`. Ceilings for the thread "
-           "counts that actually occur in this campaign:", "",
-           "| threads | episodes | achievable ceiling |", "|---|---|---|"]
+    out = ["## 状态词表与预算规则", "",
+           "状态恰好为六个值之一，由本脚本按以下规则从 watcher 自身的标志"
+           "（`metrics/status.json`）推导（与监控所用规则一致）：", "",
+           "| 状态 | 含义 |", "|---|---|",
+           "| `completed_6M` | 跑满 6,000,000 预算。 |",
+           "| `completed_at_ceiling` | 到达自身可达上限，该上限低于 6,000,000（仅 3-thread 通道）。 |",
+           "| `running` | 仍在写入：日志在 watcher 的 30 分钟停滞阈值内更新。 |",
+           "| `time_cutoff` | 未达上限即停止，且无崩溃证据（挂钟时间上限，或日志静默 > 30 分钟）。 |",
+           "| `failed` | 观测到 Traceback / NaN / Inf。 |",
+           "| `not_applicable` | 该通道未找到任何数据。 |", "",
+           "runner 向下取整 `episodes = num_env_steps // 3000 // n_rollout_threads`"
+           "（事件 F17），因此通道的可达上限为 "
+           "`(6e6 // 3000 // threads) * 3000 * threads`。本实验批次实际出现的"
+           "线程数对应的上限：", "",
+           "| threads | episodes | 可达上限 |", "|---|---|---|"]
     seen = sorted({l["threads"] for l in lanes if l["threads"]}, key=int)
     for t in seen:
         c = ceiling_of(t)
         out.append(f"| {t} | {TARGET // BUFFER // int(t)} | {f_int(c)} |")
     out += ["",
-            "`reward_per_enemy` (reward / team_size) is a cross-N-comparable quantity "
-            "ONLY for the NoWeapon family (PostureReward sums over each agent's "
-            "enemies). It is withheld for the ShootMissile family here.", "",
-            "Pilot (2026-10-04) and formal (6M) results are separate series and are "
-            "never merged.", ""]
+            "`reward_per_enemy`（reward / team_size）**仅**对 NoWeapon 系列是"
+            "可跨 N 比较的量（PostureReward 对每个 agent 的敌机求和）。"
+            "此处对 ShootMissile 系列一律不给出。", "",
+            "Pilot（2026-10-04）与 formal（6M）是两条独立序列，绝不合并。", ""]
     return out
 
 
@@ -448,12 +482,11 @@ def sec_sources(camp):
         ("metrics/equal_wallclock.csv", "equal-wall-clock checkpoints"),
         ("status/incidents.md", "failure/incident list"),
     ]
-    out = ["## Sources and freshness", "",
-           "Every number in this document is read from these machine artefacts at "
-           "generation time. A source newer than a table means the table is a "
-           "snapshot, not the live state; the live state is always the inventory "
-           "table below (built from `metrics/status.json`).", "",
-           "| source | last written |", "|---|---|"]
+    out = ["## 数据来源与新鲜度", "",
+           "本文档中的每个数字都在生成时刻从这些机器产物读取。来源文件比表格"
+           "更新，意味着表格只是快照而非实时状态；实时状态永远是下面的清单表"
+           "（由 `metrics/status.json` 构建）。", "",
+           "| 来源 | 最近写入 |", "|---|---|"]
     for rel, _ in rows:
         out.append(f"| `{rel}` | {mtime_str(camp / rel)} |")
     out.append("")
@@ -461,18 +494,18 @@ def sec_sources(camp):
 
 
 def sec_inventory(lanes, st, st_ts):
-    out = ["## Experiment inventory (every lane)", ""]
+    out = ["## 实验清单（所有通道）", ""]
     if st_ts is not None:
         age_min = (datetime.now() - st_ts).total_seconds() / 60.0
-        out.append(f"Live view from `metrics/status.json` (timestamp {st_ts:%Y-%m-%d %H:%M:%S}; "
-                   f"{age_min:.1f} min before this file was generated).")
+        out.append(f"来自 `metrics/status.json` 的实时视图（时间戳 {st_ts:%Y-%m-%d %H:%M:%S}；"
+                   f"本文件生成前 {age_min:.1f} 分钟）。")
         if age_min > STALL_MIN:
-            out.append(f"**Warning**: the watcher snapshot is {age_min:.0f} min old — "
-                       "the liveness flags below may be stale.")
+            out.append(f"**警告**：watcher 快照已过期 {age_min:.0f} 分钟 —— "
+                       "下方的存活标志可能已过时。")
     else:
-        out.append("`metrics/status.json` is unavailable — statuses below are derived "
-                   "from `metrics/summary.csv` / `manifest.csv` instead.")
-    out += ["", "| experiment | scenario | algo | seed | thr | achievable ceiling | steps | % ceiling | status | FPS | wall-clock | flags |",
+        out.append("`metrics/status.json` 不可用 —— 下方状态改由 "
+                   "`metrics/summary.csv` / `manifest.csv` 推导。")
+    out += ["", "| 实验 | 场景 | 算法 | 种子 | threads | 可达上限 | 步数 | % 上限 | 状态 | FPS | 挂钟时间 | 标志 |",
             "|---|---|---|---|---|---|---|---|---|---|---|---|"]
     for l in lanes:
         pct = "—"
@@ -487,10 +520,10 @@ def sec_inventory(lanes, st, st_ts):
     total_steps = sum(l["steps"] for l in lanes if l["steps"] is not None)
     total_ceiling = sum(l["ceiling"] for l in lanes if l["ceiling"])
     agg = st.get("aggregate_fps")
-    out.append(f"Totals across {len(lanes)} lanes: **{total_steps:,} env steps completed of "
-               f"{total_ceiling:,} achievable** (snapshot); aggregate live throughput "
-               f"**{raw(agg)} env-steps/s**.")
-    out += ["", "### Checkpoints", "", "| experiment | latest checkpoint | state |", "|---|---|---|"]
+    out.append(f"共 {len(lanes)} 条通道合计：已完成 **{total_steps:,} env steps / "
+               f"可达 {total_ceiling:,}**（快照）；全批次实时聚合吞吐 "
+               f"**{raw(agg)} env-steps/s**。")
+    out += ["", "### Checkpoint", "", "| 实验 | 最新 checkpoint | 状态 |", "|---|---|---|"]
     for l in lanes:
         out.append(f"| `{l['exp']}` | `{cell(l['ckpt'])}` | {cell(l['ckpt_state'])} |")
     out.append("")
@@ -499,14 +532,14 @@ def sec_inventory(lanes, st, st_ts):
 
 def sec_scaling(camp):
     rows = read_csv_rows(camp / "metrics" / "scaling_table.csv")
-    out = ["## Scaling table (reward and reward-per-enemy)", ""]
+    out = ["## scaling 表（reward 与每敌机 reward）", ""]
     if not rows:
-        out += ["_UNAVAILABLE — `metrics/scaling_table.csv` missing or empty._", ""]
+        out += ["_不可用 —— `metrics/scaling_table.csv` 缺失或为空。_", ""]
         return out
-    out.append(f"Snapshot: `metrics/scaling_table.csv` (written {mtime_str(camp / 'metrics' / 'scaling_table.csv')}). "
-               "`reward_per_enemy = train_reward_last / team_size`, computed here and "
-               "emitted only for the NoWeapon family.")
-    out += ["", "| scale | variant | seed | thr | steps (snapshot) | FPS | train reward (last) | reward/enemy | eval reward (last) | tail slope |",
+    out.append(f"快照：`metrics/scaling_table.csv`（写入于 {mtime_str(camp / 'metrics' / 'scaling_table.csv')}）。"
+               "`reward_per_enemy = train_reward_last / team_size`，在本脚本内计算，"
+               "仅对 NoWeapon 系列输出。")
+    out += ["", "| 规模 | 变体 | 种子 | thr | 步数（快照） | FPS | 训练 reward（最后） | 每敌机 reward | eval reward（最后） | 尾段斜率 |",
             "|---|---|---|---|---|---|---|---|---|---|"]
     for r in rows:
         variant = g(r, "variant")
@@ -523,9 +556,8 @@ def sec_scaling(camp):
             f_num(g(r, "train_reward_last")), rpe, f_num(g(r, "eval_reward_last")),
             raw(g(r, "train_reward_tail_slope"))))
     out += ["",
-            "`reward_per_enemy` is shown as `n/a` for any ShootMissile row by policy. "
-            "The official-baseline lanes are not part of this table (they are their own "
-            "series; see the inventory).", ""]
+            "按既定口径，任何 ShootMissile 行的 `reward_per_enemy` 一律显示为 `n/a`。"
+            "官方基线通道不属于本表（它们是独立序列；见清单）。", ""]
     return out
 
 
@@ -536,7 +568,7 @@ def render_budget_tables(camp, fname, title, blurb):
     rows = read_csv_rows(camp / "metrics" / fname)
     out = [f"## {title}", ""]
     if not rows:
-        out += [f"_UNAVAILABLE — `metrics/{fname}` missing or empty._", ""]
+        out += [f"_不可用 —— `metrics/{fname}` 缺失或为空。_", ""]
         return out
     budgets = []
     for col in rows[0].keys():
@@ -544,13 +576,13 @@ def render_budget_tables(camp, fname, title, blurb):
         if m:
             budgets.append(m.group(1))
     out += [blurb, "",
-            f"Snapshot: `metrics/{fname}` (written {mtime_str(camp / 'metrics' / fname)}). "
-            "`—` = pending (budget not reached at the snapshot); `*` = interpolated "
-            "between bracketing updates; `†` = first crossing; `§` = before-data / "
-            "nan-gap. Raw status and bracket per cell: the CSV itself.", ""]
+            f"快照：`metrics/{fname}`（写入于 {mtime_str(camp / 'metrics' / fname)}）。"
+            "`—` = pending（该快照时尚未达到该预算）；`*` = 在相邻 update 之间"
+            "插值；`†` = 首次跨过；`§` = before-data / nan-gap。"
+            "逐格原始状态与区间见 CSV 本身。", ""]
 
     def table(prefix, label, withhold_shoot):
-        out_l = [f"**{label}**", "", "| experiment | seed | " + " | ".join(budgets) + " |",
+        out_l = [f"**{label}**", "", "| 实验 | 种子 | " + " | ".join(budgets) + " |",
                  "|---" * (2 + len(budgets)) + "|"]
         any_value = False
         for r in rows:
@@ -571,34 +603,33 @@ def render_budget_tables(camp, fname, title, blurb):
                 cell(g(r, "experiment")), cell(g(r, "seed")), " | ".join(cells)))
         out_l.append("")
         if not any_value:
-            out_l += ["_No lane has reached any of these budgets at the snapshot; "
-                      "every cell is pending and nothing is extrapolated._", ""]
+            out_l += ["_该快照时没有任何通道达到这些预算；所有单元格均为 pending，"
+                      "未做任何外推。_", ""]
         return out_l
 
     out += table("reward", "reward", False)
-    out += table("reward_per_enemy", "reward per enemy (reward / team_size; NoWeapon family only — "
-                 "`n/a` for ShootMissile)", True)
+    out += table("reward_per_enemy", "每敌机 reward（reward / team_size；仅 NoWeapon 系列 —— "
+                 "ShootMissile 为 `n/a`）", True)
     return out
 
 
 def sec_representation(camp):
     data = read_json(camp / "metrics" / "critic_scaling.json")
-    out = ["## Representation / critic scaling (measured vs extrapolated)", ""]
+    out = ["## 表征 / critic scaling（实测 vs 外推）", ""]
     if not data:
-        out += ["_UNAVAILABLE — `metrics/critic_scaling.json` missing or unreadable._", ""]
+        out += ["_不可用 —— `metrics/critic_scaling.json` 缺失或无法读取。_", ""]
         return out
     measured = data.get("measured", []) or []
     extrapolated = data.get("extrapolated", []) or []
     anchored = [e for e in extrapolated if str(e.get("note", "")).strip() == "measured"]
     beyond = [e for e in extrapolated if str(e.get("note", "")).strip() != "measured"]
 
-    out += [f"Source: `metrics/critic_scaling.json` (written "
-            f"{mtime_str(camp / 'metrics' / 'critic_scaling.json')}); probe = model "
-            "construction on the real networks, no training. Three tables, never "
-            "mixed: (1) the four MEASURED points, (2) values derived from those same "
-            "measurements, (3) predictions beyond the measured range.", "",
-            "### 1. Measured rows (N = 2, 3, 5, 10)", "",
-            "| N | agents | obs dim | share obs dim | actor params | critic params | critic 1st layer params | 1st-layer MAC/envstep | fwd ms (batch) | fwd ms (fixed-256) | bwd ms (fixed-256) | fwd µs/sample |",
+    out += [f"来源：`metrics/critic_scaling.json`（写入于 "
+            f"{mtime_str(camp / 'metrics' / 'critic_scaling.json')}）；probe = 在真实网络"
+            "上构建模型，不做训练。三张表绝不混用：(1) 四个实测点，"
+            "(2) 由这些实测值推导的量，(3) 超出实测范围的预测。", "",
+            "### 1. 实测行（N = 2, 3, 5, 10）", "",
+            "| N | agents | obs 维度 | share obs 维度 | actor 参数量 | critic 参数量 | critic 首层参数量 | 首层 MAC/envstep | fwd ms（batch） | fwd ms（固定 256） | bwd ms（固定 256） | fwd µs/样本 |",
             "|---|---|---|---|---|---|---|---|---|---|---|---|"]
     checks = []
     for m in measured:
@@ -621,7 +652,7 @@ def sec_representation(camp):
 
     def extra_table(rows, heading, blurb):
         out_l = ["", f"### {heading}", "", blurb, "",
-                 "| N | agents | obs dim | share obs dim | critic 1st layer params | 1st-layer MAC/envstep | est. fwd ms/envstep | share-obs buffer GB |",
+                 "| N | agents | obs 维度 | share obs 维度 | critic 首层参数量 | 首层 MAC/envstep | 估计 fwd ms/envstep | share-obs 缓冲区 GB |",
                  "|---|---|---|---|---|---|---|---|"]
         for e in rows:
             out_l.append("| {} | {} | {} | {} | {} | {} | {} | {} |".format(
@@ -633,14 +664,14 @@ def sec_representation(camp):
         out_l.append("")
         return out_l
 
-    out += extra_table(anchored, "2. Derived from the measured points (not new measurements)",
-                       f"Computed from the same N = {', '.join(str(r.get('team_size')) for r in anchored)} "
-                       "probe runs; the first-layer values here are identical to table 1 and are "
-                       "checked below. Do not treat this table as independent evidence.")
-    out += extra_table(beyond, "3. EXTRAPOLATED beyond the measured range (predictions only)",
-                       f"N = {', '.join(str(r.get('team_size')) for r in beyond)} were never measured "
-                       "(the probe only built the four networks above). These rows are model-based "
-                       "predictions and must never be mixed with — or quoted as — measurements.")
+    out += extra_table(anchored, "2. 由实测点推导（不是新的测量）",
+                       f"由同样的 N = {', '.join(str(r.get('team_size')) for r in anchored)} "
+                       "的 probe 运行计算得到；此处的首层数值与表 1 完全相同，"
+                       "并在下方核对。不要把这本表当作独立证据。")
+    out += extra_table(beyond, "3. 超出实测范围的外推（仅为预测）",
+                       f"N = {', '.join(str(r.get('team_size')) for r in beyond)} 从未被实测"
+                       "（probe 只构建了上面四个网络）。这些行是基于模型的预测，"
+                       "绝不能与实测混用 —— 也不能当作实测引用。")
 
     for e in beyond:
         n = e.get("team_size")
@@ -653,30 +684,30 @@ def sec_representation(camp):
 
     ok = all(rec in (None, "") or calc is None or abs(float(rec) - float(calc)) < 0.5
              for _, rec, calc in checks)
-    out += ["### Closed-form check (computed in this script, not asserted)", "",
-            "Per row: `share_obs = 24N² + 6N`, `critic_params = 128·(24N²+6N) + 150145`, "
-            "`critic_first_layer_params = 128·(share_obs + 1)`.", "",
-            "| quantity | recorded | closed form | match |", "|---|---|---|---|"]
+    out += ["### 解析式核对（在本脚本中计算，非断言）", "",
+            "每行：`share_obs = 24N² + 6N`，`critic_params = 128·(24N²+6N) + 150145`，"
+            "`critic_first_layer_params = 128·(share_obs + 1)`。", "",
+            "| 量 | 记录值 | 解析式 | 是否一致 |", "|---|---|---|---|"]
     for name, rec, calc in checks:
-        match = "—" if (rec in (None, "") or calc is None) else ("OK" if abs(float(rec) - float(calc)) < 0.5 else "**MISMATCH**")
+        match = "—" if (rec in (None, "") or calc is None) else ("一致" if abs(float(rec) - float(calc)) < 0.5 else "**不一致**")
         out.append(f"| {cell(name)} | {f_int(rec)} | {f_int(calc)} | {match} |")
-    out += ["", f"All closed-form checks passed: **{'yes' if ok else 'NO — see MISMATCH rows'}**. "
-            f"Probe metadata: device `{raw(data.get('device'))}`, "
-            f"effective G-MAC/s {raw(data.get('effective_G_MAC_per_s'))}, "
-            f"batch threads {raw(data.get('batch_threads'))}.", ""]
+    out += ["", f"全部解析式核对通过：**{'是' if ok else '否 —— 见不一致的行'}**。"
+            f"Probe 元数据：device `{raw(data.get('device'))}`，"
+            f"effective G-MAC/s {raw(data.get('effective_G_MAC_per_s'))}，"
+            f"batch threads {raw(data.get('batch_threads'))}。", ""]
     return out
 
 
 def sec_computational(camp, st):
     rows = read_csv_rows(camp / "metrics" / "scaling_table.csv")
-    out = ["## Computational scalability", ""]
+    out = ["## 计算可扩展性", ""]
     if not rows:
-        out += ["_UNAVAILABLE — `metrics/scaling_table.csv` missing or empty._", ""]
+        out += ["_不可用 —— `metrics/scaling_table.csv` 缺失或为空。_", ""]
         return out
-    out += [f"Snapshot: `metrics/scaling_table.csv` (written "
-            f"{mtime_str(camp / 'metrics' / 'scaling_table.csv')}). `FPS` is the runner's "
-            "own vectorised env-steps/s; `agent-steps/s = env-steps/s × total agents`.", "",
-            "| scale | variant | thr | FPS (env-steps/s) | env-steps/s per thread | agent-steps/s | agent-steps/s per thread | sec / vectorised step | sec / rollout episode (3000 steps) |",
+    out += [f"快照：`metrics/scaling_table.csv`（写入于 "
+            f"{mtime_str(camp / 'metrics' / 'scaling_table.csv')}）。`FPS` 为 runner 自身的 "
+            "vectorised env-steps/s；`agent-steps/s = env-steps/s × 总 agent 数`。", "",
+            "| 规模 | 变体 | thr | FPS（env-steps/s） | 每线程 env-steps/s | agent-steps/s | 每线程 agent-steps/s | 秒 / vectorised step | 秒 / rollout episode（3000 步） |",
             "|---|---|---|---|---|---|---|---|---|"]
     for r in rows:
         fps = g(r, "fps")
@@ -687,8 +718,8 @@ def sec_computational(camp, st):
             f_g(g(r, "agent_steps_per_s")), f_g(g(r, "agent_steps_per_s_per_thread")),
             raw(g(r, "sec_per_vectorised_step")), raw(g(r, "sec_per_rollout_episode"))))
     agg = st.get("aggregate_fps")
-    out += ["", f"Live campaign aggregate throughput at the `metrics/status.json` "
-            f"snapshot: **{raw(agg)} env-steps/s** across all live lanes.", ""]
+    out += ["", f"`metrics/status.json` 快照时全批次实时聚合吞吐："
+            f"全部活跃通道合计 **{raw(agg)} env-steps/s**。", ""]
     return out
 
 
@@ -744,17 +775,17 @@ def parse_incidents(path):
 
 
 def sec_failures(camp, lanes, st):
-    out = ["## Failure list (summarised from `status/incidents.md`)", ""]
+    out = ["## 失败清单（摘自 `status/incidents.md`）", ""]
     items = parse_incidents(camp / "status" / "incidents.md")
     if not items:
-        out += ["_UNAVAILABLE — `status/incidents.md` missing or unreadable._", ""]
+        out += ["_不可用 —— `status/incidents.md` 缺失或无法读取。_", ""]
     else:
         cats = Counter((it["category"] or "?").split("(")[0].strip() for it in items)
-        out += [f"{len(items)} incidents recorded for this campaign "
-                f"({', '.join(f'{c}: {n}' for c, n in sorted(cats.items()))}). "
-                "F1–F9 live in `docs/night_failures.md` and belong to the 2026-10-04 "
-                "pilot; they are not re-listed here.", "",
-                "| id | title | category | detected | summary (symptom/cause excerpt) |",
+        out += [f"本实验批次共记录 {len(items)} 起事件 "
+                f"（{', '.join(f'{c}: {n}' for c, n in sorted(cats.items()))}）。"
+                "F1–F9 位于 `docs/night_failures.md`，属于 2026-10-04 pilot；"
+                "此处不再重复列出。", "",
+                "| id | 标题 | 类别 | 发现时间 | 摘要（症状/原因节选） |",
                 "|---|---|---|---|---|"]
         for it in items:
             sym = it.get("symptom") or ""
@@ -767,54 +798,52 @@ def sec_failures(camp, lanes, st):
     n_inf = sum(1 for l in lanes if "Inf" in l["flags"])
     n_tb = sum(1 for l in lanes if "Traceback in log" in l["flags"])
     n_failed = sum(1 for l in lanes if l["status"] == "failed")
-    out += [f"Live health flags at this snapshot: NaN ×{n_nan}, Inf ×{n_inf}, "
-            f"traceback ×{n_tb}; lanes in status `failed`: {n_failed}.", ""]
+    out += [f"本快照的实时健康标志：NaN ×{n_nan}，Inf ×{n_inf}，"
+            f"traceback ×{n_tb}；状态为 `failed` 的通道：{n_failed} 条。", ""]
     return out
 
 
 def sec_limitations(lanes):
-    out = ["## WHAT THIS DOES NOT SHOW", "",
-           "Known limitations; read this before quoting any number above.", ""]
+    out = ["## 本文档不展示的内容", "",
+           "已知局限；引用上面任何数字之前请先阅读本节。", ""]
 
     groups = {}
     for l in lanes:
         groups.setdefault(l["scenario"], set()).add(str(l["seed"]))
     multi = sorted(k for k, v in groups.items() if len(v) > 1)
     single = sorted(k for k, v in groups.items() if len(v) <= 1)
-    out += ["1. **Single seed at most scales.** Only the scenarios below carry more "
-            "than one seed so far; every other scenario is a single-seed result. A "
-            "between-scale (or between-seed) difference smaller than the run-to-run "
-            "seed spread is not interpretable, and this document performs no such "
-            "comparison.",
-            f"   - multi-seed so far: {', '.join(f'`{k}`' for k in multi) if multi else 'none'}",
-            f"   - single-seed at this generation: {', '.join(f'`{k}`' for k in single) if single else 'none'}", ""]
+    out += ["1. **大多数规模只有一个种子。** 目前只有下列场景拥有多于一个种子；"
+            "其余场景均为单种子结果。小于运行间种子离散度的跨规模（或跨种子）"
+            "差异不可解释，本文档也不做这类比较。",
+            f"   - 目前多种子：{', '.join(f'`{k}`' for k in multi) if multi else '无'}",
+            f"   - 本次生成时为单种子：{', '.join(f'`{k}`' for k in single) if single else '无'}", ""]
 
     thr_groups = {}
     for l in lanes:
         thr_groups.setdefault(l["scenario"], set()).add(l["threads"])
     confound = sorted(k for k, v in thr_groups.items() if len(v) > 1)
-    out += ["2. **`n_rollout_threads` is a confound, not a detail.** The thread count "
-            "differs across scales (forced by wall-clock: at a constant thread count "
-            "10v10 cannot reach 6M inside the window) and the PPO update batch size is "
-            "`threads × 3000`, so batch size differs across scales too."]
+    out += ["2. **`n_rollout_threads` 是混淆因素，不是细节。** 线程数在各规模间"
+            "不同（受挂钟时间所迫：固定线程数时 10v10 无法在窗口内到达 6M），"
+            "且 PPO update 的 batch 大小为 `threads × 3000`，因此 batch 大小"
+            "也随规模不同。"]
     thr_line = ", ".join(
-        f"`{k}`: {sorted(int(t) for t in v if t)} thr (batch {sorted(int(t) * BUFFER for t in v if t)})"
+        f"`{k}`: {sorted(int(t) for t in v if t)} thr（batch {sorted(int(t) * BUFFER for t in v if t)}）"
         for k, v in sorted(thr_groups.items()))
-    out += [f"   - threads per scenario at this generation: {thr_line}",
-            (f"   - **within-scenario difference across seeds**: "
-             f"{', '.join(f'`{k}`' for k in confound)} — the seed comparison there is "
-             f"confounded by thread count as well.") if confound else
-            "   - no scenario currently mixes thread counts across its seeds.", ""]
+    out += [f"   - 本次生成时各场景的线程数：{thr_line}",
+            (f"   - **同场景内跨种子的差异**："
+             f"{', '.join(f'`{k}`' for k in confound)} —— 该处的种子比较同样"
+             f"被线程数混淆。") if confound else
+            "   - 目前没有场景在其种子之间混用不同线程数。", ""]
 
     capped = [l for l in lanes if l["ceiling"] and l["ceiling"] < TARGET]
     ceil3 = ceiling_of(3)
-    out += ["3. **The 1v1 lanes cannot reach 6,000,000 by construction.** "
-            f"A 3-thread lane floors at {TARGET // BUFFER // 3} episodes, i.e. "
-            f"{f_int(ceil3)} of the nominal {f_int(TARGET)} (incident F17). Those lanes "
-            "are reported as `completed_at_ceiling`, not as censored.",
-            (f"   - affected lanes at this generation: "
+    out += ["3. **1v1 通道按构造无法到达 6,000,000。** "
+            f"3-thread 通道向下取整到 {TARGET // BUFFER // 3} 个 episode，即名义 "
+            f"{f_int(TARGET)} 中的 {f_int(ceil3)}（事件 F17）。这些通道记为 "
+            "`completed_at_ceiling`，而不是被截断。",
+            (f"   - 本次生成时受影响的通道："
              f"{', '.join(f'`{l['exp']}`' for l in capped)}") if capped else
-            "   - no lane is currently below the nominal budget by construction.", ""]
+            "   - 目前没有通道因构造原因低于名义预算。", ""]
 
     shoot_lanes = [l for l in lanes if l["shoot"]]
     sib = [l for l in lanes if l["threads"] == 3 and not l["shoot"] and l["fps"] not in (None, "")]
@@ -823,42 +852,36 @@ def sec_limitations(lanes):
         try:
             sf = max(float(x["fps"]) for x in shoot_lanes if x["fps"] not in (None, ""))
             others = sorted(f"{float(x['fps']):g}" for x in sib if x["fps"] not in (None, ""))
-            fps_line = (f"   - current FPS: ShootMissile {sf:g} vs sibling 3-thread 1v1 lanes "
-                        f"{', '.join(others)} env-steps/s (see inventory).")
+            fps_line = (f"   - 当前 FPS：ShootMissile {sf:g}，同类 3-thread 1v1 通道为 "
+                        f"{', '.join(others)} env-steps/s（见清单）。")
         except (TypeError, ValueError):
             fps_line = ""
-    out += ["4. **The 1v1 ShootMissile lane runs with `--use-prior`, which roughly "
-            "halves throughput** (incident F14, category `Computational scalability` — "
-            "not algorithmic). Its lower FPS is a property of the official code path, "
-            "not an algorithmic finding.", fps_line, ""]
+    out += ["4. **1v1 ShootMissile 通道带 `--use-prior` 运行，吞吐约减半**"
+            "（事件 F14，类别 `Computational scalability` —— 不是算法问题）。"
+            "其较低的 FPS 是官方代码路径的性质，不是算法发现。", fps_line, ""]
 
-    out += ["5. **6M is a budget reduction, not a convergence result.** The official "
-            f"configuration trains for 1e8 steps; this campaign runs {f_int(TARGET)} "
-            f"({100.0 * TARGET / 1e8:.0f}% of that). Final rewards are an "
-            "intermediate-training-state snapshot and must not be presented as "
-            "converged performance.", "",
-            "Also, by policy:", "",
-            "- `reward_per_enemy` is defined only for the NoWeapon family "
-            "(PostureReward sums over agents); it is withheld for ShootMissile rows.",
-            "- The 2026-10-04 pilot is a separate series and is excluded from this "
-            "document.",
-            "- Tables built from the analysis CSVs are snapshots of those files "
-            "(mtimes above); only the inventory is the live view. Nothing here is "
-            "averaged across seeds, fitted, or significance-tested.",
-            "- This document is a data record, not an analysis; interpret it with the "
-            "hand-written report.", ""]
+    out += ["5. **6M 是预算缩减，不是收敛结果。** 官方配置训练 1e8 步；"
+            f"本批次只跑 {f_int(TARGET)}（为其 {100.0 * TARGET / 1e8:.0f}%）。"
+            "最终 reward 是训练中途状态的快照，绝不能当作已收敛的性能来呈现。", "",
+            "另外，按既定口径：", "",
+            "- `reward_per_enemy` 只对 NoWeapon 系列有定义"
+            "（PostureReward 对 agent 求和）；ShootMissile 行一律不给出。",
+            "- 2026-10-04 pilot 是独立序列，不包含在本文档中。",
+            "- 由分析 CSV 构建的表格只是那些文件的快照（mtime 见上）；"
+            "只有清单是实时视图。本文档不做跨种子平均、拟合或显著性检验。",
+            "- 本文档是数据记录，不是分析；请结合手写报告解读。", ""]
     return out
 
 
 def sec_artefacts(camp):
-    return ["## Related artefacts (not embedded here)", "",
-            "- `metrics/scaling_table.csv` — machine-readable version of the scaling table above, and wider (obs dims, parameter counts, CPU/RAM peaks).",
-            "- `metrics/normalized_scaling.csv` — per-episode reward and reward/enemy for the scaling family.",
-            "- `metrics/sample_efficiency.csv` — reward / reward-per-enemy at fixed budgets up to 6M.",
-            "- `metrics/equal_sample.csv`, `metrics/equal_wallclock.csv` — the raw checkpoint tables with per-cell status and bracket.",
-            "- `metrics/resources.csv`, `metrics/throughput_history.csv`, `system/system_samples_v2.csv` — resource/throughput time series (the v1 sampler file is unreliably CPU-scaled; see incident F16).",
-            "- `figures/` — plots regenerated by `scripts/make_figures.py`.",
-            "- `docs/formal_repro_scaling_2026-10-07_08.md` — the hand-written report this document is the safety net for.",
+    return ["## 相关产物（未内嵌到本文档）", "",
+            "- `metrics/scaling_table.csv` —— 上表 scaling 表的机器可读版本，列更全（obs 维度、参数量、CPU/RAM 峰值）。",
+            "- `metrics/normalized_scaling.csv` —— scaling 系列的逐 episode reward 与每敌机 reward。",
+            "- `metrics/sample_efficiency.csv` —— 至 6M 各固定预算下的 reward / 每敌机 reward。",
+            "- `metrics/equal_sample.csv`、`metrics/equal_wallclock.csv` —— 带逐格状态与区间的原始 checkpoint 表。",
+            "- `metrics/resources.csv`、`metrics/throughput_history.csv`、`system/system_samples_v2.csv` —— 资源/吞吐时间序列（v1 采样文件的 CPU 换算不可靠；见事件 F16）。",
+            "- `figures/` —— 由 `scripts/make_figures.py` 重新生成的图。",
+            "- `docs/formal_repro_scaling_2026-10-07_08.md` —— 本文档作为其安全网的手写报告。",
             ""]
 
 
@@ -870,19 +893,18 @@ def generate(camp, out_path, repo):
     gi = git_info(repo)
 
     L = []
-    L += [f"# Formal-6M auto-results — machine-generated numeric record", "",
-          f"> **This file is machine-generated. Do not hand-edit.** Generated "
+    L += [f"# Formal-6M 自动结果 —— 机器生成的数值记录", "",
+          f"> **本文件由机器生成，请勿手改。** 生成于 "
           f"**{now:%Y-%m-%d %H:%M:%S} {now.astimezone().tzname()}** "
-          f"({now.astimezone().isoformat(timespec='seconds')}) "
-          f"by `experiments/2026-10-07-08-formal6m/scripts/make_auto_results.py` "
-          f"(repo HEAD `{gi['head']}`, branch `{gi['branch']}`). 本文件由脚本自动生成，所有数字均来自机器产物。", ">",
-          f"> Campaign: `experiments/2026-10-07-08-formal6m`. Regenerate with: "
+          f"（{now.astimezone().isoformat(timespec='seconds')}），"
+          f"由 `experiments/2026-10-07-08-formal6m/scripts/make_auto_results.py` "
+          f"生成（repo HEAD `{gi['head']}`，分支 `{gi['branch']}`）。所有数字均来自机器产物。", ">",
+          f"> 实验批次：`experiments/2026-10-07-08-formal6m`。重新生成："
           f"`cd experiments/2026-10-07-08-formal6m && /root/miniconda3/envs/jsbsim/bin/python scripts/make_auto_results.py` "
-          f"(also invoked by `scripts/freeze.sh`, which the tmux auto-finalizer runs on a schedule).", ">",
-          "> Every value below is read from the files listed under *Sources and freshness*; "
-          "none is hand-entered, and nothing is extrapolated except where a row explicitly "
-          "says so. If the hand-written report never gets finished, this document is the "
-          "complete numeric record.", ""]
+          f"（`scripts/freeze.sh` 也会调用它，tmux auto-finalizer 按计划运行 freeze.sh）。", ">",
+          "> 下方每个数值都读取自 *数据来源与新鲜度* 一节列出的文件；没有任何手工"
+          "填入的值，除某行明确说明外也不做任何外推。若手写报告最终未能完成，"
+          "本文档就是完整的数值记录。", ""]
 
     sections = [
         ("Conventions", lambda: sec_conventions(lanes)),
@@ -890,13 +912,13 @@ def generate(camp, out_path, repo):
         ("Inventory", lambda: sec_inventory(lanes, st, st_ts)),
         ("Scaling", lambda: sec_scaling(camp)),
         ("EqualSample", lambda: render_budget_tables(
-            camp, "equal_sample.csv", "Equal-sample comparison",
-            "Reward and reward-per-enemy at fixed vectorised env-step budgets "
-            "(1M–6M), from the campaign's own equal-sample generator.")),
+            camp, "equal_sample.csv", "等样本对比",
+            "固定 vectorised env-step 预算（1M–6M）下的 reward 与每敌机 reward，"
+            "来自本批次自带的等样本生成器。")),
         ("EqualWallclock", lambda: render_budget_tables(
-            camp, "equal_wallclock.csv", "Equal-wall-clock comparison",
-            "Reward and reward-per-enemy at fixed wall-clock budgets (1h–24h), "
-            "from the campaign's own equal-wall-clock generator.")),
+            camp, "equal_wallclock.csv", "等挂钟时间对比",
+            "固定挂钟时间预算（1h–24h）下的 reward 与每敌机 reward，"
+            "来自本批次自带的等挂钟时间生成器。")),
         ("Representation", lambda: sec_representation(camp)),
         ("Computational", lambda: sec_computational(camp, st)),
         ("Failures", lambda: sec_failures(camp, lanes, st)),
@@ -907,7 +929,7 @@ def generate(camp, out_path, repo):
         try:
             L += fn()
         except Exception as exc:  # noqa: BLE001 -- one broken section must not kill the doc
-            L += [f"sections/{name}: _UNAVAILABLE — generator error: "
+            L += [f"sections/{name}: _不可用 —— 生成器错误："
                   f"{type(exc).__name__}: {exc}_", ""]
 
     out_path.parent.mkdir(parents=True, exist_ok=True)

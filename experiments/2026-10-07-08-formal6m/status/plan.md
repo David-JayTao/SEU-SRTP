@@ -1,29 +1,28 @@
-# Campaign plan and dynamic scheduling decisions
+# 实验计划与动态调度决策
 
-Live state is in `running_jobs.md`; this file records *why* the schedule is what
-it is, and the pre-decided rules for what happens as lanes free up.
+实时状态在 `running_jobs.md`；本文件记录调度*为什么*是这样，以及通道释放后如何处理的
+预先定好的规则。
 
-## Resource model
+## 资源模型
 
-48-core cgroup quota. GPU is not the constraint (≤2.3 GB VRAM/job, 0–39% util).
-Objective: **maximise aggregate useful env-steps/s**, subject to P0 (10v10)
-completing 6M.
+48 核 cgroup 配额。GPU 不是约束（每任务 ≤2.3 GB 显存，利用率 0–39%）。
+目标：**最大化总有效 env-steps/s**，约束条件是 P0（10v10）完成 6M。
 
-Measured calibration points (2026-10-07):
+实测标定点（2026-10-07）：
 
-| time | lanes | threads | cores busy | aggregate env-steps/s |
+| 时间 | 通道数 | 线程数 | 忙碌核数 | 总 env-steps/s |
 |---|---|---|---|---|
 | 03:11 | 5 | 44 | 42.0 / 48 | 451 |
 | 03:17 | 7 | 50 | 41.0 / 48 | 672 |
 | 03:19 | 9 | 56 | 42.2 / 48 | 668 |
 | 03:46 | 9 | 56 | 43.0 / 48 | ~810 |
 
-Steady-state per-lane FPS at 9 lanes / 56 threads (03:46), with the CPU cost of
-each lane expressed as FPS per rollout thread:
+9 通道 / 56 线程下的稳态各通道 FPS（03:46），每个通道的 CPU 代价以每 rollout 线程的 FPS
+表示：
 
-| lane | threads | FPS | FPS/thread | ETA to 6M |
+| 通道 | 线程 | FPS | FPS/线程 | 到达 6M 的 ETA |
 |---|---|---|---|---|
-| 10v10 s0 | 20 | 67 cum. (**74 marginal**) | 3.7 | 01:35–03:55 Oct 8 |
+| 10v10 s0 | 20 | 累计 67（**边际 74**） | 3.7 | 01:35–03:55 Oct 8 |
 | 5v5 s0 | 8 | 81 | 10.1 | 22:50 Oct 7 |
 | 3v3 s0 | 8 | 127 | 15.9 | 15:45 Oct 7 |
 | 2v2 s0 | 4 | 78 | 19.5 | 23:20 Oct 7 |
@@ -31,62 +30,56 @@ each lane expressed as FPS per rollout thread:
 | 1v1 vsBaseline | 3 | 119 | 39.7 | 17:30 Oct 7 |
 | 1v1 Selfplay | 3 | 106 | 35.3 | 18:50 Oct 7 |
 | 1v1 HierSelfplay | 3 | 85 | 28.3 | 22:20 Oct 7 |
-| 1v1 Shoot HierSelfplay | 3 | 55 | 18.3 | **~09:40 Oct 8 — marginal** |
+| 1v1 Shoot HierSelfplay | 3 | 55 | 18.3 | **~09:40 Oct 8 — 临界** |
 
-(FPS/thread varies 21× across lanes, which is the whole reason a flat
-thread-per-job allocation is wrong and why the allocation is chosen per lane.)
+（FPS/线程在各通道之间相差 21 倍，这正是"给每个任务分配相同线程数"错误的原因，
+也正是按通道分配线程的原因。）
 
-### 1v1/ShootMissile is structurally ~2× slower — not contention
+### 1v1/ShootMissile 在结构上慢约 2×——不是资源争用
 
-`--use-prior` (implemented only in `algorithms/ppo/ppo_actor.py`) roughly halves
-SingleCombat throughput. Pilot measurement at an identical 10 threads:
+`--use-prior`（仅实现在 `algorithms/ppo/ppo_actor.py` 中）把 SingleCombat 的吞吐大约减半。
+pilot（前序试跑）在相同 10 线程下的测量：
 
-| pilot run | threads | FPS |
+| pilot 运行 | 线程 | FPS |
 |---|---|---|
 | `official_1v1_selfplay` | 10 | 324 |
 | `official_1v1_shoot_hier_selfplay` | 10 | 170 |
 
-This campaign reproduces it at 3 threads (1v1 Selfplay 106 FPS = 35.3/thread,
-1v1 Shoot 55 FPS = 18.3/thread — the same ~2:1 ratio). **Consequence: at 3
-threads the Shoot baseline needs ~30.3 h, i.e. it lands at roughly 98% of 6M by
-the freeze.** It is kept rather than killed+relaunched because a relaunch would
-create a second `run<N>/` directory and a restarted partial trajectory is not a
-clean formal run. It will be reported as `time_cutoff` with the steps actually
-reached, never as `completed_6M`.
+本次实验在 3 线程下复现了它（1v1 Selfplay 106 FPS = 35.3/线程，
+1v1 Shoot 55 FPS = 18.3/线程——相同的约 2:1 比例）。**后果：在 3 线程下 Shoot 基线
+需要约 30.3 h，即在冻结时落在 6M 的大约 98% 处。** 它被保留而不是杀掉重跑，因为
+重跑会创建一个新的 `run<N>/` 目录，而重新启动的部分轨迹不是一次干净的正式运行。
+它将按实际达到的步数记为 `time_cutoff`，绝不记为 `completed_6M`。
 
-Adding the two SingleCombat lanes at 03:10 raised aggregate throughput by **+221
-env-steps/s at zero measured cost to the other five lanes** (10v10 held at 70 FPS,
-3v3 at 132 vs 133). This is the F8 mechanism in reverse: each rollout worker only
-reaches ~0.7 of a core because it blocks on IPC, so the machine has spare
-*scheduling* capacity even when `load1` looks saturated (44). **Decision rule:
-judge by measured aggregate env-steps/s and by the P0 job's FPS, never by load1
-or by idle GPU.**
+在 03:10 加入这两个 SingleCombat 通道，使总吞吐提高了 **+221 env-steps/s，而对另外五个
+通道的实测代价为零**（10v10 保持在 70 FPS，3v3 为 132 对 133）。这是 F8 机制的逆过程：
+每个 rollout worker 只占用约 0.7 个核，因为它会阻塞在 IPC 上，因此即使 `load1`
+看起来饱和（44），机器仍有空闲的*调度*容量。**决策规则：用实测的总 env-steps/s 和
+P0 任务的 FPS 来判断，绝不看 load1 或空闲 GPU。**
 
-At 56 threads / 42.2 busy cores the box is now genuinely full; no further
-concurrency is added until a lane drains.
+在 56 线程 / 42.2 忙碌核下，这台机器现在真正装满了；在某个通道排空之前不再增加任何并发。
 
-## Why this thread allocation
+## 为什么这样分配线程
 
-At equal threads the env cost scales roughly as 2v2 : 3v3 : 5v5 : 10v10 =
-107.8 : 60.3 : 25.4 : 7.8 (single-core bench, pilot). Equal finish times would
-need threads in roughly inverse proportion, i.e. ~2/3 of the budget on 10v10 —
-which would starve everything else. The allocation below instead gives 10v10
-enough to clear 6M with margin and spends the rest on coverage.
+在线程数相同时，env 开销大致按 2v2 : 3v3 : 5v5 : 10v10 = 107.8 : 60.3 : 25.4 : 7.8 缩放
+（单核基准测试，pilot）。要同时跑完需要大致成反比的线程数，即约 2/3 的预算给
+10v10——那会饿死其他所有任务。下面的分配改为给 10v10 足够（且有余量）跑完 6M 的线程，
+其余的用于覆盖面。
 
-| job | threads | rationale |
+| 任务 | 线程 | 理由 |
 |---|---|---|
-| 10v10 s0 | 20 | P0. The only job that cannot be re-run in this window. |
-| 5v5 s0 | 8 | P2. |
-| 3v3 s0 | 8 | P2. |
-| 2v2 s0 | 4 | P2. Cheapest scale; reaches 6M at 4 threads in ~20 h. |
-| official 2v2 s0 | 4 | P1, L1 official entry point. |
-| 4 × official 1v1 | 3 each | P1. SingleCombat is only 2 aircraft, so 3 threads already yields 107–119 FPS. |
+| 10v10 s0 | 20 | P0。唯一无法在本窗口内重跑的任务。 |
+| 5v5 s0 | 8 | P2。 |
+| 3v3 s0 | 8 | P2。 |
+| 2v2 s0 | 4 | P2。最便宜的规模；4 线程下约 20 h 达到 6M。 |
+| official 2v2 s0 | 4 | P1，L1 官方入口点。 |
+| 4 × official 1v1 | 各 3 | P1。SingleCombat 只有 2 架飞机，所以 3 线程已能产出 107–119 FPS。 |
 
-## Pre-decided rules as lanes drain
+## 通道排空时的预定规则
 
-Drain schedule at current rates (all still on track):
+按当前速率的排空时间表（都还在计划内）：
 
-| ~time | lane freeing | threads |
+| 约略时间 | 释放的通道 | 线程 |
 |---|---|---|
 | 15:40 Oct 7 | 3v3 s0 | 8 |
 | 17:15 Oct 7 | 1v1 vsBaseline | 3 |
@@ -96,109 +89,97 @@ Drain schedule at current rates (all still on track):
 | 00:05 Oct 8 | official 2v2 | 4 |
 | 03:00 Oct 8 | 10v10 s0 | 20 |
 
-Rule for each freed lane, in priority order (§14 of the campaign brief):
+每个被释放通道的规则，按优先级顺序（任务书 §14 节）：
 
-1. **Second seed where a full 6M still fits.** Check
-   `(6e6 - 0) / expected_FPS` against the *remaining* wall-clock, and start only
-   if it finishes by 09:00 Oct 8. Feasible candidates and their 8-thread ETAs
-   from 15:40: 3v3 s1 ≈ 12.4 h (→ 04:05 ✔), 2v2 s1 ≈ 11.1 h (→ 02:45 ✔),
-   5v5 s1 ≈ 19.7 h (→ 11:20 ✘). **5v5 s1 misses by ~2 h at 8 threads; if it is
-   chosen it must be given more threads or accepted as time-censored.**
-2. **Shoot-family scaling** (P4) if no seed fits: `2v2/scaling_shoot` ≈ 11 h ✔,
-   `3v3/scaling_shoot` ≈ 16 h ✔.
-3. **Remaining official baselines not yet run** (P3): `1/heading` (ppo,
-   SingleControl, seed 5). Cheap (~590 FPS at 10 threads).
-4. **Never** start a job that cannot produce a useful partial result before
-   10:00 Oct 8.
+1. **在还能装下完整 6M 时安排第二种子。** 用
+   `(6e6 - 0) / expected_FPS` 对照*剩余*墙钟时间，只有在 09:00 Oct 8 前能跑完时才启动。
+   可行的候选及其从 15:40 起算的 8 线程 ETA：3v3 s1 ≈ 12.4 h（→ 04:05 ✔）、
+   2v2 s1 ≈ 11.1 h（→ 02:45 ✔）、5v5 s1 ≈ 19.7 h（→ 11:20 ✘）。**5v5 s1 在 8 线程下
+   差约 2 h；若选它，必须给它更多线程，或者接受它被时间删失（time-censored）。**
+2. 若没有种子能装下，则跑 **Shoot 系列 scaling**（P4）：`2v2/scaling_shoot` ≈ 11 h ✔、
+   `3v3/scaling_shoot` ≈ 16 h ✔。
+3. **尚未运行的其余官方基线**（P3）：`1/heading`（ppo，SingleControl，种子 5）。
+   便宜（10 线程下约 590 FPS）。
+4. **绝不**启动在 10:00 Oct 8 前无法产出有用部分结果的任务。
 
-### Drain-time arithmetic (why late lanes can only take short jobs)
+### 排空时刻的算术（为什么晚释放的通道只能接短任务）
 
-A lane freeing at time *t* can host a job only if
-`6e6 / expected_FPS_at_those_threads <= (09:00 Oct 8 - t)`. Using the measured
-per-thread rates (2v2 ≈ 19.5, 3v3 ≈ 16, 5v5 ≈ 10, 10v10 ≈ 3.7 env-steps/s/thread):
+在时刻 *t* 释放的通道只能容纳满足
+`6e6 / expected_FPS_at_those_threads <= (09:00 Oct 8 - t)` 的任务。使用实测的每线程速率
+（2v2 ≈ 19.5、3v3 ≈ 16、5v5 ≈ 10、10v10 ≈ 3.7 env-steps/s/线程）：
 
-| lane frees | threads | window left | 6M at 8 threads needs | fits? |
+| 通道释放于 | 线程 | 剩余窗口 | 8 线程跑 6M 需要 | 装得下？ |
 |---|---|---|---|---|
-| 3v3 @15:40 | 8 | 17.3 h | 3v3 (10.4 h) ✔, 2v2 (10.4 h) ✔, 5v5 (20.8 h) ✘ | yes (small scales) |
-| 5v5 @22:50 | 8 | 10.2 h | 2v2 (10.4 h) ~, 3v3 (10.4 h) ~, anything bigger ✘ | marginal |
-| 2v2 @23:20 | 4 | 9.7 h | 2v2 at 4 thr (20 h) ✘ | no |
-| off2v2 @00:10 | 4 | 8.8 h | ✘ for 6M; fine for 1/heading (2.8 h) | short jobs only |
-| 10v10 @~01:30 | 20 | 7.5 h | 2v2 seed at 20 thr (4.3 h) ✔, 3v3 seed (5.2 h) ✔, 5v5 (8.3 h) ✘ | generous |
+| 3v3 @15:40 | 8 | 17.3 h | 3v3（10.4 h）✔、2v2（10.4 h）✔、5v5（20.8 h）✘ | 是（小规模） |
+| 5v5 @22:50 | 8 | 10.2 h | 2v2（10.4 h）~、3v3（10.4 h）~、更大的都不行 ✘ | 临界 |
+| 2v2 @23:20 | 4 | 9.7 h | 4 线程跑 2v2（20 h）✘ | 否 |
+| off2v2 @00:10 | 4 | 8.8 h | 对 6M 是 ✘；对 1/heading（2.8 h）没问题 | 只能接短任务 |
+| 10v10 @~01:30 | 20 | 7.5 h | 20 线程的 2v2 种子（4.3 h）✔、3v3 种子（5.2 h）✔、5v5（8.3 h）✘ | 宽裕 |
 
-**Consequence: the only genuinely useful 6M-capable slot after ~23:00 is the
-10v10 lane's 20 threads when it completes at ~01:30 Oct 8.** That is the slot to
-hold for a second seed at 2v2 or 3v3. Everything freeing between 22:50 and 00:10
-can only take `1/heading` (SingleControl, ~590 FPS at 10 threads, ~2.8 h) or a
-partial Shoot-scaling run.
+**后果：约 23:00 之后唯一真正有用、能承载 6M 的档期，就是 10v10 通道在约 01:30 Oct 8
+完成时释放的 20 个线程。** 这个档期应当留给 2v2 或 3v3 的第二种子。22:50 到 00:10 之间
+释放的一切只能接 `1/heading`（SingleControl，10 线程下约 590 FPS，约 2.8 h）或一次部分
+的 Shoot-scaling 运行。
 
-**No lane can host 5v5 seed 1 at 6M.** Starting it at 15:40 on the 3v3 lane gets
-it to roughly 5.0M by the freeze (5v5 needs ~20.8 h at 8 threads against a 17.3 h
-window). If it is started anyway it must be reported as `time_cutoff` with the
-steps actually reached — which is still a usable variance sample over 0–5M, but
-is a weaker deliverable than a complete 3v3 seed 1. **Decision deferred to
-15:40 with live numbers in hand.**
+**没有任何通道能在 6M 下承载 5v5 种子 1。** 让它在 15:40 占用 3v3 通道启动，到冻结时
+大约只能到 5.0M（5v5 在 8 线程下需要约 20.8 h，而窗口只有 17.3 h）。若仍要启动，
+必须按实际达到的步数记为 `time_cutoff`——这仍然是 0–5M 上一个可用的方差样本，
+但相比一个完整的 3v3 种子 1 是更弱的交付物。**决定推迟到 15:40，届时手握实时数字再定。**
 
-## Final-phase tasks (do at ~09:00 Oct 8, once training stops competing for CPU)
+## 收尾阶段任务（在约 09:00 Oct 8 做，等训练不再争抢 CPU 之后）
 
-These are cheap, single-core, inference-only probes that need a QUIET machine or
-trained checkpoints, so they are deliberately deferred to the freeze window.
+这些是便宜、单核、纯推理的探针，需要一台安静的机器或已训练好的 checkpoint，
+因此它们被有意推迟到冻结窗口。
 
-1. **`offline_eval.py` on every final f6m checkpoint** (`--run-dir <...>/run1
-   --episodes 8`). Yields for each lane a low-variance `mean_return`,
-   `std_return` and, critically, **`mean_episode_length`**.
-   *Why this matters:* `average_episode_rewards` is computed as
+1. **对每个最终的 f6m checkpoint 运行 `offline_eval.py`**（`--run-dir <...>/run1
+   --episodes 8`）。为每个通道给出低方差的 `mean_return`、`std_return`，
+   以及关键的 **`mean_episode_length`**。
+   *为什么重要：* `average_episode_rewards` 的计算方式是
    `buffer.rewards.sum() / (buffer.masks == False).sum()`
-   (`runner/share_jsbsim_runner.py:112`) — i.e. a **per-agent-episode** mean over
-   the learner's `num_agents // 2` team. Because `PostureReward` sums over an
-   agent's enemies, that quantity scales with N, which is why `reward/N` is the
-   right normalisation. **But it is still confounded if the mean episode LENGTH
-   differs across N** (reward accumulates per step, so shorter episodes give
-   smaller-magnitude per-episode rewards regardless of skill). The probe
-   measures the length directly instead of assuming it away.
-2. **`critic_scaling_probe.py`** on a quiet box — fills the representation
-   columns (local obs dim, share_obs dim, actor/critic param counts vs N).
-3. **`env_bench.py`** quiet-mode re-measurement for the computational-scaling
-   figure; the pilot's `quiet`/`loaded` pair is the precedent for reporting both.
-4. **`obs_cost_profile.py`** to re-confirm the O(N²) observation-construction
-   attribution (pilot F8) under this campaign's configuration.
+   （`runner/share_jsbsim_runner.py:112`）——即对学习者的 `num_agents // 2` 队伍求的
+   **每 agent 每 episode** 均值。由于 `PostureReward` 是对一个 agent 的敌人求和，
+   这个量会随 N 缩放，这就是为什么 `reward/N` 是正确的归一化。
+   **但如果平均 episode 长度随 N 不同，它仍然被混淆**（reward 按步累积，
+   所以无论技能如何，更短的 episode 给出的每 episode reward 幅度更小）。该探针
+   直接测量长度，而不是把它假设掉。
+2. **`critic_scaling_probe.py`** 在安静的机器上——填充表示（representation）
+   列（local obs 维度、share_obs 维度、actor/critic 参数量随 N 的变化）。
+3. **`env_bench.py`** 安静模式重新测量，用于计算规模图；pilot 的 `quiet`/`loaded`
+   配对是"两者都报告"的先例。
+4. **`obs_cost_profile.py`** 在本次实验的配置下再次确认 O(N²) 观测构造的归因（pilot F8）。
 
-## Two eval-measurement facts inherited from the pilot (do not re-derive)
+## 从 pilot 继承的两个 eval 测量事实（不要重新推导）
 
-- **MultipleCombat evaluation is deterministic.** Re-evaluating one checkpoint 8
-  times gave `std_return = 0.0` (`docs/overnight_repro_scaling_2026-10-04.md`
-  §5.1). So the `--eval-episodes 1` series wobbling between −28 and −280 across
-  training is **not** eval sampling noise; it is the policy *and the re-drawn
-  self-play opponent* changing. Per-checkpoint the estimator has zero variance
-  and unknown (potentially large) bias — so eval curves are suggestive only, and
-  no conclusion in this report rests on a single eval point.
-- **`--eval-interval 2` means eval every 2 PPO updates**, and at 10v10 an eval
-  costs ~140–156 s (`metrics.jsonl` `wall_time` deltas). At 100 updates that is
-  ~2 h of the 10v10 lane's wall-clock — already inside the reported FPS, which is
-  a wall-clock average, not a pure step rate.
+- **MultipleCombat 的评估是确定性的。** 对同一个 checkpoint 重复评估 8 次得到
+  `std_return = 0.0`（`docs/overnight_repro_scaling_2026-10-04.md`
+  §5.1）。因此 `--eval-episodes 1` 序列在训练过程中于 −28 到 −280 之间波动
+  **不是** eval 采样噪声；那是策略*以及重新抽取的自博弈对手*在变。对单个
+  checkpoint，该估计量方差为零、偏差未知（可能很大）——因此 eval 曲线只有提示
+  意义，本报告没有任何结论依赖单个 eval 点。
+- **`--eval-interval 2` 意味着每 2 次 PPO update 评估一次**，而在 10v10 下一次 eval
+  花费约 140–156 s（`metrics.jsonl` 的 `wall_time` 差值）。在 100 次 update 下那就是
+  10v10 通道墙钟时间的约 2 h——已经包含在报告的 FPS 里，因为 FPS 是墙钟平均，
+  不是纯粹的步率。
 
-## Explicitly not done, and why
+## 明确没有做的事，以及原因
 
-- **10v10 second seed**: needs ~26 h at the threads available; the earliest a
-  lane large enough could free is 03:00 Oct 8, leaving 7 h. Recorded in the
-  report as infeasible in this window, not attempted as a token gesture.
-- **Official 100M budgets**: ~300–400 h per run on this box. Out of scope by
-  construction; 6M is stated as a formal *budget reduction*, never as
-  convergence.
-- **Algorithm changes / env optimisation**: forbidden for the main line
-  (comparability). See report §4.4.
+- **10v10 第二种子**：在可用线程下需要约 26 h；足够大的通道最早也要 03:00 Oct 8
+  才能释放，只剩 7 h。报告中记为在本窗口内不可行，没有作为一种象征性姿态去尝试。
+- **官方 100M 预算**：在这台机器上每条约需 300–400 h。在构造上就超出范围；
+  6M 被明确表述为正式的*预算缩减*，绝不是收敛。
+- **算法改动 / env 优化**：主线禁止（可比性）。见报告 §4.4。
 
 ---
 
-## Revised drain plan (2026-10-07 17:45), after the CPU correction (F16)
+## 修订后的排空计划（2026-10-07 17:45），在 CPU 修正（F16）之后
 
-The earlier drain table assumed 43–47 of 48 cores were busy, i.e. no headroom.
-The cgroup measurement shows **~38–42 of 48** with no meaningful throttling, so
-two second seeds were launched immediately (5v5 s1 @10 thr, 3v3 s1 @8 thr) rather
-than waiting for lanes to drain.
+早先的排空表假设 48 核中有 43–47 核忙碌，即没有余量。
+cgroup 测量显示**48 核中约 38–42 核**忙碌，且没有实质性的节流，因此立即启动了两个
+第二种子（5v5 s1 @10 线程，3v3 s1 @8 线程），而不是等通道排空。
 
-Projected drain times at current rates:
+按当前速率预计的排空时间：
 
-| ~time (Oct 7/8) | lane freeing | threads |
+| 约略时间（Oct 7/8） | 释放的通道 | 线程 |
 |---|---|---|
 | 19:20 | 1v1 Selfplay | 3 |
 | 23:30 | 1v1 HierSelfplay | 3 |
@@ -208,129 +189,108 @@ Projected drain times at current rates:
 | 03:25 | 10v10 s0 | 20 |
 | ~06:00 | 1v1 Shoot | 3 |
 
-**Feasibility of a third seed.** A lane only helps if
-`6e6 / FPS_at_that_thread_count <= 09:20 Oct 8 - t`. From ~23:30 there are
-~9.8 h left, so a second seed needs ≥170 FPS. `2v2` reaches ~19.5 env-steps/s per
-thread, so **2v2 seed 1 at 10 threads (~195 FPS, ~8.5 h) fits** and is the next
-item in the brief's ranking (第三：2v2 / 3v3 seed 2). 3v3 seed 1 is already
-running at 8 threads.
+**第三种子的可行性。** 通道只有满足 `6e6 / FPS_at_that_thread_count <= 09:20 Oct 8 - t`
+才有用。从约 23:30 起还剩约 9.8 h，因此第二种子需要 ≥170 FPS。`2v2` 每线程能达到
+约 19.5 env-steps/s，所以 **10 线程的 2v2 种子 1（约 195 FPS，约 8.5 h）装得下**，
+是任务书排序中的下一项（第三：2v2 / 3v3 seed 2）。3v3 种子 1 已经在 8 线程下运行。
 
-**Reminder on divisibility (F17).** Choose thread counts that divide 2000:
-4, 5, 8, 10, 16, 20, 25 … **not** 3, 6, 7, 9, 11. A lane launched at 11 threads
-would silently finish 1.8% short.
+**关于整除性的提醒（F17）。** 选择能整除 2000 的线程数：4、5、8、10、16、20、25……
+**不要** 3、6、7、9、11。以 11 线程启动的通道会静默地少跑 1.8%。
 
-**Reserve.** The 10v10 lane's 20 threads free at ~03:25 with only ~5.5 h left —
-too little for any 6M run, so that capacity should go to (`1/heading`, ~2.8 h) or
-a partial Shoot-scaling run, or simply be left unused rather than started and
-abandoned.
+**储备。** 10v10 通道的 20 个线程约 03:25 释放时只剩约 5.5 h——对任何 6M 运行都太少，
+因此这部分容量应当给（`1/heading`，约 2.8 h）或一次部分的 Shoot-scaling 运行，
+或者干脆闲置，而不是启动了又放弃。
 
-### Decision 17:30 — do NOT add a fourth seed yet
+### 决定 17:30——暂不加入第四种子
 
-After launching 5v5 s1 and 3v3 s1, measured container CPU rose to **41.6–43.6 of
-48 cores (87–91%)** with throttling still negligible (0.047%). That is close
-enough to the quota that adding another 10-thread lane would risk real
-throttling, which would fall hardest on the *tightest* lane — `f6m_5v5_noweapon_s1`
-at 95 FPS (nominal ETA ~10:50, i.e. already past the freeze).
+启动 5v5 s1 和 3v3 s1 之后，容器实测 CPU 上升到 **48 核中的 41.6–43.6 核（87–91%）**，
+而节流仍然可以忽略（0.047%）。这已经离配额足够近，再加一个 10 线程的通道就有真实
+节流的风险，而节流对*最紧张*的通道打击最大——`f6m_5v5_noweapon_s1` 只有 95 FPS
+（名义 ETA ~10:50，即已经越过冻结）。
 
-So the next seed waits for a lane to drain rather than being squeezed in. Note
-that `f6m_5v5_noweapon_s1` is **not necessarily lost**: its nominal ETA assumes
-today's contention. By 01:15 Oct 8 roughly 22 rollout threads will have freed, so
-if its marginal rate rises from 95 to ~120 FPS it reaches 6M around 07:30–08:00.
-Its progress is therefore tracked explicitly rather than assumed censored.
+因此下一个种子要等通道排空，而不是硬挤进去。注意 `f6m_5v5_noweapon_s1`
+**未必就输了**：它的名义 ETA 假设的是今天的争用水平。到 01:15 Oct 8，大约 22 个
+rollout 线程将已释放，所以如果它的边际速率从 95 升到约 120 FPS，它会在 07:30–08:00
+左右达到 6M。因此它的进度被显式跟踪，而不是想当然地当作被删失。
 
-### 18:45 — CPU is at the quota edge; the remaining official L1 entry gets the next free lane
+### 18:45——CPU 已在配额边缘；剩下的官方 L1 条目获得下一个空闲通道
 
-Container CPU is **42–43 of 48 cores (87–90%)** and `nr_throttled` has risen from
-0.078% to **1.28% of periods** and is still creeping (~+0.035%/2 min). Small
-enough that aggregate throughput is unaffected (991 env-steps/s, unchanged since
-the second seeds started), and the two second seeds are worth far more than the
-~1.3% they cost — but the box is now genuinely at its ceiling, so no further
-concurrency without a corresponding free-up.
+容器 CPU 为 **48 核中的 42–43 核（87–90%）**，`nr_throttled` 已从 0.078% 升至
+**周期的 1.28%**，并且还在缓慢爬升（约 +0.035%/2 min）。这小到不影响总吞吐
+（991 env-steps/s，自第二种子启动以来未变），而且这两个第二种子远比它们付出的
+约 1.3% 代价更有价值——但机器现在真正到了上限，因此没有相应的释放就不再增加并发。
 
-**Plan: at ~19:05 `f6m_official_1v1_selfplay_s1` completes and frees 3 threads.**
-Rather than leave them idle, add the one official L1 training entry not yet run:
+**计划：约 19:05 `f6m_official_1v1_selfplay_s1` 完成并释放 3 个线程。**
+与其让它们闲置，不如补上唯一一个尚未运行的官方 L1 训练条目：
 
-| job | scenario | algo | seed | threads | why |
+| 任务 | 场景 | 算法 | 种子 | 线程 | 原因 |
 |---|---|---|---|---|---|
-| `f6m_official_heading_s5` | `SingleControl 1/heading` | ppo | 5 | **4** | the last unrun official L1 entry (brief P3); ~236 FPS at 4 threads → 6M in ~7 h, done ~02:10 |
+| `f6m_official_heading_s5` | `SingleControl 1/heading` | ppo | 5 | **4** | 最后一个尚未运行的官方 L1 条目（任务书 P3）；4 线程下约 236 FPS → 约 7 h 到 6M，约 02:10 完成 |
 
-**4 threads, not 3**, because the thread count must divide 2000 (F17) or the lane
-silently caps at 5,994,000. SingleControl is 1 aircraft and CPU-cheap, so 4
-threads plus the freed 3 keeps us inside the quota.
+**用 4 线程，不是 3**，因为线程数必须整除 2000（F17），否则该通道会静默地封顶在
+5,994,000。SingleControl 只有 1 架飞机、CPU 开销小，所以 4 线程加上刚释放的 3 线程
+仍在配额之内。
 
-**Note the honest framing of this lane**: `1/heading` is SingleControl, i.e. *not*
-a multi-agent task. It completes the official inventory and is reported as a
-single-agent control, **not** as evidence about multi-agent scaling.
+**注意对这个通道的诚实定位**：`1/heading` 是 SingleControl，即*不是*多智能体任务。
+它只是补齐官方清单，将作为单智能体对照报告，**而不是**作为关于多智能体规模化的证据。
 
-### 19:07 — the real concurrency limit: bursty throttling, not average CPU
+### 19:07——真正的并发上限：突发式节流，而不是平均 CPU
 
-A 90-second window measurement separates two things the instantaneous samples
-conflated:
+一个 90 秒窗口的测量区分了瞬时采样所混淆的两件事：
 
-| quantity | value |
+| 量 | 值 |
 |---|---|
-| CPU consumed, 90 s average | **35.3 of 48 cores (74% of quota)** |
-| throttled periods, same window | **5.22%** |
-| throttled periods, campaign lifetime | 1.49% |
+| 90 s 平均消耗的 CPU | **48 核中的 35.3 核（配额的 74%）** |
+| 同一窗口的节流周期占比 | **5.22%** |
+| 本次实验全程的节流周期占比 | 1.49% |
 
-Average utilisation is only 74%, yet 5% of scheduling periods are throttled. That
-is the signature of **bursty oversubscription**: cgroup-v2 throttling fires when
-the container exceeds its 100 ms-period quota, and with 70+ worker processes a
-synchronised moment (several lanes beginning a rollout or ending an episode at
-once) can exceed it even though the long-run average sits well below the cap.
+平均利用率只有 74%，却有 5% 的调度周期被节流。这是**突发式超额订阅**的特征：
+cgroup-v2 的节流在容器超出其 100 ms 周期的配额时触发，而在有 70 多个 worker 进程时，
+一个同步的瞬间（多个通道同时开始一次 rollout 或同时结束一个 episode）就可能超限，
+尽管长期平均远低于上限。
 
-**Consequence for scheduling.** The usable capacity is not "48 minus average
-usage". It is 48 cores of *smooth* capacity, and a workload that is bursty loses
-a few percent of it to throttling. So the earlier reasoning — "average is 74%, so
-there are ~13 cores spare" — was wrong, and no further lanes are added. Twelve is
-the ceiling for this campaign.
+**对调度的后果。** 可用容量不是"48 减去平均用量"。它是 48 核的*平滑*容量，而突发式
+的工作负载会因节流损失几个百分点。所以之前的推理——"平均是 74%，所以还有约 13 核
+空闲"——是错的，不再增加通道。十二个是本次实验的上限。
 
-**Cost check.** Aggregate throughput is 992 env-steps/s, unchanged since the
-second seeds were added, so the throttling cost is small relative to what those
-lanes contribute (~190 env-steps/s). Kept, not rolled back — but the box is done.
+**代价核查。** 总吞吐为 992 env-steps/s，自加入第二种子以来未变，所以节流的代价
+相对于这些通道贡献的（约 190 env-steps/s）很小。保留，不回滚——但机器已经到顶。
 
 ---
 
-# 2026-10-08 01:14 — wave 6: second seeds into recovered capacity
+# 2026-10-08 01:14——第 6 波：第二种子放进回收出来的容量
 
-By 01:12 eight lanes had completed (5v5 s0, 3v3 s0, 2v2 s0, official 2v2 and
-heading all at exactly 6,000,000; the three 3-thread 1v1 lanes at their
-5,994,000 ceiling). Only 4 lanes were still running and container CPU had fallen
-to **30.8 of 48 cores**, freeing **29 rollout threads**.
+到 01:12 已有八个通道完成（5v5 s0、3v3 s0、2v2 s0、official 2v2 和 heading
+都恰好是 6,000,000；三个 3 线程的 1v1 通道达到其 5,994,000 上限）。只有 4 个通道
+仍在运行，容器 CPU 降到 **48 核中的 30.8 核**，释放出 **29 个 rollout 线程**。
 
-## What was launched, and why in that order
+## 启动了哪些，以及为什么是这个顺序
 
-| job | threads | rationale |
+| 任务 | 线程 | 理由 |
 |---|---|---|
-| `f6m_10v10_noweapon_s1` | **20** | The brief's #1 second seed, and it tests the campaign's **headline** result. |
-| `f6m_5v5_noweapon_s2` | **8** | A clean second comparison at the most volatile mid scale. |
+| `f6m_10v10_noweapon_s1` | **20** | 任务书排名 #1 的第二种子，而且它检验本次实验的**头条**结果。 |
+| `f6m_5v5_noweapon_s2` | **8** | 在波动最大的中间规模上做一次干净的第二组比较。 |
 
-**Thread count is not a free parameter here.** For a *seed* comparison everything
-except `--seed` must match the seed-0 lane or the comparison additionally
-crosses the §4.5 batch-size confound. So 10v10 seed 1 runs at 20 threads
-(seed 0's value) and 5v5 seed 2 at 8 (seed 0's value) — **not** at the largest
-number the box could take. This deliberately trades coverage for comparability;
-the opposite trade would have produced two fast, uninterpretable runs.
+**这里线程数不是自由参数。** 对于*种子*比较，除 `--seed` 外的一切都必须与种子 0
+的通道一致，否则比较会额外跨越 §4.5 的 batch-size 混淆因素。所以 10v10 种子 1 用
+20 线程（种子 0 的取值），5v5 种子 2 用 8 线程（种子 0 的取值）——**而不是**机器
+能承受的最大数值。这是有意用覆盖面换取可比性；反过来权衡则会产生两次很快但
+无法解释的运行。
 
-**Why 10v10 seed 1 matters most.** The scaling curve's striking feature is that
-10v10 sits at ≈0 reward (≈+0.06 per enemy) while 2v2/3v3/5v5 are all strongly
-positive (+8 to +12 per enemy). That is the headline, and it currently rests on
-**one trajectory**. A second 10v10 seed is the only available test of whether the
-result replicates. At 20 threads it reaches roughly **2.3M of 6M (≈38%)** by the
-freeze, so it will be `time_cutoff` — accepted deliberately, because a partial
-second trajectory at the headline scale is worth more than a complete run at a
-scale that is already well covered.
+**为什么 10v10 种子 1 最重要。** scaling 曲线最引人注目的一点是 10v10 处于约 0 的
+reward（每敌机约 +0.06），而 2v2/3v3/5v5 都显著为正（每敌机 +8 到 +12）。这就是
+头条结果，而它目前只依赖**一条轨迹**。第二个 10v10 种子是检验该结果能否复现的
+唯一可得手段。在 20 线程下它到冻结时大约能到 **6M 中的 2.3M（约 38%）**，
+所以它将是 `time_cutoff`——这是有意接受的，因为头条规模上的第二条部分轨迹，
+比在已经覆盖良好的规模上再多一次完整运行更值钱。
 
-**What was deliberately not run.** 2v2 seed 1: it would need 4 threads to match
-seed 0, buying only ~28% coverage at the scale with the *smoothest* seed-0 curve
-and therefore the least variance to resolve. The brief's #3 item
-(2v2 **or** 3v3 second seed) is already satisfied by `f6m_3v3_noweapon_s1`, which
-projects to complete.
+**有意没有运行的。** 2v2 种子 1：要与种子 0 匹配就得用 4 线程，而在种子 0 曲线
+*最平滑*、因而要分辨的方差最小的规模上，这只能买到约 28% 的覆盖率。任务书第 3 项
+（2v2 **或** 3v3 第二种子）已由 `f6m_3v3_noweapon_s1` 满足，它预计能跑完。
 
-## Next free-up: 10v10 seed 0 at ~04:00 (20 threads, 5 h window)
+## 下一次释放：10v10 种子 0 于约 04:00（20 线程，5 h 窗口）
 
-5 h is too short for any 6M run at N≥3 at the thread counts that keep a
-comparison clean. The best available use is a **new family** at small scale:
-`2v2/scaling_shoot` at 20 threads ≈ 390 FPS → 6M in ≈4.3 h, which fits. That adds
-an armed-combat point at a scale where the unarmed baseline is already complete,
-i.e. a matched armed-vs-unarmed comparison. Decided at 04:00 with live numbers.
+5 h 对于任何在保持比较干净的线程数下 N≥3 的 6M 运行都太短。最好的用法是在小规模上
+开一个**新系列**：20 线程的 `2v2/scaling_shoot` ≈ 390 FPS → 约 4.3 h 跑完 6M，
+装得下。这在无武器基线已完成的规模上增加一个带武器对抗的数据点，即一次配对的
+"带武器 vs 无武器"比较。04:00 拿着实时数字再定。
