@@ -1,0 +1,12 @@
+
+
+     JSBSim Flight Dynamics Model v1.1.6 [GitHub build 320/commit b477f6312bee2fd3af4c4e5ba1a3e732ed2b99d4] Aug  4 2026 16:52:04
+  N  agents  get_obs_all  get_state   sim_run  full_step   obs%   sim%  us/agent
+  2       4      1.176ms    1.188ms   2.271ms   11.951ms  19.8%  19.0%   297.01
+  3       6      2.751ms    2.911ms   3.496ms   20.815ms  27.2%  16.8%   485.19
+  5      10      9.050ms    7.975ms   6.989ms   47.254ms  36.0%  14.8%   797.54
+ 10      20     33.061ms   32.514ms  15.484ms  150.466ms  43.6%  10.3%  1625.69
+            [JSBSim-ML v2.0]
+
+JSBSim startup beginning ...
+

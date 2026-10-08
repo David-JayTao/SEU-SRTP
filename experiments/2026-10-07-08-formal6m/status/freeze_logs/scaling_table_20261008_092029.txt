@@ -1,0 +1,14 @@
+wrote /root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/metrics/scaling_table.csv (8 rows)
+
+| scale | variant | agents | obs | share_obs | actor_p | critic_p | thr | seed | FPS | s/vec-step | s/rollout-ep | agent-steps/s | ag-steps/s/thr | steps | eps | rew_first | rew_last | slope | eval_rew | value_loss | critic_gn | entropy | NaN? | learnable? |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 2v2 | noweapon | 4 | 27 | 108 | 154891 | 163969 | 4 | 0 | 77 | 0.052 | 155.8 | 308 | 77 | 6000000 | 500 | -3.51 | 22 | +0.0479 | -99 | 0.16 | 8.17 | -0.000552 | no | flat/declining |
+| 3v3 | noweapon | 6 | 39 | 234 | 156427 | 180097 | 8 | 0 | 125 | 0.064 | 192 | 750 | 93.8 | 6000000 | 250 | -5.32 | 35.9 | +0.0089 | 47.8 | 0.178 | 7.31 | -0.000331 | no | flat/declining |
+| 3v3 | noweapon | 6 | 39 | 234 | 156427 | 180097 | 8 | 1 | 124 | 0.0645 | 193.5 | 744 | 93 | 6000000 | 250 | -5.44 | 34.5 | -0.0105 | 47.6 | 0.12 | 6.23 | -0.000287 | no | flat/declining |
+| 5v5 | noweapon | 10 | 63 | 630 | 159499 | 230785 | 8 | 0 | 79 | 0.101 | 303.8 | 790 | 98.8 | 6000000 | 250 | -9.12 | 39.8 | +0.365 | -223 | 0.776 | 20.8 | -0.000389 | no | improving |
+| 5v5 | noweapon | 10 | 63 | 630 | 159499 | 230785 | 10 | 1 | 93 | 0.108 | 322.6 | 930 | 93 | 5400000 | 180 | -9.05 | 34 | -0.405 | -2.81 | 0.657 | 14.7 | -0.000397 | no | flat/declining |
+| 5v5 | noweapon | 10 | 63 | 630 | 159499 | 230785 | 8 | 2 | 79 | 0.101 | 303.8 | 790 | 98.8 | 2304000 | 96 | -8.99 | 7.95 | +0.144 | -58.2 | 0.983 | 22.7 | -0.000649 | no | improving |
+| 10v10 | noweapon | 20 | 123 | 2460 | 167179 | 465025 | 20 | 0 | 65 | 0.308 | 923.1 | 1300 | 65 | 6000000 | 100 | -17.6 | 0.392 | +0.391 | -87.9 | 3.79 | 55.2 | -0.000267 | no | improving |
+| 10v10 | noweapon | 20 | 123 | 2460 | 167179 | 465025 | 20 | 1 | 64 | 0.312 | 937.5 | 1280 | 64 | 1860000 | 31 | -17.6 | 3.29 | +2.08 | -30.9 | 33.4 | 45.2 | -0.000306 | no | improving |
+
+campaign peaks so far: CPU peak 46.2 busy cores of the 48-core quota (96.2% of quota; cgroup cpu.stat (authoritative)), RAM 87.1 GB, VRAM 3310 MB (single job uses <1.5 GB)

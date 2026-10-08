@@ -1,6 +1,6 @@
 # Formal-6M auto-results — machine-generated numeric record
 
-> **This file is machine-generated. Do not hand-edit.** Generated **2026-10-08 08:31:26 CST** (2026-10-08T08:31:26+08:00) by `experiments/2026-10-07-08-formal6m/scripts/make_auto_results.py` (repo HEAD `f4441cc`, branch `exp/formal-6m-20261007`). 本文件由脚本自动生成，所有数字均来自机器产物。
+> **This file is machine-generated. Do not hand-edit.** Generated **2026-10-08 09:21:32 CST** (2026-10-08T09:21:32+08:00) by `experiments/2026-10-07-08-formal6m/scripts/make_auto_results.py` (repo HEAD `48dffca`, branch `exp/formal-6m-20261007`). 本文件由脚本自动生成，所有数字均来自机器产物。
 >
 > Campaign: `experiments/2026-10-07-08-formal6m`. Regenerate with: `cd experiments/2026-10-07-08-formal6m && /root/miniconda3/envs/jsbsim/bin/python scripts/make_auto_results.py` (also invoked by `scripts/freeze.sh`, which the tmux auto-finalizer runs on a schedule).
 >
@@ -39,18 +39,18 @@ Every number in this document is read from these machine artefacts at generation
 
 | source | last written |
 |---|---|
-| `manifest.csv` | 2026-10-08 08:30:26 |
-| `metrics/status.json` | 2026-10-08 08:30:25 |
-| `metrics/summary.csv` | 2026-10-08 08:31:26 |
-| `metrics/scaling_table.csv` | 2026-10-08 08:31:26 |
-| `metrics/critic_scaling.json` | 2026-10-08 08:30:30 |
-| `metrics/equal_sample.csv` | 2026-10-08 08:30:32 |
-| `metrics/equal_wallclock.csv` | 2026-10-08 08:30:32 |
+| `manifest.csv` | 2026-10-08 09:20:32 |
+| `metrics/status.json` | 2026-10-08 09:20:32 |
+| `metrics/summary.csv` | 2026-10-08 09:21:31 |
+| `metrics/scaling_table.csv` | 2026-10-08 09:21:31 |
+| `metrics/critic_scaling.json` | 2026-10-08 09:20:37 |
+| `metrics/equal_sample.csv` | 2026-10-08 09:20:39 |
+| `metrics/equal_wallclock.csv` | 2026-10-08 09:20:39 |
 | `status/incidents.md` | 2026-10-07 18:12:33 |
 
 ## Experiment inventory (every lane)
 
-Live view from `metrics/status.json` (timestamp 2026-10-08 08:30:23; 1.1 min before this file was generated).
+Live view from `metrics/status.json` (timestamp 2026-10-08 09:20:30; 1.0 min before this file was generated).
 
 | experiment | scenario | algo | seed | thr | achievable ceiling | steps | % ceiling | status | FPS | wall-clock | flags |
 |---|---|---|---|---|---|---|---|---|---|---|---|
@@ -58,10 +58,10 @@ Live view from `metrics/status.json` (timestamp 2026-10-08 08:30:23; 1.1 min bef
 | `f6m_3v3_noweapon_s0` | 3v3/scaling_noweapon/HierarchySelfplay | mappo | 0 | 8 | 6,000,000 | 6,000,000 | 100.0% | `completed_6M` | 125 | 13.3 h | — |
 | `f6m_3v3_noweapon_s1` | 3v3/scaling_noweapon/HierarchySelfplay | mappo | 1 | 8 | 6,000,000 | 6,000,000 | 100.0% | `completed_6M` | 124 | 13.4 h | — |
 | `f6m_5v5_noweapon_s0` | 5v5/scaling_noweapon/HierarchySelfplay | mappo | 0 | 8 | 6,000,000 | 6,000,000 | 100.0% | `completed_6M` | 79 | 20.9 h | — |
-| `f6m_5v5_noweapon_s1` | 5v5/scaling_noweapon/HierarchySelfplay | mappo | 1 | 10 | 6,000,000 | 5,070,000 | 84.5% | `running` | 93 | 15.1 h | — |
-| `f6m_5v5_noweapon_s2` | 5v5/scaling_noweapon/HierarchySelfplay | mappo | 2 | 8 | 6,000,000 | 2,040,000 | 34.0% | `running` | 78 | 7.2 h | — |
+| `f6m_5v5_noweapon_s1` | 5v5/scaling_noweapon/HierarchySelfplay | mappo | 1 | 10 | 6,000,000 | 5,400,000 | 90.0% | `running` | 93 | 16.0 h | — |
+| `f6m_5v5_noweapon_s2` | 5v5/scaling_noweapon/HierarchySelfplay | mappo | 2 | 8 | 6,000,000 | 2,304,000 | 38.4% | `running` | 79 | 8.1 h | — |
 | `f6m_10v10_noweapon_s0` | 10v10/scaling_noweapon/HierarchySelfplay | mappo | 0 | 20 | 6,000,000 | 6,000,000 | 100.0% | `completed_6M` | 65 | 25.3 h | — |
-| `f6m_10v10_noweapon_s1` | 10v10/scaling_noweapon/HierarchySelfplay | mappo | 1 | 20 | 6,000,000 | 1,620,000 | 27.0% | `running` | 63 | 7.2 h | — |
+| `f6m_10v10_noweapon_s1` | 10v10/scaling_noweapon/HierarchySelfplay | mappo | 1 | 20 | 6,000,000 | 1,860,000 | 31.0% | `running` | 64 | 8.1 h | — |
 | `f6m_official_1v1_hier_selfplay_s1` | 1v1/NoWeapon/HierarchySelfplay | ppo | 1 | 3 | 5,994,000 | 5,994,000 | 100.0% | `completed_at_ceiling` | 83 | 20.0 h | — |
 | `f6m_official_1v1_selfplay_s1` | 1v1/NoWeapon/Selfplay | ppo | 1 | 3 | 5,994,000 | 5,994,000 | 100.0% | `completed_at_ceiling` | 104 | 15.9 h | — |
 | `f6m_official_1v1_shoot_hier_selfplay_s1` | 1v1/ShootMissile/HierarchySelfplay | ppo | 1 | 3 | 5,994,000 | 5,994,000 | 100.0% | `completed_at_ceiling` | 61 | 27.0 h | — |
@@ -69,7 +69,7 @@ Live view from `metrics/status.json` (timestamp 2026-10-08 08:30:23; 1.1 min bef
 | `f6m_official_2v2_noweapon_s0` | 2v2/NoWeapon/HierarchySelfplay | mappo | 0 | 4 | 6,000,000 | 6,000,000 | 100.0% | `completed_6M` | 75 | 22.0 h | — |
 | `f6m_official_heading_s5` | 1/heading | ppo | 5 | 4 | 6,000,000 | 6,000,000 | 100.0% | `completed_6M` | 275 | 6.1 h | — |
 
-Totals across 14 lanes: **74,706,000 env steps completed of 83,976,000 achievable** (snapshot); aggregate live throughput **1424 env-steps/s**.
+Totals across 14 lanes: **75,540,000 env steps completed of 83,976,000 achievable** (snapshot); aggregate live throughput **1426 env-steps/s**.
 
 ### Checkpoints
 
@@ -92,7 +92,7 @@ Totals across 14 lanes: **74,706,000 env steps completed of 83,976,000 achievabl
 
 ## Scaling table (reward and reward-per-enemy)
 
-Snapshot: `metrics/scaling_table.csv` (written 2026-10-08 08:31:26). `reward_per_enemy = train_reward_last / team_size`, computed here and emitted only for the NoWeapon family.
+Snapshot: `metrics/scaling_table.csv` (written 2026-10-08 09:21:31). `reward_per_enemy = train_reward_last / team_size`, computed here and emitted only for the NoWeapon family.
 
 | scale | variant | seed | thr | steps (snapshot) | FPS | train reward (last) | reward/enemy | eval reward (last) | tail slope |
 |---|---|---|---|---|---|---|---|---|---|
@@ -100,10 +100,10 @@ Snapshot: `metrics/scaling_table.csv` (written 2026-10-08 08:31:26). `reward_per
 | 3v3 | noweapon | 0 | 8 | 6,000,000 | 125 | 35.9318 | 11.9773 | 47.8388 | 0.0089 |
 | 3v3 | noweapon | 1 | 8 | 6,000,000 | 124 | 34.4728 | 11.4909 | 47.6476 | -0.0105 |
 | 5v5 | noweapon | 0 | 8 | 6,000,000 | 79 | 39.7857 | 7.9571 | -222.7146 | 0.3652 |
-| 5v5 | noweapon | 1 | 10 | 5,100,000 | 93 | 13.8687 | 2.7737 | 29.2194 | 0.0304 |
-| 5v5 | noweapon | 2 | 8 | 2,064,000 | 78 | 7.4459 | 1.4892 | -1.9794 | 0.3275 |
+| 5v5 | noweapon | 1 | 10 | 5,400,000 | 93 | 34.0185 | 6.8037 | -2.8143 | -0.4046 |
+| 5v5 | noweapon | 2 | 8 | 2,304,000 | 79 | 7.9511 | 1.5902 | -58.1626 | 0.1439 |
 | 10v10 | noweapon | 0 | 20 | 6,000,000 | 65 | 0.3918 | 0.0392 | -87.8638 | 0.3908 |
-| 10v10 | noweapon | 1 | 20 | 1,620,000 | 63 | 7.3785 | 0.7378 | 0.6044 | 1.56 |
+| 10v10 | noweapon | 1 | 20 | 1,860,000 | 64 | 3.2868 | 0.3287 | -30.8630 | 2.0756 |
 
 `reward_per_enemy` is shown as `n/a` for any ShootMissile row by policy. The official-baseline lanes are not part of this table (they are their own series; see the inventory).
 
@@ -111,7 +111,7 @@ Snapshot: `metrics/scaling_table.csv` (written 2026-10-08 08:31:26). `reward_per
 
 Reward and reward-per-enemy at fixed vectorised env-step budgets (1M–6M), from the campaign's own equal-sample generator.
 
-Snapshot: `metrics/equal_sample.csv` (written 2026-10-08 08:30:32). `—` = pending (budget not reached at the snapshot); `*` = interpolated between bracketing updates; `†` = first crossing; `§` = before-data / nan-gap. Raw status and bracket per cell: the CSV itself.
+Snapshot: `metrics/equal_sample.csv` (written 2026-10-08 09:20:39). `—` = pending (budget not reached at the snapshot); `*` = interpolated between bracketing updates; `†` = first crossing; `§` = before-data / nan-gap. Raw status and bracket per cell: the CSV itself.
 
 **reward**
 
@@ -153,7 +153,7 @@ Snapshot: `metrics/equal_sample.csv` (written 2026-10-08 08:30:32). `—` = pend
 
 Reward and reward-per-enemy at fixed wall-clock budgets (1h–24h), from the campaign's own equal-wall-clock generator.
 
-Snapshot: `metrics/equal_wallclock.csv` (written 2026-10-08 08:30:32). `—` = pending (budget not reached at the snapshot); `*` = interpolated between bracketing updates; `†` = first crossing; `§` = before-data / nan-gap. Raw status and bracket per cell: the CSV itself.
+Snapshot: `metrics/equal_wallclock.csv` (written 2026-10-08 09:20:39). `—` = pending (budget not reached at the snapshot); `*` = interpolated between bracketing updates; `†` = first crossing; `§` = before-data / nan-gap. Raw status and bracket per cell: the CSV itself.
 
 **reward**
 
@@ -193,16 +193,16 @@ Snapshot: `metrics/equal_wallclock.csv` (written 2026-10-08 08:30:32). `—` = p
 
 ## Representation / critic scaling (measured vs extrapolated)
 
-Source: `metrics/critic_scaling.json` (written 2026-10-08 08:30:30); probe = model construction on the real networks, no training. Three tables, never mixed: (1) the four MEASURED points, (2) values derived from those same measurements, (3) predictions beyond the measured range.
+Source: `metrics/critic_scaling.json` (written 2026-10-08 09:20:37); probe = model construction on the real networks, no training. Three tables, never mixed: (1) the four MEASURED points, (2) values derived from those same measurements, (3) predictions beyond the measured range.
 
 ### 1. Measured rows (N = 2, 3, 5, 10)
 
 | N | agents | obs dim | share obs dim | actor params | critic params | critic 1st layer params | 1st-layer MAC/envstep | fwd ms (batch) | fwd ms (fixed-256) | bwd ms (fixed-256) | fwd µs/sample |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| 2 | 4 | 27 | 108 | 154,891 | 163,969 | 13,952 | 331,776 | 0.289 | 0.7128 | 6.0494 | 2.7840 |
-| 3 | 6 | 39 | 234 | 156,427 | 180,097 | 30,080 | 1,078,272 | 0.382 | 0.9301 | 6.2689 | 3.6330 |
-| 5 | 10 | 63 | 630 | 159,499 | 230,785 | 80,768 | 4,838,400 | 0.449 | 0.9762 | 6.2333 | 3.8130 |
-| 10 | 20 | 123 | 2460 | 167,179 | 465,025 | 315,008 | 37,785,600 | 0.447 | 0.9079 | 5.3419 | 3.5470 |
+| 2 | 4 | 27 | 108 | 154,891 | 163,969 | 13,952 | 331,776 | 0.328 | 0.3396 | 6.1962 | 1.3260 |
+| 3 | 6 | 39 | 234 | 156,427 | 180,097 | 30,080 | 1,078,272 | 0.572 | 0.9866 | 6.1374 | 3.8540 |
+| 5 | 10 | 63 | 630 | 159,499 | 230,785 | 80,768 | 4,838,400 | 0.456 | 0.9931 | 6.3363 | 3.8790 |
+| 10 | 20 | 123 | 2460 | 167,179 | 465,025 | 315,008 | 37,785,600 | 0.454 | 0.9697 | 6.1432 | 3.7880 |
 
 ### 2. Derived from the measured points (not new measurements)
 
@@ -210,10 +210,10 @@ Computed from the same N = 2, 3, 5, 10 probe runs; the first-layer values here a
 
 | N | agents | obs dim | share obs dim | critic 1st layer params | 1st-layer MAC/envstep | est. fwd ms/envstep | share-obs buffer GB |
 |---|---|---|---|---|---|---|---|
-| 2 | 4 | 27 | 108 | 13,952 | 331,776 | 0.0037 | 0.029 |
-| 3 | 6 | 39 | 234 | 30,080 | 1,078,272 | 0.0121 | 0.094 |
-| 5 | 10 | 63 | 630 | 80,768 | 4,838,400 | 0.0545 | 0.423 |
-| 10 | 20 | 123 | 2460 | 315,008 | 37,785,600 | 0.4256 | 3.3 |
+| 2 | 4 | 27 | 108 | 13,952 | 331,776 | 0.0040 | 0.029 |
+| 3 | 6 | 39 | 234 | 30,080 | 1,078,272 | 0.0130 | 0.094 |
+| 5 | 10 | 63 | 630 | 80,768 | 4,838,400 | 0.0582 | 0.423 |
+| 10 | 20 | 123 | 2460 | 315,008 | 37,785,600 | 0.4545 | 3.3 |
 
 
 ### 3. EXTRAPOLATED beyond the measured range (predictions only)
@@ -222,9 +222,9 @@ N = 20, 50, 100 were never measured (the probe only built the four networks abov
 
 | N | agents | obs dim | share obs dim | critic 1st layer params | 1st-layer MAC/envstep | est. fwd ms/envstep | share-obs buffer GB |
 |---|---|---|---|---|---|---|---|
-| 20 | 40 | 243 | 9720 | 1,244,288 | 298,598,400 | 3.3631 | 26.08 |
-| 50 | 100 | 603 | 60300 | 7,718,528 | 4,631,040,000 | 52.1593 | 404.478 |
-| 100 | 200 | 1203 | 240600 | 30,796,928 | 36,956,160,000 | 416.2362 | 3227.773 |
+| 20 | 40 | 243 | 9720 | 1,244,288 | 298,598,400 | 3.5920 | 26.08 |
+| 50 | 100 | 603 | 60300 | 7,718,528 | 4,631,040,000 | 55.7097 | 404.478 |
+| 100 | 200 | 1203 | 240600 | 30,796,928 | 36,956,160,000 | 444.5690 | 3227.773 |
 
 ### Closed-form check (computed in this script, not asserted)
 
@@ -251,11 +251,11 @@ Per row: `share_obs = 24N² + 6N`, `critic_params = 128·(24N²+6N) + 150145`, `
 | N=100 share_obs_dim (extrapolated) | 240,600 | 240,600 | OK |
 | N=100 critic_first_layer (extrapolated) | 30,796,928 | 30,796,928 | OK |
 
-All closed-form checks passed: **yes**. Probe metadata: device `cuda:0`, effective G-MAC/s 88.79, batch threads 12.
+All closed-form checks passed: **yes**. Probe metadata: device `cuda:0`, effective G-MAC/s 83.13, batch threads 12.
 
 ## Computational scalability
 
-Snapshot: `metrics/scaling_table.csv` (written 2026-10-08 08:31:26). `FPS` is the runner's own vectorised env-steps/s; `agent-steps/s = env-steps/s × total agents`.
+Snapshot: `metrics/scaling_table.csv` (written 2026-10-08 09:21:31). `FPS` is the runner's own vectorised env-steps/s; `agent-steps/s = env-steps/s × total agents`.
 
 | scale | variant | thr | FPS (env-steps/s) | env-steps/s per thread | agent-steps/s | agent-steps/s per thread | sec / vectorised step | sec / rollout episode (3000 steps) |
 |---|---|---|---|---|---|---|---|---|
@@ -264,11 +264,11 @@ Snapshot: `metrics/scaling_table.csv` (written 2026-10-08 08:31:26). `FPS` is th
 | 3v3 | noweapon | 8 | 124 | 15.50 | 744 | 93 | 0.06452 | 193.5 |
 | 5v5 | noweapon | 8 | 79 | 9.88 | 790 | 98.8 | 0.10127 | 303.8 |
 | 5v5 | noweapon | 10 | 93 | 9.30 | 930 | 93 | 0.10753 | 322.6 |
-| 5v5 | noweapon | 8 | 78 | 9.75 | 780 | 97.5 | 0.10256 | 307.7 |
+| 5v5 | noweapon | 8 | 79 | 9.88 | 790 | 98.8 | 0.10127 | 303.8 |
 | 10v10 | noweapon | 20 | 65 | 3.25 | 1300 | 65 | 0.30769 | 923.1 |
-| 10v10 | noweapon | 20 | 63 | 3.15 | 1260 | 63 | 0.31746 | 952.4 |
+| 10v10 | noweapon | 20 | 64 | 3.20 | 1280 | 64 | 0.3125 | 937.5 |
 
-Live campaign aggregate throughput at the `metrics/status.json` snapshot: **1424 env-steps/s** across all live lanes.
+Live campaign aggregate throughput at the `metrics/status.json` snapshot: **1426 env-steps/s** across all live lanes.
 
 ## Failure list (summarised from `status/incidents.md`)
 

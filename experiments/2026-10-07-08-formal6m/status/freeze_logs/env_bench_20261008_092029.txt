@@ -1,0 +1,3 @@
+usage: env_bench.py [-h] --scenario SCENARIO [--env-name ENV_NAME]
+                    [--steps STEPS] [--warmup WARMUP] [--json JSON]
+env_bench.py: error: the following arguments are required: --scenario

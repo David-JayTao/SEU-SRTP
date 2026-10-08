@@ -1,7 +1,7 @@
 {
-  "timestamp": "2026-10-08T00:30:23.486449+00:00",
-  "timestamp_local": "2026-10-08 08:30:23 ",
-  "aggregate_fps": 1424,
+  "timestamp": "2026-10-08T01:43:50.840530+00:00",
+  "timestamp_local": "2026-10-08 09:43:50 ",
+  "aggregate_fps": 1427,
   "jobs": [
     {
       "exp": "f6m_10v10_noweapon_s0",
@@ -25,7 +25,7 @@
       "achievable": 6000000,
       "done": true,
       "stalled": false,
-      "age_min": 255.0,
+      "age_min": 328.5,
       "run_dir": "/root/autodl-tmp/SEU-SRTP/scripts/results/MultipleCombat/10v10/scaling_noweapon/HierarchySelfplay/mappo/f6m_10v10_noweapon_s0/run1",
       "log": "/root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/logs/f6m_10v10_noweapon_s0_seed0_gpu2_20261007_025431.log"
     },
@@ -51,7 +51,7 @@
       "achievable": 6000000,
       "done": true,
       "stalled": false,
-      "age_min": 519.3,
+      "age_min": 592.8,
       "run_dir": "/root/autodl-tmp/SEU-SRTP/scripts/results/MultipleCombat/5v5/scaling_noweapon/HierarchySelfplay/mappo/f6m_5v5_noweapon_s0/run1",
       "log": "/root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/logs/f6m_5v5_noweapon_s0_seed0_gpu1_20261007_025433.log"
     },
@@ -77,7 +77,7 @@
       "achievable": 6000000,
       "done": true,
       "stalled": false,
-      "age_min": 978.4,
+      "age_min": 1051.9,
       "run_dir": "/root/autodl-tmp/SEU-SRTP/scripts/results/MultipleCombat/3v3/scaling_noweapon/HierarchySelfplay/mappo/f6m_3v3_noweapon_s0/run1",
       "log": "/root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/logs/f6m_3v3_noweapon_s0_seed0_gpu0_20261007_025433.log"
     },
@@ -103,7 +103,7 @@
       "achievable": 6000000,
       "done": true,
       "stalled": false,
-      "age_min": 486.7,
+      "age_min": 560.2,
       "run_dir": "/root/autodl-tmp/SEU-SRTP/scripts/results/MultipleCombat/2v2/scaling_noweapon/HierarchySelfplay/mappo/f6m_2v2_noweapon_s0/run1",
       "log": "/root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/logs/f6m_2v2_noweapon_s0_seed0_gpu0_20261007_025433.log"
     },
@@ -129,7 +129,7 @@
       "achievable": 6000000,
       "done": true,
       "stalled": false,
-      "age_min": 455.2,
+      "age_min": 528.6,
       "run_dir": "/root/autodl-tmp/SEU-SRTP/scripts/results/MultipleCombat/2v2/NoWeapon/HierarchySelfplay/mappo/f6m_official_2v2_noweapon_s0/run1",
       "log": "/root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/logs/f6m_official_2v2_noweapon_s0_seed0_gpu1_20261007_025433.log"
     },
@@ -155,7 +155,7 @@
       "achievable": 5994000,
       "done": true,
       "stalled": false,
-      "age_min": 806.4,
+      "age_min": 879.8,
       "run_dir": "/root/autodl-tmp/SEU-SRTP/scripts/results/SingleCombat/1v1/NoWeapon/Selfplay/ppo/f6m_official_1v1_selfplay_s1/run1",
       "log": "/root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/logs/f6m_official_1v1_selfplay_s1_seed1_gpu0_20261007_031014.log"
     },
@@ -181,7 +181,7 @@
       "achievable": 5994000,
       "done": true,
       "stalled": false,
-      "age_min": 944.6,
+      "age_min": 1018.1,
       "run_dir": "/root/autodl-tmp/SEU-SRTP/scripts/results/SingleCombat/1v1/NoWeapon/vsBaseline/ppo/f6m_official_1v1_vsbaseline_s1/run1",
       "log": "/root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/logs/f6m_official_1v1_vsbaseline_s1_seed1_gpu1_20261007_031014.log"
     },
@@ -207,7 +207,7 @@
       "achievable": 5994000,
       "done": true,
       "stalled": false,
-      "age_min": 134.3,
+      "age_min": 207.7,
       "run_dir": "/root/autodl-tmp/SEU-SRTP/scripts/results/SingleCombat/1v1/ShootMissile/HierarchySelfplay/ppo/f6m_official_1v1_shoot_hier_selfplay_s1/run1",
       "log": "/root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/logs/f6m_official_1v1_shoot_hier_selfplay_s1_seed1_gpu2_20261007_031755.log"
     },
@@ -233,7 +233,7 @@
       "achievable": 5994000,
       "done": true,
       "stalled": false,
-      "age_min": 549.7,
+      "age_min": 623.2,
       "run_dir": "/root/autodl-tmp/SEU-SRTP/scripts/results/SingleCombat/1v1/NoWeapon/HierarchySelfplay/ppo/f6m_official_1v1_hier_selfplay_s1/run1",
       "log": "/root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/logs/f6m_official_1v1_hier_selfplay_s1_seed1_gpu0_20261007_031755.log"
     },
@@ -241,25 +241,25 @@
       "exp": "f6m_5v5_noweapon_s1",
       "scale": "5v5 s1",
       "threads": 10,
-      "steps": 5070000,
+      "steps": 5550000,
       "target": 6000000,
-      "pct": 84.5,
-      "fps": 93,
-      "eta_h": 2.78,
-      "updates": 168,
+      "pct": 92.5,
+      "fps": 94,
+      "eta_h": 1.33,
+      "updates": 184,
       "total_updates": 200,
-      "reward": 35.36533203125,
-      "eval_reward": 29.219409942626953,
-      "value_loss": 0.41629563868045805,
-      "critic_grad_norm": 12.450609695911407,
-      "actor_grad_norm": 1.2364377498626709,
+      "reward": 52.946474609375,
+      "eval_reward": 79.20941925048828,
+      "value_loss": 0.2598253130912781,
+      "critic_grad_norm": 9.768542844057084,
+      "actor_grad_norm": 1.2950294196605683,
       "nan": false,
       "inf": false,
       "traceback": false,
       "achievable": 6000000,
       "done": false,
       "stalled": false,
-      "age_min": 4.1,
+      "age_min": 0.0,
       "run_dir": "/root/autodl-tmp/SEU-SRTP/scripts/results/MultipleCombat/5v5/scaling_noweapon/HierarchySelfplay/mappo/f6m_5v5_noweapon_s1/run1",
       "log": "/root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/logs/f6m_5v5_noweapon_s1_seed1_gpu2_20261007_172033.log"
     },
@@ -285,7 +285,7 @@
       "achievable": 6000000,
       "done": true,
       "stalled": false,
-      "age_min": 103.3,
+      "age_min": 176.8,
       "run_dir": "/root/autodl-tmp/SEU-SRTP/scripts/results/MultipleCombat/3v3/scaling_noweapon/HierarchySelfplay/mappo/f6m_3v3_noweapon_s1/run1",
       "log": "/root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/logs/f6m_3v3_noweapon_s1_seed1_gpu0_20261007_172512.log"
     },
@@ -311,7 +311,7 @@
       "achievable": 6000000,
       "done": true,
       "stalled": false,
-      "age_min": 446.7,
+      "age_min": 520.1,
       "run_dir": "/root/autodl-tmp/SEU-SRTP/scripts/results/SingleControl/1/heading/ppo/f6m_official_heading_s5/run1",
       "log": "/root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/logs/f6m_official_heading_s5_seed5_gpu0_20261007_190022.log"
     },
@@ -319,25 +319,25 @@
       "exp": "f6m_10v10_noweapon_s1",
       "scale": "10v10 s1",
       "threads": 20,
-      "steps": 1620000,
+      "steps": 1920000,
       "target": 6000000,
-      "pct": 27.0,
-      "fps": 63,
-      "eta_h": 19.31,
-      "updates": 26,
+      "pct": 32.0,
+      "fps": 64,
+      "eta_h": 17.71,
+      "updates": 31,
       "total_updates": 100,
-      "reward": 7.37849365234375,
-      "eval_reward": 0.6044453382492065,
-      "value_loss": 39.69234027862549,
-      "critic_grad_norm": 57.678803062438966,
-      "actor_grad_norm": 0.6240587860345841,
+      "reward": -7.797206420898437,
+      "eval_reward": -30.86301040649414,
+      "value_loss": 40.608602905273436,
+      "critic_grad_norm": 44.363463973999025,
+      "actor_grad_norm": 0.5980835795402527,
       "nan": false,
       "inf": false,
-      "traceback": false,
+      "traceback": true,
       "achievable": 6000000,
       "done": false,
       "stalled": false,
-      "age_min": 7.9,
+      "age_min": 11.3,
       "run_dir": "/root/autodl-tmp/SEU-SRTP/scripts/results/MultipleCombat/10v10/scaling_noweapon/HierarchySelfplay/mappo/f6m_10v10_noweapon_s1/run1",
       "log": "/root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/logs/f6m_10v10_noweapon_s1_seed1_gpu1_20261008_011321.log"
     },
@@ -345,48 +345,48 @@
       "exp": "f6m_5v5_noweapon_s2",
       "scale": "5v5 s2",
       "threads": 8,
-      "steps": 2040000,
+      "steps": 2376000,
       "target": 6000000,
-      "pct": 34.0,
-      "fps": 78,
-      "eta_h": 14.1,
-      "updates": 84,
+      "pct": 39.6,
+      "fps": 79,
+      "eta_h": 12.74,
+      "updates": 98,
       "total_updates": 250,
-      "reward": 4.205340576171875,
-      "eval_reward": -1.9794061183929443,
-      "value_loss": 0.8795535296201706,
-      "critic_grad_norm": 27.697356176376342,
-      "actor_grad_norm": 1.3059951543807984,
+      "reward": 16.360836791992188,
+      "eval_reward": -179.08050537109375,
+      "value_loss": 1.0284894317388535,
+      "critic_grad_norm": 34.49879522323609,
+      "actor_grad_norm": 1.3583862960338593,
       "nan": false,
       "inf": false,
-      "traceback": false,
+      "traceback": true,
       "achievable": 6000000,
       "done": false,
       "stalled": false,
-      "age_min": 4.2,
+      "age_min": 11.0,
       "run_dir": "/root/autodl-tmp/SEU-SRTP/scripts/results/MultipleCombat/5v5/scaling_noweapon/HierarchySelfplay/mappo/f6m_5v5_noweapon_s2/run1",
       "log": "/root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/logs/f6m_5v5_noweapon_s2_seed2_gpu0_20261008_011324.log"
     }
   ],
   "duplicate_runs": [],
   "system": {
-    "load1": 28.26,
+    "load1": 9.36,
     "cpu_busy": {
-      "cores": 25.15,
+      "cores": 8.47,
       "quota": 48.0,
-      "pct_of_quota": 52.4,
-      "throttled_pct": 6.1906
+      "pct_of_quota": 17.7,
+      "throttled_pct": 5.946
     },
     "gpu": [
       {
         "index": 0,
-        "util": 1,
-        "mem_mib": 666
+        "util": 0,
+        "mem_mib": 450
       },
       {
         "index": 1,
-        "util": 1,
-        "mem_mib": 1046
+        "util": 0,
+        "mem_mib": 4
       },
       {
         "index": 2,
@@ -396,14 +396,14 @@
     ],
     "mem": {
       "total_gb": 1007.5,
-      "used_gb": 43.6,
-      "avail_gb": 950.8
+      "used_gb": 36.9,
+      "avail_gb": 957.5
     }
   },
   "procs": {
-    "n_procs": 44,
-    "rss_gb": 25.65,
-    "cpu_pct": 2360.9
+    "n_procs": 12,
+    "rss_gb": 5.59,
+    "cpu_pct": 636.3
   },
   "tmux": [
     "f6m_10v10",

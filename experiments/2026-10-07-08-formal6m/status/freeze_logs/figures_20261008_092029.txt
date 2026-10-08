@@ -1,0 +1,26 @@
+campaign : /root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m
+repo     : /root/autodl-tmp/SEU-SRTP
+loaded 14 experiments with at least one logged update
+  f6m_official_1v1_hier_selfplay_s1          N=  1 seed=1   steps=  6.0M fps=    83 threads=3 source=f6m_official_1v1_hier_selfplay_s1_seed1_gpu0_20261007_031755.log
+  f6m_official_1v1_selfplay_s1               N=  1 seed=1   steps=  6.0M fps=   104 threads=3 source=f6m_official_1v1_selfplay_s1_seed1_gpu0_20261007_031014.log
+  f6m_official_1v1_shoot_hier_selfplay_s1    N=  1 seed=1   steps=  6.0M fps=    61 threads=3 source=f6m_official_1v1_shoot_hier_selfplay_s1_seed1_gpu2_20261007_031755.log
+  f6m_official_1v1_vsbaseline_s1             N=  1 seed=1   steps=  6.0M fps=   122 threads=3 source=f6m_official_1v1_vsbaseline_s1_seed1_gpu1_20261007_031014.log
+  f6m_2v2_noweapon_s0                        N=  2 seed=0   steps=  6.0M fps=    77 threads=4 source=f6m_2v2_noweapon_s0_seed0_gpu0_20261007_025433.log
+  f6m_official_2v2_noweapon_s0               N=  2 seed=0   steps=  6.0M fps=    75 threads=4 source=f6m_official_2v2_noweapon_s0_seed0_gpu1_20261007_025433.log
+  f6m_3v3_noweapon_s0                        N=  3 seed=0   steps=  6.0M fps=   125 threads=8 source=f6m_3v3_noweapon_s0_seed0_gpu0_20261007_025433.log
+  f6m_3v3_noweapon_s1                        N=  3 seed=1   steps=  6.0M fps=   124 threads=8 source=f6m_3v3_noweapon_s1_seed1_gpu0_20261007_172512.log
+  f6m_5v5_noweapon_s0                        N=  5 seed=0   steps=  6.0M fps=    79 threads=8 source=f6m_5v5_noweapon_s0_seed0_gpu1_20261007_025433.log
+  f6m_5v5_noweapon_s1                        N=  5 seed=1   steps=  5.4M fps=    93 threads=10 source=f6m_5v5_noweapon_s1_seed1_gpu2_20261007_172033.log
+  f6m_5v5_noweapon_s2                        N=  5 seed=2   steps=  2.3M fps=    79 threads=8 source=f6m_5v5_noweapon_s2_seed2_gpu0_20261008_011324.log
+  f6m_10v10_noweapon_s0                      N= 10 seed=0   steps=  6.0M fps=    65 threads=20 source=f6m_10v10_noweapon_s0_seed0_gpu2_20261007_025431.log
+  f6m_10v10_noweapon_s1                      N= 10 seed=1   steps=  1.9M fps=    63 threads=20 source=f6m_10v10_noweapon_s1_seed1_gpu1_20261008_011321.log
+  f6m_official_heading_s5                    N=None seed=5   steps=  6.0M fps=   275 threads=4 source=f6m_official_heading_s5_seed5_gpu0_20261007_190022.log
+resource sample: 3 experiments -> /root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/metrics/resources.csv
+wrote formal_learning_curves_steps.png  (432 KB)
+wrote formal_learning_curves_walltime.png  (394 KB)
+wrote formal_scaling_reward_normalized.png  (326 KB)
+wrote formal_throughput_vs_agents.png  (222 KB)
+wrote formal_resource_scaling.png  (131 KB)
+wrote formal_critic_scaling.png  (200 KB)
+
+figures in /root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/figures

@@ -1,0 +1,18 @@
+campaign root : /root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m
+results root  : /root/autodl-tmp/SEU-SRTP/scripts/results
+wrote /root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/metrics/summary.csv  (14 experiments)
+wrote /root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/metrics/curves/*.csv
+  f6m_10v10_noweapon_s0                  steps=   6000000 fps=   65.0 rew=0.3918273 eval=-87.86381 ckpt= 'actor_latest.pt' crashed=False
+  f6m_10v10_noweapon_s1                  steps=   1860000 fps=   64.0 rew=3.2868426 eval=-30.86301 ckpt= 'actor_latest.pt' crashed=False
+  f6m_2v2_noweapon_s0                    steps=   6000000 fps=   77.0 rew=21.992397 eval=-99.02575 ckpt= 'actor_latest.pt' crashed=False
+  f6m_3v3_noweapon_s0                    steps=   6000000 fps=  125.0 rew=35.931772 eval=47.838817 ckpt= 'actor_latest.pt' crashed=False
+  f6m_3v3_noweapon_s1                    steps=   6000000 fps=  124.0 rew=34.472834 eval=47.647571 ckpt= 'actor_latest.pt' crashed=False
+  f6m_5v5_noweapon_s0                    steps=   6000000 fps=   79.0 rew=39.785653 eval=-222.7146 ckpt= 'actor_latest.pt' crashed=False
+  f6m_5v5_noweapon_s1                    steps=   5400000 fps=   93.0 rew=34.018549 eval=-2.814315 ckpt= 'actor_latest.pt' crashed=False
+  f6m_5v5_noweapon_s2                    steps=   2304000 fps=   79.0 rew=7.9511123 eval=-58.16260 ckpt= 'actor_latest.pt' crashed=False
+  f6m_official_1v1_hier_selfplay_s1      steps=   5994000 fps=   83.0 rew=-92.80680 eval=-307.0672 ckpt= 'actor_latest.pt' crashed=False
+  f6m_official_1v1_selfplay_s1           steps=   5994000 fps=  104.0 rew=26.932571 eval=36.368396 ckpt= 'actor_latest.pt' crashed=False
+  f6m_official_1v1_shoot_hier_selfplay_s1 steps=   5994000 fps=   61.0 rew=-7.771264 eval=18.354038 ckpt= 'actor_latest.pt' crashed=False
+  f6m_official_1v1_vsbaseline_s1         steps=   5994000 fps=  122.0 rew=27.784508 eval=     None ckpt= 'actor_latest.pt' crashed=False
+  f6m_official_2v2_noweapon_s0           steps=   6000000 fps=   75.0 rew=23.128452 eval=31.314615 ckpt= 'actor_latest.pt' crashed=False
+  f6m_official_heading_s5                steps=   6000000 fps=  275.0 rew=320.47387 eval=     None ckpt= 'actor_latest.pt' crashed=False
