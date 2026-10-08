@@ -5,9 +5,10 @@
 
 commit message 参与 commit hash 的计算，message 一改 hash 必变，所以：
 
-- **pilot 的 `manifest.csv` 和 `docs/baseline_inventory.md` 里记录的旧 hash 已失效**，要用下面这张表回溯。新 hash 与旧 hash 之间没有任何前缀关系。
+- **pilot 的 `manifest.csv` 和 `docs/baseline_inventory.md` 里记录的旧 hash 已失效**，要用下面这张表回溯；旧 hash 与新 hash 之间没有前缀关系，不要前缀匹配。
 - 备份（均未删除）：tag `backup/pre-chinese-rewrite` 与 branch `backup/formal-6m-english` 都仍指向旧的最终 commit `6c5bd99`；filter-branch 另外留下 `refs/original/refs/heads/exp/formal-6m-20261007`，同样指向 `6c5bd99`。
-- 唯一 hash 未变的 commit 是 `d133be63`（"导出了进展的pdf"）：它本来就是中文，message 逐字节未改，因此 hash 保持不变。
+- 唯一无需翻译的 commit 是 `d133be63`（"导出了进展的pdf"，本来就是中文），其 message 逐字节未改；但它的父 commit 也被重写，所以它的 hash 仍然变了——71 个 commit 的 hash 全部变化。
+- 改写完成之后本分支又新增了 1 个 commit（不属于本次改写，也不在本表里）：`ef2f0f9` 文档：正式实验文档全部转为中文，补齐结论一节，commit message 统一改中文。
 - 表按时间顺序（旧 -> 新）排列，与 `git log --reverse` 的输出一致。
 
 改写命令（filter-branch 要求工作区干净，而主工作区有实验监控在写的未提交文件，所以在一个干净的临时 worktree 里执行）：
