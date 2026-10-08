@@ -81,3 +81,32 @@
 - GPU2: util 3%, VRAM 2388 MiB
 - tmux: f6m_10v10, f6m_10v10s1, f6m_1v1hier, f6m_1v1shoot, f6m_1v1sp, f6m_1v1vs, f6m_2v2, f6m_3v3, f6m_3v3s1, f6m_5v5, f6m_5v5s1, f6m_5v5s2, f6m_events, f6m_finalize, f6m_heading, f6m_off2v2, f6m_watch
 
+### snapshot 2026-10-08 06:00
+# Formal-6M monitor  2026-10-08 06:01:20 
+
+**Aggregate throughput: 1419 env-steps/s** across 5 live jobs (49 rollout threads; 9 lanes completed and release their threads)
+
+| experiment | scale | thr | steps | % | FPS | ETA h | reward | eval | v_loss | critic_gn | flags |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| f6m_10v10_noweapon_s0 | 10v10 | 20 | 6,000,000 | 100.0% | 65 | — | 0.392 | -87.864 | 3.787 | 55.16 | **complete** |
+| f6m_5v5_noweapon_s0 | 5v5 | 8 | 6,000,000 | 100.0% | 79 | — | 39.786 | -222.715 | 0.776 | 20.83 | **complete** |
+| f6m_3v3_noweapon_s0 | 3v3 | 8 | 6,000,000 | 100.0% | 125 | — | 35.932 | 47.839 | 0.178 | 7.31 | **complete** |
+| f6m_2v2_noweapon_s0 | 2v2 | 4 | 6,000,000 | 100.0% | 77 | — | 21.992 | -99.026 | 0.160 | 8.17 | **complete** |
+| f6m_official_2v2_noweapon_s0 | official_2v2 | 4 | 6,000,000 | 100.0% | 75 | — | 23.128 | 31.315 | 0.072 | 3.07 | **complete** |
+| f6m_official_1v1_selfplay_s1 | o_1v1_selfplay | 3 | 5,994,000 | 99.9% | 104 | 0.02 | 26.933 | 36.368 | 0.671 | 33.88 | **complete 5,994,000 of 6,000,000** |
+| f6m_official_1v1_vsbaseline_s1 | o_1v1_vsbaseline | 3 | 5,994,000 | 99.9% | 122 | 0.01 | 27.785 | — | 0.997 | 19.78 | **complete 5,994,000 of 6,000,000** |
+| f6m_official_1v1_shoot_hier_selfplay_s1 | o_1v1_shoot | 3 | 5,931,000 | 98.8% | 61 | 0.31 | -8.778 | 18.212 | 0.730 | 3.79 | ok |
+| f6m_official_1v1_hier_selfplay_s1 | o_1v1_hier | 3 | 5,994,000 | 99.9% | 83 | 0.02 | -92.807 | -307.067 | 8.124 | 441.28 | **complete 5,994,000 of 6,000,000** |
+| f6m_5v5_noweapon_s1 | 5v5 s1 | 10 | 4,170,000 | 69.5% | 91 | 5.59 | 54.962 | 68.700 | 0.477 | 15.83 | ok |
+| f6m_3v3_noweapon_s1 | 3v3 s1 | 8 | 5,616,000 | 93.6% | 124 | 0.86 | 34.411 | 48.106 | 0.139 | 6.53 | ok |
+| f6m_official_heading_s5 | o_heading | 4 | 6,000,000 | 100.0% | 275 | — | 320.474 | — | 8.942 | 119.57 | **complete** |
+| f6m_10v10_noweapon_s1 | 10v10 s1 | 20 | 1,020,000 | 17.0% | 61 | 22.68 | -11.843 | -218.319 | 55.365 | 47.64 | ok |
+| f6m_5v5_noweapon_s2 | 5v5 s2 | 8 | 1,320,000 | 22.0% | 77 | 16.88 | 3.292 | -33.995 | 1.736 | 57.03 | ok |
+
+- load1 **44.87**  container CPU **33.32 / 48.0 cores** (69.4% of quota, throttled 6.7555% of periods)  train procs **55**, **30.08 GB** RSS
+- RAM used 51.1 GB / 1007.5 GB (avail 942.7 GB)
+- GPU0: util 3%, VRAM 1321 MiB
+- GPU1: util 0%, VRAM 1046 MiB
+- GPU2: util 5%, VRAM 1347 MiB
+- tmux: f6m_10v10, f6m_10v10s1, f6m_1v1hier, f6m_1v1shoot, f6m_1v1sp, f6m_1v1vs, f6m_2v2, f6m_3v3, f6m_3v3s1, f6m_5v5, f6m_5v5s1, f6m_5v5s2, f6m_events, f6m_finalize, f6m_heading, f6m_off2v2, f6m_watch
+

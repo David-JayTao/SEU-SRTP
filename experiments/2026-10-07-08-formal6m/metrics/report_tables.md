@@ -9,18 +9,18 @@ campaign root: `/root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m`（
 |---|---|---|---|---|---|---|
 | `f6m_official_1v1_hier_selfplay_s1` | 已完成 (达到步数预算) | 5994000/6000000 | 83 | -69.37 → -92.81 | -307.07 | yes |
 | `f6m_official_1v1_selfplay_s1` | 已完成 (达到步数预算) | 5994000/6000000 | 104 | -156.4 → 26.93 | 36.368 | yes |
-| `f6m_official_1v1_shoot_hier_selfplay_s1` | 运行中 (仍在写入) | 5931000/6000000 | 61 | -192.9 → -8.778 | 18.212 | yes |
+| `f6m_official_1v1_shoot_hier_selfplay_s1` | 已完成 (达到步数预算) | 5994000/6000000 | 61 | -192.9 → -7.771 | 18.354 | yes |
 | `f6m_official_1v1_vsbaseline_s1` | 已完成 (达到步数预算) | 5994000/6000000 | 122 | -207.1 → 27.78 | - | yes |
 | `f6m_official_2v2_noweapon_s0` | 已完成 (达到步数预算) | 6000000/6000000 | 75 | -3.507 → 23.13 | 31.315 | yes |
 | `f6m_official_heading_s5` | 已完成 (达到步数预算) | 6000000/6000000 | 275 | -14.82 → 320.5 | - | yes |
 | `f6m_10v10_noweapon_s0` | 已完成 (达到步数预算) | 6000000/6000000 | 65 | -17.62 → 0.3918 | -87.864 | yes |
-| `f6m_10v10_noweapon_s1` | 运行中 (仍在写入) | 1020000/6000000 | 61 | -17.61 → -11.84 | -218.32 | yes |
+| `f6m_10v10_noweapon_s1` | 运行中 (仍在写入) | 1620000/6000000 | 63 | -17.61 → 7.378 | 0.60445 | yes |
 | `f6m_2v2_noweapon_s0` | 已完成 (达到步数预算) | 6000000/6000000 | 77 | -3.51 → 21.99 | -99.026 | yes |
 | `f6m_3v3_noweapon_s0` | 已完成 (达到步数预算) | 6000000/6000000 | 125 | -5.318 → 35.93 | 47.839 | yes |
-| `f6m_3v3_noweapon_s1` | 运行中 (仍在写入) | 5616000/6000000 | 124 | -5.436 → 34.41 | 48.106 | yes |
+| `f6m_3v3_noweapon_s1` | 已完成 (达到步数预算) | 6000000/6000000 | 124 | -5.436 → 34.47 | 47.648 | yes |
 | `f6m_5v5_noweapon_s0` | 已完成 (达到步数预算) | 6000000/6000000 | 79 | -9.117 → 39.79 | -222.71 | yes |
-| `f6m_5v5_noweapon_s1` | 运行中 (仍在写入) | 4170000/6000000 | 91 | -9.054 → 54.96 | 68.7 | yes |
-| `f6m_5v5_noweapon_s2` | 运行中 (仍在写入) | 1320000/6000000 | 77 | -8.991 → 3.292 | -33.995 | yes |
+| `f6m_5v5_noweapon_s1` | 运行中 (仍在写入) | 5100000/6000000 | 93 | -9.054 → 13.87 | 29.219 | yes |
+| `f6m_5v5_noweapon_s2` | 运行中 (仍在写入) | 2064000/6000000 | 78 | -8.991 → 7.446 | -1.9794 | yes |
 
 ## B. Scaling 对比表（含 wall-clock 归一化）
 
@@ -30,18 +30,18 @@ wrote /root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/metrics/scali
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 2v2 | noweapon | 4 | 27 | 108 | 154891 | 163969 | 4 | 0 | 77 | 0.052 | 155.8 | 308 | 77 | 6000000 | 500 | -3.51 | 22 | +0.0479 | -99 | 0.16 | 8.17 | -0.000552 | no | flat/declining |
 | 3v3 | noweapon | 6 | 39 | 234 | 156427 | 180097 | 8 | 0 | 125 | 0.064 | 192 | 750 | 93.8 | 6000000 | 250 | -5.32 | 35.9 | +0.0089 | 47.8 | 0.178 | 7.31 | -0.000331 | no | flat/declining |
-| 3v3 | noweapon | 6 | 39 | 234 | 156427 | 180097 | 8 | 1 | 124 | 0.0645 | 193.5 | 744 | 93 | 5616000 | 234 | -5.44 | 34.4 | -0.0188 | 48.1 | 0.139 | 6.53 | -0.000334 | no | flat/declining |
+| 3v3 | noweapon | 6 | 39 | 234 | 156427 | 180097 | 8 | 1 | 124 | 0.0645 | 193.5 | 744 | 93 | 6000000 | 250 | -5.44 | 34.5 | -0.0105 | 47.6 | 0.12 | 6.23 | -0.000287 | no | flat/declining |
 | 5v5 | noweapon | 10 | 63 | 630 | 159499 | 230785 | 8 | 0 | 79 | 0.101 | 303.8 | 790 | 98.8 | 6000000 | 250 | -9.12 | 39.8 | +0.365 | -223 | 0.776 | 20.8 | -0.000389 | no | improving |
-| 5v5 | noweapon | 10 | 63 | 630 | 159499 | 230785 | 10 | 1 | 91 | 0.11 | 329.7 | 910 | 91 | 4170000 | 139 | -9.05 | 55 | +0.008 | 68.7 | 0.477 | 15.8 | -0.000393 | no | flat/declining |
-| 5v5 | noweapon | 10 | 63 | 630 | 159499 | 230785 | 8 | 2 | 77 | 0.104 | 311.7 | 770 | 96.2 | 1320000 | 55 | -8.99 | 3.29 | +0.52 | -34 | 1.74 | 57 | -0.000726 | no | improving |
+| 5v5 | noweapon | 10 | 63 | 630 | 159499 | 230785 | 10 | 1 | 93 | 0.108 | 322.6 | 930 | 93 | 5100000 | 170 | -9.05 | 13.9 | +0.0304 | 29.2 | 0.481 | 11.6 | -0.000438 | no | flat/declining |
+| 5v5 | noweapon | 10 | 63 | 630 | 159499 | 230785 | 8 | 2 | 78 | 0.103 | 307.7 | 780 | 97.5 | 2064000 | 86 | -8.99 | 7.45 | +0.328 | -1.98 | 1.15 | 26.1 | -0.000671 | no | improving |
 | 10v10 | noweapon | 20 | 123 | 2460 | 167179 | 465025 | 20 | 0 | 65 | 0.308 | 923.1 | 1300 | 65 | 6000000 | 100 | -17.6 | 0.392 | +0.391 | -87.9 | 3.79 | 55.2 | -0.000267 | no | improving |
-| 10v10 | noweapon | 20 | 123 | 2460 | 167179 | 465025 | 20 | 1 | 61 | 0.328 | 983.6 | 1220 | 61 | 1020000 | 17 | -17.6 | -11.8 | +1.06 | -218 | 55.4 | 47.6 | -0.000312 | no | improving |
+| 10v10 | noweapon | 20 | 123 | 2460 | 167179 | 465025 | 20 | 1 | 63 | 0.317 | 952.4 | 1260 | 63 | 1620000 | 27 | -17.6 | 7.38 | +1.56 | 0.604 | 39.7 | 57.7 | -0.000308 | no | improving |
 
 campaign peaks so far: CPU peak 46.2 busy cores of the 48-core quota (96.2% of quota; cgroup cpu.stat (authoritative)), RAM 87.1 GB, VRAM 3310 MB (single job uses <1.5 GB)
 
 ## C. 归一化后的 critic 对比
 
-wrote /root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/metrics/normalized_scaling.csv (2045 rows)
+wrote /root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/metrics/normalized_scaling.csv (2133 rows)
 
 === mean over the first 5 episodes per run (hierarchical NoWeapon family) ===
 (value_loss/N^2 and grad_norm/N remove the reward-magnitude growth; a purely reward-scale effect would make both constant)
@@ -105,13 +105,13 @@ wrote /root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/metrics/norma
 | 实验 | 进程数 | 峰值 CPU% | 峰值 CPU 核 | 峰值 RSS | GPU | 该 GPU 峰值显存 |
 |---|---|---|---|---|---|---|
 | `f6m_10v10_noweapon_s0` | 22 | 1603% | 16.0 | 15.19 GB | 2 | 1036 MB |
-| `f6m_10v10_noweapon_s1` | 22 | 1328% | 13.3 | 15.19 GB | 1 | 1036 MB |
+| `f6m_10v10_noweapon_s1` | 22 | 1359% | 13.6 | 15.19 GB | 1 | 1036 MB |
 | `f6m_2v2_noweapon_s0` | 6 | 288% | 2.9 | 2.97 GB | 0 | 536 MB |
 | `f6m_3v3_noweapon_s0` | 10 | 552% | 5.5 | 4.61 GB | 0 | 650 MB |
 | `f6m_3v3_noweapon_s1` | 10 | 559% | 5.6 | 4.48 GB | 0 | 650 MB |
 | `f6m_5v5_noweapon_s0` | 10 | 625% | 6.2 | 4.85 GB | 1 | 660 MB |
 | `f6m_5v5_noweapon_s1` | 12 | 735% | 7.4 | 5.59 GB | 2 | 712 MB |
-| `f6m_5v5_noweapon_s2` | 10 | 557% | 5.6 | 4.87 GB | 0 | 656 MB |
+| `f6m_5v5_noweapon_s2` | 10 | 557% | 5.6 | 4.98 GB | 0 | 656 MB |
 | `f6m_official_1v1_hier_selfplay_s1` | 5 | 195% | 1.9 | 2.59 GB | 0 | 538 MB |
 | `f6m_official_1v1_selfplay_s1` | 5 | 170% | 1.7 | 2.51 GB | 0 | 670 MB |
 | `f6m_official_1v1_shoot_hier_selfplay_s1` | 5 | 220% | 2.2 | 2.62 GB | 2 | 620 MB |
@@ -125,7 +125,7 @@ wrote /root/autodl-tmp/SEU-SRTP/experiments/2026-10-07-08-formal6m/metrics/norma
 |---|---|---|---|---|---|---|---|---|---|
 | f6m_official_1v1_hier_selfplay_s1 | 1 | 5,994,000 | 20.05 h | 83 | -69.367 | -92.807 | -307.07 | completed_6M | actor_latest.pt |
 | f6m_official_1v1_selfplay_s1 | 1 | 5,994,000 | 15.90 h | 104 | -156.44 | 26.933 | 36.368 | completed_6M | actor_latest.pt |
-| f6m_official_1v1_shoot_hier_selfplay_s1 | 1 | 5,931,000 | 26.72 h | 61 | -192.88 | -8.7778 | 18.212 | running | actor_latest.pt |
+| f6m_official_1v1_shoot_hier_selfplay_s1 | 1 | 5,994,000 | 26.97 h | 61 | -192.88 | -7.7713 | 18.354 | completed_6M | actor_latest.pt |
 | f6m_official_1v1_vsbaseline_s1 | 1 | 5,994,000 | 13.59 h | 122 | -207.14 | 27.785 | - | completed_6M | actor_latest.pt |
 | f6m_official_2v2_noweapon_s0 | 0 | 6,000,000 | 22.01 h | 75 | -3.5066 | 23.128 | 31.315 | completed_6M | actor_latest.pt |
 | f6m_official_heading_s5 | 5 | 6,000,000 | 6.06 h | 275 | -14.825 | 320.47 | - | completed_6M | actor_latest.pt |
@@ -141,12 +141,12 @@ _F9: `1v1/ShootMissile/HierarchyVsBaseline` 是官方入口但在首个 env step
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 2v2 | 4 | 0 | 6,000,000 | 77 | 21.49 h | 21.992 | 10.996 | 0.16045 | 8.1739 | 2.9 | 2.97 GB | 536 MB | completed_6M |
 | 3v3 | 6 | 0 | 6,000,000 | 125 | 13.29 h | 35.932 | 11.977 | 0.17833 | 7.3129 | 5.5 | 4.61 GB | 650 MB | completed_6M |
-| 3v3 | 6 | 1 | 5,616,000 | 124 | 12.60 h | 34.411 | 11.47 | 0.13948 | 6.5257 | 5.6 | 4.48 GB | 650 MB | running |
+| 3v3 | 6 | 1 | 6,000,000 | 124 | 13.36 h | 34.473 | 11.491 | 0.11956 | 6.2302 | 5.6 | 4.48 GB | 650 MB | completed_6M |
 | 5v5 | 10 | 0 | 6,000,000 | 79 | 20.94 h | 39.786 | 7.9571 | 0.77586 | 20.828 | 6.2 | 4.85 GB | 660 MB | completed_6M |
-| 5v5 | 10 | 1 | 4,170,000 | 91 | 12.68 h | 54.962 | 10.992 | 0.47669 | 15.828 | 7.4 | 5.59 GB | 712 MB | running |
-| 5v5 | 10 | 2 | 1,320,000 | 77 | 4.80 h | 3.2923 | 0.65846 | 1.7359 | 57.03 | 5.6 | 4.87 GB | 656 MB | running |
+| 5v5 | 10 | 1 | 5,100,000 | 93 | 15.18 h | 13.869 | 2.7737 | 0.48109 | 11.607 | 7.4 | 5.59 GB | 712 MB | running |
+| 5v5 | 10 | 2 | 2,064,000 | 78 | 7.30 h | 7.4459 | 1.4892 | 1.15 | 26.145 | 5.6 | 4.98 GB | 656 MB | running |
 | 10v10 | 20 | 0 | 6,000,000 | 65 | 25.35 h | 0.39183 | 0.039183 | 3.7869 | 55.161 | 16.0 | 15.19 GB | 1036 MB | completed_6M |
-| 10v10 | 20 | 1 | 1,020,000 | 61 | 4.80 h | -11.843 | -1.1843 | 55.365 | 47.637 | 13.3 | 15.19 GB | 1036 MB | running |
+| 10v10 | 20 | 1 | 1,620,000 | 63 | 7.30 h | 7.3785 | 0.73785 | 39.692 | 57.679 | 13.6 | 15.19 GB | 1036 MB | running |
 
 _Reward normalized = 末次训练 reward / N（NoWeapon 家族 PostureReward 对每个 enemy 求和，故除以 team size N；ShootMissile 家族不适用该归一化）。CPU/RAM/VRAM 为该实验进程的实测峰值（ps + nvidia-smi --query-compute-apps，随本脚本每次运行累积进 metrics/resources.csv；'-' 表示尚无采样）。_
 
