@@ -285,39 +285,137 @@ _单元格：NoWeapon 通道为 `reward（每敌机 reward）`；`*` = 在相邻
 <!-- /AUTO:section8 -->
 
 <!--
-本报告的图片嵌入约定（任务书 §27：图片必须嵌入，不能只列出）。
-所有图片位于 experiments/2026-10-07-08-formal6m/figures/，
-由 scripts/make_figures.py 重新生成，scripts/freeze.sh 会再跑一遍该脚本。
+本报告的图片嵌入约定。
+所有图位于 experiments/2026-10-07-08-formal6m/figures_v2/，
+由 scripts/figures/make_all.py 一条命令重新生成（见 docs/experiment_figures_guide.md）。
 以下路径相对于本文件所在位置（docs/）。
 
-pilot 与正式序列绝不能画成一条不加区分的线；只有 "*_with_pilot"
-变体会混合两者，且在那里通过线型和明确的图例条目来区分。
+旧的一套图（工程监控风格）保留在 experiments/2026-10-07-08-formal6m/figures/，未删除。
+两套图的差别：旧图把不同任务塞进同一坐标系、图例拥挤、raw reward 波动遮蔽趋势、
+10v10 被共享 y 轴压成平线；figures_v2 全部重画，按任务分组、独立 y 轴、raw+平滑分层、
+10v10 单独成面板。
 -->
 
 ### 图片
 
-**§6 — N-v-N 正式 scaling，学习曲线**
+以下 7 张图由 `scripts/figures/make_all.py` 从 `metrics/*.csv`、`metrics/*.json` 与
+`metrics.jsonl` 生成，**未从任何旧 PNG 反推数据**。统一口径：raw 曲线
+（`lw=0.7, alpha=0.15`）+ rolling mean 平滑（固定 **250,000 环境步**窗口，`lw=2.2`）；
+同一规模跨图固定颜色，多 seed 用同色不同线型区分；未完成的 run 自然截止、不插值。
 
-![正式学习曲线 vs 环境步数](../experiments/2026-10-07-08-formal6m/figures/formal_learning_curves_steps.png)
+---
 
-![正式学习曲线 vs 挂钟时间](../experiments/2026-10-07-08-formal6m/figures/formal_learning_curves_walltime.png)
+#### 图 1 — 官方 baseline 复现（四个任务，四套独立 reward 尺度）
 
-**§7 — 按队伍规模归一化的 reward（NoWeapon 唯一可跨 N 比较的量）**
+![官方 baseline 复现：四个任务、四条独立 reward 尺度](../experiments/2026-10-07-08-formal6m/figures_v2/fig1_official_baselines.png)
 
-![每敌机 reward vs 步数、vs 挂钟时间、vs N](../experiments/2026-10-07-08-formal6m/figures/formal_scaling_reward_normalized.png)
+1. **比较什么**：四个官方任务各自的训练曲线——A 单智能体飞行控制（`1/heading`）、
+   B 1v1 NoWeapon 的三个 scenario、C 1v1 ShootMissile、D 2v2 MultipleCombat。
+2. **主要观察**：六个官方入口**全部复现成功**。A 从 −15 稳定升到约 +300；
+   B 里 Selfplay 与 vsBaseline 收敛到 +25 附近，而 HierarchySelfplay 在 2.5M 之后
+   **持续下滑**到 −100 以下；D 快速升到约 +22 后平台。
+3. **限制**：**四个子图的 y 轴量级差一个数量级**（±320 / ±200 / ±200 / ±40），
+   面板之间**绝不可比高低**——视觉上更高的线不代表算法更好，只是任务的 reward 定义不同。
+   每个 run 只有 1 个 seed。B 的三条线是**不同 scenario**，不是同一算法的三个变体。
+4. **对后续研究意味着什么**：官方入口可作为可靠基线使用；但 1v1 层次化自博弈的
+   后期退化（图 1b）是一个值得单独调查的现象，它提示**自博弈的非平稳性**可能在某些
+   配置下占主导。
 
-**§9 — 计算可扩展性与批次吞吐**
+![1v1 层次化自博弈的完整原始曲线（不含平滑）](../experiments/2026-10-07-08-formal6m/figures_v2/fig1b_1v1_hier_raw.png)
 
-![吞吐量 vs agent 数](../experiments/2026-10-07-08-formal6m/figures/formal_throughput_vs_agents.png)
+**图 1b（附图）**：只画原始曲线、不叠加平滑，专门用来看后期不稳定。
+平滑会把这里的负向尖峰抹平，因此主图与附图必须并看。四条官方 baseline 分别为
+Selfplay / vsBaseline / HierarchySelfplay / ShootMissile HierarchySelfplay。
 
-![资源随 N 的 scaling](../experiments/2026-10-07-08-formal6m/figures/formal_resource_scaling.png)
+---
 
-**§10 — 表示 / 集中式 critic scaling**
+#### 图 2 — N-v-N scaling 学习曲线（本轮主图）
 
-![Critic 与 actor 随 N 的 scaling](../experiments/2026-10-07-08-formal6m/figures/formal_critic_scaling.png)
+![N-v-N scaling：按规模分面板的学习曲线](../experiments/2026-10-07-08-formal6m/figures_v2/fig2_scaling_curves.png)
 
-**Pilot 与正式对比图**（`*_with_pilot`）以不同线型叠加 2026-10-04 的
-pilot，使两个批次绝不会被混淆。
+1. **比较什么**：NoWeapon 家族在 N=2 / 3 / 5 / 10 四个规模下的 episode reward
+   随环境步数的变化，每个面板只放该规模的多个 seed。
+2. **主要观察**：2v2/3v3/5v5 都学得起来并稳定在各自的高位（约 +22 / +35 / +40）；
+   **10v10 是唯一的例外**——它单调改善但极慢，−17.6 起步，6M 结束才到 +0.4。
+   3v3 的两个 seed 几乎重合，说明该规模的结果是稳的。
+3. **限制**：① **各面板 y 轴独立，跨面板的高度不能直接比较**（10v10 的 +0.4 与
+   2v2 的 +22 不在同一尺度上）；② 2v2 与 10v10 在 6M 处各只有 **1 个 seed**；
+   ③ 5v5 seed 1（5.4M）、5v5 seed 2（2.3M）、10v10 seed 1（1.86M）**被时间截断**，
+   曲线自然截止、未做任何补齐；④ **`n_rollout_threads` 各规模不同**
+   （2v2=4、3v3=8、5v5=8 或 10、10v10=20），跨规模比较因此混入了 PPO batch size 差异。
+4. **对后续研究意味着什么**：scalability 的代价在本架构下**集中在最大规模**。
+   要判断这是"需要更多样本"还是"结构上受限"，下一步必须做受控对照——
+   同任务、同 seed、只换 critic 输入结构（见 §16 N2）。
+
+![共享 y 轴版本：为什么旧图看不见 10v10](../experiments/2026-10-07-08-formal6m/figures_v2/fig2b_scaling_shared_axis.png)
+
+**图 2b（附图，诊断用）**：四规模**共用同一 y 轴**。这不是主图，它的用途是
+**解释旧图的问题**——旧的综合图正是这种画法，5v5 的 −63..+53 定下了轴范围，
+10v10 的 −18..+17 只占其中 35 个单位，于是被压成贴着零线的一条平线，看起来像"没数据"。
+
+> **10v10 数据是完整的**：seed 0 跑满 6,000,000 步，seed 1 到 1,860,000 步被时间截断。
+> 旧图中它"看不见"纯粹是共享 y 轴的尺度效应，**不是数据缺失，也不是被过滤掉**。
+
+---
+
+#### 图 3 — 跨规模等预算比较
+
+![跨规模等预算比较：matched reward per enemy](../experiments/2026-10-07-08-formal6m/figures_v2/fig3_matched_budget.png)
+
+1. **比较什么**：在**统一的 1M / 2M / 4M / 6M 步预算**下，各规模的
+   `reward per enemy`。取值方式是在 `[预算−200k, 预算]` 窗口内取平均，
+   而不是取最后一个点——因为各 seed 的完成步数不同。
+2. **主要观察**：1M 处四个规模挤在 −1.4 ~ +10 之间；到 6M 时 2v2/3v3 升到约 +11~+12、
+   5v5 约 +8、而 **10v10 只有 +0.04**，且它是**唯一在 1M 处为负**的规模。
+   3v3 在两个 seed 下几乎无差异。
+3. **限制**：① **只有真正达到该预算的 run 才参与比较**（4M 处 5v5 还有 2 个 seed，
+   6M 处只剩 1 个），误差棒只在 seed ≥ 3 处画；② **`reward/N` 只对 NoWeapon 家族有效**，
+   且**不等于任务成功率**——不同 N 的任务规模与奖励构成不同；
+   ③ 本轮**没有可靠胜率指标**，这是**训练奖励的探索性比较**；
+   ④ 官方 2v2 属于不同配置家族，仅作空心点参考。
+4. **对后续研究意味着什么**：N=10 的落后在**每个预算点**上都存在，不是末期才出现的，
+   这削弱了"再训久一点就好了"的解释，也说明**同等算力下规模化付出的代价是持续的**。
+
+---
+
+#### 图 4 — 计算可扩展性
+
+![计算可扩展性：吞吐、wall-clock、资源与耗时分解](../experiments/2026-10-07-08-formal6m/figures_v2/fig4_computational.png)
+
+1. **比较什么**：A 训练吞吐、B 达到 1M 步所需 wall-clock、C 峰值资源占用、
+   D 每步耗时分解（仿真 / 观测构造 / 状态构造 / 其他）。
+2. **主要观察**：A 中吞吐从 2v2 的约 77 降到 10v10 的约 66（线程数已不同），
+   而单核基准显示内在成本从 107.8 降到 7.8 环境步/秒；**D 面板最直接：
+   观测构造占每步耗时的比例随 N 上升（27.6% → 34.7% → 45.7% → 40.3%）**，
+   即"每架飞机变得更贵"主要来自观测构造，而非物理仿真。
+3. **限制**：① **各点 rollout 线程数不同**（4/8/8-10/20），点与点不是同一算力配额下的
+   对比，绝不能解读为算法本身的计算复杂度；② C 面板的 CPU 一栏来自已被证伪的旧采样器
+   （F16：`/proc/stat` 在本容器报的是宿主机核数），只能作相对参考，RSS/VRAM 可用；
+   ③ D 面板来自 pilot 的**独立 profiling**，不是训练时采样。
+4. **对后续研究意味着什么**：**当前最明显的 scalability 瓶颈是观测/状态构造的冗余计算**
+   （同一 O(N²) 工作每步做两遍）。这是一个纯工程改造就能拿到的加速，
+   应当作为独立 A/B 实验验证（§16 N7），不能与算法改进混为一谈。
+
+---
+
+#### 图 5 — 集中式 Critic 可扩展性
+
+![集中式 critic 的表示与容量随 N 的变化](../experiments/2026-10-07-08-formal6m/figures_v2/fig5_critic_scaling.png)
+
+1. **比较什么**：A 局部观测维度与共享观测维度、B critic 与 actor 参数量、
+   C critic 第一层每步 MACs、D 归一化 critic 梯度范数，全部随 team size N 变化。
+2. **主要观察**：`obs = 12N+3`（线性）、`share_obs = 24N²+6N`（**精确二次**）、
+   `critic_params = 128(24N²+6N)+150145`——四个实测 N 点上**逐位精确**。
+   换句话说 **critic 第一层的每步计算是 Θ(N³)**，而 **actor 参数量几乎不随 N 变**
+   （N=2→10 只涨 8%）。对比之下环境本身实测只有 N^1.64：
+   **critic 的渐进增长率高于环境**。
+3. **限制**：① A/B/C 只用 4 个**实测** N（2/3/5/10），json 里的 N=20/50/100 **外推值一律未画**；
+   ② D 面板是**诊断性指标**，各项增长本身**不代表**已经证明 critic 学习困难；
+   ③ 部分 N 的 run 训练较浅，箱体可能随后续训练移动。
+4. **对后续研究意味着什么**：这是本报告支持"critic 值得单独研究"的**最强一条依据**，
+   但它是一条**结构性事实**，不是因果结论。要证明 O(N²) 的输入就是学习变慢的原因，
+   必须在同任务上跑一个次二次的 critic（attention / 局部 / 因子化）做受控对照——
+   本轮**没有做**（§16 N2）。
 
 ## 9. 计算可扩展性
 
